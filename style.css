@@ -127,6 +127,30 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 .callout-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:5px}
 .callout span{font-size:.85rem;color:var(--text-mid);line-height:1.5}
 
+/* Hero badges */
+.hero-badges{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap}
+.badge{padding:.3rem .8rem;border:1px solid var(--border);border-radius:50px;font-size:.75rem;font-weight:500;color:var(--text-mid)}
+.hero-price{color:var(--primary)}
+
+/* ATS Bar */
+.ats-bar{padding:1.25rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg-card)}
+.ats-label{text-align:center;font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem}
+.ats-logos{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
+.ats-logos span{font-size:.85rem;font-weight:700;color:var(--text-mid);letter-spacing:.02em}
+
+/* Comparison Table */
+.compare-section{padding:4rem 0}
+.compare-table-wrap{overflow-x:auto;margin-top:1rem}
+.compare-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.compare-table th{padding:.7rem .8rem;text-align:center;font-weight:600;color:var(--text-dim);border-bottom:1px solid var(--border)}
+.compare-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--border);color:var(--text-mid)}
+.compare-table td:first-child{text-align:left;font-weight:600;color:var(--text)}
+.compare-highlight{background:rgba(99,102,241,.08);color:var(--primary) !important;font-weight:700 !important}
+.compare-table th.compare-highlight{border-bottom:2px solid var(--primary)}
+
+/* Launch tag */
+.launch-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:.2rem .9rem;border-radius:50px;font-size:.7rem;font-weight:700;white-space:nowrap}
+
 /* How It Works */
 .how-section{padding:4rem 0;background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .steps{display:flex;align-items:flex-start}
@@ -186,6 +210,25 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 .footer-inner{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--text-dim)}
 .footer a{color:var(--primary);text-decoration:none}
 .footer-right{text-align:right}
+
+/* Blog */
+.blog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.blog-card{display:block;padding:1.5rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s}
+.blog-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.blog-tag{display:inline-block;font-size:.7rem;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
+.blog-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem;line-height:1.35}
+.blog-card p{font-size:.85rem;color:var(--text-mid);line-height:1.5;margin-bottom:.5rem}
+.blog-meta{font-size:.75rem;color:var(--text-dim)}
+.blog-content{max-width:680px;margin:0 auto;padding:2rem 0 4rem}
+.blog-content h2{text-align:left;font-size:1.4rem;margin:2rem 0 .75rem}
+.blog-content p{font-size:.95rem;color:var(--text-mid);line-height:1.75;margin-bottom:1rem}
+.blog-content ul{padding-left:1.25rem;margin-bottom:1rem}
+.blog-content li{font-size:.95rem;color:var(--text-mid);line-height:1.75;margin-bottom:.35rem}
+.blog-content strong{color:var(--text)}
+.blog-back{display:inline-block;font-size:.85rem;color:var(--text-dim);text-decoration:none;margin-bottom:1.5rem}
+.blog-back:hover{color:var(--primary)}
+.blog-title{font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:.5rem;letter-spacing:-.02em}
+.blog-date{font-size:.82rem;color:var(--text-dim);margin-bottom:2rem}
 
 /* Spinner */
 .spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.5rem}
