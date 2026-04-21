@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>.resume-preview{background:#fff;color:#1a1a1a;padding:1.5rem 2rem;border-radius:4px;font-family:Georgia,serif;font-size:.82rem;line-height:1.55;box-shadow:0 4px 16px rgba(0,0,0,.3);max-height:600px;overflow-y:auto}</style>
 </head>
 <body>
     <nav class="nav">
@@ -87,24 +88,73 @@
     function showSuccess(data) {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('success').style.display = 'block';
+        window._resumeText = data.resume_text;
 
-        var btns = document.getElementById('downloadBtns');
-        var html = '';
-
-        // For now show text preview with copy button (PDF generation next step)
         var preview = document.getElementById('preview');
-        preview.innerHTML = '<details open><summary style="cursor:pointer;font-weight:700;font-size:.95rem;margin-bottom:.75rem;">Resume</summary>'
-            + '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;white-space:pre-wrap;font-size:.85rem;line-height:1.65;color:var(--text-mid);">'
-            + escapeHtml(data.resume_text) + '</div>'
-            + '<button onclick="copyText(this, \'' + escapeAttr(data.resume_text) + '\')" class="btn btn-sm" style="margin-top:.75rem;">Copy Resume Text</button>'
-            + '</details>';
+        var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
+        html += '<button onclick="downloadPdf()" class="btn">Download Resume PDF</button>';
+        html += '<button onclick="copyToClipboard()" class="btn" style="background:var(--bg-card);color:var(--text-mid);border:1px solid var(--border);" id="copyBtn">Copy Resume Text</button>';
+        html += '</div>';
+
+        html += '<div class="resume-preview">' + formatResume(data.resume_text) + '</div>';
 
         if (data.cover_letter_text) {
-            preview.innerHTML += '<details style="margin-top:1.5rem;"><summary style="cursor:pointer;font-weight:700;font-size:.95rem;margin-bottom:.75rem;">Cover Letter</summary>'
-                + '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;white-space:pre-wrap;font-size:.85rem;line-height:1.65;color:var(--text-mid);">'
-                + escapeHtml(data.cover_letter_text) + '</div>'
-                + '<button onclick="copyText(this, \'' + escapeAttr(data.cover_letter_text) + '\')" class="btn btn-sm" style="margin-top:.75rem;background:#059669;">Copy Cover Letter</button>'
-                + '</details>';
+            html += '<details style="margin-top:1.25rem;"><summary style="cursor:pointer;font-weight:600;font-size:.88rem;color:var(--text-mid);">View Cover Letter</summary>';
+            html += '<div class="resume-preview" style="margin-top:.75rem;">' + formatResume(data.cover_letter_text) + '</div></details>';
+        }
+        preview.innerHTML = html;
+    }
+
+    function formatResume(text) {
+        var lines = text.split('\n');
+        var h = '';
+        for (var i = 0; i < lines.length; i++) {
+            var l = lines[i].trim();
+            if (!l) { h += '<br>'; continue; }
+            if (i === 0) { h += '<div style="text-align:center;font-size:1.1rem;font-weight:700;font-family:Georgia,serif;">' + escapeHtml(l) + '</div>'; continue; }
+            if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { h += '<div style="text-align:center;font-size:.75rem;color:#888;margin-bottom:.5rem;">' + escapeHtml(l) + '</div>'; continue; }
+            if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { h += '<div style="font-size:.82rem;font-weight:700;border-bottom:1px solid #444;padding-bottom:2px;margin-top:.75rem;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.03em;">' + escapeHtml(l) + '</div>'; continue; }
+            var escaped = escapeHtml(l).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            if (l.startsWith('* ') || l.startsWith('- ')) { h += '<div style="font-size:.78rem;margin-left:1rem;margin-bottom:.15rem;position:relative;padding-left:.75rem;color:#ccc;"><span style="position:absolute;left:0;">&#8226;</span>' + escaped.substring(2) + '</div>'; continue; }
+            if (l.indexOf(':') !== -1 && l.match(/^[A-Z]/)) { escaped = escaped.replace(/^([^:]+:)/, '<strong>$1</strong>'); }
+            if (l.match(/\|.*\d{4}/)) { h += '<div style="font-size:.75rem;color:#888;font-style:italic;">' + escaped + '</div>'; continue; }
+            h += '<div style="font-size:.78rem;color:#ccc;">' + escaped + '</div>';
+        }
+        return h;
+    }
+
+    function downloadPdf() {
+        if (!window._resumeText) return;
+        var w = window.open('', '_blank');
+        var text = window._resumeText;
+        var lines = text.split('\n');
+        var html = '<html><head><style>body{margin:0.4in 0.55in;font-family:Georgia,serif;color:#1a1a1a;font-size:11px;line-height:1.45;}h1{text-align:center;font-size:20px;margin:0;letter-spacing:1px;}p.contact{text-align:center;font-size:9px;color:#333;margin:2px 0 8px;}h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #000;padding-bottom:2px;margin:12px 0 6px;}li{font-size:10.5px;margin-bottom:1px;}p.line{font-size:10.5px;margin:1px 0;}</style></head><body>';
+        for (var i = 0; i < lines.length; i++) {
+            var l = lines[i].trim();
+            if (!l) continue;
+            if (i === 0) { html += '<h1>' + esc(l) + '</h1>'; continue; }
+            if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { html += '<p class="contact">' + esc(l) + '</p>'; continue; }
+            if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { html += '<h2>' + esc(l) + '</h2>'; continue; }
+            var cl = esc(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+            if (l.startsWith('* ') || l.startsWith('- ')) { html += '<li>' + cl.substring(2) + '</li>'; continue; }
+            if (l.indexOf(':') !== -1 && l.match(/^[A-Z]/)) { cl = cl.replace(/^([^:]+:)/, '<b>$1</b>'); }
+            html += '<p class="line">' + cl + '</p>';
+        }
+        html += '</body></html>';
+        w.document.write(html);
+        w.document.close();
+        setTimeout(function() { w.print(); }, 500);
+    }
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    function copyToClipboard() {
+        if (window._resumeText) {
+            navigator.clipboard.writeText(window._resumeText).then(function() {
+                var b = document.getElementById('copyBtn');
+                b.textContent = 'Copied!';
+                setTimeout(function() { b.textContent = 'Copy Resume Text'; }, 2000);
+            });
         }
     }
 
