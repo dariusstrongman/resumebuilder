@@ -170,6 +170,19 @@ function optimizeLinkedIn() {
             result.innerHTML = formatSuggestions(data.suggestions);
             result.style.display = 'block';
             result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (data.error && data.error.indexOf('Paste Text') !== -1) {
+            result.innerHTML = '<div style="text-align:center;padding:1rem;">'
+                + '<p style="font-weight:600;margin-bottom:0.75rem;">LinkedIn blocks automated reading. Here is how to copy your profile:</p>'
+                + '<ol style="text-align:left;max-width:400px;margin:0 auto 1rem;font-size:0.9rem;line-height:1.8;">'
+                + '<li>Open your LinkedIn profile in a new tab</li>'
+                + '<li>Scroll through your entire profile</li>'
+                + '<li>Press Ctrl+A (select all) then Ctrl+C (copy)</li>'
+                + '<li>Click the <strong>"Paste Text"</strong> tab above and paste it</li>'
+                + '</ol>'
+                + '<button class="btn btn-outline" onclick="switchLinkedInTab(\'text\');document.getElementById(\'linkedinInput\').focus();">Switch to Paste Text</button>'
+                + '</div>';
+            result.style.display = 'block';
+            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else if (data.error) {
             alert(data.error);
         }
