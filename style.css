@@ -262,6 +262,16 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 .blog-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem;line-height:1.35}
 .blog-card p{font-size:.85rem;color:var(--text-mid);line-height:1.5;margin-bottom:.5rem}
 .blog-meta{font-size:.75rem;color:var(--text-dim)}
+.blog-featured{display:block;padding:2rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);text-decoration:none;color:var(--text);transition:border-color .15s;position:relative;overflow:hidden}
+.blog-featured:hover{border-color:var(--primary)}
+.blog-featured h2{font-size:1.3rem;font-weight:700;margin-bottom:.5rem;line-height:1.3;text-align:left}
+.blog-featured p{font-size:.92rem;color:var(--text-mid);line-height:1.6;margin-bottom:.5rem}
+.bf-tag{position:absolute;top:1rem;right:1rem;background:var(--primary);color:#fff;font-size:.65rem;font-weight:700;padding:.2rem .6rem;border-radius:50px;text-transform:uppercase;letter-spacing:.05em}
+.bf-content{max-width:85%}
+.blog-pagination{display:flex;justify-content:center;gap:.4rem;margin-top:2rem}
+.blog-pagination button{padding:.45rem .85rem;border:1px solid var(--border);background:var(--bg-card);color:var(--text-mid);border-radius:var(--radius);font-family:inherit;font-size:.85rem;cursor:pointer;transition:all .15s}
+.blog-pagination button:hover{border-color:var(--primary);color:var(--primary)}
+.blog-pagination button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .blog-content{max-width:680px;margin:0 auto;padding:2rem 0 4rem}
 .blog-content h2{text-align:left;font-size:1.4rem;margin:2rem 0 .75rem}
 .blog-content p{font-size:.95rem;color:var(--text-mid);line-height:1.75;margin-bottom:1rem}
