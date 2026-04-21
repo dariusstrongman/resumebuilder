@@ -429,10 +429,13 @@ setInterval(function() { docIdx = (docIdx + 1) % docExamples.length; renderDocCo
 
 function enlargeDoc(el) {
     var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;cursor:pointer;';
-    var box = document.createElement('div');
-    box.style.cssText = 'background:#fff;color:#1a1a1a;padding:2.5rem 3rem;border-radius:8px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;font-family:Georgia,serif;font-size:11px;line-height:1.5;box-shadow:0 20px 60px rgba(0,0,0,.5);';
-    box.innerHTML = el.innerHTML.replace('Click to enlarge','');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;cursor:pointer;overflow-y:auto;';
+    var box = el.cloneNode(true);
+    box.classList.add('doc-enlarged');
+    box.style.cursor = 'default';
+    box.onclick = function(e) { e.stopPropagation(); };
+    var hint = box.querySelector('.enlarge-hint');
+    if (hint) hint.remove();
     overlay.appendChild(box);
     overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
     document.body.appendChild(overlay);
