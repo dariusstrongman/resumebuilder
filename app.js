@@ -234,7 +234,12 @@ function sendPayload(data, btn) {
     data.amount = data.include_cover_letter ? 150 : 100;
     if (promoApplied) data.promo_code = 'test123';
     var email = document.getElementById('userEmail').value.trim();
-    if (email) data.user_email = email;
+    if (!email || email.indexOf('@') < 1) {
+        alert('Please enter your email address.');
+        resetBtn(btn);
+        return;
+    }
+    data.user_email = email;
 
     fetch(WEBHOOK_URL, {
         method: 'POST',
