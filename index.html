@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeGo - AI Resume Tailor | Match Any Job Posting for $1</title>
+    <meta name="description" content="Paste your resume and a job posting. Get a tailored, ATS-optimized resume in seconds. Just $1 per resume, $0.50 for a cover letter.">
+    <meta property="og:title" content="ResumeGo - AI Resume Tailor">
+    <meta property="og:description" content="Tailored resumes that match job postings. ATS-optimized. $1 each.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://resume.stromation.com">
+    <meta name="twitter:card" content="summary">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-inner">
+            <a href="/" class="nav-brand">Resume<span>Go</span></a>
+            <div class="nav-links">
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#linkedin">LinkedIn</a>
+                <a href="#generate" class="btn btn-sm">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">AI-Powered Resume Tailoring</div>
+            <h1>Stop sending the same resume<br>to every job</h1>
+            <p class="hero-sub">Paste your resume + a job posting. Get a tailored, ATS-optimized resume in seconds. Hiring managers see a perfect match. You get more interviews.</p>
+            <div class="hero-cta">
+                <a href="#generate" class="btn btn-lg">Tailor My Resume - $1</a>
+                <p class="hero-note">No account needed. Pay per use.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><strong>$1</strong><span>per resume</span></div>
+                <div class="stat"><strong>+$0.50</strong><span>cover letter</span></div>
+                <div class="stat"><strong>30 sec</strong><span>delivery</span></div>
+                <div class="stat"><strong>ATS</strong><span>optimized</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2>How it works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Paste your resume</h3>
+                    <p>Copy and paste your current resume text. We keep your experience, education, and skills intact.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Paste the job posting</h3>
+                    <p>Copy the job description from LinkedIn, Indeed, or any job board. We extract the keywords that matter.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Download your tailored resume</h3>
+                    <p>Get a clean, professional PDF tailored to that specific role. ATS-friendly formatting, keyword-matched content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why" id="pricing">
+        <div class="container">
+            <h2>Why tailor every resume?</h2>
+            <div class="why-grid">
+                <div class="why-card">
+                    <h3>75% of resumes get filtered out</h3>
+                    <p>ATS software scans for keywords from the job description. Generic resumes miss them and never reach a human.</p>
+                </div>
+                <div class="why-card">
+                    <h3>Recruiters spend 7 seconds scanning</h3>
+                    <p>When your summary and bullet points mirror the job requirements, you pass the scan instantly.</p>
+                </div>
+                <div class="why-card">
+                    <h3>One resume fits nobody</h3>
+                    <p>A "Data Analyst" resume wont match a "Business Intelligence" posting even if you have the same skills. Wording matters.</p>
+                </div>
+            </div>
+            <div class="pricing-box">
+                <div class="price-item">
+                    <h3>Resume Tailor</h3>
+                    <div class="price">$1</div>
+                    <ul>
+                        <li>ATS-optimized for the specific job</li>
+                        <li>Clean, professional PDF</li>
+                        <li>1-2 pages (prefers 1 page)</li>
+                        <li>Keywords matched to job posting</li>
+                        <li>Ready in 30 seconds</li>
+                    </ul>
+                </div>
+                <div class="price-item highlight">
+                    <div class="popular">Most Popular</div>
+                    <h3>Resume + Cover Letter</h3>
+                    <div class="price">$1.50</div>
+                    <ul>
+                        <li>Everything in Resume Tailor</li>
+                        <li>Matching cover letter</li>
+                        <li>Same tone and keywords</li>
+                        <li>Addressed to the company</li>
+                        <li>Ready to send</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="linkedin-section" id="linkedin">
+        <div class="container">
+            <h2>LinkedIn Optimizer</h2>
+            <p class="section-sub">Paste your LinkedIn profile text. Get specific suggestions to improve your headline, summary, and experience sections for recruiter visibility.</p>
+            <div class="linkedin-box">
+                <textarea id="linkedinInput" placeholder="Paste your LinkedIn profile text here (headline, about, experience sections)..." rows="8"></textarea>
+                <button class="btn btn-lg" id="linkedinBtn" onclick="optimizeLinkedIn()">Optimize My LinkedIn - Free</button>
+                <div id="linkedinResult" class="linkedin-result" style="display:none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="generate-section" id="generate">
+        <div class="container">
+            <h2>Generate your tailored resume</h2>
+            <form id="resumeForm" class="resume-form">
+                <div class="form-group">
+                    <label for="resumeText">Your current resume</label>
+                    <textarea id="resumeText" placeholder="Paste your full resume text here..." rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="jobText">Job posting</label>
+                    <textarea id="jobText" placeholder="Paste the full job description here..." rows="10" required></textarea>
+                </div>
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="coverLetter">
+                        <span>Add a matching cover letter (+$0.50)</span>
+                    </label>
+                </div>
+                <div class="form-total">
+                    Total: <span id="totalPrice">$1.00</span>
+                </div>
+                <button type="submit" class="btn btn-lg btn-full" id="submitBtn">Pay & Generate Resume</button>
+                <p class="form-note">Secure payment via Stripe. No account needed.</p>
+            </form>
+            <div id="resultArea" class="result-area" style="display:none;">
+                <h3>Your tailored resume is ready</h3>
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>ResumeGo by <a href="https://www.stromation.com">Stromation</a></p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
