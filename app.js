@@ -179,52 +179,6 @@ function toggleFaq(btn) {
     if (!wasOpen) item.classList.add('open');
 }
 
-// LinkedIn optimizer
-function optimizeLinkedIn() {
-    var btn = document.getElementById('linkedinBtn');
-    var result = document.getElementById('linkedinResult');
-    var text = document.getElementById('linkedinInput').value.trim();
-    if (!text || text.length < 50) {
-        alert('Please paste your LinkedIn profile text (at least 50 characters).');
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Analyzing your profile...';
-    result.style.display = 'none';
-
-    fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'linkedin', linkedin_text: text })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.suggestions) {
-            result.innerHTML = formatSuggestions(data.suggestions);
-            result.style.display = 'block';
-            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else if (data.error) {
-            alert(data.error);
-        }
-    })
-    .catch(function() { alert('Something went wrong. Please try again.'); })
-    .finally(function() {
-        btn.disabled = false;
-        btn.textContent = 'Optimize My LinkedIn - Free';
-    });
-}
-
-function formatSuggestions(text) {
-    return text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/^### (.*$)/gm, '<h4 style="margin:1rem 0 .5rem;font-size:.95rem;">$1</h4>')
-        .replace(/^## (.*$)/gm, '<h3 style="margin:1.25rem 0 .5rem;font-size:1.05rem;">$1</h3>')
-        .replace(/^- (.*$)/gm, '<div style="padding:.15rem 0 .15rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--primary);">&#8226;</span>$1</div>')
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g, '<br>');
-}
-
 // Before/After rotation
 var baExamples = [
     {
