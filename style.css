@@ -151,6 +151,30 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 /* Launch tag */
 .launch-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:.2rem .9rem;border-radius:50px;font-size:.7rem;font-weight:700;white-space:nowrap}
 
+/* Document Comparison */
+.doc-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;transition:opacity .4s}
+.doc-col{position:relative}
+.doc-col-label{text-align:center;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;padding:.3rem .8rem;border-radius:50px;display:inline-block}
+.doc-col:first-child .doc-col-label{background:var(--red-light);color:var(--red)}
+.doc-col:last-child .doc-col-label{background:var(--green-light);color:var(--green)}
+.doc-col{text-align:center}
+.doc-preview{background:#fff;color:#1a1a1a;padding:1.25rem 1.5rem;border-radius:4px;text-align:left;font-family:Georgia,serif;font-size:.62rem;line-height:1.45;box-shadow:0 4px 20px rgba(0,0,0,.4);min-height:320px}
+.doc-preview .dp-name{text-align:center;font-size:.9rem;font-weight:700;letter-spacing:.5px;margin-bottom:.15rem}
+.doc-preview .dp-contact{text-align:center;font-size:.5rem;color:#555;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid #ccc}
+.doc-preview .dp-section{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:.5rem;padding-bottom:.1rem;border-bottom:1px solid #222;margin-bottom:.25rem}
+.doc-preview .dp-job{font-size:.58rem;margin-top:.35rem}
+.doc-preview .dp-job strong{font-size:.6rem}
+.doc-preview .dp-job em{font-size:.52rem;color:#555;font-style:italic}
+.doc-preview .dp-bullet{font-size:.55rem;margin-left:.7rem;margin-bottom:.1rem;position:relative;padding-left:.5rem;color:#333}
+.doc-preview .dp-bullet::before{content:"\2022";position:absolute;left:0;color:#555}
+.doc-preview .dp-weak{color:#999}
+.doc-preview .dp-strong{color:#1a1a1a}
+.doc-preview .dp-kw{background:rgba(99,102,241,.12);padding:0 2px;border-radius:2px;color:#4338ca;font-weight:600}
+.doc-score{text-align:center;margin-top:.6rem;font-size:.8rem;font-weight:700}
+.doc-col:first-child .doc-score{color:var(--red)}
+.doc-col:last-child .doc-score{color:var(--green)}
+@media(max-width:768px){.doc-compare{grid-template-columns:1fr}}
+
 /* How It Works */
 .how-section{padding:4rem 0;background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .steps{display:flex;align-items:flex-start}

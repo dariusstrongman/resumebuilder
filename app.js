@@ -341,76 +341,70 @@ function toggleFaq(btn) {
 }
 
 // Before/After rotation
-var baExamples = [
-    {
-        role: 'Registered Nurse', company: 'Memorial Hospital',
-        before: ['Took care of patients in the ICU', 'Gave medications and did assessments', 'Worked with doctors on treatment plans'],
-        afterRole: 'ICU Registered Nurse',
-        after: ['Delivered <em>critical care</em> to 4-6 <em>ICU patients</em> per shift, monitoring <em>ventilators</em>, <em>IV drips</em>, and <em>hemodynamic</em> status', 'Administered <em>high-risk medications</em> following <em>evidence-based protocols</em>, maintaining zero medication errors over 18 months', 'Collaborated with <em>interdisciplinary care teams</em> on <em>treatment planning</em> and <em>patient discharge coordination</em>'],
-        beforeScore: 31, afterScore: 89
-    },
-    {
-        role: 'Marketing Coordinator', company: 'BrightPath Agency',
-        before: ['Managed social media accounts', 'Helped with email campaigns', 'Created content for the website'],
-        afterRole: 'Digital Marketing Coordinator',
-        after: ['Managed <em>social media strategy</em> across 4 platforms, growing <em>organic engagement</em> by coordinating <em>content calendars</em> and <em>A/B testing</em>', 'Executed <em>email marketing campaigns</em> using <em>HubSpot</em>, segmenting audiences and optimizing <em>open rates</em> and <em>click-through rates</em>', 'Produced <em>SEO-optimized content</em> including blog posts, landing pages, and <em>lead magnets</em> aligned with <em>brand guidelines</em>'],
-        beforeScore: 24, afterScore: 87
-    },
-    {
-        role: 'Project Manager', company: 'BuildRight Construction',
-        before: ['Managed construction projects', 'Kept track of budgets and schedules', 'Worked with subcontractors'],
-        afterRole: 'Senior Project Manager',
-        after: ['Managed <em>commercial construction projects</em> valued at $2-5M, delivering within <em>budget</em> and <em>schedule constraints</em>', 'Tracked <em>project budgets</em>, <em>change orders</em>, and <em>cost forecasting</em> using <em>Procore</em> and <em>MS Project</em>', 'Coordinated 8-12 <em>subcontractor teams</em>, conducting <em>site inspections</em> and enforcing <em>OSHA safety compliance</em>'],
-        beforeScore: 28, afterScore: 91
-    },
-    {
-        role: 'Accountant', company: 'Greenfield Financial',
-        before: ['Did monthly financial reports', 'Helped with tax preparation', 'Reconciled accounts'],
-        afterRole: 'Staff Accountant',
-        after: ['Prepared <em>monthly financial statements</em> and <em>variance analysis</em> for management review in compliance with <em>GAAP</em>', 'Supported <em>tax preparation</em> and <em>year-end close</em> processes, coordinating with external <em>CPA firms</em> on <em>audit documentation</em>', 'Performed <em>account reconciliations</em> across 50+ <em>general ledger accounts</em>, resolving discrepancies within 48 hours'],
-        beforeScore: 22, afterScore: 85
-    },
-    {
-        role: 'Software Developer', company: 'Acme Corp',
-        before: ['Built web applications', 'Wrote APIs', 'Fixed bugs and did code reviews'],
-        afterRole: 'Full Stack Developer',
-        after: ['Developed <em>React</em> and <em>TypeScript</em> web applications serving production traffic with <em>CI/CD pipelines</em>', 'Designed and implemented <em>RESTful APIs</em> using <em>Node.js</em> and <em>PostgreSQL</em>, following <em>microservices architecture</em>', 'Conducted <em>code reviews</em> and <em>pair programming</em>, improving <em>code quality</em> and reducing <em>production incidents</em>'],
-        beforeScore: 33, afterScore: 92
-    },
-    {
-        role: 'Teacher', company: 'Lincoln Elementary',
-        before: ['Taught 3rd grade students', 'Created lesson plans', 'Met with parents about student progress'],
-        afterRole: 'Elementary Educator',
-        after: ['Designed and delivered <em>differentiated instruction</em> for 24 <em>diverse learners</em>, integrating <em>STEM activities</em> and <em>project-based learning</em>', 'Developed <em>standards-aligned lesson plans</em> using <em>backward design</em> framework, incorporating <em>formative assessments</em> and <em>data-driven instruction</em>', 'Facilitated <em>parent-teacher conferences</em> and maintained ongoing <em>family engagement</em> through <em>progress monitoring</em> and <em>intervention plans</em>'],
-        beforeScore: 26, afterScore: 88
-    }
+var docExamples = [
+    { name: 'MARIA GONZALEZ', contact: 'mariag88@yahoo.com | 469-555-0234',
+      beforeSummary: 'I am a store manager looking for new opportunities. Good at customer service and managing people.',
+      beforeJob: 'Store Manager', beforeCo: 'Dollar General, Mesquite TX', beforeDate: '2019 - Present',
+      beforeBullets: ['Manage the store', 'Do scheduling for employees', 'Handle customer complaints', 'Count the register at night'],
+      afterSummary: 'Retail operations manager with 5+ years overseeing daily store operations, P&L reporting, and team development for a high-volume location with ~$1.2M annual revenue.',
+      afterJob: 'Store Manager', afterCo: 'Dollar General, Mesquite TX', afterDate: '2019 - Present',
+      afterBullets: ['Managed daily operations for a <span class="dp-kw">high-volume retail location</span>, overseeing <span class="dp-kw">P&L reporting</span> and cash reconciliation', 'Recruited, trained, and <span class="dp-kw">developed a team</span> of ~10 associates, reducing turnover through structured onboarding', 'Resolved customer escalations and implemented service recovery processes, maintaining store satisfaction scores', 'Oversaw <span class="dp-kw">inventory management</span> and loss prevention, conducting nightly audits and variance reporting'],
+      beforeScore: 23, afterScore: 87 },
+    { name: 'JAMES CHEN', contact: 'jchen.dev@gmail.com | 972-555-3344 | github.com/jameschen',
+      beforeSummary: 'Software developer with experience in multiple programming languages. Strong problem solver.',
+      beforeJob: 'Software Developer', beforeCo: 'Acme Corp, Dallas TX', beforeDate: '2020 - Present',
+      beforeBullets: ['Built web applications', 'Wrote APIs', 'Fixed bugs', 'Did code reviews'],
+      afterSummary: 'Backend engineer with 4+ years building production web applications in Python and JavaScript. Experienced with RESTful APIs, PostgreSQL, and CI/CD pipelines in an Agile environment.',
+      afterJob: 'Software Developer', afterCo: 'Acme Corp, Dallas TX', afterDate: '2020 - Present',
+      afterBullets: ['Built and maintained <span class="dp-kw">React</span> web applications serving 50K+ monthly users with <span class="dp-kw">TypeScript</span> and modern frontend tooling', 'Designed <span class="dp-kw">RESTful APIs</span> in <span class="dp-kw">Node.js</span> with <span class="dp-kw">PostgreSQL</span>, handling 10K+ daily transactions across 3 microservices', 'Implemented <span class="dp-kw">CI/CD pipelines</span> using GitHub Actions, reducing deployment time from 2 hours to 15 minutes', 'Conducted <span class="dp-kw">code reviews</span> for a team of 6, reducing production bugs by ~30% quarter-over-quarter'],
+      beforeScore: 31, afterScore: 92 },
+    { name: 'TIFFANY NGUYEN', contact: 'tiffnguyen@gmail.com | 817-555-9012',
+      beforeSummary: 'New nursing graduate looking for my first RN position. Completed clinical rotations at JPS Hospital.',
+      beforeJob: 'Certified Nursing Assistant', beforeCo: 'Brookdale Senior Living, Arlington TX', beforeDate: 'Jun 2022 - May 2024',
+      beforeBullets: ['Took vital signs', 'Helped patients with daily activities', 'Documented patient info'],
+      afterSummary: 'BSN-prepared registered nurse with 2 years of CNA experience and 260 hours of clinical rotations across Med-Surg, ICU, OB, and Pediatrics units. BLS certified with hands-on patient assessment and documentation skills.',
+      afterJob: 'Certified Nursing Assistant', afterCo: 'Brookdale Senior Living, Arlington TX', afterDate: 'Jun 2022 - May 2024',
+      afterBullets: ['Monitored and recorded <span class="dp-kw">vital signs</span> for ~30 residents per shift, escalating changes to nursing staff per facility protocols', 'Delivered <span class="dp-kw">patient care</span> including bathing, mobility assistance, and meal support for a <span class="dp-kw">long-term care</span> population', 'Documented patient status and care activities in <span class="dp-kw">electronic health records</span>, maintaining accurate and timely charting'],
+      beforeScore: 19, afterScore: 84 },
+    { name: 'JOSE RAMIREZ', contact: 'jramirez77@gmail.com | 682-555-7788',
+      beforeSummary: 'Construction worker with experience in framing, concrete, and drywall.',
+      beforeJob: 'Construction Worker', beforeCo: 'Martinez Builders, Fort Worth TX', beforeDate: '2020 - Present',
+      beforeBullets: ['General construction work', 'Framing and concrete', 'Operated power tools'],
+      afterSummary: 'Construction professional with 5+ years of hands-on experience in commercial and residential projects. Skilled in concrete, framing, and finish work with OSHA 10 certification and bilingual English/Spanish communication.',
+      afterJob: 'Construction Worker', afterCo: 'Martinez Builders, Fort Worth TX', afterDate: '2020 - Present',
+      afterBullets: ['Executed <span class="dp-kw">framing</span>, <span class="dp-kw">concrete</span>, and <span class="dp-kw">drywall</span> installations across ~20 commercial and residential projects', 'Operated power tools and heavy equipment in compliance with <span class="dp-kw">OSHA safety regulations</span> with zero incidents', 'Read and interpreted <span class="dp-kw">construction drawings</span> to guide daily crew tasks and material staging', 'Trained 3 new crew members on site procedures, tool safety, and <span class="dp-kw">finish work</span> techniques'],
+      beforeScore: 25, afterScore: 88 }
 ];
 
-var baIndex = 0;
-var baGrid = document.getElementById('baGrid');
-function renderBaExample() {
-    if (!baGrid) return;
-    var ex = baExamples[baIndex];
-    baGrid.innerHTML = '<div class="ba-card ba-before">'
-        + '<div class="ba-tag ba-tag-red">What you sent</div>'
-        + '<div class="ba-line"><strong>' + ex.role + '</strong> <span>' + ex.company + '</span></div>'
-        + '<ul>' + ex.before.map(function(b) { return '<li>' + b + '</li>'; }).join('') + '</ul>'
-        + '<div class="ba-score ba-score-red"><span class="ba-pct">' + ex.beforeScore + '%</span> ATS match</div>'
-        + '</div>'
-        + '<div class="ba-card ba-after">'
-        + '<div class="ba-tag ba-tag-green">After ResumeGo</div>'
-        + '<div class="ba-line"><strong>' + ex.afterRole + '</strong> <span>' + ex.company + '</span></div>'
-        + '<ul>' + ex.after.map(function(b) { return '<li>' + b + '</li>'; }).join('') + '</ul>'
-        + '<div class="ba-score ba-score-green"><span class="ba-pct">' + ex.afterScore + '%</span> ATS match</div>'
-        + '</div>';
-    baGrid.style.opacity = '0';
-    setTimeout(function() { baGrid.style.opacity = '1'; }, 50);
+var docIdx = 0;
+var docEl = document.getElementById('docCompare');
+function renderDocCompare() {
+    if (!docEl) return;
+    var ex = docExamples[docIdx];
+    function doc(summary, job, co, date, bullets, highlighted) {
+        var cls = highlighted ? 'dp-strong' : 'dp-weak';
+        var h = '<div class="dp-name">' + ex.name + '</div>';
+        h += '<div class="dp-contact">' + ex.contact + '</div>';
+        h += '<div class="dp-section">PROFESSIONAL SUMMARY</div>';
+        h += '<div class="' + cls + '" style="font-size:.55rem;line-height:1.4;margin-bottom:.3rem;">' + summary + '</div>';
+        h += '<div class="dp-section">PROFESSIONAL EXPERIENCE</div>';
+        h += '<div class="dp-job"><strong>' + job + '</strong> | ' + co + '<br><em>' + date + '</em></div>';
+        for (var i = 0; i < bullets.length; i++) {
+            h += '<div class="dp-bullet">' + bullets[i] + '</div>';
+        }
+        return h;
+    }
+    docEl.innerHTML = '<div class="doc-col"><div class="doc-col-label">Before</div>'
+        + '<div class="doc-preview">' + doc(ex.beforeSummary, ex.beforeJob, ex.beforeCo, ex.beforeDate, ex.beforeBullets, false) + '</div>'
+        + '<div class="doc-score">' + ex.beforeScore + '% ATS match</div></div>'
+        + '<div class="doc-col"><div class="doc-col-label">After ResumeGo</div>'
+        + '<div class="doc-preview">' + doc(ex.afterSummary, ex.afterJob, ex.afterCo, ex.afterDate, ex.afterBullets, true) + '</div>'
+        + '<div class="doc-score">' + ex.afterScore + '% ATS match</div></div>';
+    docEl.style.opacity = '0';
+    setTimeout(function() { docEl.style.opacity = '1'; }, 50);
 }
-renderBaExample();
-setInterval(function() {
-    baIndex = (baIndex + 1) % baExamples.length;
-    renderBaExample();
-}, 5000);
+renderDocCompare();
+setInterval(function() { docIdx = (docIdx + 1) % docExamples.length; renderDocCompare(); }, 6000);
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
