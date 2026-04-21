@@ -72,6 +72,10 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 .checkbox-wrap strong{display:block;font-size:.9rem}
 .checkbox-wrap span{font-size:.78rem;color:var(--text-dim)}
 
+.email-input{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text);font-family:inherit;font-size:.88rem;transition:border-color .15s}
+.email-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.email-input::placeholder{color:var(--text-dim)}
+.label-hint{font-weight:400;font-size:.78rem;color:var(--text-dim)}
 .promo-row{display:flex;gap:.5rem;margin-bottom:.5rem}
 .promo-input{flex:1;padding:.6rem .85rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text);font-family:inherit;font-size:.85rem}
 .promo-input:focus{outline:none;border-color:var(--primary)}
