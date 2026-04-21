@@ -37,13 +37,6 @@ function toggleFaq(btn) {
     if (!wasOpen) item.classList.add('open');
 }
 
-// LinkedIn tabs
-function switchLinkedInTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-    document.getElementById('linkedinUrlTab').style.display = tab === 'url' ? 'block' : 'none';
-    document.getElementById('linkedinTextTab').style.display = tab === 'text' ? 'block' : 'none';
-}
 
 // Form submit
 var form = document.getElementById('resumeForm');
@@ -133,27 +126,13 @@ function escapeHtml(str) {
 function optimizeLinkedIn() {
     var btn = document.getElementById('linkedinBtn');
     var result = document.getElementById('linkedinResult');
-    var urlTab = document.getElementById('linkedinUrlTab');
-    var isUrl = urlTab.style.display !== 'none';
 
-    var payload = { mode: 'linkedin' };
-
-    if (isUrl) {
-        var slug = document.getElementById('linkedinUrl').value.trim();
-        if (!slug) {
-            alert('Please enter your LinkedIn profile URL or username.');
-            return;
-        }
-        slug = slug.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//i, '').replace(/\/+$/, '');
-        payload.linkedin_url = 'https://www.linkedin.com/in/' + slug;
-    } else {
-        var text = document.getElementById('linkedinInput').value.trim();
-        if (!text || text.length < 50) {
-            alert('Please paste your LinkedIn profile text (at least 50 characters).');
-            return;
-        }
-        payload.linkedin_text = text;
+    var text = document.getElementById('linkedinInput').value.trim();
+    if (!text || text.length < 50) {
+        alert('Please paste your LinkedIn profile text (at least 50 characters).');
+        return;
     }
+    var payload = { mode: 'linkedin', linkedin_text: text };
 
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Analyzing your profile...';
@@ -168,19 +147,6 @@ function optimizeLinkedIn() {
     .then(function(data) {
         if (data.suggestions) {
             result.innerHTML = formatSuggestions(data.suggestions);
-            result.style.display = 'block';
-            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else if (data.error && data.error.indexOf('Paste Text') !== -1) {
-            result.innerHTML = '<div style="text-align:center;padding:1rem;">'
-                + '<p style="font-weight:600;margin-bottom:0.75rem;">LinkedIn blocks automated reading. Here is how to copy your profile:</p>'
-                + '<ol style="text-align:left;max-width:400px;margin:0 auto 1rem;font-size:0.9rem;line-height:1.8;">'
-                + '<li>Open your LinkedIn profile in a new tab</li>'
-                + '<li>Scroll through your entire profile</li>'
-                + '<li>Press Ctrl+A (select all) then Ctrl+C (copy)</li>'
-                + '<li>Click the <strong>"Paste Text"</strong> tab above and paste it</li>'
-                + '</ol>'
-                + '<button class="btn btn-outline" onclick="switchLinkedInTab(\'text\');document.getElementById(\'linkedinInput\').focus();">Switch to Paste Text</button>'
-                + '</div>';
             result.style.display = 'block';
             result.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else if (data.error) {
