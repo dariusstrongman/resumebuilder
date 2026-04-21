@@ -295,7 +295,9 @@ function showResult(data) {
 
     var userEmail = document.getElementById('userEmail').value.trim();
     if (userEmail) {
-        html += '<div style="margin-top:1rem;padding:.75rem 1rem;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:var(--radius);font-size:.85rem;color:var(--text-mid);">A copy has been sent to <strong style="color:var(--text);">' + escapeHtml(userEmail) + '</strong>. Check your spam folder if you dont see it.</div>';
+        html += '<div style="margin-top:1rem;padding:.85rem 1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:.75rem;">'
+            + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>'
+            + '<div><span style="font-size:.88rem;color:var(--text);">Resume delivered to <strong>' + escapeHtml(userEmail) + '</strong></span><br><span style="font-size:.75rem;color:var(--text-dim);">Allow a few minutes for delivery. If you dont see it, check your spam or promotions folder.</span></div></div>';
     }
 
     content.innerHTML = html;
