@@ -293,6 +293,11 @@ function showResult(data) {
         html += '<div class="resume-preview" style="margin-top:.75rem;">' + formatResumePreview(data.cover_letter_text) + '</div></details>';
     }
 
+    var userEmail = document.getElementById('userEmail').value.trim();
+    if (userEmail) {
+        html += '<div style="margin-top:1rem;padding:.75rem 1rem;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:var(--radius);font-size:.85rem;color:var(--text-mid);">A copy has been sent to <strong style="color:var(--text);">' + escapeHtml(userEmail) + '</strong>. Check your spam folder if you dont see it.</div>';
+    }
+
     content.innerHTML = html;
     area.style.display = 'block';
     area.scrollIntoView({ behavior: 'smooth' });
