@@ -44,8 +44,8 @@ var jobHint = document.getElementById('jobHint');
 if (jobText) {
     jobText.addEventListener('input', function() {
         var val = this.value.trim();
-        if (val.match(/^https?:\/\//i) || val.match(/linkedin\.com|indeed\.com|glassdoor\.com/i)) {
-            jobHint.textContent = 'Paste the job description text, not the URL. Open the posting and copy the text.';
+        if (val.match(/^https?:\/\//i) && val.length < 200) {
+            jobHint.textContent = 'Tip: pasting the full job description text gives better results than a URL.';
         } else {
             jobHint.textContent = '';
         }
@@ -131,10 +131,6 @@ if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         var job = document.getElementById('jobText').value.trim();
-        if (job.match(/^https?:\/\//i)) {
-            alert('Please paste the job description text, not a URL. Open the job posting and copy the text.');
-            return;
-        }
         if (!job || job.length < 50) {
             alert('Please paste the full job description (at least 50 characters).');
             return;
