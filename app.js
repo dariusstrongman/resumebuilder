@@ -269,6 +269,8 @@ function showResult(data) {
     var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
     if (data.resume_pdf_base64) {
         html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="btn">Download Resume PDF</a>';
+    } else if (data.resume_text) {
+        html += '<button onclick="printResume()" class="btn">Download Resume PDF</button>';
     }
     if (data.cover_pdf_base64) {
         html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="btn" style="background:var(--green)">Download Cover Letter PDF</a>';
@@ -314,6 +316,31 @@ function formatResumePreview(text) {
         html += '<div style="font-size:.78rem;color:#ccc;">' + line + '</div>';
     }
     return html;
+}
+
+function printResume() {
+    if (!window._resumeText) return;
+    var text = window._resumeText;
+    var lines = text.split('\n');
+    var html = '<html><head><style>body{margin:40px 55px;font-family:Georgia,serif;color:#1a1a1a;font-size:11px;line-height:1.45;}h1{text-align:center;font-size:20px;margin:0;letter-spacing:1px;}p.contact{text-align:center;font-size:9px;color:#333;margin:2px 0 8px;}h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #000;padding-bottom:2px;margin:12px 0 6px;}div.job{margin-top:6px;}div.job strong{font-size:11px;}div.job em{font-size:9.5px;color:#555;}ul{margin:2px 0;padding-left:18px;}li{font-size:10.5px;margin-bottom:1px;}p.skills{font-size:10px;margin:1px 0;}p.edu{font-size:10px;margin:2px 0;}@media print{body{margin:0.4in 0.5in;}}</style></head><body>';
+    var inEdu = false;
+    for (var i = 0; i < lines.length; i++) {
+        var l = lines[i].trim();
+        if (!l) continue;
+        if (i === 0) { html += '<h1>' + escapeHtml(l) + '</h1>'; continue; }
+        if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { html += '<p class="contact">' + escapeHtml(l) + '</p>'; continue; }
+        if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { if (l.match(/EDUCATION/)) inEdu = true; else inEdu = false; html += '<h2>' + escapeHtml(l) + '</h2>'; continue; }
+        var cleaned = escapeHtml(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+        if (l.startsWith('* ') || l.startsWith('- ')) { html += '<li>' + cleaned.substring(2) + '</li>'; continue; }
+        if (l.match(/\|.*\d{4}/) && !inEdu) { html += '<div class="job"><strong>' + cleaned.split('|')[0] + '</strong> |' + cleaned.split('|').slice(1).join('|') + '</div>'; continue; }
+        if (inEdu) { html += '<p class="edu">' + cleaned + '</p>'; continue; }
+        html += '<p class="skills">' + cleaned + '</p>';
+    }
+    html += '</body></html>';
+    var w = window.open('', '_blank');
+    w.document.write(html);
+    w.document.close();
+    setTimeout(function() { w.print(); }, 500);
 }
 
 function copyResume() {
