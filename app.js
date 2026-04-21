@@ -157,14 +157,15 @@ if (form) {
             btn.innerHTML = '<span class="spinner"></span>Reading your resume...';
             extractTextFromFile(uploadedFile).then(function(text) {
                 if (!text || text.length < 50) {
-                    alert('Could not read your file. Please use the "Paste Text" tab instead.');
+                    alert('Could not extract enough text from your file (' + (text ? text.length : 0) + ' characters found). Please use the "Paste Text" tab and paste your resume manually.');
                     resetBtn(btn);
                     return;
                 }
                 btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
                 sendPayload({ resume: text, job_posting: job, include_cover_letter: wantCover }, btn);
-            }).catch(function() {
-                alert('Could not read your file. Please use the "Paste Text" tab instead.');
+            }).catch(function(err) {
+                console.error('File extraction error:', err);
+                alert('Could not read your file: ' + (err && err.message ? err.message : 'unknown error') + '. Please use the "Paste Text" tab instead.');
                 resetBtn(btn);
             });
         }
@@ -174,36 +175,54 @@ if (form) {
 function extractTextFromFile(file) {
     return new Promise(function(resolve, reject) {
         var reader = new FileReader();
+        reader.onerror = function() { reject(new Error('Could not read file')); };
         reader.onload = function() {
             var arrayBuffer = reader.result;
-            if (file.name.match(/\.pdf$/i) && window.pdfjsLib) {
-                var loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-                loadingTask.promise.then(function(pdf) {
-                    var pages = [];
-                    var done = 0;
-                    for (var i = 1; i <= pdf.numPages; i++) {
-                        (function(pageNum) {
-                            pdf.getPage(pageNum).then(function(page) {
-                                page.getTextContent().then(function(content) {
-                                    var text = content.items.map(function(item) { return item.str; }).join(' ');
-                                    pages[pageNum - 1] = text;
-                                    done++;
-                                    if (done === pdf.numPages) {
-                                        resolve(pages.join('\n\n'));
-                                    }
-                                });
-                            });
-                        })(i);
-                    }
-                }).catch(reject);
-            } else if (file.name.match(/\.docx?$/i) && window.mammoth) {
-                mammoth.extractRawText({ arrayBuffer: arrayBuffer }).then(function(result) {
-                    var text = (result.value || '').trim();
-                    if (text.length > 50) resolve(text);
-                    else reject(new Error('Could not read Word document'));
-                }).catch(reject);
+
+            if (file.name.match(/\.pdf$/i)) {
+                if (window.pdfjsLib) {
+                    try {
+                        var loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+                        loadingTask.promise.then(function(pdf) {
+                            var pages = [];
+                            var done = 0;
+                            var total = pdf.numPages;
+                            if (total === 0) { reject(new Error('PDF has no pages')); return; }
+                            for (var i = 1; i <= total; i++) {
+                                (function(pageNum) {
+                                    pdf.getPage(pageNum).then(function(page) {
+                                        page.getTextContent().then(function(content) {
+                                            var text = content.items.map(function(item) { return item.str; }).join(' ');
+                                            pages[pageNum - 1] = text;
+                                            done++;
+                                            if (done === total) {
+                                                var result = pages.join('\n\n').trim();
+                                                if (result.length > 50) resolve(result);
+                                                else reject(new Error('PDF appears to be scanned/image-based. Please use Paste Text tab.'));
+                                            }
+                                        }).catch(function() { done++; pages[pageNum-1] = ''; if (done === total) resolve(pages.join('\n\n').trim()); });
+                                    }).catch(function() { done++; pages[pageNum-1] = ''; if (done === total) resolve(pages.join('\n\n').trim()); });
+                                })(i);
+                            }
+                        }).catch(function(e) { reject(new Error('Could not parse PDF: ' + (e.message || e))); });
+                    } catch(e) { reject(new Error('PDF parser error: ' + e.message)); }
+                } else {
+                    reject(new Error('PDF reader not loaded. Try refreshing the page, or use the Paste Text tab.'));
+                }
+            } else if (file.name.match(/\.docx$/i)) {
+                if (window.mammoth) {
+                    mammoth.extractRawText({ arrayBuffer: arrayBuffer }).then(function(result) {
+                        var text = (result.value || '').trim();
+                        if (text.length > 50) resolve(text);
+                        else reject(new Error('Could not extract text from Word document'));
+                    }).catch(function(e) { reject(new Error('Word parser error: ' + (e.message || e))); });
+                } else {
+                    reject(new Error('Word reader not loaded. Try refreshing the page, or use the Paste Text tab.'));
+                }
+            } else if (file.name.match(/\.doc$/i)) {
+                reject(new Error('.doc format is not supported. Please save as .docx or PDF, or use the Paste Text tab.'));
             } else {
-                reject(new Error('Unsupported file type'));
+                reject(new Error('Unsupported file type. Please upload a PDF or .docx file.'));
             }
         };
         reader.readAsArrayBuffer(file);
