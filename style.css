@@ -39,6 +39,11 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 
 /* Upload Form */
 .upload-form{max-width:560px;margin:0 auto}
+.resume-input-tabs{display:flex;gap:0;margin-bottom:1rem;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.ri-tab{flex:1;padding:.65rem;background:var(--bg-card);border:none;font-family:inherit;font-size:.88rem;font-weight:600;color:var(--text-dim);cursor:pointer;transition:all .15s}
+.ri-tab.active{background:var(--primary);color:#fff}
+.ri-tab:hover:not(.active){color:var(--text)}
+.job-hint{font-weight:400;font-size:.78rem;color:var(--red)}
 .upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.25rem;background:var(--bg-card)}
 .upload-zone:hover,.upload-zone.drag-over{border-color:var(--primary);background:var(--primary-light)}
 .upload-zone.has-file{border-style:solid;border-color:var(--green);cursor:default}

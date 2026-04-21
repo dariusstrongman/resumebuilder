@@ -20,11 +20,35 @@ function applyPromo() {
     }
 }
 
+var resumeMode = 'upload';
+
+function switchResumeTab(tab) {
+    resumeMode = tab;
+    document.querySelectorAll('.ri-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+    document.getElementById('resumeUploadTab').style.display = tab === 'upload' ? 'block' : 'none';
+    document.getElementById('resumePasteTab').style.display = tab === 'paste' ? 'block' : 'none';
+}
+
 // Mobile menu
 var mobileToggle = document.getElementById('mobileToggle');
 if (mobileToggle) {
     mobileToggle.addEventListener('click', function() {
         document.getElementById('navLinks').classList.toggle('open');
+    });
+}
+
+// Job posting URL detection
+var jobText = document.getElementById('jobText');
+var jobHint = document.getElementById('jobHint');
+if (jobText) {
+    jobText.addEventListener('input', function() {
+        var val = this.value.trim();
+        if (val.match(/^https?:\/\//i) || val.match(/linkedin\.com|indeed\.com|glassdoor\.com/i)) {
+            jobHint.textContent = 'Paste the job description text, not the URL. Open the posting and copy the text.';
+        } else {
+            jobHint.textContent = '';
+        }
     });
 }
 
@@ -106,57 +130,69 @@ var form = document.getElementById('resumeForm');
 if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (!uploadedFile) {
-            uploadZone.classList.add('file-error');
-            setTimeout(function() { uploadZone.classList.remove('file-error'); }, 2000);
+        var job = document.getElementById('jobText').value.trim();
+        if (job.match(/^https?:\/\//i)) {
+            alert('Please paste the job description text, not a URL. Open the job posting and copy the text.');
             return;
         }
-        var job = document.getElementById('jobText').value.trim();
         if (!job || job.length < 50) {
             alert('Please paste the full job description (at least 50 characters).');
             return;
         }
         var wantCover = document.getElementById('coverLetter').checked;
         var btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
 
-        var reader = new FileReader();
-        reader.onload = function() {
-            var base64 = reader.result.split(',')[1];
-            var payload = {
-                mode: promoApplied ? 'tailor_free' : 'tailor',
-                file_base64: base64,
-                file_name: uploadedFile.name,
-                file_type: uploadedFile.type || 'application/pdf',
-                job_posting: job,
-                include_cover_letter: wantCover,
-                amount: wantCover ? 150 : 100
+        if (resumeMode === 'paste') {
+            var resumeTextVal = document.getElementById('resumeText').value.trim();
+            if (!resumeTextVal || resumeTextVal.length < 100) {
+                alert('Please paste your full resume text (at least 100 characters).');
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
+            sendPayload({ resume: resumeTextVal, job_posting: job, include_cover_letter: wantCover }, btn);
+        } else {
+            if (!uploadedFile) {
+                uploadZone.classList.add('file-error');
+                setTimeout(function() { uploadZone.classList.remove('file-error'); }, 2000);
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
+            var reader = new FileReader();
+            reader.onload = function() {
+                var base64 = reader.result.split(',')[1];
+                sendPayload({ file_base64: base64, file_name: uploadedFile.name, file_type: uploadedFile.type || 'application/pdf', job_posting: job, include_cover_letter: wantCover }, btn);
             };
-            if (promoApplied) payload.promo_code = 'test123';
+            reader.readAsDataURL(uploadedFile);
+        }
+    });
+}
 
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                if (data.payment_url) {
-                    window.location.href = data.payment_url;
-                } else if (data.resume_text) {
-                    showResult(data);
-                } else if (data.error) {
-                    alert(data.error);
-                    resetBtn(btn);
-                }
-            })
-            .catch(function() {
-                alert('Something went wrong. Please try again.');
-                resetBtn(btn);
-            });
-        };
-        reader.readAsDataURL(uploadedFile);
+function sendPayload(data, btn) {
+    data.mode = promoApplied ? 'tailor_free' : 'tailor';
+    data.amount = data.include_cover_letter ? 150 : 100;
+    if (promoApplied) data.promo_code = 'test123';
+
+    fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+        if (resp.payment_url) {
+            window.location.href = resp.payment_url;
+        } else if (resp.resume_text) {
+            showResult(resp);
+        } else if (resp.error) {
+            alert(resp.error);
+            resetBtn(btn);
+        }
+    })
+    .catch(function() {
+        alert('Something went wrong. Please try again.');
+        resetBtn(btn);
     });
 }
 

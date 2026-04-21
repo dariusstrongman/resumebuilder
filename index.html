@@ -37,23 +37,36 @@
             <p class="hero-sub">Upload your resume. Paste the job posting. Get a tailored version that passes ATS filters and lands interviews. 60 seconds. $1.</p>
 
             <form id="resumeForm" class="upload-form">
-                <div class="upload-zone" id="uploadZone">
-                    <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden>
-                    <div class="upload-default" id="uploadDefault">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-                        <p class="upload-text">Drop your resume here or <span class="upload-link">click to browse</span></p>
-                        <p class="upload-hint">PDF or Word, 5MB max</p>
-                    </div>
-                    <div class="upload-done" id="uploadDone" style="display:none;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-                        <span id="fileName"></span>
-                        <button type="button" class="upload-remove" id="removeFile">Remove</button>
+                <div class="resume-input-tabs">
+                    <button type="button" class="ri-tab active" data-tab="upload" onclick="switchResumeTab('upload')">Upload File</button>
+                    <button type="button" class="ri-tab" data-tab="paste" onclick="switchResumeTab('paste')">Paste Text</button>
+                </div>
+
+                <div id="resumeUploadTab">
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden>
+                        <div class="upload-default" id="uploadDefault">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                            <p class="upload-text">Drop your resume here or <span class="upload-link">click to browse</span></p>
+                            <p class="upload-hint">PDF or Word, 5MB max</p>
+                        </div>
+                        <div class="upload-done" id="uploadDone" style="display:none;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+                            <span id="fileName"></span>
+                            <button type="button" class="upload-remove" id="removeFile">Remove</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="jobText">Job posting</label>
-                    <textarea id="jobText" placeholder="Paste the full job description here. Include the title, requirements, and qualifications." rows="8" required></textarea>
+                <div id="resumePasteTab" style="display:none;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <textarea id="resumeText" placeholder="Paste your full resume text here. Include name, contact info, summary, experience, skills, and education." rows="10"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:1.25rem;">
+                    <label for="jobText">Job posting <span class="job-hint" id="jobHint"></span></label>
+                    <textarea id="jobText" placeholder="Paste the full job description text here. Copy it from LinkedIn, Indeed, or any job board. Do not paste a URL." rows="8" required></textarea>
                 </div>
 
                 <label class="checkbox-wrap">
