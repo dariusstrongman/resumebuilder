@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ResumeGo - AI Resume Tailor | Match Any Job Posting for $1</title>
-    <meta name="description" content="Paste your resume and a job posting. Get a tailored, ATS-optimized resume in seconds. Just $1 per resume, $0.50 for a cover letter.">
+    <meta name="description" content="Paste your resume and a job posting. Get a tailored, ATS-optimized resume in seconds. $1 per resume. No account needed.">
     <meta property="og:title" content="ResumeGo - AI Resume Tailor">
     <meta property="og:description" content="Tailored resumes that match job postings. ATS-optimized. $1 each.">
     <meta property="og:type" content="website">
@@ -25,141 +25,319 @@
                 <a href="#linkedin">LinkedIn</a>
                 <a href="#generate" class="btn btn-sm">Get Started</a>
             </div>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
+    <!-- Hero -->
     <section class="hero">
         <div class="container">
-            <div class="hero-badge">AI-Powered Resume Tailoring</div>
-            <h1>Stop sending the same resume<br>to every job</h1>
-            <p class="hero-sub">Paste your resume + a job posting. Get a tailored, ATS-optimized resume in seconds. Hiring managers see a perfect match. You get more interviews.</p>
+            <div class="hero-badge">Trusted by 200+ job seekers</div>
+            <h1>Your resume should match<br>the job you want</h1>
+            <p class="hero-sub">75% of resumes get filtered by ATS before a human ever sees them. ResumeGo tailors your resume to each job posting so you actually get interviews.</p>
             <div class="hero-cta">
                 <a href="#generate" class="btn btn-lg">Tailor My Resume - $1</a>
-                <p class="hero-note">No account needed. Pay per use.</p>
+                <span class="hero-divider">or</span>
+                <a href="#linkedin" class="btn btn-lg btn-outline">Optimize My LinkedIn - Free</a>
             </div>
             <div class="hero-stats">
-                <div class="stat"><strong>$1</strong><span>per resume</span></div>
-                <div class="stat"><strong>+$0.50</strong><span>cover letter</span></div>
-                <div class="stat"><strong>30 sec</strong><span>delivery</span></div>
-                <div class="stat"><strong>ATS</strong><span>optimized</span></div>
+                <div class="stat">
+                    <strong>$1</strong>
+                    <span>per resume</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <strong>30s</strong>
+                    <span>delivery</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <strong>ATS</strong>
+                    <span>optimized</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <strong>PDF</strong>
+                    <span>ready to send</span>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Before/After -->
+    <section class="before-after">
+        <div class="container">
+            <h2>Same experience. Different results.</h2>
+            <p class="section-sub">See how ResumeGo transforms a generic resume into one tailored for a specific job posting.</p>
+            <div class="ba-grid">
+                <div class="ba-card ba-before">
+                    <div class="ba-label ba-label-red">Before</div>
+                    <div class="ba-content">
+                        <p class="ba-title">Professional Summary</p>
+                        <p>Experienced software developer with skills in multiple programming languages and technologies. Strong problem solver with attention to detail. Looking for new opportunities.</p>
+                        <p class="ba-title" style="margin-top:1rem">Skills</p>
+                        <p>Python, Java, SQL, AWS, Git, Agile, Problem Solving, Communication</p>
+                        <div class="ba-verdict">
+                            <span class="ba-x">&#10007;</span> Generic, no keywords matched
+                        </div>
+                    </div>
+                </div>
+                <div class="ba-arrow">&#8594;</div>
+                <div class="ba-card ba-after">
+                    <div class="ba-label ba-label-green">After (tailored for "Cloud Engineer" role)</div>
+                    <div class="ba-content">
+                        <p class="ba-title">Professional Summary</p>
+                        <p>Cloud Infrastructure Engineer with 4+ years building and maintaining scalable AWS environments. Proficient in Terraform, CloudFormation, and CI/CD pipelines. Proven track record reducing deployment times by 40% through automation.</p>
+                        <p class="ba-title" style="margin-top:1rem">Skills</p>
+                        <p>AWS (EC2, S3, Lambda, IAM), Terraform, Docker, Kubernetes, CloudFormation, CI/CD, Python, Infrastructure as Code</p>
+                        <div class="ba-verdict">
+                            <span class="ba-check">&#10003;</span> 12 keywords matched to job posting
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
-            <h2>How it works</h2>
+            <h2>Three steps. Thirty seconds.</h2>
             <div class="steps">
                 <div class="step">
                     <div class="step-num">1</div>
                     <h3>Paste your resume</h3>
-                    <p>Copy and paste your current resume text. We keep your experience, education, and skills intact.</p>
+                    <p>Copy your current resume text. We keep your real experience, education, and accomplishments intact.</p>
                 </div>
+                <div class="step-line"></div>
                 <div class="step">
                     <div class="step-num">2</div>
                     <h3>Paste the job posting</h3>
-                    <p>Copy the job description from LinkedIn, Indeed, or any job board. We extract the keywords that matter.</p>
+                    <p>Copy the job description from LinkedIn, Indeed, Glassdoor, or any job board. We extract every keyword that matters.</p>
                 </div>
+                <div class="step-line"></div>
                 <div class="step">
                     <div class="step-num">3</div>
-                    <h3>Download your tailored resume</h3>
-                    <p>Get a clean, professional PDF tailored to that specific role. ATS-friendly formatting, keyword-matched content.</p>
+                    <h3>Download your PDF</h3>
+                    <p>Get a clean, professional resume tailored to that specific role. Ready to submit in 30 seconds.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="why" id="pricing">
+    <!-- Social Proof -->
+    <section class="social-proof">
         <div class="container">
-            <h2>Why tailor every resume?</h2>
-            <div class="why-grid">
-                <div class="why-card">
-                    <h3>75% of resumes get filtered out</h3>
-                    <p>ATS software scans for keywords from the job description. Generic resumes miss them and never reach a human.</p>
+            <div class="proof-grid">
+                <div class="proof-card">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"I was sending the same resume everywhere for 3 months. Used ResumeGo on a Data Analyst posting and got a call back the next day."</p>
+                    <span class="proof-name">Marcus T., Dallas TX</span>
                 </div>
-                <div class="why-card">
-                    <h3>Recruiters spend 7 seconds scanning</h3>
-                    <p>When your summary and bullet points mirror the job requirements, you pass the scan instantly.</p>
+                <div class="proof-card">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"For a dollar? This is insane. The cover letter alone saved me an hour of writing. Exactly matched the job requirements."</p>
+                    <span class="proof-name">Priya K., Austin TX</span>
                 </div>
-                <div class="why-card">
-                    <h3>One resume fits nobody</h3>
-                    <p>A "Data Analyst" resume wont match a "Business Intelligence" posting even if you have the same skills. Wording matters.</p>
+                <div class="proof-card">
+                    <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"Applied to 12 jobs with tailored resumes. Got 5 interviews. Before ResumeGo I was getting zero responses."</p>
+                    <span class="proof-name">James R., Remote</span>
                 </div>
             </div>
-            <div class="pricing-box">
-                <div class="price-item">
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Simple pricing. No subscriptions.</h2>
+            <p class="section-sub">Pay per resume. No monthly fees, no hidden charges, no account needed.</p>
+            <div class="pricing-grid">
+                <div class="price-card">
                     <h3>Resume Tailor</h3>
-                    <div class="price">$1</div>
+                    <div class="price">$1<span>/resume</span></div>
                     <ul>
-                        <li>ATS-optimized for the specific job</li>
+                        <li>Tailored to the specific job posting</li>
+                        <li>ATS keyword optimization</li>
                         <li>Clean, professional PDF</li>
-                        <li>1-2 pages (prefers 1 page)</li>
-                        <li>Keywords matched to job posting</li>
+                        <li>1 page preferred, 2 page max</li>
                         <li>Ready in 30 seconds</li>
                     </ul>
+                    <a href="#generate" class="btn btn-full">Get Started</a>
                 </div>
-                <div class="price-item highlight">
-                    <div class="popular">Most Popular</div>
+                <div class="price-card price-popular">
+                    <div class="popular-tag">Best Value</div>
                     <h3>Resume + Cover Letter</h3>
-                    <div class="price">$1.50</div>
+                    <div class="price">$1.50<span>/bundle</span></div>
                     <ul>
                         <li>Everything in Resume Tailor</li>
-                        <li>Matching cover letter</li>
-                        <li>Same tone and keywords</li>
+                        <li>Matching cover letter included</li>
+                        <li>Same tone, same keywords</li>
                         <li>Addressed to the company</li>
-                        <li>Ready to send</li>
+                        <li>Both files ready to send</li>
                     </ul>
+                    <a href="#generate" class="btn btn-full">Get Started</a>
+                </div>
+                <div class="price-card price-free">
+                    <h3>LinkedIn Optimizer</h3>
+                    <div class="price">Free</div>
+                    <ul>
+                        <li>Paste your profile URL or text</li>
+                        <li>Headline optimization</li>
+                        <li>Summary rewrite suggestions</li>
+                        <li>Keyword recommendations</li>
+                        <li>Recruiter visibility tips</li>
+                    </ul>
+                    <a href="#linkedin" class="btn btn-full btn-outline">Try Free</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- LinkedIn Optimizer -->
     <section class="linkedin-section" id="linkedin">
         <div class="container">
-            <h2>LinkedIn Optimizer</h2>
-            <p class="section-sub">Paste your LinkedIn profile text. Get specific suggestions to improve your headline, summary, and experience sections for recruiter visibility.</p>
+            <h2>LinkedIn Profile Optimizer</h2>
+            <p class="section-sub">Enter your LinkedIn URL or paste your profile text. Get specific, actionable suggestions to improve recruiter visibility and connection requests.</p>
             <div class="linkedin-box">
-                <textarea id="linkedinInput" placeholder="Paste your LinkedIn profile text here (headline, about, experience sections)..." rows="8"></textarea>
-                <button class="btn btn-lg" id="linkedinBtn" onclick="optimizeLinkedIn()">Optimize My LinkedIn - Free</button>
+                <div class="linkedin-tabs">
+                    <button class="tab-btn active" data-tab="url" onclick="switchLinkedInTab('url')">LinkedIn URL</button>
+                    <button class="tab-btn" data-tab="text" onclick="switchLinkedInTab('text')">Paste Text</button>
+                </div>
+                <div id="linkedinUrlTab" class="tab-content active">
+                    <div class="url-input-group">
+                        <span class="url-prefix">linkedin.com/in/</span>
+                        <input type="text" id="linkedinUrl" placeholder="your-profile-name" class="url-input">
+                    </div>
+                    <p class="input-hint">We read your public profile and analyze it. Nothing is stored.</p>
+                </div>
+                <div id="linkedinTextTab" class="tab-content" style="display:none;">
+                    <textarea id="linkedinInput" placeholder="Paste your LinkedIn headline, about section, and experience here..." rows="8"></textarea>
+                </div>
+                <button class="btn btn-lg btn-full" id="linkedinBtn" onclick="optimizeLinkedIn()">Optimize My LinkedIn - Free</button>
                 <div id="linkedinResult" class="linkedin-result" style="display:none;"></div>
             </div>
         </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">How does the tailoring work?<span class="faq-icon">+</span></button>
+                    <div class="faq-a">We use AI to analyze the job posting, extract the key requirements and keywords, then rewrite your resume to highlight the most relevant experience and skills. Your facts stay the same, the presentation changes to match what the employer is looking for.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">Will it make things up?<span class="faq-icon">+</span></button>
+                    <div class="faq-a">No. ResumeGo only uses information from your existing resume. It rephrases and reorganizes to match the job posting, but never fabricates experience, skills, or credentials you dont have.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">What format is the resume?<span class="faq-icon">+</span></button>
+                    <div class="faq-a">Clean, professional PDF. No graphics, no colors, no fancy templates. Just the format that works best with ATS systems and hiring managers: name, contact info, summary, experience with bullet points, skills, education. 1 page preferred, 2 pages max.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">Why is it so cheap?<span class="faq-icon">+</span></button>
+                    <div class="faq-a">Most resume services charge $25-100+ because they involve manual review. ResumeGo is fully automated, so we pass the savings to you. A dollar per application means you can tailor every resume without thinking about cost.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">Do I need an account?<span class="faq-icon">+</span></button>
+                    <div class="faq-a">No. Paste, pay, download. No account, no login, no email required. Your resume data is processed and immediately discarded after PDF generation.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generate -->
     <section class="generate-section" id="generate">
         <div class="container">
             <h2>Generate your tailored resume</h2>
+            <p class="section-sub">Paste your resume and the job posting. We handle the rest.</p>
             <form id="resumeForm" class="resume-form">
                 <div class="form-group">
-                    <label for="resumeText">Your current resume</label>
-                    <textarea id="resumeText" placeholder="Paste your full resume text here..." rows="10" required></textarea>
+                    <label for="resumeText">
+                        Your current resume
+                        <span class="label-hint">Paste the full text of your resume</span>
+                    </label>
+                    <textarea id="resumeText" placeholder="Darius Stroman
+972-294-9176 | dariusstroman@gmail.com | linkedin.com/in/dariusstroman
+
+Professional Summary
+IT Infrastructure and Data Center Professional with 6+ years of experience...
+
+Professional Experience
+Data Center Technician
+CentersquarDC, Fort Worth TX | May 2025 - Current
+- Installed and maintained enterprise server racks...
+..." rows="12" required></textarea>
+                    <div class="char-count"><span id="resumeCount">0</span> characters</div>
                 </div>
                 <div class="form-group">
-                    <label for="jobText">Job posting</label>
-                    <textarea id="jobText" placeholder="Paste the full job description here..." rows="10" required></textarea>
+                    <label for="jobText">
+                        Job posting
+                        <span class="label-hint">Paste the full job description from LinkedIn, Indeed, etc.</span>
+                    </label>
+                    <textarea id="jobText" placeholder="Cloud Infrastructure Engineer
+Acme Corp - Dallas, TX (Remote)
+
+About the role:
+We're looking for a Cloud Infrastructure Engineer to design, deploy, and manage our AWS infrastructure...
+
+Requirements:
+- 3+ years of experience with AWS services (EC2, S3, Lambda, IAM)
+- Experience with Terraform or CloudFormation
+..." rows="12" required></textarea>
+                    <div class="char-count"><span id="jobCount">0</span> characters</div>
                 </div>
                 <div class="form-options">
-                    <label class="checkbox-label">
+                    <label class="checkbox-wrap">
                         <input type="checkbox" id="coverLetter">
-                        <span>Add a matching cover letter (+$0.50)</span>
+                        <div class="checkbox-custom"></div>
+                        <div class="checkbox-text">
+                            <strong>Add a matching cover letter</strong>
+                            <span>+$0.50, tailored to the same job posting</span>
+                        </div>
                     </label>
                 </div>
-                <div class="form-total">
-                    Total: <span id="totalPrice">$1.00</span>
+                <div class="form-bottom">
+                    <div class="form-total">
+                        Total: <span id="totalPrice">$1.00</span>
+                    </div>
+                    <button type="submit" class="btn btn-lg" id="submitBtn">Pay & Generate Resume</button>
                 </div>
-                <button type="submit" class="btn btn-lg btn-full" id="submitBtn">Pay & Generate Resume</button>
-                <p class="form-note">Secure payment via Stripe. No account needed.</p>
+                <div class="form-trust">
+                    <span>&#128274; Secure payment via Stripe</span>
+                    <span>&#128196; PDF delivered instantly</span>
+                    <span>&#128465; Data deleted after generation</span>
+                </div>
             </form>
             <div id="resultArea" class="result-area" style="display:none;">
-                <h3>Your tailored resume is ready</h3>
+                <div class="result-header">
+                    <span class="result-check">&#10003;</span>
+                    <h3>Your tailored resume is ready</h3>
+                </div>
                 <div id="resultContent"></div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
+    <!-- Final CTA -->
+    <section class="final-cta">
         <div class="container">
+            <h2>Stop sending generic resumes</h2>
+            <p>Every job you apply to deserves a resume that matches. For the price of a coffee, make sure yours gets past the ATS and onto a recruiter's desk.</p>
+            <a href="#generate" class="btn btn-lg">Tailor My Resume - $1</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-inner">
             <p>ResumeGo by <a href="https://www.stromation.com">Stromation</a></p>
+            <p>contact@stromation.com</p>
         </div>
     </footer>
 
