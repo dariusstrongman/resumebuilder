@@ -267,11 +267,11 @@ function showResult(data) {
     var btn = document.getElementById('submitBtn');
 
     var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
-    if (data.resume_pdf_url) {
-        html += '<a href="' + data.resume_pdf_url + '" target="_blank" class="btn">Download Resume PDF</a>';
+    if (data.resume_pdf_base64) {
+        html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="btn">Download Resume PDF</a>';
     }
-    if (data.cover_letter_pdf_url) {
-        html += '<a href="' + data.cover_letter_pdf_url + '" target="_blank" class="btn" style="background:var(--green)">Download Cover Letter PDF</a>';
+    if (data.cover_pdf_base64) {
+        html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="btn" style="background:var(--green)">Download Cover Letter PDF</a>';
     }
     html += '</div>';
 
