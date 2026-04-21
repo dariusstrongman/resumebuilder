@@ -1,97 +1,146 @@
 var WEBHOOK_URL = 'https://n8n.myaibuffet.com/webhook/resume-tailor';
+var uploadedFile = null;
 
 // Mobile menu
 var mobileToggle = document.getElementById('mobileToggle');
 if (mobileToggle) {
     mobileToggle.addEventListener('click', function() {
-        document.querySelector('.nav-links').classList.toggle('open');
+        document.getElementById('navLinks').classList.toggle('open');
     });
 }
 
 // Price toggle
 var coverCheck = document.getElementById('coverLetter');
-var totalEl = document.getElementById('totalPrice');
+var totalEl = document.getElementById('btnPrice');
 if (coverCheck) {
     coverCheck.addEventListener('change', function() {
         totalEl.textContent = this.checked ? '$1.50' : '$1.00';
     });
 }
 
-// Character counts
-var resumeText = document.getElementById('resumeText');
-var jobText = document.getElementById('jobText');
-var resumeCount = document.getElementById('resumeCount');
-var jobCount = document.getElementById('jobCount');
-if (resumeText && resumeCount) {
-    resumeText.addEventListener('input', function() { resumeCount.textContent = this.value.length; });
-}
-if (jobText && jobCount) {
-    jobText.addEventListener('input', function() { jobCount.textContent = this.value.length; });
+// File upload
+var uploadZone = document.getElementById('uploadZone');
+var fileInput = document.getElementById('fileInput');
+var uploadDefault = document.getElementById('uploadDefault');
+var uploadDone = document.getElementById('uploadDone');
+var fileNameEl = document.getElementById('fileName');
+var removeBtn = document.getElementById('removeFile');
+
+if (uploadZone) {
+    uploadZone.addEventListener('click', function() {
+        if (!uploadedFile) fileInput.click();
+    });
+
+    uploadZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+
+    uploadZone.addEventListener('dragleave', function() {
+        this.classList.remove('drag-over');
+    });
+
+    uploadZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', function() {
+        if (this.files.length) handleFile(this.files[0]);
+    });
+
+    removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        uploadedFile = null;
+        fileInput.value = '';
+        uploadDefault.style.display = 'block';
+        uploadDone.style.display = 'none';
+        uploadZone.classList.remove('has-file', 'file-error');
+    });
 }
 
-// FAQ toggle
-function toggleFaq(btn) {
-    var item = btn.parentElement;
-    var wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(function(el) { el.classList.remove('open'); });
-    if (!wasOpen) item.classList.add('open');
+function handleFile(file) {
+    var validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (validTypes.indexOf(file.type) === -1 && !file.name.match(/\.(pdf|doc|docx)$/i)) {
+        uploadZone.classList.add('file-error');
+        uploadDefault.innerHTML = '<p style="color:var(--red);font-weight:600;">Please upload a PDF or Word document</p><p class="upload-hint">PDF or Word, 5MB max</p>';
+        setTimeout(function() {
+            uploadZone.classList.remove('file-error');
+            uploadDefault.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><p class="upload-text">Drop your resume here or <span class="upload-link">click to browse</span></p><p class="upload-hint">PDF or Word, 5MB max</p>';
+        }, 3000);
+        return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+        alert('File is too large. Maximum 5MB.');
+        return;
+    }
+    uploadedFile = file;
+    fileNameEl.textContent = file.name;
+    uploadDefault.style.display = 'none';
+    uploadDone.style.display = 'flex';
+    uploadZone.classList.add('has-file');
 }
-
 
 // Form submit
 var form = document.getElementById('resumeForm');
 if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        var resume = document.getElementById('resumeText').value.trim();
-        var job = document.getElementById('jobText').value.trim();
-        var wantCover = document.getElementById('coverLetter').checked;
-        var btn = document.getElementById('submitBtn');
-
-        if (!resume || resume.length < 100) {
-            alert('Please paste your full resume (at least 100 characters).');
+        if (!uploadedFile) {
+            uploadZone.classList.add('file-error');
+            setTimeout(function() { uploadZone.classList.remove('file-error'); }, 2000);
             return;
         }
+        var job = document.getElementById('jobText').value.trim();
         if (!job || job.length < 50) {
             alert('Please paste the full job description (at least 50 characters).');
             return;
         }
-
+        var wantCover = document.getElementById('coverLetter').checked;
+        var btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span>Generating your resume...';
+        btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
 
-        fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                mode: 'tailor',
-                resume: resume,
-                job_posting: job,
-                include_cover_letter: wantCover,
-                amount: wantCover ? 150 : 100
+        var reader = new FileReader();
+        reader.onload = function() {
+            var base64 = reader.result.split(',')[1];
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mode: 'tailor',
+                    file_base64: base64,
+                    file_name: uploadedFile.name,
+                    file_type: uploadedFile.type || 'application/pdf',
+                    job_posting: job,
+                    include_cover_letter: wantCover,
+                    amount: wantCover ? 150 : 100
+                })
             })
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            if (data.payment_url) {
-                window.location.href = data.payment_url;
-            } else if (data.resume_html) {
-                showResult(data);
-            } else if (data.error) {
-                alert(data.error);
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.payment_url) {
+                    window.location.href = data.payment_url;
+                } else if (data.resume_text) {
+                    showResult(data);
+                } else if (data.error) {
+                    alert(data.error);
+                    resetBtn(btn);
+                }
+            })
+            .catch(function() {
+                alert('Something went wrong. Please try again.');
                 resetBtn(btn);
-            }
-        })
-        .catch(function() {
-            alert('Something went wrong. Please try again.');
-            resetBtn(btn);
-        });
+            });
+        };
+        reader.readAsDataURL(uploadedFile);
     });
 }
 
 function resetBtn(btn) {
     btn.disabled = false;
-    btn.textContent = 'Pay & Generate Resume';
+    btn.innerHTML = 'Tailor My Resume <span class="btn-price" id="btnPrice">' + (document.getElementById('coverLetter').checked ? '$1.50' : '$1.00') + '</span>';
 }
 
 function showResult(data) {
@@ -107,8 +156,8 @@ function showResult(data) {
         html += '<a href="' + data.cover_letter_pdf_url + '" target="_blank" class="btn download-btn" style="background:var(--green)">Download Cover Letter</a>';
     }
     if (data.resume_text) {
-        html += '<details style="margin-top:1.5rem;"><summary style="cursor:pointer;font-weight:600;font-size:0.9rem;color:var(--text-light);">Preview resume text</summary>';
-        html += '<div style="margin-top:1rem;padding:1.5rem;background:#fff;border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;line-height:1.65;white-space:pre-wrap;">' + escapeHtml(data.resume_text) + '</div></details>';
+        html += '<details style="margin-top:1.25rem;"><summary style="cursor:pointer;font-weight:600;font-size:.85rem;color:var(--text-dim);">Preview resume text</summary>';
+        html += '<div style="margin-top:.75rem;padding:1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);font-size:.82rem;line-height:1.65;white-space:pre-wrap;">' + escapeHtml(data.resume_text) + '</div></details>';
     }
     content.innerHTML = html;
     area.style.display = 'block';
@@ -122,17 +171,23 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+// FAQ toggle
+function toggleFaq(btn) {
+    var item = btn.parentElement;
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(el) { el.classList.remove('open'); });
+    if (!wasOpen) item.classList.add('open');
+}
+
 // LinkedIn optimizer
 function optimizeLinkedIn() {
     var btn = document.getElementById('linkedinBtn');
     var result = document.getElementById('linkedinResult');
-
     var text = document.getElementById('linkedinInput').value.trim();
     if (!text || text.length < 50) {
         alert('Please paste your LinkedIn profile text (at least 50 characters).');
         return;
     }
-    var payload = { mode: 'linkedin', linkedin_text: text };
 
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Analyzing your profile...';
@@ -141,7 +196,7 @@ function optimizeLinkedIn() {
     fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ mode: 'linkedin', linkedin_text: text })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -153,9 +208,7 @@ function optimizeLinkedIn() {
             alert(data.error);
         }
     })
-    .catch(function() {
-        alert('Something went wrong. Please try again.');
-    })
+    .catch(function() { alert('Something went wrong. Please try again.'); })
     .finally(function() {
         btn.disabled = false;
         btn.textContent = 'Optimize My LinkedIn - Free';
@@ -165,21 +218,21 @@ function optimizeLinkedIn() {
 function formatSuggestions(text) {
     return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/^### (.*$)/gm, '<h4 style="margin:1.25rem 0 0.5rem;font-size:1rem;color:var(--text);">$1</h4>')
-        .replace(/^## (.*$)/gm, '<h3 style="margin:1.5rem 0 0.5rem;font-size:1.1rem;color:var(--text);">$1</h3>')
-        .replace(/^- (.*$)/gm, '<div style="padding:0.2rem 0 0.2rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--primary);">&#8226;</span>$1</div>')
+        .replace(/^### (.*$)/gm, '<h4 style="margin:1rem 0 .5rem;font-size:.95rem;">$1</h4>')
+        .replace(/^## (.*$)/gm, '<h3 style="margin:1.25rem 0 .5rem;font-size:1.05rem;">$1</h3>')
+        .replace(/^- (.*$)/gm, '<div style="padding:.15rem 0 .15rem 1rem;position:relative;"><span style="position:absolute;left:0;color:var(--primary);">&#8226;</span>$1</div>')
         .replace(/\n\n/g, '<br><br>')
         .replace(/\n/g, '<br>');
 }
 
-// Smooth scroll for anchor links
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
     a.addEventListener('click', function(e) {
         var target = document.querySelector(this.getAttribute('href'));
         if (target) {
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            document.querySelector('.nav-links').classList.remove('open');
+            document.getElementById('navLinks').classList.remove('open');
         }
     });
 });
