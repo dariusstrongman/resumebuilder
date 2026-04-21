@@ -1,5 +1,24 @@
 var WEBHOOK_URL = 'https://n8n.myaibuffet.com/webhook/resume-tailor';
 var uploadedFile = null;
+var promoApplied = false;
+
+function applyPromo() {
+    var input = document.getElementById('promoCode');
+    var msg = document.getElementById('promoMsg');
+    var code = input.value.trim();
+    if (code === 'test123') {
+        promoApplied = true;
+        msg.textContent = 'Promo applied. Free generation.';
+        msg.className = 'promo-msg success';
+        input.disabled = true;
+        document.getElementById('promoBtn').disabled = true;
+        document.getElementById('btnPrice').textContent = 'Free';
+    } else {
+        msg.textContent = 'Invalid promo code.';
+        msg.className = 'promo-msg error';
+        promoApplied = false;
+    }
+}
 
 // Mobile menu
 var mobileToggle = document.getElementById('mobileToggle');
@@ -105,18 +124,21 @@ if (form) {
         var reader = new FileReader();
         reader.onload = function() {
             var base64 = reader.result.split(',')[1];
+            var payload = {
+                mode: promoApplied ? 'tailor_free' : 'tailor',
+                file_base64: base64,
+                file_name: uploadedFile.name,
+                file_type: uploadedFile.type || 'application/pdf',
+                job_posting: job,
+                include_cover_letter: wantCover,
+                amount: wantCover ? 150 : 100
+            };
+            if (promoApplied) payload.promo_code = 'test123';
+
             fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    mode: 'tailor',
-                    file_base64: base64,
-                    file_name: uploadedFile.name,
-                    file_type: uploadedFile.type || 'application/pdf',
-                    job_posting: job,
-                    include_cover_letter: wantCover,
-                    amount: wantCover ? 150 : 100
-                })
+                body: JSON.stringify(payload)
             })
             .then(function(r) { return r.json(); })
             .then(function(data) {
