@@ -200,14 +200,14 @@ function extractTextFromFile(file) {
                         })(i);
                     }
                 }).catch(reject);
+            } else if (file.name.match(/\.docx?$/i) && window.mammoth) {
+                mammoth.extractRawText({ arrayBuffer: arrayBuffer }).then(function(result) {
+                    var text = (result.value || '').trim();
+                    if (text.length > 50) resolve(text);
+                    else reject(new Error('Could not read Word document'));
+                }).catch(reject);
             } else {
-                var text = new TextDecoder().decode(arrayBuffer);
-                text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-                if (text.length > 50) {
-                    resolve(text);
-                } else {
-                    reject(new Error('Could not read file'));
-                }
+                reject(new Error('Unsupported file type'));
             }
         };
         reader.readAsArrayBuffer(file);
