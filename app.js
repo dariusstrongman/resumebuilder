@@ -158,14 +158,59 @@ if (form) {
                 return;
             }
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
-            var reader = new FileReader();
-            reader.onload = function() {
-                var base64 = reader.result.split(',')[1];
-                sendPayload({ file_base64: base64, file_name: uploadedFile.name, file_type: uploadedFile.type || 'application/pdf', job_posting: job, include_cover_letter: wantCover }, btn);
-            };
-            reader.readAsDataURL(uploadedFile);
+            btn.innerHTML = '<span class="spinner"></span>Reading your resume...';
+            extractTextFromFile(uploadedFile).then(function(text) {
+                if (!text || text.length < 50) {
+                    alert('Could not read your file. Please use the "Paste Text" tab instead.');
+                    resetBtn(btn);
+                    return;
+                }
+                btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
+                sendPayload({ resume: text, job_posting: job, include_cover_letter: wantCover }, btn);
+            }).catch(function() {
+                alert('Could not read your file. Please use the "Paste Text" tab instead.');
+                resetBtn(btn);
+            });
         }
+    });
+}
+
+function extractTextFromFile(file) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var arrayBuffer = reader.result;
+            if (file.name.match(/\.pdf$/i) && window.pdfjsLib) {
+                var loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+                loadingTask.promise.then(function(pdf) {
+                    var pages = [];
+                    var done = 0;
+                    for (var i = 1; i <= pdf.numPages; i++) {
+                        (function(pageNum) {
+                            pdf.getPage(pageNum).then(function(page) {
+                                page.getTextContent().then(function(content) {
+                                    var text = content.items.map(function(item) { return item.str; }).join(' ');
+                                    pages[pageNum - 1] = text;
+                                    done++;
+                                    if (done === pdf.numPages) {
+                                        resolve(pages.join('\n\n'));
+                                    }
+                                });
+                            });
+                        })(i);
+                    }
+                }).catch(reject);
+            } else {
+                var text = new TextDecoder().decode(arrayBuffer);
+                text = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+                if (text.length > 50) {
+                    resolve(text);
+                } else {
+                    reject(new Error('Could not read file'));
+                }
+            }
+        };
+        reader.readAsArrayBuffer(file);
     });
 }
 
