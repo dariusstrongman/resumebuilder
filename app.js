@@ -342,38 +342,56 @@ function toggleFaq(btn) {
 
 // Before/After rotation
 var docExamples = [
-    { name: 'MARIA GONZALEZ', contact: 'mariag88@yahoo.com | 469-555-0234',
-      beforeSummary: 'I am a store manager looking for new opportunities. Good at customer service and managing people.',
-      beforeJob: 'Store Manager', beforeCo: 'Dollar General, Mesquite TX', beforeDate: '2019 - Present',
-      beforeBullets: ['Manage the store', 'Do scheduling for employees', 'Handle customer complaints', 'Count the register at night'],
-      afterSummary: 'Retail operations manager with 5+ years overseeing daily store operations, P&L reporting, and team development for a high-volume location with ~$1.2M annual revenue.',
-      afterJob: 'Store Manager', afterCo: 'Dollar General, Mesquite TX', afterDate: '2019 - Present',
-      afterBullets: ['Managed daily operations for a <span class="dp-kw">high-volume retail location</span>, overseeing <span class="dp-kw">P&L reporting</span> and cash reconciliation', 'Recruited, trained, and <span class="dp-kw">developed a team</span> of ~10 associates, reducing turnover through structured onboarding', 'Resolved customer escalations and implemented service recovery processes, maintaining store satisfaction scores', 'Oversaw <span class="dp-kw">inventory management</span> and loss prevention, conducting nightly audits and variance reporting'],
+    { name: 'MARIA GONZALEZ', contact: 'mariag88@yahoo.com | 469-555-0234 | Mesquite, TX',
+      beforeSummary: 'Hardworking retail professional with experience in store management and customer service. Looking for a new opportunity where I can use my skills to help a team succeed.',
+      beforeJobs: [
+        { title: 'Store Manager', co: 'Dollar General, Mesquite TX', date: '2019 - Present', bullets: ['Responsible for managing day to day store operations', 'Handle scheduling for a team of employees', 'Deal with customer complaints and resolve issues', 'Close out registers and prepare nightly deposits', 'Train new hires on store procedures'] },
+        { title: 'Cashier', co: 'Walmart, Garland TX', date: '2016 - 2019', bullets: ['Worked the cash register and processed transactions', 'Stocked shelves and organized merchandise', 'Helped customers find products in the store'] }
+      ],
+      beforeSkills: 'Customer Service, Cash Handling, Microsoft Word, Team Player, Hard Worker',
+      beforeEdu: 'McKinney High School, Diploma, 2015',
+      afterSummary: 'Retail operations manager with 5+ years overseeing daily store operations, P&L reporting, and team development. Track record of training and retaining staff in a high-volume, fast-paced environment.',
+      afterJobs: [
+        { title: 'Store Manager', co: 'Dollar General, Mesquite TX', date: '2019 - Present', bullets: ['Managed daily operations for a <span class="dp-kw">high-volume retail location</span>, overseeing <span class="dp-kw">P&L reporting</span>, cash reconciliation, and deposit preparation', 'Recruited, scheduled, and <span class="dp-kw">developed a team</span> of ~10 associates, reducing turnover through structured onboarding and coaching', 'Resolved customer escalations and implemented <span class="dp-kw">service recovery processes</span>, maintaining store satisfaction scores above district average', 'Oversaw <span class="dp-kw">inventory management</span> and <span class="dp-kw">loss prevention</span>, conducting nightly audits and shrinkage reporting', 'Trained 30+ new hires over 5 years on POS systems, merchandising standards, and safety protocols'] },
+        { title: 'Cashier', co: 'Walmart, Garland TX', date: '2016 - 2019', bullets: ['Processed ~200 transactions daily across register and self-checkout, maintaining accuracy and speed during peak hours', 'Managed shelf inventory and product displays for 3 departments, executing weekly <span class="dp-kw">planogram resets</span>', 'Assisted customers with product location and returns, averaging 95%+ satisfaction on post-transaction surveys'] }
+      ],
+      afterSkills: '<b>Operations:</b> P&L Reporting, Inventory Management, Loss Prevention, Scheduling<br><b>Leadership:</b> Team Development, Hiring, Training, Performance Coaching<br><b>Systems:</b> POS Systems, Planogram Management, Cash Handling',
+      afterEdu: null,
       beforeScore: 23, afterScore: 87 },
-    { name: 'JAMES CHEN', contact: 'jchen.dev@gmail.com | 972-555-3344 | github.com/jameschen',
-      beforeSummary: 'Software developer with experience in multiple programming languages. Strong problem solver.',
-      beforeJob: 'Software Developer', beforeCo: 'Acme Corp, Dallas TX', beforeDate: '2020 - Present',
-      beforeBullets: ['Built web applications', 'Wrote APIs', 'Fixed bugs', 'Did code reviews'],
-      afterSummary: 'Backend engineer with 4+ years building production web applications in Python and JavaScript. Experienced with RESTful APIs, PostgreSQL, and CI/CD pipelines in an Agile environment.',
-      afterJob: 'Software Developer', afterCo: 'Acme Corp, Dallas TX', afterDate: '2020 - Present',
-      afterBullets: ['Built and maintained <span class="dp-kw">React</span> web applications serving 50K+ monthly users with <span class="dp-kw">TypeScript</span> and modern frontend tooling', 'Designed <span class="dp-kw">RESTful APIs</span> in <span class="dp-kw">Node.js</span> with <span class="dp-kw">PostgreSQL</span>, handling 10K+ daily transactions across 3 microservices', 'Implemented <span class="dp-kw">CI/CD pipelines</span> using GitHub Actions, reducing deployment time from 2 hours to 15 minutes', 'Conducted <span class="dp-kw">code reviews</span> for a team of 6, reducing production bugs by ~30% quarter-over-quarter'],
+
+    { name: 'JAMES CHEN', contact: 'jchen.dev@gmail.com | 972-555-3344 | github.com/jameschen | Dallas, TX',
+      beforeSummary: 'Experienced software developer with skills in multiple programming languages and technologies. Strong problem solver with attention to detail. Looking for new opportunities.',
+      beforeJobs: [
+        { title: 'Software Developer', co: 'Acme Corp, Dallas TX', date: 'Jan 2020 - Present', bullets: ['Build and maintain web applications', 'Write REST APIs in Node.js', 'Manage PostgreSQL databases', 'Participate in code reviews', 'Fix bugs reported by QA team'] },
+        { title: 'Junior Developer', co: 'Startup Inc, Austin TX', date: 'Jun 2018 - Dec 2019', bullets: ['Developed frontend features using HTML, CSS, JavaScript', 'Fixed bugs and wrote unit tests', 'Worked with the design team on new features'] }
+      ],
+      beforeSkills: 'JavaScript, React, Node.js, PostgreSQL, Git, HTML/CSS, Problem Solving, Communication',
+      beforeEdu: 'BS Computer Science, UT Austin, 2018',
+      afterSummary: 'Full-stack engineer with 6+ years building production web applications in React, Node.js, and PostgreSQL. Experienced with CI/CD pipelines, microservices architecture, and agile development in cross-functional teams.',
+      afterJobs: [
+        { title: 'Software Developer', co: 'Acme Corp, Dallas TX', date: 'Jan 2020 - Present', bullets: ['Built and maintained <span class="dp-kw">React</span> and <span class="dp-kw">TypeScript</span> web applications serving 50K+ monthly active users across 3 product lines', 'Designed <span class="dp-kw">RESTful APIs</span> in <span class="dp-kw">Node.js</span> with <span class="dp-kw">PostgreSQL</span>, handling 10K+ daily transactions across microservices', 'Implemented <span class="dp-kw">CI/CD pipelines</span> using <span class="dp-kw">GitHub Actions</span>, reducing deployment cycles from 2 hours to 15 minutes', 'Conducted <span class="dp-kw">code reviews</span> for a team of 6 engineers, reducing production defects ~30% over 4 quarters', 'Optimized <span class="dp-kw">database queries</span> and caching layers, improving API response times by 40% for high-traffic endpoints'] },
+        { title: 'Junior Developer', co: 'Startup Inc, Austin TX', date: 'Jun 2018 - Dec 2019', bullets: ['Developed responsive frontend features in <span class="dp-kw">JavaScript</span>, <span class="dp-kw">HTML/CSS</span>, and early React components for a B2B SaaS platform', 'Wrote 200+ <span class="dp-kw">unit tests</span> using Jest, increasing code coverage from 45% to 78% across 3 modules', 'Collaborated with design and product teams in <span class="dp-kw">Agile sprints</span> to ship 12 features over 18 months'] }
+      ],
+      afterSkills: '<b>Languages:</b> JavaScript, TypeScript, Python, SQL, HTML/CSS<br><b>Frameworks:</b> React, Node.js, Express, Next.js<br><b>Data:</b> PostgreSQL, Redis, MongoDB<br><b>DevOps:</b> GitHub Actions, Docker, CI/CD, AWS (EC2, S3)',
+      afterEdu: 'BS Computer Science, UT Austin, 2018',
       beforeScore: 31, afterScore: 92 },
-    { name: 'TIFFANY NGUYEN', contact: 'tiffnguyen@gmail.com | 817-555-9012',
-      beforeSummary: 'New nursing graduate looking for my first RN position. Completed clinical rotations at JPS Hospital.',
-      beforeJob: 'Certified Nursing Assistant', beforeCo: 'Brookdale Senior Living, Arlington TX', beforeDate: 'Jun 2022 - May 2024',
-      beforeBullets: ['Took vital signs', 'Helped patients with daily activities', 'Documented patient info'],
-      afterSummary: 'BSN-prepared registered nurse with 2 years of CNA experience and 260 hours of clinical rotations across Med-Surg, ICU, OB, and Pediatrics units. BLS certified with hands-on patient assessment and documentation skills.',
-      afterJob: 'Certified Nursing Assistant', afterCo: 'Brookdale Senior Living, Arlington TX', afterDate: 'Jun 2022 - May 2024',
-      afterBullets: ['Monitored and recorded <span class="dp-kw">vital signs</span> for ~30 residents per shift, escalating changes to nursing staff per facility protocols', 'Delivered <span class="dp-kw">patient care</span> including bathing, mobility assistance, and meal support for a <span class="dp-kw">long-term care</span> population', 'Documented patient status and care activities in <span class="dp-kw">electronic health records</span>, maintaining accurate and timely charting'],
-      beforeScore: 19, afterScore: 84 },
-    { name: 'JOSE RAMIREZ', contact: 'jramirez77@gmail.com | 682-555-7788',
-      beforeSummary: 'Construction worker with experience in framing, concrete, and drywall.',
-      beforeJob: 'Construction Worker', beforeCo: 'Martinez Builders, Fort Worth TX', beforeDate: '2020 - Present',
-      beforeBullets: ['General construction work', 'Framing and concrete', 'Operated power tools'],
-      afterSummary: 'Construction professional with 5+ years of hands-on experience in commercial and residential projects. Skilled in concrete, framing, and finish work with OSHA 10 certification and bilingual English/Spanish communication.',
-      afterJob: 'Construction Worker', afterCo: 'Martinez Builders, Fort Worth TX', afterDate: '2020 - Present',
-      afterBullets: ['Executed <span class="dp-kw">framing</span>, <span class="dp-kw">concrete</span>, and <span class="dp-kw">drywall</span> installations across ~20 commercial and residential projects', 'Operated power tools and heavy equipment in compliance with <span class="dp-kw">OSHA safety regulations</span> with zero incidents', 'Read and interpreted <span class="dp-kw">construction drawings</span> to guide daily crew tasks and material staging', 'Trained 3 new crew members on site procedures, tool safety, and <span class="dp-kw">finish work</span> techniques'],
-      beforeScore: 25, afterScore: 88 }
+
+    { name: 'TIFFANY NGUYEN', contact: 'tiffnguyen@gmail.com | 817-555-9012 | Arlington, TX',
+      beforeSummary: 'I am a new nursing graduate looking for my first RN position. I completed my clinical rotations at JPS Hospital in Fort Worth and I am very passionate about patient care.',
+      beforeJobs: [
+        { title: 'Clinical Rotations', co: 'JPS Hospital, Fort Worth TX', date: 'Fall 2024 - Spring 2025', bullets: ['Med-surg rotation, 120 hours', 'ICU rotation, 60 hours', 'OB rotation, 40 hours', 'Pediatrics rotation, 40 hours'] },
+        { title: 'Certified Nursing Assistant', co: 'Brookdale Senior Living, Arlington TX', date: 'Jun 2022 - May 2024', bullets: ['Took vital signs on patients', 'Helped patients with daily activities like bathing and eating', 'Documented patient information in charts'] }
+      ],
+      beforeSkills: 'Patient Care, Vital Signs, CPR, Teamwork, Microsoft Office, Caring Personality',
+      beforeEdu: 'BSN Nursing, University of Texas at Arlington, May 2025 | BLS Certified',
+      afterSummary: 'BSN-prepared registered nurse with 2 years of direct patient care experience as a CNA and 260 hours of clinical rotations across Med-Surg, ICU, OB, and Pediatrics. BLS certified with strong assessment, documentation, and interdisciplinary communication skills.',
+      afterJobs: [
+        { title: 'Clinical Rotations', co: 'JPS Hospital, Fort Worth TX', date: 'Fall 2024 - Spring 2025', bullets: ['Completed 120 hours on a <span class="dp-kw">Medical-Surgical</span> unit, performing <span class="dp-kw">patient assessments</span>, medication administration, and wound care for 4-6 patients per shift', 'Completed 60 hours in <span class="dp-kw">ICU</span>, monitoring ventilators, IV drips, and hemodynamic status under preceptor guidance', 'Rotated through OB (40 hrs) and Pediatrics (40 hrs), gaining experience in <span class="dp-kw">family-centered care</span> and age-specific interventions'] },
+        { title: 'Certified Nursing Assistant', co: 'Brookdale Senior Living, Arlington TX', date: 'Jun 2022 - May 2024', bullets: ['Monitored and recorded <span class="dp-kw">vital signs</span> for ~30 residents per shift, escalating abnormal findings to the nursing team', 'Delivered direct <span class="dp-kw">patient care</span> including bathing, mobility assistance, and meal support for a long-term care population', 'Documented patient status and care activities in <span class="dp-kw">electronic health records</span>, maintaining accurate and timely charting'] }
+      ],
+      afterSkills: '<b>Clinical:</b> Patient Assessment, Medication Administration, Wound Care, Vital Signs<br><b>Systems:</b> Electronic Health Records (Epic), BLS Certified<br><b>Soft Skills:</b> Patient Advocacy, Interdisciplinary Communication, Time Management',
+      afterEdu: 'BSN Nursing, University of Texas at Arlington, May 2025',
+      beforeScore: 19, afterScore: 84 }
 ];
 
 var docIdx = 0;
@@ -381,30 +399,44 @@ var docEl = document.getElementById('docCompare');
 function renderDocCompare() {
     if (!docEl) return;
     var ex = docExamples[docIdx];
-    function doc(summary, job, co, date, bullets, highlighted) {
-        var cls = highlighted ? 'dp-strong' : 'dp-weak';
+    function buildDoc(summary, jobs, skills, edu, highlighted) {
         var h = '<div class="dp-name">' + ex.name + '</div>';
         h += '<div class="dp-contact">' + ex.contact + '</div>';
         h += '<div class="dp-section">PROFESSIONAL SUMMARY</div>';
-        h += '<div class="' + cls + '" style="font-size:.55rem;line-height:1.4;margin-bottom:.3rem;">' + summary + '</div>';
+        h += '<div style="font-size:.55rem;line-height:1.4;margin-bottom:.3rem;color:' + (highlighted ? '#1a1a1a' : '#888') + ';">' + summary + '</div>';
         h += '<div class="dp-section">PROFESSIONAL EXPERIENCE</div>';
-        h += '<div class="dp-job"><strong>' + job + '</strong> | ' + co + '<br><em>' + date + '</em></div>';
-        for (var i = 0; i < bullets.length; i++) {
-            h += '<div class="dp-bullet">' + bullets[i] + '</div>';
+        for (var j = 0; j < jobs.length; j++) {
+            h += '<div class="dp-job"><strong>' + jobs[j].title + '</strong> | ' + jobs[j].co + '<br><em>' + jobs[j].date + '</em></div>';
+            for (var b = 0; b < jobs[j].bullets.length; b++) {
+                h += '<div class="dp-bullet">' + jobs[j].bullets[b] + '</div>';
+            }
         }
+        if (skills) { h += '<div class="dp-section">SKILLS</div><div style="font-size:.5rem;line-height:1.4;color:#333;">' + skills + '</div>'; }
+        if (edu) { h += '<div class="dp-section">EDUCATION</div><div style="font-size:.5rem;color:#333;">' + edu + '</div>'; }
         return h;
     }
     docEl.innerHTML = '<div class="doc-col"><div class="doc-col-label">Before</div>'
-        + '<div class="doc-preview">' + doc(ex.beforeSummary, ex.beforeJob, ex.beforeCo, ex.beforeDate, ex.beforeBullets, false) + '</div>'
+        + '<div class="doc-preview" onclick="enlargeDoc(this)"><div class="enlarge-hint">Click to enlarge</div>' + buildDoc(ex.beforeSummary, ex.beforeJobs, ex.beforeSkills, ex.beforeEdu, false) + '</div>'
         + '<div class="doc-score">' + ex.beforeScore + '% ATS match</div></div>'
         + '<div class="doc-col"><div class="doc-col-label">After ResumeGo</div>'
-        + '<div class="doc-preview">' + doc(ex.afterSummary, ex.afterJob, ex.afterCo, ex.afterDate, ex.afterBullets, true) + '</div>'
+        + '<div class="doc-preview" onclick="enlargeDoc(this)"><div class="enlarge-hint">Click to enlarge</div>' + buildDoc(ex.afterSummary, ex.afterJobs, ex.afterSkills, ex.afterEdu, true) + '</div>'
         + '<div class="doc-score">' + ex.afterScore + '% ATS match</div></div>';
     docEl.style.opacity = '0';
     setTimeout(function() { docEl.style.opacity = '1'; }, 50);
 }
 renderDocCompare();
-setInterval(function() { docIdx = (docIdx + 1) % docExamples.length; renderDocCompare(); }, 6000);
+setInterval(function() { docIdx = (docIdx + 1) % docExamples.length; renderDocCompare(); }, 8000);
+
+function enlargeDoc(el) {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;cursor:pointer;';
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#fff;color:#1a1a1a;padding:2.5rem 3rem;border-radius:8px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;font-family:Georgia,serif;font-size:11px;line-height:1.5;box-shadow:0 20px 60px rgba(0,0,0,.5);';
+    box.innerHTML = el.innerHTML.replace('Click to enlarge','');
+    overlay.appendChild(box);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+}
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
