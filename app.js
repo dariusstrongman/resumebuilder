@@ -225,6 +225,78 @@ function formatSuggestions(text) {
         .replace(/\n/g, '<br>');
 }
 
+// Before/After rotation
+var baExamples = [
+    {
+        role: 'Registered Nurse', company: 'Memorial Hospital',
+        before: ['Took care of patients in the ICU', 'Gave medications and did assessments', 'Worked with doctors on treatment plans'],
+        afterRole: 'ICU Registered Nurse',
+        after: ['Delivered <em>critical care</em> to 4-6 <em>ICU patients</em> per shift, monitoring <em>ventilators</em>, <em>IV drips</em>, and <em>hemodynamic</em> status', 'Administered <em>high-risk medications</em> following <em>evidence-based protocols</em>, maintaining zero medication errors over 18 months', 'Collaborated with <em>interdisciplinary care teams</em> on <em>treatment planning</em> and <em>patient discharge coordination</em>'],
+        beforeScore: 31, afterScore: 89
+    },
+    {
+        role: 'Marketing Coordinator', company: 'BrightPath Agency',
+        before: ['Managed social media accounts', 'Helped with email campaigns', 'Created content for the website'],
+        afterRole: 'Digital Marketing Coordinator',
+        after: ['Managed <em>social media strategy</em> across 4 platforms, growing <em>organic engagement</em> by coordinating <em>content calendars</em> and <em>A/B testing</em>', 'Executed <em>email marketing campaigns</em> using <em>HubSpot</em>, segmenting audiences and optimizing <em>open rates</em> and <em>click-through rates</em>', 'Produced <em>SEO-optimized content</em> including blog posts, landing pages, and <em>lead magnets</em> aligned with <em>brand guidelines</em>'],
+        beforeScore: 24, afterScore: 87
+    },
+    {
+        role: 'Project Manager', company: 'BuildRight Construction',
+        before: ['Managed construction projects', 'Kept track of budgets and schedules', 'Worked with subcontractors'],
+        afterRole: 'Senior Project Manager',
+        after: ['Managed <em>commercial construction projects</em> valued at $2-5M, delivering within <em>budget</em> and <em>schedule constraints</em>', 'Tracked <em>project budgets</em>, <em>change orders</em>, and <em>cost forecasting</em> using <em>Procore</em> and <em>MS Project</em>', 'Coordinated 8-12 <em>subcontractor teams</em>, conducting <em>site inspections</em> and enforcing <em>OSHA safety compliance</em>'],
+        beforeScore: 28, afterScore: 91
+    },
+    {
+        role: 'Accountant', company: 'Greenfield Financial',
+        before: ['Did monthly financial reports', 'Helped with tax preparation', 'Reconciled accounts'],
+        afterRole: 'Staff Accountant',
+        after: ['Prepared <em>monthly financial statements</em> and <em>variance analysis</em> for management review in compliance with <em>GAAP</em>', 'Supported <em>tax preparation</em> and <em>year-end close</em> processes, coordinating with external <em>CPA firms</em> on <em>audit documentation</em>', 'Performed <em>account reconciliations</em> across 50+ <em>general ledger accounts</em>, resolving discrepancies within 48 hours'],
+        beforeScore: 22, afterScore: 85
+    },
+    {
+        role: 'Software Developer', company: 'Acme Corp',
+        before: ['Built web applications', 'Wrote APIs', 'Fixed bugs and did code reviews'],
+        afterRole: 'Full Stack Developer',
+        after: ['Developed <em>React</em> and <em>TypeScript</em> web applications serving production traffic with <em>CI/CD pipelines</em>', 'Designed and implemented <em>RESTful APIs</em> using <em>Node.js</em> and <em>PostgreSQL</em>, following <em>microservices architecture</em>', 'Conducted <em>code reviews</em> and <em>pair programming</em>, improving <em>code quality</em> and reducing <em>production incidents</em>'],
+        beforeScore: 33, afterScore: 92
+    },
+    {
+        role: 'Teacher', company: 'Lincoln Elementary',
+        before: ['Taught 3rd grade students', 'Created lesson plans', 'Met with parents about student progress'],
+        afterRole: 'Elementary Educator',
+        after: ['Designed and delivered <em>differentiated instruction</em> for 24 <em>diverse learners</em>, integrating <em>STEM activities</em> and <em>project-based learning</em>', 'Developed <em>standards-aligned lesson plans</em> using <em>backward design</em> framework, incorporating <em>formative assessments</em> and <em>data-driven instruction</em>', 'Facilitated <em>parent-teacher conferences</em> and maintained ongoing <em>family engagement</em> through <em>progress monitoring</em> and <em>intervention plans</em>'],
+        beforeScore: 26, afterScore: 88
+    }
+];
+
+var baIndex = 0;
+var baGrid = document.getElementById('baGrid');
+function renderBaExample() {
+    if (!baGrid) return;
+    var ex = baExamples[baIndex];
+    baGrid.innerHTML = '<div class="ba-card ba-before">'
+        + '<div class="ba-tag ba-tag-red">What you sent</div>'
+        + '<div class="ba-line"><strong>' + ex.role + '</strong> <span>' + ex.company + '</span></div>'
+        + '<ul>' + ex.before.map(function(b) { return '<li>' + b + '</li>'; }).join('') + '</ul>'
+        + '<div class="ba-score ba-score-red"><span class="ba-pct">' + ex.beforeScore + '%</span> ATS match</div>'
+        + '</div>'
+        + '<div class="ba-card ba-after">'
+        + '<div class="ba-tag ba-tag-green">After ResumeGo</div>'
+        + '<div class="ba-line"><strong>' + ex.afterRole + '</strong> <span>' + ex.company + '</span></div>'
+        + '<ul>' + ex.after.map(function(b) { return '<li>' + b + '</li>'; }).join('') + '</ul>'
+        + '<div class="ba-score ba-score-green"><span class="ba-pct">' + ex.afterScore + '%</span> ATS match</div>'
+        + '</div>';
+    baGrid.style.opacity = '0';
+    setTimeout(function() { baGrid.style.opacity = '1'; }, 50);
+}
+renderBaExample();
+setInterval(function() {
+    baIndex = (baIndex + 1) % baExamples.length;
+    renderBaExample();
+}, 5000);
+
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
     a.addEventListener('click', function(e) {
