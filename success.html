@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Resume Ready - ResumeGo</title>
+    <title>Your Resume is Ready - ResumeGo</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,49 +21,108 @@
         </div>
     </nav>
 
-    <section class="hero" style="padding: 4rem 0;">
-        <div class="container">
-            <h1 style="font-size: 2rem;">Your resume is ready</h1>
-            <p class="hero-sub">Your tailored resume has been generated. Download it below.</p>
-            <div id="loading" style="margin: 2rem 0;">
-                <span class="spinner" style="border-color: rgba(37,99,235,0.3); border-top-color: #2563EB; width: 40px; height: 40px;"></span>
-                <p style="margin-top: 1rem; color: #64748B;">Preparing your files...</p>
+    <section class="hero" style="padding:4rem 0;min-height:60vh;display:flex;align-items:center;">
+        <div class="container" style="width:100%;">
+            <!-- Loading -->
+            <div id="loading" style="text-align:center;">
+                <div class="spinner" style="width:48px;height:48px;border-width:4px;border-color:rgba(99,102,241,.2);border-top-color:var(--primary);margin:0 auto;"></div>
+                <h2 style="margin-top:1.5rem;font-size:1.5rem;">Generating your tailored resume...</h2>
+                <p style="color:var(--text-dim);margin-top:.5rem;">This takes about 30 seconds. Please dont close this page.</p>
             </div>
-            <div id="downloads" style="display:none; margin: 2rem 0;"></div>
-            <div id="error" style="display:none; margin: 2rem 0; padding: 1.5rem; background: rgba(220,38,38,0.05); border: 1px solid rgba(220,38,38,0.2); border-radius: 10px; color: #DC2626;"></div>
+
+            <!-- Success -->
+            <div id="success" style="display:none;text-align:center;">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" style="margin:0 auto;"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+                <h2 style="margin-top:1rem;font-size:1.5rem;">Your tailored resume is ready</h2>
+                <p style="color:var(--text-dim);margin-top:.5rem;margin-bottom:2rem;">Download your files below. They are available for 24 hours.</p>
+                <div id="downloadBtns"></div>
+                <div id="preview" style="margin-top:2rem;text-align:left;max-width:620px;margin-left:auto;margin-right:auto;"></div>
+                <div style="margin-top:2rem;">
+                    <a href="/" class="btn btn-outline">Tailor Another Resume</a>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error" style="display:none;text-align:center;">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" style="margin:0 auto;"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                <h2 style="margin-top:1rem;font-size:1.5rem;">Something went wrong</h2>
+                <p id="errorMsg" style="color:var(--text-dim);margin-top:.5rem;margin-bottom:2rem;"></p>
+                <a href="/" class="btn">Try Again</a>
+            </div>
         </div>
     </section>
 
     <script>
     var params = new URLSearchParams(window.location.search);
     var sessionId = params.get('session_id');
-    if (sessionId) {
-        fetch('https://n8n.myaibuffet.com/webhook/resume-success?session_id=' + sessionId)
+
+    if (!sessionId) {
+        showError('No payment session found. Please go back and try again.');
+    } else {
+        fetch('https://n8n.myaibuffet.com/webhook/resume-tailor', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'fulfill', session_id: sessionId })
+        })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-            document.getElementById('loading').style.display = 'none';
-            if (data.resume_pdf_url) {
-                var html = '<a href="' + data.resume_pdf_url + '" target="_blank" class="btn btn-lg download-btn">Download Resume PDF</a>';
-                if (data.cover_letter_pdf_url) {
-                    html += '<a href="' + data.cover_letter_pdf_url + '" target="_blank" class="btn btn-lg download-btn" style="background:#059669; margin-left: 0.5rem;">Download Cover Letter PDF</a>';
-                }
-                html += '<p style="margin-top: 1.5rem; color: #64748B; font-size: 0.9rem;">Files are available for 24 hours. Save them now.</p>';
-                document.getElementById('downloads').innerHTML = html;
-                document.getElementById('downloads').style.display = 'block';
+            if (data.resume_text) {
+                showSuccess(data);
             } else {
-                document.getElementById('error').textContent = data.error || 'Something went wrong generating your resume. Email contact@stromation.com for help.';
-                document.getElementById('error').style.display = 'block';
+                showError(data.error || 'Failed to generate your resume. Email contact@stromation.com for help.');
             }
         })
         .catch(function() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').textContent = 'Connection error. Refresh the page or email contact@stromation.com.';
-            document.getElementById('error').style.display = 'block';
+            showError('Connection error. Refresh the page to try again, or email contact@stromation.com.');
         });
-    } else {
+    }
+
+    function showSuccess(data) {
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').textContent = 'No session found. Go back and try again.';
+        document.getElementById('success').style.display = 'block';
+
+        var btns = document.getElementById('downloadBtns');
+        var html = '';
+
+        // For now show text preview with copy button (PDF generation next step)
+        var preview = document.getElementById('preview');
+        preview.innerHTML = '<details open><summary style="cursor:pointer;font-weight:700;font-size:.95rem;margin-bottom:.75rem;">Resume</summary>'
+            + '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;white-space:pre-wrap;font-size:.85rem;line-height:1.65;color:var(--text-mid);">'
+            + escapeHtml(data.resume_text) + '</div>'
+            + '<button onclick="copyText(this, \'' + escapeAttr(data.resume_text) + '\')" class="btn btn-sm" style="margin-top:.75rem;">Copy Resume Text</button>'
+            + '</details>';
+
+        if (data.cover_letter_text) {
+            preview.innerHTML += '<details style="margin-top:1.5rem;"><summary style="cursor:pointer;font-weight:700;font-size:.95rem;margin-bottom:.75rem;">Cover Letter</summary>'
+                + '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;white-space:pre-wrap;font-size:.85rem;line-height:1.65;color:var(--text-mid);">'
+                + escapeHtml(data.cover_letter_text) + '</div>'
+                + '<button onclick="copyText(this, \'' + escapeAttr(data.cover_letter_text) + '\')" class="btn btn-sm" style="margin-top:.75rem;background:#059669;">Copy Cover Letter</button>'
+                + '</details>';
+        }
+    }
+
+    function showError(msg) {
+        document.getElementById('loading').style.display = 'none';
         document.getElementById('error').style.display = 'block';
+        document.getElementById('errorMsg').textContent = msg;
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function escapeAttr(str) {
+        return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+    }
+
+    function copyText(btn, text) {
+        text = text.replace(/\\n/g, '\n');
+        navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = btn.textContent.indexOf('Cover') >= 0 ? 'Copy Cover Letter' : 'Copy Resume Text'; }, 2000);
+        });
     }
     </script>
 </body>
