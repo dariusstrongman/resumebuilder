@@ -87,6 +87,7 @@ section h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.75rem
 .result-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
 .result-area h3{color:var(--green);font-size:1rem}
 .download-btn{margin:.4rem .4rem 0 0}
+.resume-preview{background:#fff;color:#1a1a1a;padding:1.5rem 2rem;border-radius:4px;font-family:Georgia,serif;font-size:.82rem;line-height:1.55;box-shadow:0 4px 16px rgba(0,0,0,.3);max-height:500px;overflow-y:auto}
 
 /* Before/After */
 .before-after{padding:4rem 0}

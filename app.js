@@ -266,21 +266,64 @@ function showResult(data) {
     var content = document.getElementById('resultContent');
     var btn = document.getElementById('submitBtn');
 
-    var html = '';
+    var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
     if (data.resume_pdf_url) {
-        html += '<a href="' + data.resume_pdf_url + '" target="_blank" class="btn download-btn">Download Resume PDF</a>';
+        html += '<a href="' + data.resume_pdf_url + '" target="_blank" class="btn">Download Resume PDF</a>';
     }
     if (data.cover_letter_pdf_url) {
-        html += '<a href="' + data.cover_letter_pdf_url + '" target="_blank" class="btn download-btn" style="background:var(--green)">Download Cover Letter</a>';
+        html += '<a href="' + data.cover_letter_pdf_url + '" target="_blank" class="btn" style="background:var(--green)">Download Cover Letter PDF</a>';
     }
+    html += '</div>';
+
     if (data.resume_text) {
-        html += '<details style="margin-top:1.25rem;"><summary style="cursor:pointer;font-weight:600;font-size:.85rem;color:var(--text-dim);">Preview resume text</summary>';
-        html += '<div style="margin-top:.75rem;padding:1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);font-size:.82rem;line-height:1.65;white-space:pre-wrap;">' + escapeHtml(data.resume_text) + '</div></details>';
+        html += '<div class="resume-preview">' + formatResumePreview(data.resume_text) + '</div>';
+        html += '<button onclick="copyResume()" class="btn btn-sm" style="margin-top:.75rem;background:var(--bg-card);color:var(--text-mid);border:1px solid var(--border);" id="copyBtn">Copy Resume Text</button>';
     }
+    if (data.cover_letter_text) {
+        html += '<details style="margin-top:1.25rem;"><summary style="cursor:pointer;font-weight:600;font-size:.88rem;color:var(--text-mid);">View Cover Letter</summary>';
+        html += '<div class="resume-preview" style="margin-top:.75rem;">' + formatResumePreview(data.cover_letter_text) + '</div></details>';
+    }
+
     content.innerHTML = html;
     area.style.display = 'block';
     area.scrollIntoView({ behavior: 'smooth' });
     resetBtn(btn);
+
+    window._resumeText = data.resume_text;
+}
+
+function formatResumePreview(text) {
+    var lines = text.split('\n');
+    var html = '';
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) { html += '<br>'; continue; }
+        if (i === 0) { html += '<div style="text-align:center;font-size:1.1rem;font-weight:700;font-family:Georgia,serif;">' + escapeHtml(line) + '</div>'; continue; }
+        if (i === 1 && (line.indexOf('|') !== -1 || line.indexOf('@') !== -1)) { html += '<div style="text-align:center;font-size:.75rem;color:#888;margin-bottom:.5rem;">' + escapeHtml(line) + '</div>'; continue; }
+        if (line.match(/^(PROFESSIONAL SUMMARY|PROFESSIONAL EXPERIENCE|TECHNICAL SKILLS|EDUCATION|CERTIFICATIONS|SKILLS)/i)) {
+            html += '<div style="font-size:.82rem;font-weight:700;border-bottom:1px solid #444;padding-bottom:2px;margin-top:.75rem;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.03em;">' + escapeHtml(line) + '</div>';
+            continue;
+        }
+        line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        if (line.startsWith('* ') || line.startsWith('- ')) {
+            html += '<div style="font-size:.78rem;margin-left:1rem;margin-bottom:.15rem;position:relative;padding-left:.75rem;color:#ccc;"><span style="position:absolute;left:0;">&#8226;</span>' + line.substring(2) + '</div>';
+            continue;
+        }
+        if (line.match(/\|.*\d{4}/)) { html += '<div style="font-size:.75rem;color:#888;font-style:italic;">' + escapeHtml(line) + '</div>'; continue; }
+        if (line.match(/^[A-Z]/) && lines[i+1] && lines[i+1].match(/[,|].*\d{4}/)) { html += '<div style="font-size:.85rem;font-weight:700;margin-top:.5rem;">' + escapeHtml(line) + '</div>'; continue; }
+        html += '<div style="font-size:.78rem;color:#ccc;">' + line + '</div>';
+    }
+    return html;
+}
+
+function copyResume() {
+    if (window._resumeText) {
+        navigator.clipboard.writeText(window._resumeText).then(function() {
+            var btn = document.getElementById('copyBtn');
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = 'Copy Resume Text'; }, 2000);
+        });
+    }
 }
 
 function escapeHtml(str) {
