@@ -7,119 +7,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Tips That Get Interviews | ResumeGo Blog</title>
     <meta name="description" content="Practical resume advice backed by how hiring actually works. Learn what ATS systems scan for, which keywords matter, and how to stand out in 7 seconds.">
+    <meta name="theme-color" content="#07080a">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <nav class="nav">
-        <div class="container nav-inner">
-            <a href="/" class="nav-brand">Resume<span>Go</span></a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/blog/">Blog</a>
-                <a href="/#generate" class="btn btn-sm">Tailor My Resume</a>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+        <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="blog-hero">
+    <div class="blog-hero-inner">
+        <span class="blog-hero__eyebrow">Resume Playbook</span>
+        <h1>Practical advice. Backed by <em>how hiring actually works.</em></h1>
+        <p>Tactics for getting past ATS filters and onto a recruiter's desk. No generic fluff.</p>
+    </div>
+</section>
+
+<!-- FEATURED POST -->
+<section class="blog-featured-section">
+    <div class="blog-featured-inner">
+        <a href="why-tailoring-your-resume-matters.html" class="blog-featured">
+            <div class="bf-marker">Most Read</div>
+            <div class="bf-body">
+                <span class="blog-tag">Strategy</span>
+                <h2>Why Sending the Same Resume to Every Job is Costing You Interviews</h2>
+                <p>75% of resumes get filtered before a human sees them. Not because you are unqualified. Because your wording doesnt match. Here is the fix that takes 60 seconds.</p>
+                <span class="blog-meta">5 min read &rarr;</span>
             </div>
-        </div>
-    </nav>
+        </a>
+    </div>
+</section>
 
-    <section class="hero" style="padding:3rem 0 1.5rem;">
-        <div class="container">
-            <h1 style="font-size:2.4rem;">The Resume Playbook</h1>
-            <p class="hero-sub">Most resume advice is generic fluff. This isnt. These are the specific tactics that get past ATS filters and onto a recruiters desk.</p>
-        </div>
-    </section>
-
-    <!-- Featured Post -->
-    <section style="padding:0 0 2rem;">
-        <div class="container">
-            <a href="why-tailoring-your-resume-matters.html" class="blog-featured">
-                <div class="bf-tag">Most Read</div>
-                <div class="bf-content">
-                    <span class="blog-tag">Strategy</span>
-                    <h2>Why Sending the Same Resume to Every Job is Costing You Interviews</h2>
-                    <p>75% of resumes get filtered before a human sees them. Not because you are unqualified. Because your wording doesnt match. Here is the fix that takes 60 seconds.</p>
-                    <span class="blog-meta">5 min read &rarr;</span>
-                </div>
+<!-- GRID -->
+<section class="blog-grid-section">
+    <div class="blog-grid-inner">
+        <div class="blog-grid" id="blogGrid">
+            <a href="how-ats-systems-work.html" class="blog-card">
+                <span class="blog-tag">ATS</span>
+                <h3>How ATS Systems Actually Work (And Why Your Resume Gets Rejected)</h3>
+                <p>You hit submit and your resume disappears. Here is exactly what happens next inside Workday, Greenhouse, and Lever before anyone reads a word.</p>
+                <span class="blog-meta">6 min read</span>
+            </a>
+            <a href="resume-keywords-that-get-interviews.html" class="blog-card">
+                <span class="blog-tag">Keywords</span>
+                <h3>The Resume Keywords That Actually Get You Interviews</h3>
+                <p>Not all keywords are equal. Hard skills get you past the ATS. Here is how to find them in any job posting and where to put them so they count.</p>
+                <span class="blog-meta">5 min read</span>
+            </a>
+            <a href="one-page-vs-two-page-resume.html" class="blog-card">
+                <span class="blog-tag">Format</span>
+                <h3>One Page or Two Page Resume? Here is How to Decide</h3>
+                <p>The one-page rule is wrong. So is "always use two pages." The real answer depends on one thing most people never consider.</p>
+                <span class="blog-meta">4 min read</span>
+            </a>
+            <a href="biggest-resume-mistakes.html" class="blog-card">
+                <span class="blog-tag">Mistakes</span>
+                <h3>5 Resume Mistakes That Make Hiring Managers Skip Yours in 7 Seconds</h3>
+                <p>Hiring managers spend 6-7 seconds on your resume. These five mistakes guarantee you dont survive the scan. Most people make at least two of them.</p>
+                <span class="blog-meta">5 min read</span>
             </a>
         </div>
-    </section>
+        <div class="blog-pagination" id="blogPagination"></div>
+    </div>
+</section>
 
-    <!-- Blog Grid -->
-    <section style="padding:0 0 3rem;">
-        <div class="container">
-            <div class="blog-grid" id="blogGrid">
-                <a href="how-ats-systems-work.html" class="blog-card">
-                    <span class="blog-tag">ATS</span>
-                    <h3>How ATS Systems Actually Work (And Why Your Resume Gets Rejected)</h3>
-                    <p>You hit submit and your resume disappears. Here is exactly what happens next inside Workday, Greenhouse, and Lever before anyone reads a word.</p>
-                    <span class="blog-meta">6 min read</span>
-                </a>
-                <a href="resume-keywords-that-get-interviews.html" class="blog-card">
-                    <span class="blog-tag">Keywords</span>
-                    <h3>The Resume Keywords That Actually Get You Interviews</h3>
-                    <p>Not all keywords are equal. Hard skills get you past the ATS. Here is how to find them in any job posting and where to put them so they count.</p>
-                    <span class="blog-meta">5 min read</span>
-                </a>
-                <a href="one-page-vs-two-page-resume.html" class="blog-card">
-                    <span class="blog-tag">Format</span>
-                    <h3>One Page or Two Page Resume? Here is How to Decide</h3>
-                    <p>The one-page rule is wrong. So is "always use two pages." The real answer depends on one thing most people never consider.</p>
-                    <span class="blog-meta">4 min read</span>
-                </a>
-                <a href="biggest-resume-mistakes.html" class="blog-card">
-                    <span class="blog-tag">Mistakes</span>
-                    <h3>5 Resume Mistakes That Make Hiring Managers Skip Yours in 7 Seconds</h3>
-                    <p>Hiring managers spend 6-7 seconds on your resume. These five mistakes guarantee you dont survive the scan. Most people make at least two of them.</p>
-                    <span class="blog-meta">5 min read</span>
-                </a>
-            </div>
-            <div class="blog-pagination" id="blogPagination"></div>
+<!-- FINAL CTA -->
+<section class="final-cta">
+    <h2>Reading about resumes wont get you hired. A <em>better</em> resume will.</h2>
+    <p>Upload yours, paste the job posting, download a tailored PDF. 60 seconds. $1.</p>
+    <a href="/#generate" class="submit-btn submit-btn--inline submit-btn--light">
+        <span class="submit-btn__label">Tailor my resume &mdash; $1</span>
+    </a>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
         </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="final-cta">
-        <div class="container">
-            <h2>Reading about resumes wont get you hired. A better resume will.</h2>
-            <p>Upload yours, paste the job posting, download a tailored PDF. 60 seconds. $1.</p>
-            <a href="/#generate" class="btn btn-lg btn-white">Tailor My Resume</a>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#faq">FAQ</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">Contact</a>
         </div>
-    </section>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
 
-    <footer class="footer">
-        <div class="container footer-inner">
-            <div><a href="/" class="nav-brand">Resume<span>Go</span></a><p>by <a href="https://www.stromation.com">Stromation</a></p></div>
-            <div class="footer-right"><a href="/blog/">Blog</a><p>contact@stromation.com</p></div>
-        </div>
-    </footer>
-
-    <script>
-    // Pagination (6 per page)
+<script>
+// Pagination (6 per page)
+(function() {
     var grid = document.getElementById('blogGrid');
     var pag = document.getElementById('blogPagination');
-    if (grid && pag) {
-        var cards = Array.from(grid.querySelectorAll('.blog-card'));
-        var perPage = 6;
-        var totalPages = Math.ceil(cards.length / perPage);
-        var current = 1;
-        function renderPag() {
-            var start = (current - 1) * perPage;
-            cards.forEach(function(c, i) { c.style.display = (i >= start && i < start + perPage) ? '' : 'none'; });
-            if (totalPages <= 1) { pag.innerHTML = ''; return; }
-            var html = '';
-            if (current > 1) html += '<button onclick="blogPage(' + (current-1) + ')">Previous</button>';
-            for (var p = 1; p <= totalPages; p++) {
-                html += '<button class="' + (p === current ? 'active' : '') + '" onclick="blogPage(' + p + ')">' + p + '</button>';
-            }
-            if (current < totalPages) html += '<button onclick="blogPage(' + (current+1) + ')">Next</button>';
-            pag.innerHTML = html;
+    if (!grid || !pag) return;
+    var cards = Array.from(grid.querySelectorAll('.blog-card'));
+    var perPage = 6;
+    var totalPages = Math.ceil(cards.length / perPage);
+    var current = 1;
+    function renderPag() {
+        var start = (current - 1) * perPage;
+        cards.forEach(function(c, i) { c.style.display = (i >= start && i < start + perPage) ? '' : 'none'; });
+        if (totalPages <= 1) { pag.innerHTML = ''; return; }
+        var html = '';
+        if (current > 1) html += '<button onclick="blogPage(' + (current-1) + ')">Previous</button>';
+        for (var p = 1; p <= totalPages; p++) {
+            html += '<button class="' + (p === current ? 'active' : '') + '" onclick="blogPage(' + p + ')">' + p + '</button>';
         }
-        window.blogPage = function(p) { current = p; renderPag(); grid.scrollIntoView({behavior:'smooth'}); };
-        renderPag();
+        if (current < totalPages) html += '<button onclick="blogPage(' + (current+1) + ')">Next</button>';
+        pag.innerHTML = html;
     }
-    </script>
+    window.blogPage = function(p) { current = p; renderPag(); grid.scrollIntoView({behavior:'smooth', block:'start'}); };
+    renderPag();
+})();
+</script>
+
 </body>
 </html>
