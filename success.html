@@ -163,12 +163,18 @@
         var btns = document.getElementById('downloadBtns');
         var html = '';
         if (data.resume_pdf_base64) {
-            html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="submit-btn submit-btn--inline" onclick="trackDownload(\'resume\')"><span class="submit-btn__label">Download Resume PDF</span></a>';
+            html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="submit-btn submit-btn--inline" onclick="trackDownload(\'resume_pdf\')"><span class="submit-btn__label">Download Resume PDF</span></a>';
         } else {
             html += '<button onclick="downloadPdfFallback()" class="submit-btn submit-btn--inline"><span class="submit-btn__label">Download Resume PDF</span></button>';
         }
+        if (data.resume_docx_base64) {
+            html += '<a href="data:application/msword;base64,' + data.resume_docx_base64 + '" download="tailored_resume.doc" class="submit-btn submit-btn--inline submit-btn--light" onclick="trackDownload(\'resume_docx\')"><span class="submit-btn__label">Download Word</span></a>';
+        }
         if (data.cover_pdf_base64) {
-            html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="submit-btn submit-btn--inline submit-btn--light" onclick="trackDownload(\'cover\')"><span class="submit-btn__label">Download Cover Letter</span></a>';
+            html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="submit-btn submit-btn--inline submit-btn--light" onclick="trackDownload(\'cover_pdf\')"><span class="submit-btn__label">Cover Letter PDF</span></a>';
+        }
+        if (data.cover_docx_base64) {
+            html += '<a href="data:application/msword;base64,' + data.cover_docx_base64 + '" download="cover_letter.doc" class="submit-btn submit-btn--inline submit-btn--light" onclick="trackDownload(\'cover_docx\')"><span class="submit-btn__label">Cover Letter Word</span></a>';
         }
         html += '<button onclick="copyToClipboard()" class="grader-reset" id="copyBtn">Copy resume text</button>';
         btns.innerHTML = html;
