@@ -11,84 +11,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Your Resume is Ready - ResumeGo</title>
+    <title>Your Resume is Ready &mdash; ResumeGo</title>
+    <meta name="theme-color" content="#07080a">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>.resume-preview{background:#fff;color:#1a1a1a;padding:1.5rem 2rem;border-radius:4px;font-family:Georgia,serif;font-size:.82rem;line-height:1.55;box-shadow:0 4px 16px rgba(0,0,0,.3);max-height:600px;overflow-y:auto}</style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="container nav-inner">
-            <a href="/" class="nav-brand">Resume<span>Go</span></a>
-            <div class="nav-links">
-                <a href="/" class="btn btn-sm">Tailor Another</a>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/blog/">Blog</a>
+            <a href="/" class="nav-cta">Tailor another</a>
+        </nav>
+        <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main class="success-main">
+    <div class="success-shell">
+
+        <!-- LOADING -->
+        <div id="loading" class="success-state success-state--loading">
+            <div class="spinner-large"></div>
+            <h1 class="success-h">Tailoring your resume&hellip;</h1>
+            <p class="success-sub">This takes about 30 seconds. Please don't close this page.</p>
+            <ul class="success-steps">
+                <li data-step="1"><span class="success-step-dot"></span>Reading your resume</li>
+                <li data-step="2"><span class="success-step-dot"></span>Matching keywords from the posting</li>
+                <li data-step="3"><span class="success-step-dot"></span>Building your ATS-ready PDF</li>
+            </ul>
+        </div>
+
+        <!-- SUCCESS -->
+        <div id="success" class="success-state success-state--done" style="display:none;">
+            <div class="success-check">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+            </div>
+            <h1 class="success-h">Your tailored resume is ready.</h1>
+            <p class="success-sub">Download below. A copy was also sent to your email &mdash; check your spam folder if you don't see it.</p>
+            <div id="downloadBtns" class="success-buttons"></div>
+            <div id="preview" class="success-preview"></div>
+            <div class="success-footer-cta">
+                <a href="/" class="submit-btn submit-btn--inline submit-btn--light">
+                    <span class="submit-btn__label">Tailor another resume</span>
+                </a>
             </div>
         </div>
-    </nav>
 
-    <section class="hero" style="padding:4rem 0;min-height:60vh;display:flex;align-items:center;">
-        <div class="container" style="width:100%;">
-            <!-- Loading -->
-            <div id="loading" style="text-align:center;">
-                <div class="spinner" style="width:48px;height:48px;border-width:4px;border-color:rgba(99,102,241,.2);border-top-color:var(--primary);margin:0 auto;"></div>
-                <h2 style="margin-top:1.5rem;font-size:1.5rem;">Generating your tailored resume...</h2>
-                <p style="color:var(--text-dim);margin-top:.5rem;">This takes about 30 seconds. Please dont close this page.</p>
+        <!-- ERROR -->
+        <div id="error" class="success-state success-state--error" style="display:none;">
+            <div class="success-x">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
             </div>
-
-            <!-- Success -->
-            <div id="success" style="display:none;text-align:center;">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" style="margin:0 auto;"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-                <h2 style="margin-top:1rem;font-size:1.5rem;">Your tailored resume is ready</h2>
-                <p style="color:var(--text-dim);margin-top:.5rem;">Download your files below.</p>
-                <p style="color:var(--text-dim);margin-bottom:2rem;font-size:.85rem;">A copy has also been sent to your email. Check your spam folder if you dont see it.</p>
-                <div id="downloadBtns"></div>
-                <div id="preview" style="margin-top:2rem;text-align:left;max-width:620px;margin-left:auto;margin-right:auto;"></div>
-                <div style="margin-top:2rem;">
-                    <a href="/" class="btn btn-outline">Tailor Another Resume</a>
-                </div>
-            </div>
-
-            <!-- Error -->
-            <div id="error" style="display:none;text-align:center;">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" style="margin:0 auto;"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
-                <h2 style="margin-top:1rem;font-size:1.5rem;">Something went wrong</h2>
-                <p id="errorMsg" style="color:var(--text-dim);margin-top:.5rem;margin-bottom:2rem;"></p>
-                <a href="/" class="btn">Try Again</a>
+            <h1 class="success-h">Something went wrong.</h1>
+            <p id="errorMsg" class="success-sub"></p>
+            <div class="success-buttons">
+                <a href="/" class="submit-btn submit-btn--inline">
+                    <span class="submit-btn__label">Try again</span>
+                </a>
+                <a href="mailto:contact@stromation.com" class="submit-btn submit-btn--inline submit-btn--light">
+                    <span class="submit-btn__label">Email support</span>
+                </a>
             </div>
         </div>
-    </section>
 
-    <script>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">Contact</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script>
+(function() {
+    // Animate loading steps
+    var stepEls = document.querySelectorAll('.success-steps li');
+    var currentStep = 0;
+    var stepTimer = setInterval(function() {
+        stepEls.forEach(function(el, i) { el.classList.toggle('active', i === currentStep); });
+        currentStep = (currentStep + 1) % stepEls.length;
+    }, 1800);
+
     var params = new URLSearchParams(window.location.search);
     var sessionId = params.get('session_id');
 
     if (!sessionId) {
+        clearInterval(stepTimer);
         showError('No payment session found. Please go back and try again.');
-    } else {
-        fetch('https://n8n.myaibuffet.com/webhook/resume-tailor', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mode: 'fulfill', session_id: sessionId })
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            if (data.resume_text) {
-                showSuccess(data);
-            } else {
-                showError(data.error || 'Failed to generate your resume. Email contact@stromation.com for help.');
-            }
-        })
-        .catch(function() {
-            showError('Connection error. Refresh the page to try again, or email contact@stromation.com.');
-        });
+        return;
     }
+
+    fetch('https://n8n.myaibuffet.com/webhook/resume-tailor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'fulfill', session_id: sessionId })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        clearInterval(stepTimer);
+        if (data && data.resume_text) showSuccess(data);
+        else showError((data && data.error) || 'Failed to generate your resume. Email contact@stromation.com for help.');
+    })
+    .catch(function() {
+        clearInterval(stepTimer);
+        showError('Connection error. Refresh the page to try again, or email contact@stromation.com.');
+    });
 
     function showSuccess(data) {
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('success').style.display = 'block';
+        document.getElementById('success').style.display = 'flex';
         window._resumeText = data.resume_text;
         window._coverText = data.cover_letter_text;
 
@@ -100,30 +160,24 @@
             });
         }
 
-        var preview = document.getElementById('preview');
-        var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
+        var btns = document.getElementById('downloadBtns');
+        var html = '';
         if (data.resume_pdf_base64) {
-            html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="btn" onclick="trackDownload(\'resume\')">Download Resume PDF</a>';
+            html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="submit-btn submit-btn--inline" onclick="trackDownload(\'resume\')"><span class="submit-btn__label">Download Resume PDF</span></a>';
         } else {
-            html += '<button onclick="downloadPdfFallback()" class="btn">Download Resume PDF</button>';
+            html += '<button onclick="downloadPdfFallback()" class="submit-btn submit-btn--inline"><span class="submit-btn__label">Download Resume PDF</span></button>';
         }
         if (data.cover_pdf_base64) {
-            html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="btn" style="background:#059669" onclick="trackDownload(\'cover\')">Download Cover Letter PDF</a>';
+            html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="submit-btn submit-btn--inline submit-btn--light" onclick="trackDownload(\'cover\')"><span class="submit-btn__label">Download Cover Letter</span></a>';
         }
-        html += '<button onclick="copyToClipboard()" class="btn" style="background:var(--bg-card);color:var(--text-mid);border:1px solid var(--border);" id="copyBtn">Copy Resume Text</button>';
-        html += '</div>';
+        html += '<button onclick="copyToClipboard()" class="grader-reset" id="copyBtn">Copy resume text</button>';
+        btns.innerHTML = html;
 
-        html += '<div class="resume-preview">' + formatResume(data.resume_text) + '</div>';
-
+        var preview = document.getElementById('preview');
+        preview.innerHTML = '<div class="success-preview-label">PREVIEW</div><div class="resume-preview">' + formatResume(data.resume_text) + '</div>';
         if (data.cover_letter_text) {
-            html += '<details style="margin-top:1.25rem;"><summary style="cursor:pointer;font-weight:600;font-size:.88rem;color:var(--text-mid);">View Cover Letter</summary>';
-            html += '<div class="resume-preview" style="margin-top:.75rem;">' + formatResume(data.cover_letter_text) + '</div></details>';
+            preview.innerHTML += '<details class="success-cover"><summary>View cover letter</summary><div class="resume-preview" style="margin-top:.8rem;">' + formatResume(data.cover_letter_text) + '</div></details>';
         }
-        preview.innerHTML = html;
-    }
-
-    function trackDownload(which) {
-        if (window.gtag) gtag('event', 'file_download', { file_name: which });
     }
 
     function formatResume(text) {
@@ -131,24 +185,39 @@
         var h = '';
         for (var i = 0; i < lines.length; i++) {
             var l = lines[i].trim();
-            if (!l) { h += '<br>'; continue; }
-            if (i === 0) { h += '<div style="text-align:center;font-size:1.1rem;font-weight:700;font-family:Georgia,serif;">' + escapeHtml(l) + '</div>'; continue; }
-            if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { h += '<div style="text-align:center;font-size:.75rem;color:#888;margin-bottom:.5rem;">' + escapeHtml(l) + '</div>'; continue; }
-            if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { h += '<div style="font-size:.82rem;font-weight:700;border-bottom:1px solid #444;padding-bottom:2px;margin-top:.75rem;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.03em;">' + escapeHtml(l) + '</div>'; continue; }
-            var escaped = escapeHtml(l).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-            if (l.startsWith('* ') || l.startsWith('- ')) { h += '<div style="font-size:.78rem;margin-left:1rem;margin-bottom:.15rem;position:relative;padding-left:.75rem;color:#ccc;"><span style="position:absolute;left:0;">&#8226;</span>' + escaped.substring(2) + '</div>'; continue; }
+            if (!l) { h += '<div style="height:6px;"></div>'; continue; }
+            if (i === 0) { h += '<div class="rp-name">' + esc(l) + '</div>'; continue; }
+            if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { h += '<div class="rp-contact">' + esc(l) + '</div>'; continue; }
+            if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { h += '<div class="rp-section">' + esc(l) + '</div>'; continue; }
+            var escaped = esc(l).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            if (l.startsWith('* ') || l.startsWith('- ')) { h += '<div class="rp-bullet">' + escaped.substring(2) + '</div>'; continue; }
             if (l.indexOf(':') !== -1 && l.match(/^[A-Z]/)) { escaped = escaped.replace(/^([^:]+:)/, '<strong>$1</strong>'); }
-            if (l.match(/\|.*\d{4}/)) { h += '<div style="font-size:.75rem;color:#888;font-style:italic;">' + escaped + '</div>'; continue; }
-            h += '<div style="font-size:.78rem;color:#ccc;">' + escaped + '</div>';
+            h += '<div class="rp-line">' + escaped + '</div>';
         }
         return h;
     }
 
-    function downloadPdfFallback() {
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    window.trackDownload = function(which) {
+        if (window.gtag) gtag('event', 'file_download', { file_name: which });
+    };
+
+    window.copyToClipboard = function() {
+        if (!window._resumeText) return;
+        navigator.clipboard.writeText(window._resumeText).then(function() {
+            var b = document.getElementById('copyBtn');
+            if (!b) return;
+            var orig = b.textContent;
+            b.textContent = 'Copied!';
+            setTimeout(function() { b.textContent = orig; }, 1800);
+        });
+    };
+
+    window.downloadPdfFallback = function() {
         if (!window._resumeText) return;
         var w = window.open('', '_blank');
-        var text = window._resumeText;
-        var lines = text.split('\n');
+        var lines = window._resumeText.split('\n');
         var html = '<html><head><style>body{margin:0.4in 0.55in;font-family:Georgia,serif;color:#1a1a1a;font-size:11px;line-height:1.45;}h1{text-align:center;font-size:20px;margin:0;letter-spacing:1px;}p.contact{text-align:center;font-size:9px;color:#333;margin:2px 0 8px;}h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #000;padding-bottom:2px;margin:12px 0 6px;}li{font-size:10.5px;margin-bottom:1px;}p.line{font-size:10.5px;margin:1px 0;}</style></head><body>';
         for (var i = 0; i < lines.length; i++) {
             var l = lines[i].trim();
@@ -162,46 +231,17 @@
             html += '<p class="line">' + cl + '</p>';
         }
         html += '</body></html>';
-        w.document.write(html);
-        w.document.close();
+        w.document.write(html); w.document.close();
         setTimeout(function() { w.print(); }, 500);
-    }
-
-    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-    function copyToClipboard() {
-        if (window._resumeText) {
-            navigator.clipboard.writeText(window._resumeText).then(function() {
-                var b = document.getElementById('copyBtn');
-                b.textContent = 'Copied!';
-                setTimeout(function() { b.textContent = 'Copy Resume Text'; }, 2000);
-            });
-        }
-    }
+    };
 
     function showError(msg) {
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').style.display = 'flex';
         document.getElementById('errorMsg').textContent = msg;
     }
+})();
+</script>
 
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    function escapeAttr(str) {
-        return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
-    }
-
-    function copyText(btn, text) {
-        text = text.replace(/\\n/g, '\n');
-        navigator.clipboard.writeText(text).then(function() {
-            btn.textContent = 'Copied!';
-            setTimeout(function() { btn.textContent = btn.textContent.indexOf('Cover') >= 0 ? 'Copy Cover Letter' : 'Copy Resume Text'; }, 2000);
-        });
-    }
-    </script>
 </body>
 </html>

@@ -38,8 +38,8 @@
             <span class="brand-name">ResumeGo</span>
         </a>
         <nav class="nav-links" id="navLinks">
+            <a href="#grader">Grader <span class="nav-chip">Free</span></a>
             <a href="#how-it-works">How it works</a>
-            <a href="#examples">Examples</a>
             <a href="#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="#generate" class="nav-cta">Tailor for $1</a>
@@ -167,6 +167,60 @@
             </div>
         </aside>
 
+    </div>
+</section>
+
+<!-- ───────────────── GRADER (free tool) ───────────────── -->
+<section class="grader" id="grader">
+    <div class="grader-inner">
+        <header class="section-head grader-head">
+            <span class="section-eyebrow">Free tool</span>
+            <h2 class="section-title">Grade your resume. <em>Free.</em></h2>
+            <p class="section-dek">See your ATS score and top weaknesses in 10 seconds. No payment. No account.</p>
+        </header>
+
+        <div class="grader-shell">
+            <!-- Input -->
+            <div class="grader-input" id="graderInput">
+                <div class="grader-tabs">
+                    <button type="button" class="ri-tab active" data-tab="upload" onclick="switchGraderTab('upload')">Upload file</button>
+                    <button type="button" class="ri-tab" data-tab="paste" onclick="switchGraderTab('paste')">Paste text</button>
+                </div>
+                <div id="graderUploadTab">
+                    <div class="upload-zone" id="graderUploadZone">
+                        <input type="file" id="graderFileInput" accept=".pdf,.doc,.docx" hidden>
+                        <div class="upload-default" id="graderUploadDefault">
+                            <svg class="upload-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                            <p class="upload-text">Drop your resume or <span class="upload-link">browse</span></p>
+                            <p class="upload-hint">PDF or Word &middot; Deleted after grading</p>
+                        </div>
+                        <div class="upload-done" id="graderUploadDone" style="display:none;">
+                            <span class="upload-check" aria-hidden="true">&check;</span>
+                            <span id="graderFileName"></span>
+                            <button type="button" class="upload-remove" id="graderRemoveFile">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="graderPasteTab" style="display:none;">
+                    <textarea id="graderResumeText" placeholder="Paste your full resume text here&hellip;" rows="6"></textarea>
+                </div>
+                <button class="submit-btn" id="graderBtn" onclick="gradeResume()">
+                    <span class="submit-btn__label">Grade my resume</span>
+                    <span class="submit-btn__price">FREE</span>
+                </button>
+                <p class="grader-note">Your resume is processed in memory and never stored.</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="grader-loading" id="graderLoading" style="display:none;">
+                <div class="spinner-large"></div>
+                <p class="grader-loading-title">Reading your resume&hellip;</p>
+                <p class="grader-loading-hint">Analyzing ATS compatibility and impact</p>
+            </div>
+
+            <!-- Result (populated by JS) -->
+            <div class="grader-result" id="graderResult" style="display:none;"></div>
+        </div>
     </div>
 </section>
 

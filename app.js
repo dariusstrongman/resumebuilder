@@ -7,14 +7,46 @@ function track(event, params) {
     if (window.gtag) gtag('event', event, params || {});
 }
 
+// ========== TOAST (replaces alert) ==========
+var _toastEl = null;
+var _toastTimer = null;
+function toast(message, type) {
+    if (!_toastEl) {
+        _toastEl = document.createElement('div');
+        _toastEl.className = 'toast';
+        document.body.appendChild(_toastEl);
+    }
+    _toastEl.className = 'toast toast--' + (type || 'error');
+    _toastEl.textContent = message;
+    void _toastEl.offsetWidth;
+    _toastEl.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function() { _toastEl.classList.remove('show'); }, 4500);
+}
+
+// ========== TAILOR FORM TABS ==========
 var resumeMode = 'upload';
 
 function switchResumeTab(tab) {
     resumeMode = tab;
-    document.querySelectorAll('.ri-tab').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+    document.querySelectorAll('.form-panel .ri-tab').forEach(function(b) { b.classList.remove('active'); });
+    var target = document.querySelector('.form-panel [data-tab="' + tab + '"]');
+    if (target) target.classList.add('active');
     document.getElementById('resumeUploadTab').style.display = tab === 'upload' ? 'block' : 'none';
     document.getElementById('resumePasteTab').style.display = tab === 'paste' ? 'block' : 'none';
+}
+
+// ========== GRADER TABS ==========
+var graderMode = 'upload';
+var graderFile = null;
+
+function switchGraderTab(tab) {
+    graderMode = tab;
+    document.querySelectorAll('#graderInput .ri-tab').forEach(function(b) { b.classList.remove('active'); });
+    var target = document.querySelector('#graderInput [data-tab="' + tab + '"]');
+    if (target) target.classList.add('active');
+    document.getElementById('graderUploadTab').style.display = tab === 'upload' ? 'block' : 'none';
+    document.getElementById('graderPasteTab').style.display = tab === 'paste' ? 'block' : 'none';
 }
 
 // Mobile menu
@@ -102,7 +134,7 @@ function handleFile(file) {
         return;
     }
     if (file.size > 5 * 1024 * 1024) {
-        alert('File is too large. Maximum 5MB.');
+        toast('File is too large. Maximum 5MB.', 'error');
         return;
     }
     uploadedFile = file;
@@ -113,6 +145,231 @@ function handleFile(file) {
     track('resume_uploaded', { file_type: file.name.split('.').pop().toLowerCase(), file_size_kb: Math.round(file.size/1024) });
 }
 
+// ========== GRADER UPLOAD ==========
+(function wireGraderUpload() {
+    var zone = document.getElementById('graderUploadZone');
+    if (!zone) return;
+    var input = document.getElementById('graderFileInput');
+    var def = document.getElementById('graderUploadDefault');
+    var done = document.getElementById('graderUploadDone');
+    var nameEl = document.getElementById('graderFileName');
+    var removeBtn = document.getElementById('graderRemoveFile');
+
+    zone.addEventListener('click', function() { if (!graderFile) input.click(); });
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault(); zone.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) handleGraderFile(e.dataTransfer.files[0]);
+    });
+    input.addEventListener('change', function() { if (this.files.length) handleGraderFile(this.files[0]); });
+    removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        graderFile = null;
+        input.value = '';
+        def.style.display = 'block';
+        done.style.display = 'none';
+        zone.classList.remove('has-file');
+    });
+
+    function handleGraderFile(file) {
+        var valid = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (valid.indexOf(file.type) === -1 && !file.name.match(/\.(pdf|doc|docx)$/i)) {
+            toast('Please upload a PDF or Word document.', 'error');
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) { toast('File is too large. Maximum 5MB.', 'error'); return; }
+        graderFile = file;
+        nameEl.textContent = file.name;
+        def.style.display = 'none';
+        done.style.display = 'flex';
+        zone.classList.add('has-file');
+    }
+})();
+
+// ========== GRADER SUBMIT ==========
+function gradeResume() {
+    var btn = document.getElementById('graderBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Reading&hellip;';
+
+    function submit(text) {
+        if (!text || text.length < 50) {
+            toast('Paste or upload a resume (at least 50 characters).', 'error');
+            resetGraderBtn();
+            return;
+        }
+        if (text.length > MAX_RESUME_CHARS) text = text.substring(0, MAX_RESUME_CHARS);
+
+        window._graderResumeText = text;
+        window._graderResumeFile = graderFile;
+
+        document.getElementById('graderInput').style.display = 'none';
+        document.getElementById('graderLoading').style.display = 'block';
+        track('resume_graded', { method: graderMode });
+
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'grade', resume: text })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            document.getElementById('graderLoading').style.display = 'none';
+            if (data && data.error) {
+                toast(data.error, 'error');
+                document.getElementById('graderInput').style.display = 'block';
+                resetGraderBtn();
+                return;
+            }
+            renderGraderResult(data);
+        })
+        .catch(function() {
+            document.getElementById('graderLoading').style.display = 'none';
+            toast('Connection error. Please try again.', 'error');
+            document.getElementById('graderInput').style.display = 'block';
+            resetGraderBtn();
+        });
+    }
+
+    if (graderMode === 'paste') {
+        submit(document.getElementById('graderResumeText').value.trim());
+    } else {
+        if (!graderFile) {
+            toast('Choose a file or switch to Paste text.', 'error');
+            resetGraderBtn();
+            return;
+        }
+        extractTextFromFile(graderFile).then(submit).catch(function() {
+            toast('Could not read the file. Try the Paste text tab.', 'error');
+            resetGraderBtn();
+        });
+    }
+}
+
+function resetGraderBtn() {
+    var btn = document.getElementById('graderBtn');
+    if (!btn) return;
+    btn.disabled = false;
+    btn.innerHTML = '<span class="submit-btn__label">Grade my resume</span><span class="submit-btn__price">FREE</span>';
+}
+
+function renderGraderResult(d) {
+    var resultEl = document.getElementById('graderResult');
+    var score = typeof d.score === 'number' ? d.score : 0;
+    var ats = d.ats_compatibility || { score: 0, notes: '' };
+    var strengths = Array.isArray(d.strengths) ? d.strengths : [];
+    var issues = Array.isArray(d.issues) ? d.issues : [];
+    var gradeLetter = d.grade || '';
+    var summary = d.summary || '';
+
+    var gradeClass = 'F';
+    if (score >= 90) gradeClass = 'A';
+    else if (score >= 75) gradeClass = 'B';
+    else if (score >= 60) gradeClass = 'C';
+    else if (score >= 40) gradeClass = 'D';
+
+    var CIRC = 2 * Math.PI * 52; // 326.726
+    var finalOffset = CIRC * (1 - Math.min(100, Math.max(0, score)) / 100);
+
+    var html = '<div class="grader-result-grid">'
+        + '<div class="grader-gauge-col">'
+          + '<div class="gauge">'
+            + '<svg viewBox="0 0 120 120" class="gauge-svg">'
+              + '<circle cx="60" cy="60" r="52" class="gauge-track"/>'
+              + '<circle cx="60" cy="60" r="52" class="gauge-fill grade--' + gradeClass + '" style="stroke-dasharray:' + CIRC.toFixed(2) + ';stroke-dashoffset:' + CIRC.toFixed(2) + ';"/>'
+            + '</svg>'
+            + '<div class="gauge-center"><div class="gauge-score">' + score + '</div><div class="gauge-label">out of 100</div></div>'
+          + '</div>'
+          + (gradeLetter ? '<div class="gauge-grade-badge">' + escapeHtml(gradeLetter) + '</div>' : '')
+          + (summary ? '<p class="gauge-summary">' + escapeHtml(summary) + '</p>' : '')
+        + '</div>'
+        + '<div class="grader-details-col">'
+          + '<div class="grader-ats">'
+            + '<span class="grader-ats-label">ATS SCORE</span>'
+            + '<span class="grader-ats-score">' + (ats.score || 0) + '%</span>'
+            + (ats.notes ? '<p>' + escapeHtml(ats.notes) + '</p>' : '')
+          + '</div>';
+
+    if (strengths.length) {
+        html += '<h3>What is working</h3><div class="grader-strengths"><ul>'
+          + strengths.map(function(s) { return '<li>' + escapeHtml(s) + '</li>'; }).join('')
+          + '</ul></div>';
+    }
+
+    if (issues.length) {
+        html += '<h3>What to fix</h3><div class="grader-issues">'
+          + issues.map(function(i) {
+              var sev = (i.severity || 'low').toLowerCase();
+              if (sev !== 'high' && sev !== 'medium' && sev !== 'low') sev = 'low';
+              return '<div class="grader-issue grader-issue--' + sev + '">'
+                + '<div class="grader-issue-head">'
+                  + '<span class="issue-severity">' + sev + '</span>'
+                  + '<h4>' + escapeHtml(i.title || '') + '</h4>'
+                + '</div>'
+                + '<p>' + escapeHtml(i.description || '') + '</p>'
+              + '</div>';
+          }).join('')
+          + '</div>';
+    }
+
+    html += '<div class="grader-upsell">'
+      + '<h3>Fix all of this <em>automatically</em> &mdash; $1</h3>'
+      + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses above. ATS-optimized PDF in 60 seconds.</p>'
+      + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
+      + '</div>';
+
+    html += '</div></div>'
+      + '<div class="grader-reset-wrap"><button class="grader-reset" onclick="resetGrader()">Grade another resume</button></div>';
+
+    resultEl.innerHTML = html;
+    resultEl.style.display = 'block';
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Animate the gauge fill in after mount
+    setTimeout(function() {
+        var fill = resultEl.querySelector('.gauge-fill');
+        if (fill) fill.style.strokeDashoffset = finalOffset.toFixed(2);
+    }, 120);
+}
+
+function resetGrader() {
+    var resultEl = document.getElementById('graderResult');
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+    document.getElementById('graderInput').style.display = 'block';
+    resetGraderBtn();
+    document.getElementById('grader').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function upsellFromGrader() {
+    var text = window._graderResumeText;
+    var file = window._graderResumeFile;
+
+    if (file && uploadZone) {
+        uploadedFile = file;
+        fileNameEl.textContent = file.name;
+        uploadDefault.style.display = 'none';
+        uploadDone.style.display = 'flex';
+        uploadZone.classList.add('has-file');
+        switchResumeTab('upload');
+    } else if (text) {
+        var pasteEl = document.getElementById('resumeText');
+        if (pasteEl) pasteEl.value = text;
+        switchResumeTab('paste');
+    }
+
+    track('grader_upsell_click');
+    document.getElementById('generate').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    setTimeout(function() {
+        var jobEl = document.getElementById('jobText');
+        if (jobEl) jobEl.focus();
+    }, 900);
+
+    toast('Resume loaded. Paste a job posting to continue.', 'success');
+}
+
 // Form submit
 var form = document.getElementById('resumeForm');
 if (form) {
@@ -120,11 +377,11 @@ if (form) {
         e.preventDefault();
         var job = document.getElementById('jobText').value.trim();
         if (!job || job.length < 50) {
-            alert('Please paste the full job description (at least 50 characters).');
+            toast('Paste the full job description (at least 50 characters).', 'error');
             return;
         }
         if (job.length > MAX_JOB_CHARS) {
-            alert('Job posting is too long (' + job.length + ' characters, max ' + MAX_JOB_CHARS + '). Paste just the job description, not the whole page.');
+            toast('Job posting too long. Maximum ' + MAX_JOB_CHARS + ' characters.', 'error');
             return;
         }
         var wantCover = document.getElementById('coverLetter').checked;
@@ -133,11 +390,11 @@ if (form) {
         if (resumeMode === 'paste') {
             var resumeTextVal = document.getElementById('resumeText').value.trim();
             if (!resumeTextVal || resumeTextVal.length < 100) {
-                alert('Please paste your full resume text (at least 100 characters).');
+                toast('Paste your full resume (at least 100 characters).', 'error');
                 return;
             }
             if (resumeTextVal.length > MAX_RESUME_CHARS) {
-                alert('Resume is too long (' + resumeTextVal.length + ' characters, max ' + MAX_RESUME_CHARS + '). Please shorten it.');
+                toast('Resume too long. Maximum ' + MAX_RESUME_CHARS + ' characters.', 'error');
                 return;
             }
             btn.disabled = true;
@@ -154,7 +411,7 @@ if (form) {
             btn.innerHTML = '<span class="spinner"></span>Reading your resume...';
             extractTextFromFile(uploadedFile).then(function(text) {
                 if (!text || text.length < 50) {
-                    alert('Could not extract enough text from your file (' + (text ? text.length : 0) + ' characters found). Please use the "Paste Text" tab and paste your resume manually.');
+                    toast('Could not extract enough text from your file. Try the Paste text tab.', 'error');
                     resetBtn(btn);
                     return;
                 }
@@ -166,7 +423,7 @@ if (form) {
                 sendPayload({ resume: text, job_posting: job, include_cover_letter: wantCover }, btn);
             }).catch(function(err) {
                 console.error('File extraction error:', err);
-                alert('Could not read your file: ' + (err && err.message ? err.message : 'unknown error') + '. Please use the "Paste Text" tab instead.');
+                toast('Could not read your file. Try the Paste text tab.', 'error');
                 resetBtn(btn);
             });
         }
@@ -235,7 +492,7 @@ function sendPayload(data, btn) {
     data.amount = data.include_cover_letter ? 150 : 100;
     var email = document.getElementById('userEmail').value.trim();
     if (!email || email.indexOf('@') < 1) {
-        alert('Please enter your email address.');
+        toast('Please enter a valid email address.', 'error');
         resetBtn(btn);
         return;
     }
@@ -253,12 +510,12 @@ function sendPayload(data, btn) {
         } else if (resp.resume_text) {
             showResult(resp);
         } else if (resp.error) {
-            alert(resp.error);
+            toast(resp.error, 'error');
             resetBtn(btn);
         }
     })
     .catch(function() {
-        alert('Something went wrong. Please try again.');
+        toast('Something went wrong. Please try again.', 'error');
         resetBtn(btn);
     });
 }
