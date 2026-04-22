@@ -380,6 +380,12 @@ if (form) {
             toast('Paste the full job description (at least 50 characters).', 'error');
             return;
         }
+        // Block bare-URL submissions: we cannot fetch pages, GPT only sees the literal text
+        var jobStripped = job.replace(/https?:\/\/\S+/g, '').trim();
+        if (jobStripped.length < 50) {
+            toast('Paste the full job description, not just the link. We cannot fetch URLs.', 'error');
+            return;
+        }
         if (job.length > MAX_JOB_CHARS) {
             toast('Job posting too long. Maximum ' + MAX_JOB_CHARS + ' characters.', 'error');
             return;
