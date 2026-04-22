@@ -90,10 +90,26 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('success').style.display = 'block';
         window._resumeText = data.resume_text;
+        window._coverText = data.cover_letter_text;
+
+        if (window.gtag) {
+            gtag('event', 'purchase', {
+                currency: 'USD',
+                value: data.cover_letter_text ? 1.50 : 1.00,
+                items: [{ item_id: 'resume_tailor', item_name: 'Tailored Resume', quantity: 1 }]
+            });
+        }
 
         var preview = document.getElementById('preview');
         var html = '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">';
-        html += '<button onclick="downloadPdf()" class="btn">Download Resume PDF</button>';
+        if (data.resume_pdf_base64) {
+            html += '<a href="data:application/pdf;base64,' + data.resume_pdf_base64 + '" download="tailored_resume.pdf" class="btn" onclick="trackDownload(\'resume\')">Download Resume PDF</a>';
+        } else {
+            html += '<button onclick="downloadPdfFallback()" class="btn">Download Resume PDF</button>';
+        }
+        if (data.cover_pdf_base64) {
+            html += '<a href="data:application/pdf;base64,' + data.cover_pdf_base64 + '" download="cover_letter.pdf" class="btn" style="background:#059669" onclick="trackDownload(\'cover\')">Download Cover Letter PDF</a>';
+        }
         html += '<button onclick="copyToClipboard()" class="btn" style="background:var(--bg-card);color:var(--text-mid);border:1px solid var(--border);" id="copyBtn">Copy Resume Text</button>';
         html += '</div>';
 
@@ -104,6 +120,10 @@
             html += '<div class="resume-preview" style="margin-top:.75rem;">' + formatResume(data.cover_letter_text) + '</div></details>';
         }
         preview.innerHTML = html;
+    }
+
+    function trackDownload(which) {
+        if (window.gtag) gtag('event', 'file_download', { file_name: which });
     }
 
     function formatResume(text) {
@@ -124,7 +144,7 @@
         return h;
     }
 
-    function downloadPdf() {
+    function downloadPdfFallback() {
         if (!window._resumeText) return;
         var w = window.open('', '_blank');
         var text = window._resumeText;

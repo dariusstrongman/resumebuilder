@@ -1,0 +1,10 @@
+# Workflow backups contain live API keys (OpenAI, Stripe, Supabase service, html2pdf)
+# Never commit to public repo
+workflow-backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

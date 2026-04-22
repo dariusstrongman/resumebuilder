@@ -1,23 +1,10 @@
 var WEBHOOK_URL = 'https://n8n.myaibuffet.com/webhook/resume-tailor';
+var MAX_RESUME_CHARS = 50000;
+var MAX_JOB_CHARS = 20000;
 var uploadedFile = null;
-var promoApplied = false;
 
-function applyPromo() {
-    var input = document.getElementById('promoCode');
-    var msg = document.getElementById('promoMsg');
-    var code = input.value.trim();
-    if (code === 'test123') {
-        promoApplied = true;
-        msg.textContent = 'Promo applied. Free generation.';
-        msg.className = 'promo-msg success';
-        input.disabled = true;
-        document.getElementById('promoBtn').disabled = true;
-        document.getElementById('btnPrice').textContent = 'Free';
-    } else {
-        msg.textContent = 'Invalid promo code.';
-        msg.className = 'promo-msg error';
-        promoApplied = false;
-    }
+function track(event, params) {
+    if (window.gtag) gtag('event', event, params || {});
 }
 
 var resumeMode = 'upload';
@@ -123,6 +110,7 @@ function handleFile(file) {
     uploadDefault.style.display = 'none';
     uploadDone.style.display = 'flex';
     uploadZone.classList.add('has-file');
+    track('resume_uploaded', { file_type: file.name.split('.').pop().toLowerCase(), file_size_kb: Math.round(file.size/1024) });
 }
 
 // Form submit
@@ -135,6 +123,10 @@ if (form) {
             alert('Please paste the full job description (at least 50 characters).');
             return;
         }
+        if (job.length > MAX_JOB_CHARS) {
+            alert('Job posting is too long (' + job.length + ' characters, max ' + MAX_JOB_CHARS + '). Paste just the job description, not the whole page.');
+            return;
+        }
         var wantCover = document.getElementById('coverLetter').checked;
         var btn = document.getElementById('submitBtn');
 
@@ -144,8 +136,13 @@ if (form) {
                 alert('Please paste your full resume text (at least 100 characters).');
                 return;
             }
+            if (resumeTextVal.length > MAX_RESUME_CHARS) {
+                alert('Resume is too long (' + resumeTextVal.length + ' characters, max ' + MAX_RESUME_CHARS + '). Please shorten it.');
+                return;
+            }
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
+            track('begin_checkout', { with_cover_letter: wantCover, input_method: 'paste' });
             sendPayload({ resume: resumeTextVal, job_posting: job, include_cover_letter: wantCover }, btn);
         } else {
             if (!uploadedFile) {
@@ -161,7 +158,11 @@ if (form) {
                     resetBtn(btn);
                     return;
                 }
+                if (text.length > MAX_RESUME_CHARS) {
+                    text = text.substring(0, MAX_RESUME_CHARS);
+                }
                 btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
+                track('begin_checkout', { with_cover_letter: wantCover, input_method: 'upload' });
                 sendPayload({ resume: text, job_posting: job, include_cover_letter: wantCover }, btn);
             }).catch(function(err) {
                 console.error('File extraction error:', err);
@@ -230,9 +231,8 @@ function extractTextFromFile(file) {
 }
 
 function sendPayload(data, btn) {
-    data.mode = promoApplied ? 'tailor_free' : 'tailor';
+    data.mode = 'tailor';
     data.amount = data.include_cover_letter ? 150 : 100;
-    if (promoApplied) data.promo_code = 'test123';
     var email = document.getElementById('userEmail').value.trim();
     if (!email || email.indexOf('@') < 1) {
         alert('Please enter your email address.');
