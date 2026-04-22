@@ -10,169 +10,169 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumeGo &mdash; The Résumé Herald. A tailored résumé for $1.</title>
-    <meta name="description" content="Upload your résumé. Paste the job posting. Download a tailored, ATS-optimized PDF in sixty seconds for one dollar. No account. No subscription.">
-    <meta property="og:title" content="ResumeGo &mdash; A tailored résumé for $1.">
-    <meta property="og:description" content="Stop sending the same résumé. Our service rewrites yours to match any job posting in 60 seconds. Passes Workday, Greenhouse, Lever, and every major ATS.">
+    <title>ResumeGo &mdash; Tailored resumes for $1. Pass any ATS.</title>
+    <meta name="description" content="Upload your resume. Paste the job posting. Download a tailored, ATS-optimized PDF in 60 seconds. $1 per resume. No account. No subscription.">
+    <meta property="og:title" content="ResumeGo &mdash; Tailored resumes for $1.">
+    <meta property="og:description" content="Stop sending the same resume. We rewrite yours to match any job posting in 60 seconds. Passes Workday, Greenhouse, Lever, and every major ATS.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://resume.stromation.com">
     <meta name="twitter:card" content="summary">
+    <meta name="theme-color" content="#07080a">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="grain" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════ MASTHEAD ═══════════════════════════ -->
-<header class="masthead">
-    <div class="masthead__rule">
-        <span>Vol. I &middot; No. 01</span>
-        <span>Dallas &middot; Partly Hiring &middot; Printed Daily</span>
-        <span id="dateline">Today</span>
+<!-- ───────────────── NAV ───────────────── -->
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="#how-it-works">How it works</a>
+            <a href="#examples">Examples</a>
+            <a href="#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </div>
-
-    <a href="/" class="masthead__title" aria-label="ResumeGo Home">
-        <span class="masthead__the">The</span>
-        <span class="masthead__name">Résumé <em>Herald</em></span>
-        <span class="masthead__tag">&mdash; A dispatch on tailored résumés, delivered for a dollar &mdash;</span>
-    </a>
-
-    <nav class="masthead__nav" id="navLinks">
-        <a href="#method">The Method</a>
-        <a href="#dossier">Dossier</a>
-        <a href="#rate-card">Rate Card</a>
-        <a href="/blog/">Archive</a>
-        <a href="#generate" class="masthead__cta">File Application &searr;</a>
-    </nav>
-    <button class="masthead__toggle" id="mobileToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-    </button>
 </header>
 
 <main>
 
-<!-- ═══════════════════════════ DISPATCH / HERO ═══════════════════════════ -->
-<section class="dispatch" id="generate">
-    <div class="dispatch__lead">
-        <div class="kicker">
-            <span class="kicker__bullet">&bull;</span>
-            <span>DISPATCH</span>
-            <span class="kicker__sep">/</span>
-            <span>JOB SEARCH</span>
+<!-- ───────────────── HERO ───────────────── -->
+<section class="hero" id="generate">
+    <div class="hero-grid">
+
+        <div class="hero-copy">
+            <div class="hero-tag">
+                <span class="live-dot"></span>
+                <span>AI RESUME TAILORING</span>
+                <span class="hero-tag__sep">/</span>
+                <span>$1 PER RESUME</span>
+            </div>
+
+            <h1 class="hero-title">
+                Stop sending <em>the same</em> resume.
+                <span class="hero-title-line">Get it tailored for <span class="dollar">$1</span>.</span>
+            </h1>
+
+            <p class="hero-lede">
+                Seventy-five percent of resumes get filtered before a human reads them. We rewrite yours to match any job posting in sixty seconds. No account. No subscription.
+            </p>
+
+            <ul class="hero-points">
+                <li>60-second turnaround</li>
+                <li>Passes every major ATS</li>
+                <li>Data deleted within 24 hours</li>
+            </ul>
         </div>
 
-        <h1 class="lede">
-            Stop sending the <em>same</em> résumé.
-            <span class="lede__price">Get it tailored for <span class="lede__dollar">$1</span>.</span>
-        </h1>
+        <aside class="form-card">
+            <div class="form-card__stripe"></div>
+            <div class="form-card__head">
+                <span class="form-card__label">TAILOR A RESUME</span>
+                <span class="form-card__step">3 STEPS &middot; 60 SECONDS</span>
+            </div>
 
-        <p class="standfirst">
-            <span class="dropcap">S</span>eventy-five percent of résumés are filtered out before a human reads them. Our service rewrites yours to match the exact job posting in sixty seconds. No account, no subscription, no commitment &mdash; pay a dollar, download a PDF that passes Workday, Greenhouse, Lever, and every other applicant tracking system in use today.
-        </p>
+            <form id="resumeForm" class="form-body">
 
-        <ul class="dispatch__promises">
-            <li>No account required</li>
-            <li>Data wiped in 24 hours</li>
-            <li>Delivered in 60 seconds</li>
-        </ul>
-
-        <div class="dispatch__byline">
-            <span class="byline-rule"></span>
-            <span>Filed by <em>The Herald</em> &mdash; Est. 2026</span>
-            <span class="byline-rule"></span>
-        </div>
-    </div>
-
-    <!-- ═══════════ THE FILING DESK (form panel) ═══════════ -->
-    <aside class="form-panel" id="filing">
-        <div class="form-panel__tape"></div>
-        <div class="form-panel__head">
-            <span class="form-panel__stamp">&searr; FILE APPLICATION</span>
-            <span class="form-panel__no">FORM R &middot; 01</span>
-        </div>
-
-        <form id="resumeForm" class="form-panel__body">
-
-            <!-- 1. RÉSUMÉ -->
-            <div class="field">
-                <label class="field-label"><span class="field-num">1</span> Your résumé</label>
-                <div class="ri-tabs">
-                    <button type="button" class="ri-tab active" data-tab="upload" onclick="switchResumeTab('upload')">Upload file</button>
-                    <button type="button" class="ri-tab" data-tab="paste" onclick="switchResumeTab('paste')">Paste text</button>
-                </div>
-                <div id="resumeUploadTab">
-                    <div class="upload-zone" id="uploadZone">
-                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden>
-                        <div class="upload-default" id="uploadDefault">
-                            <span class="upload-icon" aria-hidden="true">&uarr;</span>
-                            <p class="upload-text">Drop your résumé or <span class="upload-link">browse the archive</span></p>
-                            <p class="upload-hint">PDF or Word &middot; 5 MB max</p>
-                        </div>
-                        <div class="upload-done" id="uploadDone" style="display:none;">
-                            <span class="upload-check" aria-hidden="true">&check;</span>
-                            <span id="fileName"></span>
-                            <button type="button" class="upload-remove" id="removeFile">Remove</button>
+                <!-- 1. RESUME -->
+                <div class="field">
+                    <label class="field-label">
+                        <span class="field-num">1</span>
+                        <span class="field-name">Your resume</span>
+                    </label>
+                    <div class="ri-tabs">
+                        <button type="button" class="ri-tab active" data-tab="upload" onclick="switchResumeTab('upload')">Upload file</button>
+                        <button type="button" class="ri-tab" data-tab="paste" onclick="switchResumeTab('paste')">Paste text</button>
+                    </div>
+                    <div id="resumeUploadTab">
+                        <div class="upload-zone" id="uploadZone">
+                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden>
+                            <div class="upload-default" id="uploadDefault">
+                                <svg class="upload-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                <p class="upload-text">Drop your resume or <span class="upload-link">browse</span></p>
+                                <p class="upload-hint">PDF or Word &middot; 5MB max</p>
+                            </div>
+                            <div class="upload-done" id="uploadDone" style="display:none;">
+                                <span class="upload-check" aria-hidden="true">&check;</span>
+                                <span id="fileName"></span>
+                                <button type="button" class="upload-remove" id="removeFile">Remove</button>
+                            </div>
                         </div>
                     </div>
+                    <div id="resumePasteTab" style="display:none;">
+                        <textarea id="resumeText" placeholder="Paste your resume text here&hellip;" rows="8"></textarea>
+                    </div>
                 </div>
-                <div id="resumePasteTab" style="display:none;">
-                    <textarea id="resumeText" placeholder="Paste your full résumé text here&hellip;" rows="8"></textarea>
-                </div>
-            </div>
 
-            <!-- 2. JOB POSTING -->
-            <div class="field">
-                <label for="jobText" class="field-label">
-                    <span class="field-num">2</span> The job posting
-                    <span class="field-hint" id="jobHint"></span>
+                <!-- 2. JOB POSTING -->
+                <div class="field">
+                    <label for="jobText" class="field-label">
+                        <span class="field-num">2</span>
+                        <span class="field-name">Job posting</span>
+                        <span class="field-hint" id="jobHint"></span>
+                    </label>
+                    <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5" required></textarea>
+                </div>
+
+                <!-- ADD-ON -->
+                <label class="addon checkbox-wrap">
+                    <input type="checkbox" id="coverLetter">
+                    <span class="check-box"></span>
+                    <span class="addon__body">
+                        <span class="addon__title">Add a matching cover letter <span class="addon__price">+$0.50</span></span>
+                        <span class="addon__desc">Same tone, addressed to the company</span>
+                    </span>
                 </label>
-                <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5" required></textarea>
+
+                <!-- 3. EMAIL -->
+                <div class="field">
+                    <label for="userEmail" class="field-label">
+                        <span class="field-num">3</span>
+                        <span class="field-name">Email</span>
+                    </label>
+                    <input type="email" id="userEmail" placeholder="you@example.com" class="email-input" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="submit-btn__label">Tailor my resume</span>
+                    <span class="submit-btn__price" id="btnPrice">$1.00</span>
+                </button>
+
+                <p class="form-fine">
+                    Paid once via Stripe. Delivered to your inbox. Your file is purged within 24 hours.
+                </p>
+            </form>
+
+            <div id="resultArea" class="result-area" style="display:none;">
+                <div class="result-header">
+                    <span>&check;</span>
+                    <h3>Your tailored resume is ready</h3>
+                </div>
+                <div id="resultContent"></div>
             </div>
+        </aside>
 
-            <!-- ADD-ON: Cover letter -->
-            <label class="addon checkbox-wrap">
-                <input type="checkbox" id="coverLetter">
-                <span class="check-box"></span>
-                <span class="addon__body">
-                    <strong>Add a matching cover letter <span class="addon__price">+ $0.50</span></strong>
-                    <em>Same tone, addressed to the company.</em>
-                </span>
-            </label>
-
-            <!-- 3. EMAIL -->
-            <div class="field">
-                <label for="userEmail" class="field-label"><span class="field-num">3</span> Where to send it</label>
-                <input type="email" id="userEmail" placeholder="you@example.com" class="email-input" required>
-            </div>
-
-            <button type="submit" class="file-btn" id="submitBtn">
-                <span class="file-btn__label">File &amp; Tailor</span>
-                <span class="file-btn__price" id="btnPrice">$1.00</span>
-            </button>
-
-            <p class="form-panel__fine">
-                Paid once via Stripe. Delivered to your inbox. Your file is purged within 24 hours.
-            </p>
-        </form>
-
-        <div id="resultArea" class="result-area" style="display:none;">
-            <div class="result-header">
-                <span>&check;</span>
-                <h3>Your tailored résumé is ready</h3>
-            </div>
-            <div id="resultContent"></div>
-        </div>
-    </aside>
+    </div>
 </section>
 
-<!-- ═══════════════════════════ ACCEPTED AT ═══════════════════════════ -->
+<!-- ───────────────── ATS BAR ───────────────── -->
 <section class="ats-bar">
-    <div class="ats-rule" aria-hidden="true"></div>
-    <p class="ats-label">Accepted at every major applicant tracking system</p>
+    <p class="ats-label">Works with every major applicant tracking system</p>
     <ul class="ats-logos">
         <li>Workday</li>
         <li>Greenhouse</li>
@@ -181,89 +181,85 @@
         <li>Taleo</li>
         <li>BambooHR</li>
     </ul>
-    <div class="ats-rule" aria-hidden="true"></div>
 </section>
 
-<!-- ═══════════════════════════ THE METHOD ═══════════════════════════ -->
-<section class="method" id="method">
+<!-- ───────────────── HOW IT WORKS ───────────────── -->
+<section class="section section--steps" id="how-it-works">
     <header class="section-head">
-        <span class="section-kicker">Part I</span>
-        <h2 class="section-title">The Method</h2>
-        <p class="section-dek">Three steps. Sixty seconds. One dollar.</p>
+        <span class="section-eyebrow">How it works</span>
+        <h2 class="section-title">Three steps. Sixty seconds.</h2>
+        <p class="section-dek">No account. No subscription. Just a dollar and a download.</p>
     </header>
-    <ol class="method-list">
-        <li class="method-step">
-            <span class="step-num">I</span>
-            <h3>Upload your résumé</h3>
-            <p>PDF or Word. We extract the text exactly as written. Nothing is invented. Nothing is removed.</p>
-        </li>
-        <li class="method-step">
-            <span class="step-num">II</span>
+    <div class="steps">
+        <article class="step">
+            <span class="step-num">01</span>
+            <h3>Upload your resume</h3>
+            <p>PDF or Word. We extract the text exactly as written &mdash; nothing invented, nothing removed.</p>
+        </article>
+        <article class="step">
+            <span class="step-num">02</span>
             <h3>Paste the job posting</h3>
-            <p>From LinkedIn, Indeed, Glassdoor, or the employer&rsquo;s own career page. Any industry, any level.</p>
-        </li>
-        <li class="method-step">
-            <span class="step-num">III</span>
+            <p>From LinkedIn, Indeed, Glassdoor, or any career page. Any industry, any level.</p>
+        </article>
+        <article class="step">
+            <span class="step-num">03</span>
             <h3>Download your PDF</h3>
-            <p>Keywords matched, bullets tightened, formatting ATS-clean. Ready to submit before the posting closes.</p>
-        </li>
-    </ol>
+            <p>Keywords matched, bullets tightened, formatting ATS-clean. Ready to submit.</p>
+        </article>
+    </div>
 </section>
 
-<!-- ═══════════════════════════ FROM THE DOSSIER (before/after) ═══════════════════════════ -->
-<section class="dossier" id="dossier">
+<!-- ───────────────── EXAMPLES ───────────────── -->
+<section class="section section--examples" id="examples">
     <header class="section-head">
-        <span class="section-kicker">Part II</span>
-        <h2 class="section-title">From the Dossier</h2>
-        <p class="section-dek">Same person. Same experience. The only difference is how it reads.</p>
+        <span class="section-eyebrow">Examples</span>
+        <h2 class="section-title">Same person. Same experience.</h2>
+        <p class="section-dek">The only difference is how it reads. Click either example to enlarge.</p>
     </header>
     <div class="doc-compare" id="docCompare"></div>
-    <p class="dossier__note">Click either specimen to enlarge. Examples rotate every eight seconds.</p>
 </section>
 
-<!-- ═══════════════════════════ READER MAIL (FAQ) ═══════════════════════════ -->
-<section class="faq-section" id="faq">
+<!-- ───────────────── FAQ ───────────────── -->
+<section class="section section--faq" id="faq">
     <header class="section-head">
-        <span class="section-kicker">Part III</span>
-        <h2 class="section-title">Reader Mail</h2>
-        <p class="section-dek">Questions we have received. Answers we stand behind.</p>
+        <span class="section-eyebrow">FAQ</span>
+        <h2 class="section-title">Questions, answered.</h2>
     </header>
     <div class="faq-list">
         <div class="faq-item">
-            <button class="faq-q" onclick="toggleFaq(this)">Does it invent things on my résumé?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">No. We only use the text in your uploaded résumé. We rephrase, reorganize, and align with the posting &mdash; but we never fabricate experience, skills, certifications, or metrics. Your summary describes who you actually are.</div>
+            <button class="faq-q" onclick="toggleFaq(this)">Does it make things up on my resume?<span aria-hidden="true">+</span></button>
+            <div class="faq-a">No. We only use what you upload. We rephrase, reorganize, and align with the posting &mdash; but we never fabricate experience, skills, certifications, or metrics.</div>
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">What happens to my data?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">Your résumé text is processed and purged within 24 hours. We store no accounts, no saved profiles, no ad-targeting data. No account means nothing to hold onto.</div>
+            <div class="faq-a">Your resume text is processed and purged within 24 hours. No accounts, no saved profiles, no ad targeting. No account means there is nothing to keep.</div>
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">Will it pass applicant tracking systems?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">Yes. Single column, standard section headers, no graphics, no tables. The format passes Workday, Greenhouse, Lever, iCIMS, Taleo, and every other major ATS &mdash; and we match keywords from the posting so your score stays high.</div>
+            <div class="faq-a">Yes. Single column, standard section headers, no graphics, no tables. The format passes Workday, Greenhouse, Lever, iCIMS, Taleo, and every other major ATS, and we match keywords so your score stays high.</div>
         </div>
         <div class="faq-item">
-            <button class="faq-q" onclick="toggleFaq(this)">How is this different from asking ChatGPT?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">ChatGPT returns raw text you still have to format. We analyze the exact posting, rewrite your bullets with matched keywords, generate a clean professional PDF, and refuse to invent fake experience. One click, one dollar, done.</div>
+            <button class="faq-q" onclick="toggleFaq(this)">How is this different from ChatGPT?<span aria-hidden="true">+</span></button>
+            <div class="faq-a">ChatGPT returns raw text you still have to format. We analyze the exact posting, rewrite your bullets with matched keywords, generate a clean ATS-ready PDF, and refuse to invent fake experience. One click, one dollar, done.</div>
         </div>
         <div class="faq-item">
-            <button class="faq-q" onclick="toggleFaq(this)">Does this work for my industry?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">Every industry with job postings: healthcare, tech, finance, retail, construction, education, government, hospitality, law, marketing. Any level, any role.</div>
+            <button class="faq-q" onclick="toggleFaq(this)">Does it work for my industry?<span aria-hidden="true">+</span></button>
+            <div class="faq-a">Any industry with job postings: healthcare, tech, finance, retail, construction, education, government, hospitality, law, marketing. Any level, any role.</div>
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">Why is it so cheap?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">The competition charges $25&ndash;100 per month because they bundle profile-builders, tracking dashboards, and manual review. We do one thing well. A dollar per application means you can tailor every single one.</div>
+            <div class="faq-a">Competitors charge $25&ndash;100 per month because they bundle profile-builders, tracking dashboards, and manual review. We do one thing. A dollar per application means you can tailor every single one.</div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════ THE FIELD (comparison) ═══════════════════════════ -->
-<section class="compare-section">
+<!-- ───────────────── COMPARE ───────────────── -->
+<section class="section section--compare">
     <header class="section-head">
-        <span class="section-kicker">Part IV</span>
-        <h2 class="section-title">The Field</h2>
-        <p class="section-dek">How we compare against the incumbents.</p>
+        <span class="section-eyebrow">How we compare</span>
+        <h2 class="section-title">Built for speed and price.</h2>
     </header>
-    <div class="compare-table-wrap">
+    <div class="compare-wrap">
         <table class="compare-table">
             <thead>
                 <tr>
@@ -275,7 +271,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Price</td><td class="compare-highlight">$1 / résumé</td><td>$20 / mo</td><td>$50 / mo</td><td>$24 / mo</td></tr>
+                <tr><td>Price</td><td class="compare-highlight">$1 / resume</td><td>$20 / mo</td><td>$50 / mo</td><td>$24 / mo</td></tr>
                 <tr><td>Tailored to posting</td><td class="compare-highlight">Yes</td><td>Manual</td><td>Score only</td><td>No</td></tr>
                 <tr><td>PDF output</td><td class="compare-highlight">Yes</td><td>No</td><td>No</td><td>Yes</td></tr>
                 <tr><td>Account required</td><td class="compare-highlight">No</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
@@ -288,52 +284,54 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════ RATE CARD ═══════════════════════════ -->
-<section class="rate-card" id="rate-card">
+<!-- ───────────────── PRICING ───────────────── -->
+<section class="section section--pricing" id="pricing">
     <header class="section-head">
-        <span class="section-kicker">Part V</span>
-        <h2 class="section-title">Rate Card</h2>
+        <span class="section-eyebrow">Pricing</span>
+        <h2 class="section-title">One dollar. One tailored resume.</h2>
     </header>
-    <div class="rate-card__body">
-        <div class="rate-card__figure" aria-hidden="true">
-            <span class="rate-card__currency">$</span>
-            <span class="rate-card__amount">1</span>
-            <span class="rate-card__per">per<br>résumé</span>
+    <div class="pricing-card">
+        <div class="pricing-figure">
+            <span class="pricing-currency">$</span><span class="pricing-amount">1</span>
+            <span class="pricing-per">per resume</span>
         </div>
-        <div class="rate-card__copy">
-            <p>Upload. Paste. Pay. Download. No account. No subscription. No commitment. A dollar says you can tailor every application you submit.</p>
-            <p class="rate-card__addon"><strong>Optional:</strong> matching cover letter for an additional $0.50 &mdash; same tone, addressed to the company.</p>
-            <a href="#generate" class="file-btn file-btn--inline">File an application &mdash; $1 &searr;</a>
+        <div class="pricing-copy">
+            <p>Upload. Paste. Pay. Download. No account. No subscription. No commitment.</p>
+            <p class="pricing-addon"><strong>Optional:</strong> matching cover letter for an additional $0.50 &mdash; same tone, addressed to the company.</p>
+            <a href="#generate" class="submit-btn submit-btn--inline">
+                <span class="submit-btn__label">Tailor my resume</span>
+                <span class="submit-btn__price">$1.00</span>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════ LAST CALL ═══════════════════════════ -->
-<section class="last-call">
-    <span class="last-call__stamp">&mdash; Last Call &mdash;</span>
-    <h2>Every application deserves a tailored résumé.</h2>
-    <p>For the price of a vending-machine snack, make sure yours gets read.</p>
-    <a href="#generate" class="file-btn file-btn--light">File now &mdash; $1 &searr;</a>
+<!-- ───────────────── FINAL CTA ───────────────── -->
+<section class="final-cta">
+    <h2>Every application deserves a tailored resume.</h2>
+    <p>For the price of a vending machine snack, make sure yours gets read.</p>
+    <a href="#generate" class="submit-btn submit-btn--inline submit-btn--light">
+        <span class="submit-btn__label">Start now &mdash; $1</span>
+    </a>
 </section>
 
 </main>
 
-<!-- ═══════════════════════════ COLOPHON ═══════════════════════════ -->
-<footer class="colophon">
-    <div class="colophon__rule" aria-hidden="true"></div>
-    <div class="colophon__inner">
-        <div>
-            <div class="colophon__title">The Résumé <em>Herald</em></div>
-            <p class="colophon__meta">A service of <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+<!-- ───────────────── FOOTER ───────────────── -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
         </div>
-        <div class="colophon__links">
-            <a href="/blog/">Archive</a>
-            <a href="mailto:contact@stromation.com">Post a Letter</a>
-            <a href="#generate">File an Application</a>
+        <div class="footer-links">
+            <a href="#how-it-works">How it works</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">Contact</a>
         </div>
-        <p class="colophon__set">
-            Set in <strong>Fraunces</strong> &amp; <strong>Newsreader</strong>, with <strong>JetBrains&nbsp;Mono</strong> for particulars. Printed on GitHub Pages. All typography licensed under the SIL Open Font License.
-        </p>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
     </div>
 </footer>
 
@@ -343,15 +341,6 @@
 <script>if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 <script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <script src="app.js"></script>
-<script>
-    // Masthead dateline
-    (function(){
-      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-      var d = new Date();
-      var el = document.getElementById('dateline');
-      if (el) el.textContent = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-    })();
-</script>
 
 </body>
 </html>
