@@ -1,4 +1,4 @@
-var WEBHOOK_URL = 'https://n8n.myaibuffet.com/webhook/resume-tailor';
+var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
 var MAX_RESUME_CHARS = 50000;
 var MAX_JOB_CHARS = 20000;
 var uploadedFile = null;
