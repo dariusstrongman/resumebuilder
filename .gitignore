@@ -9,3 +9,4 @@ Thumbs.db
 .idea/
 *.swp
 resume example/
+schema.sql
