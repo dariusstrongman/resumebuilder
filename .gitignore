@@ -2,6 +2,10 @@
 # Never commit to public repo
 workflow-backups/
 
+# Internal docs - keep local, do NOT publish
+CLAUDE.md
+SETUP.md
+
 # OS / editor
 .DS_Store
 Thumbs.db
