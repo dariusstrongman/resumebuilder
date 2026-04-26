@@ -66,7 +66,7 @@
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
             </div>
             <h1 class="success-h">Your tailored resume is ready.</h1>
-            <p class="success-sub">Download below. A copy was also sent to your email &mdash; check your spam folder if you don't see it.</p>
+            <p class="success-sub">Download below. A copy was also sent to <strong id="deliveryEmail">your email</strong> &mdash; check your spam folder if you don't see it.</p>
             <div id="downloadBtns" class="success-buttons"></div>
             <div id="preview" class="success-preview"></div>
             <div class="success-footer-cta">
@@ -106,7 +106,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
-            <a href="mailto:contact@stromation.com">Contact</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
         </div>
         <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
     </div>
@@ -152,6 +152,10 @@
         document.getElementById('success').style.display = 'flex';
         window._resumeText = data.resume_text;
         window._coverText = data.cover_letter_text;
+
+        if (data.email) {
+            document.getElementById('deliveryEmail').textContent = data.email;
+        }
 
         if (window.gtag) {
             gtag('event', 'purchase', {
