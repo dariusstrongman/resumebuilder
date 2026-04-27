@@ -557,6 +557,13 @@ function sendPayload(data, btn) {
     var promo = getPromoCode();
     if (promo) data.promo_code = promo;
 
+    // Promo path: hand the payload to success.html so loading + result UI matches the paid flow.
+    if (promo) {
+        try { sessionStorage.setItem('resumegoPromoPayload', JSON.stringify(data)); } catch(e) {}
+        window.location.href = '/success.html?promo=1';
+        return;
+    }
+
     fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

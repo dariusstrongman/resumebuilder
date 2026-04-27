@@ -124,8 +124,35 @@
 
     var params = new URLSearchParams(window.location.search);
     var sessionId = params.get('session_id');
+    var isPromo = params.get('promo') === '1';
 
-    if (!sessionId) {
+    var fetchBody = null;
+    if (isPromo) {
+        // Cached result from a refresh? Show immediately.
+        var cached = null;
+        try { cached = sessionStorage.getItem('resumegoPromoResult'); } catch(e) {}
+        if (cached) {
+            try {
+                clearInterval(stepTimer);
+                showSuccess(JSON.parse(cached));
+                return;
+            } catch(e) {}
+        }
+        var stashed = null;
+        try { stashed = sessionStorage.getItem('resumegoPromoPayload'); } catch(e) {}
+        if (!stashed) {
+            clearInterval(stepTimer);
+            showError('Your test submission expired. Go back and tailor again.');
+            return;
+        }
+        try { fetchBody = JSON.parse(stashed); } catch(e) {
+            clearInterval(stepTimer);
+            showError('Submission was corrupted. Tailor again from the home page.');
+            return;
+        }
+    } else if (sessionId) {
+        fetchBody = { mode: 'fulfill', session_id: sessionId };
+    } else {
         clearInterval(stepTimer);
         showError('No payment session found. Please go back and try again.');
         return;
@@ -134,12 +161,20 @@
     fetch('https://n8n.stromation.com/webhook/resume-tailor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'fulfill', session_id: sessionId })
+        body: JSON.stringify(fetchBody)
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
         clearInterval(stepTimer);
-        if (data && data.resume_text) showSuccess(data);
+        if (data && data.resume_text) {
+            if (isPromo) {
+                try {
+                    sessionStorage.setItem('resumegoPromoResult', JSON.stringify(data));
+                    sessionStorage.removeItem('resumegoPromoPayload');
+                } catch(e) {}
+            }
+            showSuccess(data);
+        }
         else showError((data && data.error) || 'Failed to generate your resume. Email contact@stromation.com for help.');
     })
     .catch(function() {
@@ -157,7 +192,7 @@
             document.getElementById('deliveryEmail').textContent = data.email;
         }
 
-        if (window.gtag) {
+        if (window.gtag && !isPromo) {
             gtag('event', 'purchase', {
                 currency: 'USD',
                 value: data.cover_letter_text ? 1.50 : 1.00,
