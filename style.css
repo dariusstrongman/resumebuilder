@@ -664,6 +664,56 @@ textarea::placeholder {
     margin-top: 0.15rem;
 }
 
+/* Promo code */
+.promo-wrap {
+    margin: 0 0 1rem;
+}
+.promo-toggle {
+    background: none;
+    border: 0;
+    padding: 0.25rem 0;
+    color: var(--ink-3);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+}
+.promo-toggle:hover { color: var(--ink-0); }
+.promo-input-wrap {
+    margin-top: 0.55rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.promo-input {
+    flex: 1;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    color: var(--ink-0);
+    border-radius: 8px;
+    font-family: var(--f-mono);
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s var(--ease);
+}
+.promo-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+.promo-input.is-valid { border-color: #16a34a; }
+.promo-input.is-invalid { border-color: #dc2626; }
+.promo-status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    min-width: 4rem;
+}
+.promo-status.is-valid { color: #16a34a; }
+.promo-status.is-invalid { color: #dc2626; }
+
 /* Submit button */
 .submit-btn {
     display: inline-flex;

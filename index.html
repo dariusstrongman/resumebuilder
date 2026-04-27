@@ -220,6 +220,15 @@
                     <p class="field-hint" style="font-size:.78rem;color:#d97706;margin-top:.4rem;">Double-check the spelling. We send your resume here too, and a typo means you wont get the email copy.</p>
                 </div>
 
+                <!-- PROMO CODE -->
+                <div class="promo-wrap">
+                    <button type="button" class="promo-toggle" id="promoToggle" aria-expanded="false">Have a promo code?</button>
+                    <div class="promo-input-wrap" id="promoInputWrap" hidden>
+                        <input type="text" id="promoCode" placeholder="Enter code" class="promo-input" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                        <span class="promo-status" id="promoStatus" aria-live="polite"></span>
+                    </div>
+                </div>
+
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <span class="submit-btn__label">Tailor my resume</span>
                     <span class="submit-btn__price" id="btnPrice">$1.00</span>

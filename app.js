@@ -74,11 +74,62 @@ if (jobText) {
 // Price toggle
 var coverCheck = document.getElementById('coverLetter');
 var totalEl = document.getElementById('btnPrice');
-if (coverCheck) {
-    coverCheck.addEventListener('change', function() {
-        totalEl.textContent = this.checked ? '$1.50' : '$1.00';
-    });
+function currentPriceLabel() {
+    if (isPromoApplied()) return 'FREE';
+    return coverCheck && coverCheck.checked ? '$1.50' : '$1.00';
 }
+function refreshPriceLabel() {
+    if (totalEl) totalEl.textContent = currentPriceLabel();
+}
+if (coverCheck) {
+    coverCheck.addEventListener('change', refreshPriceLabel);
+}
+
+// ========== PROMO CODE ==========
+// Codes are validated server-side (n8n). Frontend only mirrors the toggle UI.
+var KNOWN_PROMO_CODES = ['TEST1'];
+function isPromoApplied() {
+    var el = document.getElementById('promoCode');
+    if (!el) return false;
+    var v = (el.value || '').trim().toUpperCase();
+    return v && KNOWN_PROMO_CODES.indexOf(v) !== -1;
+}
+function getPromoCode() {
+    var el = document.getElementById('promoCode');
+    return el ? (el.value || '').trim() : '';
+}
+(function wirePromo() {
+    var toggle = document.getElementById('promoToggle');
+    var wrap = document.getElementById('promoInputWrap');
+    var input = document.getElementById('promoCode');
+    var status = document.getElementById('promoStatus');
+    if (!toggle || !wrap || !input) return;
+    toggle.addEventListener('click', function() {
+        var open = !wrap.hasAttribute('hidden');
+        if (open) {
+            wrap.setAttribute('hidden', '');
+            toggle.setAttribute('aria-expanded', 'false');
+        } else {
+            wrap.removeAttribute('hidden');
+            toggle.setAttribute('aria-expanded', 'true');
+            input.focus();
+        }
+    });
+    input.addEventListener('input', function() {
+        var v = (this.value || '').trim().toUpperCase();
+        this.classList.remove('is-valid', 'is-invalid');
+        status.classList.remove('is-valid', 'is-invalid');
+        if (!v) { status.textContent = ''; }
+        else if (KNOWN_PROMO_CODES.indexOf(v) !== -1) {
+            this.classList.add('is-valid');
+            status.classList.add('is-valid');
+            status.textContent = 'Applied';
+        } else {
+            status.textContent = '';
+        }
+        refreshPriceLabel();
+    });
+})();
 
 // File upload
 var uploadZone = document.getElementById('uploadZone');
@@ -503,6 +554,8 @@ function sendPayload(data, btn) {
         return;
     }
     data.user_email = email;
+    var promo = getPromoCode();
+    if (promo) data.promo_code = promo;
 
     fetch(WEBHOOK_URL, {
         method: 'POST',
@@ -528,7 +581,8 @@ function sendPayload(data, btn) {
 
 function resetBtn(btn) {
     btn.disabled = false;
-    btn.innerHTML = 'Tailor My Resume <span class="btn-price" id="btnPrice">' + (document.getElementById('coverLetter').checked ? '$1.50' : '$1.00') + '</span>';
+    btn.innerHTML = '<span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price" id="btnPrice">' + currentPriceLabel() + '</span>';
+    totalEl = document.getElementById('btnPrice');
 }
 
 function showResult(data) {
