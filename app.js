@@ -559,7 +559,10 @@ function sendPayload(data, btn) {
 
     // Promo path: hand the payload to success.html so loading + result UI matches the paid flow.
     if (promo) {
-        try { sessionStorage.setItem('resumegoPromoPayload', JSON.stringify(data)); } catch(e) {}
+        try {
+            sessionStorage.removeItem('resumegoPromoResult');
+            sessionStorage.setItem('resumegoPromoPayload', JSON.stringify(data));
+        } catch(e) {}
         window.location.href = '/success.html?promo=1';
         return;
     }
