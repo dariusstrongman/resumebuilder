@@ -108,10 +108,11 @@
                     <p class="account-card__detail" id="planDetail">Pay-as-you-go</p>
                     <button type="button" class="account-card__cta" id="planCta">Upgrade to Pro &mdash; $15/mo</button>
                 </div>
-                <div class="account-card">
+                <div class="account-card" id="packCreditsCard">
                     <p class="account-card__label">Pack credits</p>
                     <h3 class="account-card__value" id="packCredits">0</h3>
                     <p class="account-card__detail" id="packDetail">No active pack</p>
+                    <button type="button" class="account-card__cta" id="packCreditsView" hidden>View codes</button>
                 </div>
                 <div class="account-card account-card--tip">
                     <p class="account-card__label">Tip of the week</p>
@@ -469,6 +470,42 @@
     document.getElementById('packCredits').textContent = totalCredits;
     if (totalCredits > 0) {
         document.getElementById('packDetail').textContent = packs.length + ' active pack' + (packs.length === 1 ? '' : 's');
+        var packCard = document.getElementById('packCreditsCard');
+        var packBtn = document.getElementById('packCreditsView');
+        packCard.classList.add('account-card--clickable');
+        packBtn.hidden = false;
+        function openPacks() {
+            modalTitle.textContent = 'Your pack codes';
+            modalDate.textContent = packs.length + ' active pack' + (packs.length === 1 ? '' : 's');
+            currentResumeId = null;
+            var rows = packs.map(function(p) {
+                return '<div class="pack-list__row">'
+                    + '<div class="pack-list__main">'
+                    +   '<code class="pack-list__code">' + esc(p.code) + '</code>'
+                    +   '<span class="pack-list__uses">' + p.uses_remaining + ' / 10 uses</span>'
+                    + '</div>'
+                    + '<button type="button" class="pack-list__copy" data-code="' + esc(p.code) + '">Copy</button>'
+                    + '</div>';
+            }).join('');
+            modalBody.innerHTML = '<p class="modal__hint">Drop any of these codes into the promo field on the homepage form to redeem one credit at a time. Codes never expire.</p>'
+                + '<div class="pack-list">' + rows + '</div>';
+            modalBody.querySelectorAll('.pack-list__copy').forEach(function(b) {
+                b.addEventListener('click', function() {
+                    navigator.clipboard.writeText(b.dataset.code).then(function() {
+                        b.textContent = 'Copied';
+                        b.classList.add('copied');
+                        setTimeout(function() { b.textContent = 'Copy'; b.classList.remove('copied'); }, 1500);
+                    });
+                });
+            });
+            openModal();
+        }
+        packCard.addEventListener('click', function(e) {
+            // Don't double-fire when the inner button is clicked.
+            if (e.target === packBtn) return;
+            openPacks();
+        });
+        packBtn.addEventListener('click', openPacks);
     }
 
     // ── TIP OF THE WEEK ───────────────────────────────────────────────────

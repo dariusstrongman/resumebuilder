@@ -3911,6 +3911,73 @@ textarea::placeholder {
     color: var(--ink-0);
 }
 .upgrade-banner__id a { color: var(--accent); }
+
+/* Clickable account card variant (e.g., pack credits with codes) */
+.account-card--clickable {
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.account-card--clickable:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* Modal hint paragraph (used by packs view) */
+.modal__hint {
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0 0 1.2rem;
+}
+
+/* Pack codes list (inside modal) */
+.pack-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.pack-list__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+}
+.pack-list__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+.pack-list__code {
+    font-family: var(--f-mono, 'JetBrains Mono', monospace);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink-0);
+    background: transparent;
+}
+.pack-list__uses {
+    font-size: 0.8rem;
+    color: var(--ink-2);
+}
+.pack-list__copy {
+    background: var(--bg-3);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-0);
+    font-family: var(--f-ui);
+    font-size: 0.78rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.pack-list__copy:hover { border-color: var(--accent); color: var(--accent); }
+.pack-list__copy.copied { background: var(--accent); color: var(--bg-0); border-color: var(--accent); }
 .modal__section-title {
     font-family: var(--f-ui);
     font-size: 0.85rem;
