@@ -34,6 +34,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta nav-cta--ghost">Sign in</a>
             <a href="/#generate" class="nav-cta">Tailor for $1</a>
         </nav>
         <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
@@ -92,6 +93,10 @@
         <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
     </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../auth-config.js"></script>
+<script src="../auth-nav.js"></script>
 
 </body>
 </html>
