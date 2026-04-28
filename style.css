@@ -3827,6 +3827,45 @@ textarea::placeholder {
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--line-strong);
 }
+.modal__dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--ink-0);
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.modal__dl:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-3); }
+.modal__danger {
+    margin-top: 1.8rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line-strong);
+    text-align: right;
+}
+.modal__delete {
+    background: transparent;
+    border: 1px solid #4a2329;
+    color: #ef6c75;
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.modal__delete:hover:not(:disabled) {
+    background: rgba(239, 108, 117, 0.1);
+    border-color: #ef6c75;
+    color: #ff8b91;
+}
+.modal__delete:disabled { opacity: 0.6; cursor: wait; }
 .modal__section-title {
     font-family: var(--f-ui);
     font-size: 0.85rem;

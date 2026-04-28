@@ -518,10 +518,13 @@
 
     function dlButton(label, base64, mime, filename) {
         if (!base64) return '';
-        return '<a class="submit-btn submit-btn--inline submit-btn--light" href="data:' + mime + ';base64,' + base64 + '" download="' + esc(filename) + '"><span class="submit-btn__label">' + esc(label) + '</span></a>';
+        return '<a class="modal__dl" href="data:' + mime + ';base64,' + base64 + '" download="' + esc(filename) + '">' + esc(label) + '</a>';
     }
 
+    var currentResumeId = null;
+
     function renderResumeView(d) {
+        currentResumeId = d.id;
         var dlRow = '<div class="modal__downloads">'
             + dlButton('Resume PDF', d.resume_pdf_base64, 'application/pdf', 'resume.pdf')
             + dlButton('Resume DOCX', d.resume_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'resume.docx')
@@ -534,7 +537,45 @@
         var coverBlock = d.cover_letter_text
             ? '<h3 class="modal__section-title">Cover letter</h3><pre class="modal__pre">' + esc(d.cover_letter_text) + '</pre>'
             : '';
-        modalBody.innerHTML = dlRow + resumeBlock + coverBlock;
+        var deleteBlock = '<div class="modal__danger"><button type="button" class="modal__delete" id="modalDeleteBtn">Delete this resume</button></div>';
+        modalBody.innerHTML = dlRow + resumeBlock + coverBlock + deleteBlock;
+
+        document.getElementById('modalDeleteBtn').addEventListener('click', async function() {
+            if (!currentResumeId) return;
+            if (!confirm('Delete this resume permanently? This cannot be undone.')) return;
+            var btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Deleting…';
+            try {
+                var r = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'delete_resume', user_id: user.id, resume_id: currentResumeId })
+                });
+                var data = await r.json();
+                if (data.error) { alert(data.error); btn.disabled = false; btn.textContent = 'Delete this resume'; return; }
+                // Remove the row from the dashboard list
+                var row = listEl.querySelector('[data-resume-id="' + currentResumeId + '"]');
+                if (row) row.remove();
+                // If list now empty, restore the empty-state copy
+                if (!listEl.querySelector('[data-resume-id]')) {
+                    listEl.innerHTML = '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
+                }
+                // Decrement the count pill + total stat
+                var pill = document.getElementById('resumeCountPill');
+                if (pill) {
+                    var newTotal = Math.max(0, totalCount - 1);
+                    pill.textContent = newTotal + ' total';
+                    document.getElementById('statTotal').textContent = newTotal;
+                    totalCount = newTotal;
+                }
+                closeModal();
+            } catch(eDel) {
+                alert('Could not delete. Try again.');
+                btn.disabled = false;
+                btn.textContent = 'Delete this resume';
+            }
+        });
     }
 })();
 </script>
