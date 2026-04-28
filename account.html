@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RW4Z3ETF5P');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Account &mdash; ResumeGo</title>
+    <meta name="theme-color" content="#07080a">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/#generate">Tailor a resume</a>
+            <a href="/#pricing">Pricing</a>
+            <button type="button" id="logoutBtn" class="nav-cta nav-cta--ghost">Sign out</button>
+        </nav>
+    </div>
+</header>
+
+<main class="account-main">
+    <div class="account-shell">
+        <div id="loadingState" class="account-loading">
+            <div class="spinner-large"></div>
+            <p>Loading your account&hellip;</p>
+        </div>
+
+        <div id="dashboard" class="account-dashboard" hidden>
+            <header class="account-header">
+                <div>
+                    <p class="account-eyebrow">Account</p>
+                    <h1 class="account-title">Welcome, <span id="userName">there</span>.</h1>
+                </div>
+                <a href="/#generate" class="submit-btn submit-btn--inline">
+                    <span class="submit-btn__label">Tailor a new resume</span>
+                </a>
+            </header>
+
+            <section class="account-grid">
+                <div class="account-card">
+                    <p class="account-card__label">Plan</p>
+                    <h3 class="account-card__value" id="planValue">Free</h3>
+                    <p class="account-card__detail" id="planDetail">Pay-as-you-go</p>
+                    <a href="/#pricing" class="account-card__cta" id="planCta">Upgrade to Pro</a>
+                </div>
+                <div class="account-card">
+                    <p class="account-card__label">Resumes tailored</p>
+                    <h3 class="account-card__value" id="resumeCount">0</h3>
+                    <p class="account-card__detail">All time</p>
+                </div>
+                <div class="account-card">
+                    <p class="account-card__label">Pack credits</p>
+                    <h3 class="account-card__value" id="packCredits">0</h3>
+                    <p class="account-card__detail" id="packDetail">No active pack</p>
+                </div>
+            </section>
+
+            <section class="account-section">
+                <header class="account-section-head">
+                    <h2>Recent resumes</h2>
+                </header>
+                <div id="resumeList" class="resume-list">
+                    <div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>
+                </div>
+            </section>
+
+            <section class="account-section">
+                <header class="account-section-head">
+                    <h2>STAR interview coach</h2>
+                    <span class="account-pill">Coming soon</span>
+                </header>
+                <p class="account-soon">Practice behavioral interview questions with AI feedback. Pro plan only.</p>
+            </section>
+
+            <section class="account-section">
+                <header class="account-section-head">
+                    <h2>Settings</h2>
+                </header>
+                <div class="account-settings">
+                    <div class="account-row">
+                        <div>
+                            <p class="account-row__label">Email</p>
+                            <p class="account-row__value" id="userEmail">&mdash;</p>
+                        </div>
+                    </div>
+                    <div class="account-row">
+                        <div>
+                            <p class="account-row__label">Password</p>
+                            <p class="account-row__value">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</p>
+                        </div>
+                        <button type="button" id="changePasswordBtn" class="submit-btn submit-btn--inline submit-btn--light">
+                            <span class="submit-btn__label">Change password</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script>
+(async function() {
+    var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY);
+
+    var userRes = await sb.auth.getUser();
+    var user = userRes && userRes.data ? userRes.data.user : null;
+    if (!user) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    document.getElementById('userEmail').textContent = user.email || '';
+
+    // Load profile, subscription, packs, resume count in parallel
+    var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
+    var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
+    var packsPromise = sb.from('resumego_packs').select('uses_remaining, code').eq('user_email', user.email).gt('uses_remaining', 0);
+    var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+
+    var [profileR, subR, packsR, resumesR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise]);
+
+    var profile = profileR.data || {};
+    document.getElementById('userName').textContent = profile.display_name || (user.email || '').split('@')[0] || 'there';
+
+    var sub = subR.data;
+    var planValue = document.getElementById('planValue');
+    var planDetail = document.getElementById('planDetail');
+    var planCta = document.getElementById('planCta');
+    if (sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active') {
+        planValue.textContent = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
+        planDetail.textContent = sub.current_period_end
+            ? 'Renews ' + new Date(sub.current_period_end).toLocaleDateString()
+            : 'Active';
+        planCta.textContent = 'Manage subscription';
+        planCta.href = '#';
+    }
+
+    var packs = packsR.data || [];
+    var totalCredits = packs.reduce(function(sum, p) { return sum + (p.uses_remaining || 0); }, 0);
+    document.getElementById('packCredits').textContent = totalCredits;
+    if (totalCredits > 0) {
+        document.getElementById('packDetail').textContent = packs.length + ' active pack' + (packs.length === 1 ? '' : 's');
+    }
+
+    var resumes = resumesR.data || [];
+    document.getElementById('resumeCount').textContent = resumesR.count != null ? resumesR.count : resumes.length;
+
+    var listEl = document.getElementById('resumeList');
+    if (resumes.length > 0) {
+        listEl.innerHTML = resumes.map(function(r) {
+            var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
+            var date = r.created_at ? new Date(r.created_at).toLocaleDateString() : '';
+            return '<a href="#" class="resume-row" data-resume-id="' + r.id + '">'
+                + '<span class="resume-row__title">' + esc(title) + '</span>'
+                + '<span class="resume-row__date">' + date + '</span>'
+                + '</a>';
+        }).join('');
+    }
+
+    document.getElementById('loadingState').hidden = true;
+    document.getElementById('dashboard').hidden = false;
+
+    document.getElementById('logoutBtn').addEventListener('click', async function() {
+        await sb.auth.signOut();
+        window.location.href = '/';
+    });
+
+    document.getElementById('changePasswordBtn').addEventListener('click', async function() {
+        var pw = prompt('Enter a new password (8+ characters):');
+        if (!pw) return;
+        if (pw.length < 8) { alert('Password must be at least 8 characters.'); return; }
+        var res = await sb.auth.updateUser({ password: pw });
+        alert(res.error ? res.error.message : 'Password updated.');
+    });
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+})();
+</script>
+
+</body>
+</html>

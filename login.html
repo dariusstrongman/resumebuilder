@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RW4Z3ETF5P');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Sign In &mdash; ResumeGo</title>
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://resume.stromation.com/login.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+        </nav>
+    </div>
+</header>
+
+<main class="auth-main">
+    <div class="auth-card">
+        <div class="auth-tabs" role="tablist">
+            <button class="auth-tab active" data-mode="signin" role="tab">Sign in</button>
+            <button class="auth-tab" data-mode="signup" role="tab">Create account</button>
+        </div>
+
+        <form id="signinForm" class="auth-form">
+            <h1 class="auth-h">Welcome back.</h1>
+            <p class="auth-sub">Manage your resumes, subscription, and STAR coach sessions.</p>
+
+            <label class="auth-label">
+                <span>Email</span>
+                <input type="email" name="email" required autocomplete="email" autofocus>
+            </label>
+            <label class="auth-label">
+                <span>Password</span>
+                <input type="password" name="password" required autocomplete="current-password">
+            </label>
+
+            <button type="button" id="forgotLink" class="auth-link-btn">Forgot password?</button>
+
+            <button type="submit" class="submit-btn submit-btn--inline">
+                <span class="submit-btn__label">Sign in</span>
+            </button>
+
+            <div class="auth-msg" id="signinMsg" aria-live="polite"></div>
+        </form>
+
+        <form id="signupForm" class="auth-form" hidden>
+            <h1 class="auth-h">Create your account.</h1>
+            <p class="auth-sub">Save resumes, track applications, and unlock the STAR interview coach.</p>
+
+            <label class="auth-label">
+                <span>Name</span>
+                <input type="text" name="name" required autocomplete="name">
+            </label>
+            <label class="auth-label">
+                <span>Email</span>
+                <input type="email" name="email" required autocomplete="email">
+            </label>
+            <label class="auth-label">
+                <span>Password</span>
+                <input type="password" name="password" required minlength="8" autocomplete="new-password">
+                <small class="auth-hint">At least 8 characters.</small>
+            </label>
+
+            <button type="submit" class="submit-btn submit-btn--inline">
+                <span class="submit-btn__label">Create account</span>
+            </button>
+
+            <div class="auth-msg" id="signupMsg" aria-live="polite"></div>
+        </form>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script>
+(function() {
+    var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY);
+
+    sb.auth.getUser().then(function(res) {
+        if (res && res.data && res.data.user) {
+            window.location.href = '/account.html';
+        }
+    });
+
+    var tabs = document.querySelectorAll('.auth-tab');
+    tabs.forEach(function(b) {
+        b.addEventListener('click', function() {
+            tabs.forEach(function(x) { x.classList.toggle('active', x === b); });
+            var mode = b.dataset.mode;
+            document.getElementById('signinForm').hidden = (mode !== 'signin');
+            document.getElementById('signupForm').hidden = (mode !== 'signup');
+            clearMsg('signinMsg'); clearMsg('signupMsg');
+        });
+    });
+
+    function setMsg(id, text, isError) {
+        var el = document.getElementById(id);
+        el.textContent = text;
+        el.className = 'auth-msg ' + (isError ? 'auth-msg--error' : 'auth-msg--ok');
+    }
+    function clearMsg(id) { document.getElementById(id).textContent = ''; }
+
+    document.getElementById('signinForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var fd = new FormData(e.target);
+        var btn = e.target.querySelector('button[type="submit"]');
+        var label = btn.querySelector('.submit-btn__label');
+        btn.disabled = true; label.textContent = 'Signing in...';
+        clearMsg('signinMsg');
+        var res = await sb.auth.signInWithPassword({
+            email: (fd.get('email') || '').trim(),
+            password: fd.get('password') || ''
+        });
+        if (res.error) {
+            setMsg('signinMsg', res.error.message, true);
+            btn.disabled = false; label.textContent = 'Sign in';
+        } else {
+            window.location.href = '/account.html';
+        }
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var fd = new FormData(e.target);
+        var btn = e.target.querySelector('button[type="submit"]');
+        var label = btn.querySelector('.submit-btn__label');
+        btn.disabled = true; label.textContent = 'Creating account...';
+        clearMsg('signupMsg');
+        var res = await sb.auth.signUp({
+            email: (fd.get('email') || '').trim(),
+            password: fd.get('password') || '',
+            options: {
+                data: { display_name: (fd.get('name') || '').trim() },
+                emailRedirectTo: window.location.origin + '/account.html'
+            }
+        });
+        if (res.error) {
+            setMsg('signupMsg', res.error.message, true);
+            btn.disabled = false; label.textContent = 'Create account';
+        } else if (res.data && res.data.session) {
+            window.location.href = '/account.html';
+        } else {
+            setMsg('signupMsg', 'Check your email to confirm your account, then sign in.', false);
+            label.textContent = 'Account created';
+        }
+    });
+
+    document.getElementById('forgotLink').addEventListener('click', async function() {
+        var emailInput = document.querySelector('#signinForm input[name="email"]');
+        var email = (emailInput.value || '').trim();
+        if (!email) {
+            setMsg('signinMsg', 'Enter your email above, then click "Forgot password?" again.', true);
+            emailInput.focus();
+            return;
+        }
+        var res = await sb.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/reset-password.html'
+        });
+        if (res.error) setMsg('signinMsg', res.error.message, true);
+        else setMsg('signinMsg', 'Reset link sent. Check your email.', false);
+    });
+})();
+</script>
+
+</body>
+</html>

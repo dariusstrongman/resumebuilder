@@ -2850,3 +2850,342 @@ textarea::placeholder {
     .hero-points { gap: 0.4rem 1.2rem; font-size: 0.72rem; }
     .submit-btn { padding: 0.85rem 1rem; }
 }
+
+
+/* ══════════════════════════ AUTH (login / signup) ══════════════════════════ */
+.auth-main {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(2rem, 6vw, 4rem) 1rem;
+}
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+    background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.7);
+}
+.auth-tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--bg-2);
+    border-radius: 10px;
+    padding: 0.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--line);
+}
+.auth-tab {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.55rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.auth-tab:hover { color: var(--ink-1); }
+.auth-tab.active {
+    background: var(--bg-3);
+    color: var(--ink-0);
+    box-shadow: 0 0 0 1px var(--line-strong);
+}
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.auth-h {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    line-height: 1.1;
+    margin: 0;
+    color: var(--ink-0);
+}
+.auth-sub {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: -0.25rem 0 0.5rem;
+}
+.auth-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.auth-label > span {
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.auth-label input {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-2);
+    padding: 0.7rem 0.85rem;
+    font-family: var(--f-ui);
+    font-size: 0.95rem;
+    color: var(--ink-0);
+    border-radius: 8px;
+    transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease), background 0.15s var(--ease);
+}
+.auth-label input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--bg-1);
+    box-shadow: 0 0 0 3px rgba(197, 255, 74, 0.12);
+}
+.auth-hint {
+    color: var(--ink-3);
+    font-size: 0.78rem;
+}
+.auth-link-btn {
+    align-self: flex-start;
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-decoration-color: rgba(197, 255, 74, 0.35);
+    text-underline-offset: 3px;
+    margin-bottom: 0.5rem;
+}
+.auth-link-btn:hover { text-decoration-color: var(--accent); }
+.auth-msg {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin: 0;
+    min-height: 1.2rem;
+}
+.auth-msg--error { color: #ff7066; }
+.auth-msg--ok    { color: var(--accent); }
+
+
+/* ══════════════════════════ ACCOUNT DASHBOARD ══════════════════════════ */
+.account-main {
+    padding: clamp(2rem, 5vw, 4rem) 1rem;
+    min-height: calc(100vh - 60px);
+}
+.account-shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    width: 100%;
+}
+.account-loading {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--ink-2);
+}
+.account-loading p {
+    margin-top: 1rem;
+    font-family: var(--f-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+}
+.account-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    margin: 0 0 0.4rem;
+}
+.account-title {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    line-height: 1.05;
+    margin: 0;
+    color: var(--ink-0);
+}
+.account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+.account-card {
+    background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 1.25rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.account-card__label {
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0;
+}
+.account-card__value {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--accent);
+    margin: 0.3rem 0 0;
+}
+.account-card__detail {
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    margin: 0;
+}
+.account-card__cta {
+    margin-top: 0.6rem;
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+}
+.account-card__cta:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.account-section {
+    margin-bottom: 2.5rem;
+}
+.account-section-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+}
+.account-section-head h2 {
+    font-family: var(--f-ui);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink-0);
+    margin: 0;
+}
+.account-pill {
+    font-family: var(--f-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: var(--bg-3);
+    color: var(--ink-2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+}
+.account-soon {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+.resume-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.resume-empty {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+}
+.resume-empty a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.resume-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.resume-row:hover {
+    border-color: var(--line-strong);
+    background: var(--bg-3);
+}
+.resume-row__title {
+    color: var(--ink-0);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+.resume-row__date {
+    color: var(--ink-3);
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+.account-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.account-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+.account-row__label {
+    font-family: var(--f-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 0.25rem;
+}
+.account-row__value {
+    color: var(--ink-0);
+    font-size: 0.95rem;
+    margin: 0;
+}
+.account-row .submit-btn { width: auto; flex: 0 0 auto; }
+
+.nav-cta--ghost {
+    background: transparent !important;
+    color: var(--ink-1) !important;
+    border: 1px solid var(--line-strong) !important;
+}
+.nav-cta--ghost:hover {
+    background: var(--bg-3) !important;
+    color: var(--ink-0) !important;
+}
