@@ -648,12 +648,21 @@
         var deleteBlock = '<div class="modal__danger"><button type="button" class="modal__delete" id="modalDeleteBtn">Delete this resume</button></div>';
         modalBody.innerHTML = dlRow + resumeBlock + coverBlock + deleteBlock;
 
-        document.getElementById('modalDeleteBtn').addEventListener('click', async function() {
+        var dangerBlock = modalBody.querySelector('.modal__danger');
+        var deleteBtn = document.getElementById('modalDeleteBtn');
+
+        function restoreDeleteButton() {
+            dangerBlock.innerHTML = '<button type="button" class="modal__delete" id="modalDeleteBtn">Delete this resume</button>';
+            document.getElementById('modalDeleteBtn').addEventListener('click', showConfirmation);
+        }
+
+        async function performDelete() {
             if (!currentResumeId) return;
-            if (!confirm('Delete this resume permanently? This cannot be undone.')) return;
-            var btn = this;
-            btn.disabled = true;
-            btn.textContent = 'Deleting…';
+            var confirmBtn = document.getElementById('modalConfirmDelete');
+            var cancelBtn = document.getElementById('modalCancelDelete');
+            confirmBtn.disabled = true;
+            cancelBtn.disabled = true;
+            confirmBtn.textContent = 'Deleting…';
             try {
                 var r = await fetch(WEBHOOK, {
                     method: 'POST',
@@ -661,15 +670,16 @@
                     body: JSON.stringify({ mode: 'delete_resume', user_id: user.id, resume_id: currentResumeId })
                 });
                 var data = await r.json();
-                if (data.error) { alert(data.error); btn.disabled = false; btn.textContent = 'Delete this resume'; return; }
-                // Remove the row from the dashboard list
+                if (data.error) {
+                    alert(data.error);
+                    restoreDeleteButton();
+                    return;
+                }
                 var row = listEl.querySelector('[data-resume-id="' + currentResumeId + '"]');
                 if (row) row.remove();
-                // If list now empty, restore the empty-state copy
                 if (!listEl.querySelector('[data-resume-id]')) {
                     listEl.innerHTML = '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
                 }
-                // Decrement the count pill + total stat
                 var pill = document.getElementById('resumeCountPill');
                 if (pill) {
                     var newTotal = Math.max(0, totalCount - 1);
@@ -680,10 +690,24 @@
                 closeModal();
             } catch(eDel) {
                 alert('Could not delete. Try again.');
-                btn.disabled = false;
-                btn.textContent = 'Delete this resume';
+                restoreDeleteButton();
             }
-        });
+        }
+
+        function showConfirmation() {
+            dangerBlock.innerHTML =
+                '<div class="modal__confirm">'
+                +   '<p class="modal__confirm-text">Delete this resume? This can\'t be undone.</p>'
+                +   '<div class="modal__confirm-actions">'
+                +     '<button type="button" class="modal__cancel" id="modalCancelDelete">Cancel</button>'
+                +     '<button type="button" class="modal__delete" id="modalConfirmDelete">Yes, delete</button>'
+                +   '</div>'
+                + '</div>';
+            document.getElementById('modalCancelDelete').addEventListener('click', restoreDeleteButton);
+            document.getElementById('modalConfirmDelete').addEventListener('click', performDelete);
+        }
+
+        deleteBtn.addEventListener('click', showConfirmation);
     }
 })();
 </script>

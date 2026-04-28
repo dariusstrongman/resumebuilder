@@ -3867,6 +3867,42 @@ textarea::placeholder {
 }
 .modal__delete:disabled { opacity: 0.6; cursor: wait; }
 
+/* Inline delete confirmation inside the modal */
+.modal__confirm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem 1.1rem;
+    background: rgba(239, 108, 117, 0.06);
+    border: 1px solid rgba(239, 108, 117, 0.35);
+    border-radius: 10px;
+}
+.modal__confirm-text {
+    color: #ff8b91;
+    font-size: 0.92rem;
+    margin: 0;
+    font-weight: 500;
+}
+.modal__confirm-actions {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.modal__cancel {
+    background: var(--bg-3);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-0);
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.modal__cancel:hover:not(:disabled) { border-color: var(--ink-2); }
+.modal__cancel:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* Upgrade-fulfill-failed banner */
 .upgrade-banner {
     margin-bottom: 1.5rem;
