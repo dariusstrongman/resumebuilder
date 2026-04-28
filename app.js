@@ -699,38 +699,75 @@ function resetBtn(btn) {
     totalEl = document.getElementById('btnPrice');
 }
 
-// === 10-PACK PURCHASE ===
-// Click handler on #buyPackBtn → prompt for email → POST mode:'buy_pack' → redirect to Stripe.
+// === PRICING CTAs (10-pack + Pro) ===
+// Both auto-use the logged-in user's email when available; fall back to the
+// inline email field on the page (or /login.html for Pro) when anonymous.
 document.addEventListener('DOMContentLoaded', function() {
-    var btn = document.getElementById('buyPackBtn');
-    if (!btn) return;
-    btn.addEventListener('click', function() {
-        var email = (prompt('Enter the email where you want the pack code delivered:') || '').trim();
-        if (!email || email.indexOf('@') < 1) return;
+    var packBtn = document.getElementById('buyPackBtn');
+    var proBtn = document.getElementById('goProBtn');
+
+    function readEmail() {
+        if (window.RESUMEGO_USER_EMAIL) return window.RESUMEGO_USER_EMAIL;
+        var input = document.getElementById('userEmail');
+        var v = input && input.value ? input.value.trim() : '';
+        return (v && v.indexOf('@') > 0) ? v : '';
+    }
+
+    function startCheckout(btn, body, anonRedirect) {
+        var origHTML = btn.innerHTML;
         btn.disabled = true;
-        var origLabel = btn.innerHTML;
         btn.innerHTML = '<span class="submit-btn__label">Redirecting…</span>';
         fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mode: 'buy_pack', user_email: email })
+            body: JSON.stringify(body)
         })
         .then(function(r) { return r.json(); })
         .then(function(resp) {
             if (resp.payment_url) {
                 window.location.href = resp.payment_url;
-            } else if (resp.error) {
-                toast(resp.error, 'error');
+            } else {
+                toast(resp.error || 'Could not start checkout.', 'error');
                 btn.disabled = false;
-                btn.innerHTML = origLabel;
+                btn.innerHTML = origHTML;
             }
         })
         .catch(function() {
             toast('Could not start checkout. Please try again.', 'error');
             btn.disabled = false;
-            btn.innerHTML = origLabel;
+            btn.innerHTML = origHTML;
         });
-    });
+    }
+
+    if (packBtn) {
+        packBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var email = readEmail();
+            if (!email) {
+                toast('Enter your email above first — that\'s where we\'ll send the pack code.', 'error');
+                var input = document.getElementById('userEmail');
+                if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return;
+            }
+            startCheckout(packBtn, { mode: 'buy_pack', user_email: email });
+        });
+    }
+
+    if (proBtn) {
+        proBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!window.RESUMEGO_USER_ID) {
+                window.location.href = '/login.html?next=/account.html';
+                return;
+            }
+            startCheckout(proBtn, {
+                mode: 'create_subscription',
+                user_id: window.RESUMEGO_USER_ID,
+                user_email: window.RESUMEGO_USER_EMAIL,
+                site_url: window.location.origin
+            });
+        });
+    }
 });
 
 function showResult(data) {
