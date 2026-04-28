@@ -226,11 +226,16 @@
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <header class="modal__head">
-            <div>
+            <div class="modal__head-info">
                 <p class="modal__eyebrow" id="modalDate">&mdash;</p>
                 <h2 class="modal__title" id="modalTitle">Resume</h2>
             </div>
-            <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            <div class="modal__nav">
+                <button type="button" class="modal__nav-btn" id="modalPrev" aria-label="Previous">&larr;</button>
+                <span class="modal__counter" id="modalCounter">1 of 1</span>
+                <button type="button" class="modal__nav-btn" id="modalNext" aria-label="Next">&rarr;</button>
+                <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            </div>
         </header>
         <div class="modal__body" id="modalBody">
             <div class="account-loading" style="padding:2rem 0;">
@@ -555,27 +560,8 @@
     }
     var viewAllBtn = document.getElementById('viewAllResumesBtn');
     if (totalCount > resumes.length) {
-        viewAllBtn.textContent = 'View all ' + totalCount + ' resumes';
+        viewAllBtn.textContent = 'Browse all ' + totalCount + ' resumes';
         viewAllBtn.hidden = false;
-        viewAllBtn.addEventListener('click', async function() {
-            viewAllBtn.disabled = true;
-            var origText = viewAllBtn.textContent;
-            viewAllBtn.textContent = 'Loading…';
-            try {
-                var allR = await sb.from('resumes')
-                    .select('id, title, target_role, target_company, created_at')
-                    .order('created_at', { ascending: false })
-                    .limit(500);
-                var allRows = (allR && allR.data) || [];
-                listEl.innerHTML = allRows.map(rowHtml).join('') ||
-                    '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
-                viewAllBtn.hidden = true;
-            } catch(eAll) {
-                viewAllBtn.disabled = false;
-                viewAllBtn.textContent = origText;
-                alert('Could not load all resumes. Try again.');
-            }
-        });
     }
 
     document.getElementById('loadingState').hidden = true;
@@ -617,45 +603,120 @@
 
     function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
 
-    // ── RESUME VIEWER ──────────────────────────────────────────────────────
+    // ── RESUME VIEWER (carousel) ───────────────────────────────────────────
     var modal = document.getElementById('resumeModal');
     var modalBody = document.getElementById('modalBody');
     var modalTitle = document.getElementById('modalTitle');
     var modalDate = document.getElementById('modalDate');
+    var modalPrev = document.getElementById('modalPrev');
+    var modalNext = document.getElementById('modalNext');
+    var modalCounter = document.getElementById('modalCounter');
+
+    // Carousel state
+    var allResumes = resumes.slice(); // start with the 5 already loaded
+    var currentIndex = -1;
+    var resumeContentCache = {};
+    var allResumesLoaded = (allResumes.length >= totalCount);
 
     function openModal() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
-    function closeModal() { modal.hidden = true; document.body.style.overflow = ''; }
+    function closeModal() { modal.hidden = true; document.body.style.overflow = ''; currentIndex = -1; }
 
     modal.addEventListener('click', function(e) {
         if (e.target.dataset && e.target.dataset.close) closeModal();
     });
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && !modal.hidden) closeModal();
+        if (modal.hidden) return;
+        if (e.key === 'Escape') closeModal();
+        else if (e.key === 'ArrowLeft' && currentIndex > 0) openResumeAt(currentIndex - 1);
+        else if (e.key === 'ArrowRight' && currentIndex < allResumes.length - 1) openResumeAt(currentIndex + 1);
     });
+
+    modalPrev.addEventListener('click', function() {
+        if (currentIndex > 0) openResumeAt(currentIndex - 1);
+    });
+    modalNext.addEventListener('click', function() {
+        if (currentIndex < allResumes.length - 1) openResumeAt(currentIndex + 1);
+    });
+
+    function updateNav() {
+        if (allResumes.length <= 1) {
+            modalPrev.style.visibility = 'hidden';
+            modalNext.style.visibility = 'hidden';
+            modalCounter.style.visibility = 'hidden';
+        } else {
+            modalPrev.style.visibility = 'visible';
+            modalNext.style.visibility = 'visible';
+            modalCounter.style.visibility = 'visible';
+            modalPrev.disabled = currentIndex <= 0;
+            modalNext.disabled = currentIndex >= allResumes.length - 1;
+            modalCounter.textContent = (currentIndex + 1) + ' of ' + allResumes.length;
+        }
+    }
+
+    async function ensureAllResumes() {
+        if (allResumesLoaded) return;
+        try {
+            var allR = await sb.from('resumes')
+                .select('id, title, target_role, target_company, created_at')
+                .order('created_at', { ascending: false })
+                .limit(500);
+            if (allR && allR.data) allResumes = allR.data;
+            allResumesLoaded = true;
+        } catch(e) {}
+    }
+
+    async function openResumeAt(index) {
+        if (index < 0 || index >= allResumes.length) return;
+        currentIndex = index;
+        var meta = allResumes[index];
+        var title = meta.title || [meta.target_role, meta.target_company].filter(Boolean).join(' at ') || 'Resume';
+        modalTitle.textContent = title;
+        modalDate.textContent = meta.created_at ? new Date(meta.created_at).toLocaleDateString() : '';
+        modalBody.innerHTML = '<div class="account-loading" style="padding:2rem 0;"><div class="spinner-large"></div><p>Loading&hellip;</p></div>';
+        if (modal.hidden) openModal();
+        updateNav();
+
+        var data = resumeContentCache[meta.id];
+        if (!data) {
+            try {
+                var r = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'get_resume', user_id: user.id, resume_id: meta.id })
+                });
+                data = await r.json();
+                if (data.error) { modalBody.innerHTML = '<p style="color:var(--ink-2);">' + esc(data.error) + '</p>'; return; }
+                resumeContentCache[meta.id] = data;
+            } catch(eFetch) {
+                modalBody.innerHTML = '<p style="color:var(--ink-2);">Could not load this resume. Try again.</p>';
+                return;
+            }
+        }
+        // If user advanced before fetch finished, ignore.
+        if (currentIndex !== index) return;
+        renderResumeView(data);
+    }
 
     listEl.addEventListener('click', async function(e) {
         var row = e.target.closest('[data-resume-id]');
         if (!row) return;
         e.preventDefault();
         var rid = row.dataset.resumeId;
-        var t = row.querySelector('.resume-row__title');
-        var d = row.querySelector('.resume-row__date');
-        modalTitle.textContent = t ? t.textContent : 'Resume';
-        modalDate.textContent = d ? d.textContent : '';
-        modalBody.innerHTML = '<div class="account-loading" style="padding:2rem 0;"><div class="spinner-large"></div><p>Loading&hellip;</p></div>';
-        openModal();
-        try {
-            var r = await fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'get_resume', user_id: user.id, resume_id: rid })
-            });
-            var data = await r.json();
-            if (data.error) { modalBody.innerHTML = '<p style="color:var(--ink-2);">' + esc(data.error) + '</p>'; return; }
-            renderResumeView(data);
-        } catch(eFetch) {
-            modalBody.innerHTML = '<p style="color:var(--ink-2);">Could not load this resume. Try again.</p>';
-        }
+        await ensureAllResumes();
+        var idx = allResumes.findIndex(function(r) { return r.id === rid; });
+        if (idx < 0) idx = 0;
+        openResumeAt(idx);
+    });
+
+    // View all → open carousel at the most recent.
+    viewAllBtn.addEventListener('click', async function() {
+        viewAllBtn.disabled = true;
+        var origText = viewAllBtn.textContent;
+        viewAllBtn.textContent = 'Loading…';
+        await ensureAllResumes();
+        viewAllBtn.disabled = false;
+        viewAllBtn.textContent = origText;
+        if (allResumes.length > 0) openResumeAt(0);
     });
 
     function dlButton(label, base64, mime, filename) {
@@ -714,14 +775,26 @@
                 if (!listEl.querySelector('[data-resume-id]')) {
                     listEl.innerHTML = '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
                 }
+                // Splice from carousel + cache
+                var deletedIdx = allResumes.findIndex(function(r) { return r.id === currentResumeId; });
+                if (deletedIdx >= 0) allResumes.splice(deletedIdx, 1);
+                delete resumeContentCache[currentResumeId];
                 var pill = document.getElementById('resumeCountPill');
                 if (pill) {
                     var newTotal = Math.max(0, totalCount - 1);
                     pill.textContent = newTotal + ' total';
                     document.getElementById('statTotal').textContent = newTotal;
                     totalCount = newTotal;
+                    if (newTotal <= 5 && !viewAllBtn.hidden) viewAllBtn.hidden = true;
+                    else if (!viewAllBtn.hidden) viewAllBtn.textContent = 'Browse all ' + newTotal + ' resumes';
                 }
-                closeModal();
+                // Advance to next resume in carousel, or close if none left
+                if (allResumes.length === 0) {
+                    closeModal();
+                } else {
+                    var nextIdx = Math.min(deletedIdx, allResumes.length - 1);
+                    openResumeAt(nextIdx);
+                }
             } catch(eDel) {
                 alert('Could not delete. Try again.');
                 restoreDeleteButton();
