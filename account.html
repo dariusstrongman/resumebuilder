@@ -70,16 +70,17 @@
                     <p class="hero-ribbon__sub" id="heroSub">Your job hunt, one tailored resume at a time.</p>
                 </div>
                 <div class="hero-ribbon__cta">
-                    <a href="/#generate" class="submit-btn submit-btn--inline">
+                    <a href="/#generate" class="submit-btn submit-btn--inline" id="heroCta">
                         <span class="submit-btn__label">Tailor a new resume</span>
                     </a>
+                    <p class="hero-ribbon__hint" id="heroCtaHint" hidden></p>
                 </div>
             </section>
 
             <!-- STATS STRIP -->
             <section class="stats-strip">
                 <div class="stat-cell">
-                    <span class="stat-cell__label">This month</span>
+                    <span class="stat-cell__label" id="statMonthLabel">This month</span>
                     <span class="stat-cell__value" id="statMonth">0</span>
                     <span class="stat-cell__sub" id="statMonthSub">resumes tailored</span>
                 </div>
@@ -400,25 +401,32 @@
 
         // Pro cap is over the BILLING period, not calendar month — count
         // resumes since current_period_start, label resets as period_end.
+        var proPeriodCount = monthCount;
         try {
             if (sub.current_period_start) {
                 var periodCountR = await sb.from('resumes')
                     .select('id', { count: 'exact', head: true })
                     .gte('created_at', sub.current_period_start);
-                var periodCount = periodCountR && periodCountR.count != null ? periodCountR.count : monthCount;
-                document.getElementById('statMonth').textContent = periodCount + ' / 50';
-            } else {
-                document.getElementById('statMonth').textContent = monthCount + ' / 50';
+                proPeriodCount = periodCountR && periodCountR.count != null ? periodCountR.count : monthCount;
             }
-        } catch(ePc) {
-            document.getElementById('statMonth').textContent = monthCount + ' / 50';
-        }
+        } catch(ePc) {}
+        var proLeft = Math.max(0, 50 - proPeriodCount);
+        document.getElementById('statMonthLabel').textContent = 'Pro tailorings';
+        document.getElementById('statMonth').textContent = proLeft + ' left';
         if (sub.current_period_end) {
             var resetLabel = new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-            document.getElementById('statMonthSub').textContent = 'resets ' + resetLabel;
+            document.getElementById('statMonthSub').textContent = 'of 50 · resets ' + resetLabel;
         } else {
-            document.getElementById('statMonthSub').textContent = 'this billing period';
+            document.getElementById('statMonthSub').textContent = 'of 50 this period';
         }
+        // Hero CTA: signal that the next tailoring is free for Pro users.
+        var heroCta = document.getElementById('heroCta');
+        var heroCtaHint = document.getElementById('heroCtaHint');
+        heroCta.querySelector('.submit-btn__label').textContent = proLeft > 0 ? 'Tailor a resume — free' : 'Tailor a resume — $1';
+        heroCtaHint.hidden = false;
+        heroCtaHint.textContent = proLeft > 0
+            ? 'Included with Pro · ' + proLeft + ' of 50 left this period'
+            : "You've used your 50 this period · resets " + (sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'soon');
     } else {
         planCta.dataset.action = 'upgrade';
         toolkitStar.dataset.locked = '1';
