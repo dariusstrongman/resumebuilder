@@ -258,16 +258,18 @@
         window.history.replaceState({}, '', '/account.html');
     }
 
-    // Load profile, subscription, packs, resumes in parallel
-    var monthStart = new Date();
-    monthStart.setUTCDate(1);
-    monthStart.setUTCHours(0, 0, 0, 0);
+    // Load profile, subscription, packs, resumes in parallel.
+    // monthCount uses calendar-month for free users; Pro users get a second
+    // count over their billing period after sub loads.
+    var calMonthStart = new Date();
+    calMonthStart.setUTCDate(1);
+    calMonthStart.setUTCHours(0, 0, 0, 0);
 
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
     var packsPromise = sb.from('resumego_packs').select('uses_remaining, code').eq('user_email', user.email).gt('uses_remaining', 0);
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-    var monthCountPromise = sb.from('resumes').select('id', { count: 'exact', head: true }).gte('created_at', monthStart.toISOString());
+    var monthCountPromise = sb.from('resumes').select('id', { count: 'exact', head: true }).gte('created_at', calMonthStart.toISOString());
 
     var [profileR, subR, packsR, resumesR, monthR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise, monthCountPromise]);
 
@@ -325,14 +327,27 @@
         toolkitStarPill.textContent = 'Active';
         toolkitStarPill.classList.add('toolkit-card__pill--free');
 
-        // Pro cap: show "X / 50 this month" and reset date
-        document.getElementById('statMonth').textContent = monthCount + ' / 50';
-        var nextMonth = new Date();
-        nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
-        nextMonth.setUTCDate(1);
-        nextMonth.setUTCHours(0, 0, 0, 0);
-        var resetLabel = nextMonth.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-        document.getElementById('statMonthSub').textContent = 'resets ' + resetLabel;
+        // Pro cap is over the BILLING period, not calendar month — count
+        // resumes since current_period_start, label resets as period_end.
+        try {
+            if (sub.current_period_start) {
+                var periodCountR = await sb.from('resumes')
+                    .select('id', { count: 'exact', head: true })
+                    .gte('created_at', sub.current_period_start);
+                var periodCount = periodCountR && periodCountR.count != null ? periodCountR.count : monthCount;
+                document.getElementById('statMonth').textContent = periodCount + ' / 50';
+            } else {
+                document.getElementById('statMonth').textContent = monthCount + ' / 50';
+            }
+        } catch(ePc) {
+            document.getElementById('statMonth').textContent = monthCount + ' / 50';
+        }
+        if (sub.current_period_end) {
+            var resetLabel = new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+            document.getElementById('statMonthSub').textContent = 'resets ' + resetLabel;
+        } else {
+            document.getElementById('statMonthSub').textContent = 'this billing period';
+        }
     } else {
         planCta.dataset.action = 'upgrade';
         toolkitStar.dataset.locked = '1';
