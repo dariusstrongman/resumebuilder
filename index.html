@@ -155,11 +155,29 @@
         <aside class="form-card">
             <div class="form-card__stripe"></div>
             <div class="form-card__head">
-                <span class="form-card__label">TAILOR A RESUME</span>
-                <span class="form-card__step">3 STEPS &middot; 60 SECONDS</span>
+                <span class="form-card__label" id="formCardLabel">TAILOR A RESUME</span>
+                <span class="form-card__step" id="formCardStep">3 STEPS &middot; 60 SECONDS</span>
             </div>
 
             <form id="resumeForm" class="form-body">
+
+                <!-- MODE PICKER -->
+                <div class="mode-picker" role="radiogroup" aria-label="What do you need?">
+                    <label class="mode-option">
+                        <input type="radio" name="resumeMode" value="tailor" checked>
+                        <span class="mode-card">
+                            <span class="mode-title">Tailor for a job</span>
+                            <span class="mode-desc">Rewrite to match a specific posting.</span>
+                        </span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="resumeMode" value="cleanup">
+                        <span class="mode-card">
+                            <span class="mode-title">Clean up my resume</span>
+                            <span class="mode-desc">Polish and ATS-format, no target job.</span>
+                        </span>
+                    </label>
+                </div>
 
                 <!-- 1. RESUME -->
                 <div class="field">
@@ -200,16 +218,6 @@
                     </label>
                     <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5"></textarea>
                 </div>
-
-                <!-- CLEANUP-ONLY TOGGLE -->
-                <label class="cleanup-toggle">
-                    <input type="checkbox" id="cleanupOnly">
-                    <span class="check-box"></span>
-                    <span class="cleanup-toggle__body">
-                        <span class="cleanup-toggle__title">I don't have a specific job posting</span>
-                        <span class="cleanup-toggle__desc">Just clean up and ATS-format my resume.</span>
-                    </span>
-                </label>
 
                 <!-- ADD-ON -->
                 <label class="addon checkbox-wrap" id="coverLetterWrap">

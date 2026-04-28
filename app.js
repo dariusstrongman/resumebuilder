@@ -71,21 +71,32 @@ if (jobText) {
     });
 }
 
-// Cleanup-only toggle: hides JD field + cover letter add-on when user has no target posting
-var cleanupChk = document.getElementById('cleanupOnly');
+// Mode picker (tailor vs cleanup): shows/hides JD field + cover-letter add-on
 var jobField = document.getElementById('jobField');
 var coverLetterWrap = document.getElementById('coverLetterWrap');
-if (cleanupChk) {
-    cleanupChk.addEventListener('change', function() {
-        var on = this.checked;
-        if (jobField) jobField.style.display = on ? 'none' : '';
-        if (coverLetterWrap) coverLetterWrap.style.display = on ? 'none' : '';
-        if (on && coverCheck) {
-            coverCheck.checked = false;
-            refreshPriceLabel();
-        }
-    });
+var formCardLabel = document.getElementById('formCardLabel');
+var formCardStep = document.getElementById('formCardStep');
+var submitBtnLabel = document.querySelector('#submitBtn .submit-btn__label');
+function getResumeMode() {
+    var checked = document.querySelector('input[name="resumeMode"]:checked');
+    return checked ? checked.value : 'tailor';
 }
+function applyModeUI() {
+    var mode = getResumeMode();
+    var cleanup = (mode === 'cleanup');
+    if (jobField) jobField.style.display = cleanup ? 'none' : '';
+    if (coverLetterWrap) coverLetterWrap.style.display = cleanup ? 'none' : '';
+    if (cleanup && coverCheck) {
+        coverCheck.checked = false;
+    }
+    if (formCardLabel) formCardLabel.textContent = cleanup ? 'CLEAN UP A RESUME' : 'TAILOR A RESUME';
+    if (formCardStep)  formCardStep.textContent  = cleanup ? '2 STEPS · 60 SECONDS' : '3 STEPS · 60 SECONDS';
+    if (submitBtnLabel) submitBtnLabel.textContent = cleanup ? 'Clean up my resume' : 'Tailor my resume';
+    if (typeof refreshPriceLabel === 'function') refreshPriceLabel();
+}
+document.querySelectorAll('input[name="resumeMode"]').forEach(function(r) {
+    r.addEventListener('change', applyModeUI);
+});
 
 // Price toggle
 var coverCheck = document.getElementById('coverLetter');
@@ -442,7 +453,7 @@ var form = document.getElementById('resumeForm');
 if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        var cleanupOnly = !!(cleanupChk && cleanupChk.checked);
+        var cleanupOnly = (getResumeMode() === 'cleanup');
         var job = document.getElementById('jobText').value.trim();
         if (!cleanupOnly) {
             if (!job || job.length < 50) {

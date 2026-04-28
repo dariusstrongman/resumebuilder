@@ -3242,3 +3242,57 @@ textarea::placeholder {
     font-size: 0.8rem;
     margin-top: 0.15rem;
 }
+
+
+/* Mode picker — radio cards at top of form (Option 2) */
+.mode-picker {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin: 0 0 1.4rem;
+}
+.mode-option {
+    cursor: pointer;
+}
+.mode-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.mode-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-2);
+    border-radius: 10px;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.mode-option:hover .mode-card {
+    border-color: var(--ink-3);
+    background: var(--bg-3);
+}
+.mode-option input:checked + .mode-card {
+    border-color: var(--accent);
+    background: rgba(197, 255, 74, 0.08);
+    box-shadow: 0 0 0 1px var(--accent);
+}
+.mode-title {
+    font-family: var(--f-ui);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink-0);
+}
+.mode-option input:checked + .mode-card .mode-title {
+    color: var(--accent);
+}
+.mode-desc {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    line-height: 1.4;
+}
+@media (max-width: 480px) {
+    .mode-picker { grid-template-columns: 1fr; }
+}
