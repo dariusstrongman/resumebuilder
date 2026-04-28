@@ -47,16 +47,46 @@
         </div>
 
         <div id="dashboard" class="account-dashboard" hidden>
-            <header class="account-header">
-                <div>
-                    <p class="account-eyebrow">Account</p>
-                    <h1 class="account-title">Welcome, <span id="userName">there</span>.</h1>
-                </div>
-                <a href="/#generate" class="submit-btn submit-btn--inline">
-                    <span class="submit-btn__label">Tailor a new resume</span>
-                </a>
-            </header>
 
+            <!-- HERO RIBBON -->
+            <section class="hero-ribbon">
+                <div class="hero-ribbon__copy">
+                    <p class="account-eyebrow">Your dashboard</p>
+                    <h1 class="account-title">Welcome back, <span id="userName">there</span>.</h1>
+                    <p class="hero-ribbon__sub" id="heroSub">Your job hunt, one tailored resume at a time.</p>
+                </div>
+                <div class="hero-ribbon__cta">
+                    <a href="/#generate" class="submit-btn submit-btn--inline">
+                        <span class="submit-btn__label">Tailor a new resume</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- STATS STRIP -->
+            <section class="stats-strip">
+                <div class="stat-cell">
+                    <span class="stat-cell__label">This month</span>
+                    <span class="stat-cell__value" id="statMonth">0</span>
+                    <span class="stat-cell__sub">resumes tailored</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-cell__label">All time</span>
+                    <span class="stat-cell__value" id="statTotal">0</span>
+                    <span class="stat-cell__sub">resumes</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-cell__label">Plan</span>
+                    <span class="stat-cell__value stat-cell__value--small" id="statPlan">Free</span>
+                    <span class="stat-cell__sub" id="statPlanSub">Pay-as-you-go</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-cell__label">Member since</span>
+                    <span class="stat-cell__value stat-cell__value--small" id="statSince">&mdash;</span>
+                    <span class="stat-cell__sub" id="statSinceSub">welcome aboard</span>
+                </div>
+            </section>
+
+            <!-- PLAN / CREDITS -->
             <section class="account-grid">
                 <div class="account-card">
                     <p class="account-card__label">Plan</p>
@@ -65,39 +95,89 @@
                     <button type="button" class="account-card__cta" id="planCta">Upgrade to Pro &mdash; $15/mo</button>
                 </div>
                 <div class="account-card">
-                    <p class="account-card__label">Resumes tailored</p>
-                    <h3 class="account-card__value" id="resumeCount">0</h3>
-                    <p class="account-card__detail">All time</p>
-                </div>
-                <div class="account-card">
                     <p class="account-card__label">Pack credits</p>
                     <h3 class="account-card__value" id="packCredits">0</h3>
                     <p class="account-card__detail" id="packDetail">No active pack</p>
                 </div>
+                <div class="account-card account-card--tip">
+                    <p class="account-card__label">Tip of the week</p>
+                    <h3 class="account-card__value account-card__value--tip" id="tipTitle">&mdash;</h3>
+                    <p class="account-card__detail" id="tipBody">Loading&hellip;</p>
+                </div>
             </section>
 
+            <!-- TOOLKIT -->
+            <section class="account-section">
+                <header class="account-section-head">
+                    <h2>Your toolkit</h2>
+                    <span class="account-pill account-pill--quiet">Free for members</span>
+                </header>
+                <p class="account-soon">Resources to take you from "applied" to "offer accepted." Built for the rest of the job hunt &mdash; not just the resume.</p>
+                <div class="toolkit-grid">
+                    <a href="/star.html" class="toolkit-card" id="toolkitStar">
+                        <span class="toolkit-card__pill" id="toolkitStarPill">Pro</span>
+                        <h3>STAR interview coach</h3>
+                        <p>Five behavioral questions tailored to a target role. AI feedback per answer, scored on STAR structure.</p>
+                        <span class="toolkit-card__more">Open coach &rarr;</span>
+                    </a>
+                    <a href="/behavioral-questions.html" class="toolkit-card">
+                        <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
+                        <h3>Behavioral question bank</h3>
+                        <p>40+ real interview questions organized by competency. Print, study, practice &mdash; yours to keep.</p>
+                        <span class="toolkit-card__more">Open bank &rarr;</span>
+                    </a>
+                    <a href="/follow-up-emails.html" class="toolkit-card">
+                        <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
+                        <h3>Follow-up email pack</h3>
+                        <p>5 templates: post-application, post-interview, polite ghost-buster, thank-you, polite close.</p>
+                        <span class="toolkit-card__more">Open templates &rarr;</span>
+                    </a>
+                    <a href="/salary-playbook.html" class="toolkit-card">
+                        <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
+                        <h3>Salary negotiation playbook</h3>
+                        <p>Word-for-word scripts: deflecting "what's your range?", countering, leveraging multiple offers, equity.</p>
+                        <span class="toolkit-card__more">Open playbook &rarr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- RECENT RESUMES -->
             <section class="account-section">
                 <header class="account-section-head">
                     <h2>Recent resumes</h2>
+                    <span class="account-pill account-pill--quiet" id="resumeCountPill">0 total</span>
                 </header>
                 <div id="resumeList" class="resume-list">
                     <div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>
                 </div>
             </section>
 
+            <!-- LATEST FROM PLAYBOOK -->
             <section class="account-section">
                 <header class="account-section-head">
-                    <h2>STAR interview coach</h2>
-                    <span class="account-pill" id="starPill">Pro only</span>
+                    <h2>Latest from the playbook</h2>
+                    <a href="/blog/" class="account-section-link">All articles &rarr;</a>
                 </header>
-                <p class="account-soon">Practice behavioral interview questions with AI feedback. Generates 5 questions tailored to a target role, grades each STAR-format answer.</p>
-                <div class="success-buttons" style="margin-top:1rem;">
-                    <a href="/star.html" class="submit-btn submit-btn--inline" id="starCta">
-                        <span class="submit-btn__label">Open STAR coach</span>
+                <div class="playbook-grid">
+                    <a href="/blog/why-tailoring-your-resume-matters.html" class="playbook-card">
+                        <span class="blog-tag">Strategy</span>
+                        <h3>Why sending the same resume everywhere costs you interviews</h3>
+                        <p>75% get filtered before a human sees them. Here's the fix in 60 seconds.</p>
+                    </a>
+                    <a href="/blog/how-to-pass-ats-screening.html" class="playbook-card">
+                        <span class="blog-tag">ATS</span>
+                        <h3>How to pass the ATS screening every time</h3>
+                        <p>What the parser actually reads, and how to make sure it reads what you want.</p>
+                    </a>
+                    <a href="/blog/resume-keywords-that-get-interviews.html" class="playbook-card">
+                        <span class="blog-tag">Keywords</span>
+                        <h3>Resume keywords that get interviews</h3>
+                        <p>The exact words to mirror from a job description &mdash; and how to do it without sounding robotic.</p>
                     </a>
                 </div>
             </section>
 
+            <!-- SETTINGS -->
             <section class="account-section">
                 <header class="account-section-head">
                     <h2>Settings</h2>
@@ -173,13 +253,12 @@
                 });
             }
         } catch(e) {}
-        // Clean up URL
         window.history.replaceState({}, '', '/account.html');
     } else if (params.get('upgrade_cancelled') === '1') {
         window.history.replaceState({}, '', '/account.html');
     }
 
-    // Load profile, subscription, packs, resume count in parallel
+    // Load profile, subscription, packs, resumes in parallel
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
     var packsPromise = sb.from('resumego_packs').select('uses_remaining, code').eq('user_email', user.email).gt('uses_remaining', 0);
@@ -188,30 +267,64 @@
     var [profileR, subR, packsR, resumesR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise]);
 
     var profile = profileR.data || {};
-    document.getElementById('userName').textContent = profile.display_name || (user.email || '').split('@')[0] || 'there';
+    var firstName = profile.display_name || (user.email || '').split('@')[0] || 'there';
+    document.getElementById('userName').textContent = firstName;
 
+    // ── HERO SUB-LINE (adaptive) ───────────────────────────────────────────
+    var resumes = resumesR.data || [];
+    var totalCount = resumesR.count != null ? resumesR.count : resumes.length;
+    var heroSub = document.getElementById('heroSub');
+    if (totalCount === 0) {
+        heroSub.textContent = "Your first tailored resume is one paste away. Let's go.";
+    } else if (resumes.length > 0 && resumes[0].created_at) {
+        var daysSince = Math.floor((Date.now() - new Date(resumes[0].created_at).getTime()) / 86400000);
+        if (daysSince === 0) heroSub.textContent = "Tailored a resume today. Keep the momentum.";
+        else if (daysSince === 1) heroSub.textContent = "Last resume yesterday. The hunt rewards consistency.";
+        else if (daysSince < 7) heroSub.textContent = "Last resume " + daysSince + " days ago. Ready for the next one?";
+        else heroSub.textContent = "It's been a minute. Pick up the hunt where you left off.";
+    }
+
+    // ── STATS STRIP ────────────────────────────────────────────────────────
+    var oneMonthAgo = Date.now() - 30 * 86400000;
+    var monthCount = resumes.filter(function(r) {
+        return r.created_at && new Date(r.created_at).getTime() > oneMonthAgo;
+    }).length;
+    document.getElementById('statMonth').textContent = monthCount;
+    document.getElementById('statTotal').textContent = totalCount;
+
+    if (user.created_at) {
+        var d = new Date(user.created_at);
+        document.getElementById('statSince').textContent = d.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+        var memberDays = Math.floor((Date.now() - d.getTime()) / 86400000);
+        document.getElementById('statSinceSub').textContent = memberDays === 0 ? 'welcome aboard' : (memberDays + ' day' + (memberDays === 1 ? '' : 's') + ' in');
+    }
+
+    // ── PLAN / SUBSCRIPTION ───────────────────────────────────────────────
     var sub = subR.data;
     var planValue = document.getElementById('planValue');
     var planDetail = document.getElementById('planDetail');
     var planCta = document.getElementById('planCta');
-    var starCta = document.getElementById('starCta');
-    var starPill = document.getElementById('starPill');
+    var statPlan = document.getElementById('statPlan');
+    var statPlanSub = document.getElementById('statPlanSub');
+    var toolkitStarPill = document.getElementById('toolkitStarPill');
+    var toolkitStar = document.getElementById('toolkitStar');
     var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
     if (isPro) {
-        planValue.textContent = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
-        planDetail.textContent = sub.current_period_end
+        var label = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
+        planValue.textContent = label;
+        statPlan.textContent = label;
+        var detail = sub.current_period_end
             ? 'Renews ' + new Date(sub.current_period_end).toLocaleDateString()
             : 'Active';
+        planDetail.textContent = detail;
+        statPlanSub.textContent = 'Coach + history';
         planCta.textContent = 'Manage subscription';
         planCta.dataset.action = 'manage';
-        if (starPill) starPill.textContent = 'Active';
+        toolkitStarPill.textContent = 'Active';
+        toolkitStarPill.classList.add('toolkit-card__pill--free');
     } else {
         planCta.dataset.action = 'upgrade';
-        if (starCta) {
-            starCta.classList.add('submit-btn--light');
-            starCta.querySelector('.submit-btn__label').textContent = 'Upgrade to unlock';
-            starCta.dataset.locked = '1';
-        }
+        toolkitStar.dataset.locked = '1';
     }
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
@@ -247,15 +360,14 @@
         }
     });
 
-    if (starCta) {
-        starCta.addEventListener('click', function(e) {
-            if (starCta.dataset.locked) {
-                e.preventDefault();
-                planCta.click();
-            }
-        });
-    }
+    toolkitStar.addEventListener('click', function(e) {
+        if (toolkitStar.dataset.locked) {
+            e.preventDefault();
+            planCta.click();
+        }
+    });
 
+    // ── PACKS ─────────────────────────────────────────────────────────────
     var packs = packsR.data || [];
     var totalCredits = packs.reduce(function(sum, p) { return sum + (p.uses_remaining || 0); }, 0);
     document.getElementById('packCredits').textContent = totalCredits;
@@ -263,9 +375,30 @@
         document.getElementById('packDetail').textContent = packs.length + ' active pack' + (packs.length === 1 ? '' : 's');
     }
 
-    var resumes = resumesR.data || [];
-    document.getElementById('resumeCount').textContent = resumesR.count != null ? resumesR.count : resumes.length;
+    // ── TIP OF THE WEEK ───────────────────────────────────────────────────
+    var TIPS = [
+        { t: "Mirror the JD's exact nouns.", b: "ATS parsers match phrases literally. If they wrote 'stakeholder management,' don't write 'managing stakeholders.'" },
+        { t: "Lead with the result, not the task.", b: "'Cut deploy time 40%' beats 'responsible for deployments.' Numbers earn the second read." },
+        { t: "One page is a myth past 8 years.", b: "Two pages is normal at the senior level. Don't drop relevant work to hit a folklore rule." },
+        { t: "Tailor in 60 seconds, not 60 minutes.", b: "Open the JD, copy 5 phrases, weave them into your top 3 bullets. Done." },
+        { t: "Skip the objective.", b: "Recruiters skim. A summary statement with hard skills + years beats 'seeking a challenging role to leverage…' every time." },
+        { t: "Apply within 72 hours of posting.", b: "First-week applicants get 4x the callbacks. Speed beats polish past a baseline." },
+        { t: "Follow up on day 7.", b: "A short 'still excited about the role' email pulls your application back to the top of the inbox. Templates in your toolkit." },
+        { t: "Quantify three things minimum.", b: "Team size, budget, time saved, customers served, revenue. Pick whatever's true and put it in." },
+        { t: "Use action verbs, not 'responsible for.'", b: "Owned, shipped, scaled, cut, drove. Each verb signals you did the thing, not just sat near it." },
+        { t: "The cover letter still matters.", b: "For senior roles especially. 4 short paragraphs: hook, what they want, your match, ask for the call." },
+        { t: "Recruiter Linkedin > applying cold.", b: "If you can name the recruiter, message them with one specific reason you're a fit. Conversion is dramatically higher." },
+        { t: "Don't list every job.", b: "Last 10-15 years is plenty. Old jobs get a one-line callout if relevant, not a bullet treatment." },
+        { t: "Skills sections are scanned, not read.", b: "Front-load the 8-10 keywords that match the JD. Drop the irrelevant ones — they dilute the match score." },
+        { t: "Negotiate every offer.", b: "75% of recruiters expect it and have room. Counter at +10-15%; ask once, politely, and stop." }
+    ];
+    var weekIdx = Math.floor((Date.now() / 86400000) / 7) % TIPS.length;
+    var tip = TIPS[weekIdx];
+    document.getElementById('tipTitle').textContent = tip.t;
+    document.getElementById('tipBody').textContent = tip.b;
 
+    // ── RECENT RESUMES ────────────────────────────────────────────────────
+    document.getElementById('resumeCountPill').textContent = totalCount + ' total';
     var listEl = document.getElementById('resumeList');
     if (resumes.length > 0) {
         listEl.innerHTML = resumes.map(function(r) {
