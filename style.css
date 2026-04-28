@@ -2624,6 +2624,26 @@ textarea::placeholder {
     padding-left: 0.6rem;
 }
 .rp-bullet::before { content: '• '; color: #1a1a1a; }
+.rp-role {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0.35rem 0 0.1rem;
+}
+.rp-role-left {
+    flex: 1;
+    font-size: 0.78rem;
+    color: #1a1a1a;
+    line-height: 1.35;
+}
+.rp-role-date {
+    font-style: italic;
+    font-size: 0.7rem;
+    color: #555;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
 
 .success-cover {
     margin-top: 1.5rem;
