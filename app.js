@@ -595,6 +595,40 @@ function resetBtn(btn) {
     totalEl = document.getElementById('btnPrice');
 }
 
+// === 10-PACK PURCHASE ===
+// Click handler on #buyPackBtn → prompt for email → POST mode:'buy_pack' → redirect to Stripe.
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('buyPackBtn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+        var email = (prompt('Enter the email where you want the pack code delivered:') || '').trim();
+        if (!email || email.indexOf('@') < 1) return;
+        btn.disabled = true;
+        var origLabel = btn.innerHTML;
+        btn.innerHTML = '<span class="submit-btn__label">Redirecting…</span>';
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'buy_pack', user_email: email })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(resp) {
+            if (resp.payment_url) {
+                window.location.href = resp.payment_url;
+            } else if (resp.error) {
+                toast(resp.error, 'error');
+                btn.disabled = false;
+                btn.innerHTML = origLabel;
+            }
+        })
+        .catch(function() {
+            toast('Could not start checkout. Please try again.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = origLabel;
+        });
+    });
+});
+
 function showResult(data) {
     var area = document.getElementById('resultArea');
     var content = document.getElementById('resultContent');

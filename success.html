@@ -76,6 +76,27 @@
             </div>
         </div>
 
+        <!-- PACK PURCHASE SUCCESS -->
+        <div id="pack" class="success-state success-state--done" style="display:none;">
+            <div class="success-check">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+            </div>
+            <h1 class="success-h">Your 10-pack is ready.</h1>
+            <p class="success-sub">A copy was emailed to <strong id="packDeliveryEmail">your email</strong>. Save this code &mdash; it never expires.</p>
+            <div class="pack-code-box">
+                <div class="pack-code-label">Your code</div>
+                <div class="pack-code" id="packCode">&mdash;</div>
+                <div class="pack-code-meta"><span id="packUses">10</span> uses remaining</div>
+                <button type="button" class="submit-btn submit-btn--inline" id="packCopyBtn"><span class="submit-btn__label">Copy code</span></button>
+            </div>
+            <p class="success-sub" style="margin-top:1.5rem;">Paste your code in the <em>Promo code</em> field on the home page when you tailor &mdash; one use per resume.</p>
+            <div class="success-buttons">
+                <a href="/#generate" class="submit-btn submit-btn--inline">
+                    <span class="submit-btn__label">Tailor my first resume</span>
+                </a>
+            </div>
+        </div>
+
         <!-- ERROR -->
         <div id="error" class="success-state success-state--error" style="display:none;">
             <div class="success-x">
@@ -125,9 +146,17 @@
     var params = new URLSearchParams(window.location.search);
     var sessionId = params.get('session_id');
     var isPromo = params.get('promo') === '1';
+    var isPack = params.get('pack') === '1';
 
     var fetchBody = null;
-    if (isPromo) {
+    if (isPack) {
+        if (!sessionId) {
+            clearInterval(stepTimer);
+            showError('Missing payment session. If you were charged, email contact@stromation.com with your receipt.');
+            return;
+        }
+        fetchBody = { mode: 'fulfill_pack', session_id: sessionId };
+    } else if (isPromo) {
         // Cached result from a refresh? Show immediately.
         var cached = null;
         try { cached = sessionStorage.getItem('resumegoPromoResult'); } catch(e) {}
@@ -166,6 +195,11 @@
     .then(function(r) { return r.json(); })
     .then(function(data) {
         clearInterval(stepTimer);
+        if (isPack) {
+            if (data && data.code) showPack(data);
+            else showError((data && data.error) || 'Failed to issue your pack code. Email contact@stromation.com with your receipt.');
+            return;
+        }
         if (data && data.resume_text) {
             if (isPromo) {
                 try {
@@ -299,6 +333,37 @@
         w.document.write(html); w.document.close();
         setTimeout(function() { w.print(); }, 500);
     };
+
+    function showPack(data) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('pack').style.display = 'flex';
+        document.getElementById('packCode').textContent = data.code;
+        if (typeof data.uses_remaining === 'number') {
+            document.getElementById('packUses').textContent = data.uses_remaining;
+        }
+        if (data.user_email) {
+            document.getElementById('packDeliveryEmail').textContent = data.user_email;
+        }
+        if (window.gtag) {
+            gtag('event', 'purchase', {
+                currency: 'USD',
+                value: 5.00,
+                items: [{ item_id: 'resume_pack_10', item_name: '10-Pack', quantity: 1 }]
+            });
+        }
+        var btn = document.getElementById('packCopyBtn');
+        if (btn) {
+            btn.addEventListener('click', function() {
+                navigator.clipboard.writeText(data.code).then(function() {
+                    var label = btn.querySelector('.submit-btn__label');
+                    if (!label) return;
+                    var orig = label.textContent;
+                    label.textContent = 'Copied!';
+                    setTimeout(function() { label.textContent = orig; }, 1800);
+                });
+            });
+        }
+    }
 
     function showError(msg) {
         document.getElementById('loading').style.display = 'none';
