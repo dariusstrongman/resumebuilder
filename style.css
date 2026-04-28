@@ -3470,6 +3470,28 @@ textarea::placeholder {
 }
 .pro-hint[hidden] { display: none; }
 
+/* "View all 49 resumes" button under the recent list */
+.resume-list__more {
+    margin-top: 0.8rem;
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px dashed var(--line-strong);
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.resume-list__more:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    border-style: solid;
+}
+.resume-list__more:disabled { opacity: 0.6; cursor: wait; }
+.resume-list__more[hidden] { display: none; }
+
 /* Stats strip */
 .stats-strip {
     display: grid;

@@ -166,6 +166,7 @@
                 <div id="resumeList" class="resume-list">
                     <div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>
                 </div>
+                <button type="button" class="resume-list__more" id="viewAllResumesBtn" hidden></button>
             </section>
 
             <!-- LATEST FROM PLAYBOOK -->
@@ -541,15 +542,40 @@
     // ── RECENT RESUMES ────────────────────────────────────────────────────
     document.getElementById('resumeCountPill').textContent = totalCount + ' total';
     var listEl = document.getElementById('resumeList');
+    function rowHtml(r) {
+        var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
+        var date = r.created_at ? new Date(r.created_at).toLocaleDateString() : '';
+        return '<a href="#" class="resume-row" data-resume-id="' + r.id + '">'
+            + '<span class="resume-row__title">' + esc(title) + '</span>'
+            + '<span class="resume-row__date">' + date + '</span>'
+            + '</a>';
+    }
     if (resumes.length > 0) {
-        listEl.innerHTML = resumes.map(function(r) {
-            var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
-            var date = r.created_at ? new Date(r.created_at).toLocaleDateString() : '';
-            return '<a href="#" class="resume-row" data-resume-id="' + r.id + '">'
-                + '<span class="resume-row__title">' + esc(title) + '</span>'
-                + '<span class="resume-row__date">' + date + '</span>'
-                + '</a>';
-        }).join('');
+        listEl.innerHTML = resumes.map(rowHtml).join('');
+    }
+    var viewAllBtn = document.getElementById('viewAllResumesBtn');
+    if (totalCount > resumes.length) {
+        viewAllBtn.textContent = 'View all ' + totalCount + ' resumes';
+        viewAllBtn.hidden = false;
+        viewAllBtn.addEventListener('click', async function() {
+            viewAllBtn.disabled = true;
+            var origText = viewAllBtn.textContent;
+            viewAllBtn.textContent = 'Loading…';
+            try {
+                var allR = await sb.from('resumes')
+                    .select('id, title, target_role, target_company, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(500);
+                var allRows = (allR && allR.data) || [];
+                listEl.innerHTML = allRows.map(rowHtml).join('') ||
+                    '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
+                viewAllBtn.hidden = true;
+            } catch(eAll) {
+                viewAllBtn.disabled = false;
+                viewAllBtn.textContent = origText;
+                alert('Could not load all resumes. Try again.');
+            }
+        });
     }
 
     document.getElementById('loadingState').hidden = true;
