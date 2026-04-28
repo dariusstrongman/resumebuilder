@@ -3452,6 +3452,24 @@ textarea::placeholder {
 }
 .hero-ribbon__hint[hidden] { display: none; }
 
+/* Inline Pro status hint above the form's submit button */
+.pro-hint {
+    margin: 0 0 0.6rem;
+    padding: 0.55rem 0.85rem;
+    background: rgba(197, 255, 74, 0.08);
+    border: 1px solid rgba(197, 255, 74, 0.35);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    line-height: 1.4;
+}
+.pro-hint--cap {
+    background: rgba(255, 193, 7, 0.08);
+    border-color: rgba(255, 193, 7, 0.4);
+    color: #ffd86b;
+}
+.pro-hint[hidden] { display: none; }
+
 /* Stats strip */
 .stats-strip {
     display: grid;

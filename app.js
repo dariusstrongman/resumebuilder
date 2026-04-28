@@ -101,16 +101,61 @@ document.querySelectorAll('input[name="resumeMode"]').forEach(function(r) {
 // Price toggle
 var coverCheck = document.getElementById('coverLetter');
 var totalEl = document.getElementById('btnPrice');
+var proStatus = { isPro: false, periodUsed: 0, periodLimit: 50, periodEnd: null };
+function isProUnderCap() { return proStatus.isPro && proStatus.periodUsed < proStatus.periodLimit; }
 function currentPriceLabel() {
     if (isPromoApplied()) return 'FREE';
+    if (isProUnderCap()) return 'FREE';
     return coverCheck && coverCheck.checked ? '$1.50' : '$1.00';
 }
 function refreshPriceLabel() {
     if (totalEl) totalEl.textContent = currentPriceLabel();
+    var hint = document.getElementById('proHint');
+    if (!hint) return;
+    if (proStatus.isPro) {
+        var left = Math.max(0, proStatus.periodLimit - proStatus.periodUsed);
+        if (left > 0) {
+            hint.textContent = 'Pro · free with your plan · ' + left + ' of ' + proStatus.periodLimit + ' left this period';
+            hint.classList.remove('pro-hint--cap');
+        } else {
+            var resetTxt = proStatus.periodEnd
+                ? new Date(proStatus.periodEnd).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                : 'soon';
+            hint.textContent = "Pro · you've used your 50 this period. Pay-as-you-go from here, resets " + resetTxt + '.';
+            hint.classList.add('pro-hint--cap');
+        }
+        hint.hidden = false;
+    } else {
+        hint.hidden = true;
+    }
 }
 if (coverCheck) {
     coverCheck.addEventListener('change', refreshPriceLabel);
 }
+
+// Pro status check — runs once after auth resolves on the page.
+document.addEventListener('resumego:auth-ready', async function() {
+    if (!window.RESUMEGO_USER_ID || !window.__sb) return;
+    try {
+        var subR = await window.__sb.from('subscriptions')
+            .select('plan,status,current_period_start,current_period_end')
+            .eq('user_id', window.RESUMEGO_USER_ID)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+        var sub = subR && subR.data;
+        if (!sub || sub.status !== 'active' || (sub.plan !== 'pro_monthly' && sub.plan !== 'pro_yearly')) return;
+        proStatus.isPro = true;
+        proStatus.periodEnd = sub.current_period_end || null;
+        if (sub.current_period_start) {
+            var cR = await window.__sb.from('resumes')
+                .select('id', { count: 'exact', head: true })
+                .gte('created_at', sub.current_period_start);
+            proStatus.periodUsed = cR && cR.count != null ? cR.count : 0;
+        }
+        refreshPriceLabel();
+    } catch(e) {}
+});
 
 // ========== PROMO CODE ==========
 // Static codes are checked instantly; pack codes (PACK-XXXX-XXXX) are validated
