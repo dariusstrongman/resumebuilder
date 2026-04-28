@@ -407,13 +407,14 @@
 
         // Pro cap is over the BILLING period, not calendar month — count
         // resumes since current_period_start, label resets as period_end.
-        var proPeriodCount = monthCount;
+        var proPeriodCount = 0;
         try {
             if (sub.current_period_start) {
-                var periodCountR = await sb.from('resumes')
+                var periodCountR = await sb.from('resumego_sessions')
                     .select('id', { count: 'exact', head: true })
+                    .like('stripe_session_id', 'PRO:%')
                     .gte('created_at', sub.current_period_start);
-                proPeriodCount = periodCountR && periodCountR.count != null ? periodCountR.count : monthCount;
+                proPeriodCount = periodCountR && periodCountR.count != null ? periodCountR.count : 0;
             }
         } catch(ePc) {}
         var proLeft = Math.max(0, 50 - proPeriodCount);

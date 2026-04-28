@@ -177,8 +177,9 @@ document.addEventListener('resumego:auth-ready', async function(e) {
         proStatus.isPro = true;
         proStatus.periodEnd = sub.current_period_end || null;
         if (sub.current_period_start) {
-            var cR = await window.__sb.from('resumes')
+            var cR = await window.__sb.from('resumego_sessions')
                 .select('id', { count: 'exact', head: true })
+                .like('stripe_session_id', 'PRO:%')
                 .gte('created_at', sub.current_period_start);
             proStatus.periodUsed = cR && cR.count != null ? cR.count : 0;
         }
@@ -736,8 +737,10 @@ function sendPayload(data, btn) {
     var promo = getPromoCode();
     if (promo) data.promo_code = promo;
 
-    // Promo path: hand the payload to success.html so loading + result UI matches the paid flow.
-    if (promo) {
+    // Free paths (promo code OR Pro under cap): hand the payload to success.html
+    // so the loading animation + result UI matches the paid flow instead of
+    // dumping the result inline on the form.
+    if (promo || isProUnderCap()) {
         try {
             sessionStorage.removeItem('resumegoPromoResult');
             sessionStorage.setItem('resumegoPromoPayload', JSON.stringify(data));

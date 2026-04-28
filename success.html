@@ -206,6 +206,14 @@
             else showError((data && data.error) || 'Failed to issue your pack code. Email contact@stromation.com with your receipt.');
             return;
         }
+        // Edge case: Pro user routed to success.html based on a stale cached
+        // cap, but server actually returned a payment_url (cap reached). Send
+        // them to Stripe instead of showing an error.
+        if (data && data.payment_url) {
+            try { sessionStorage.removeItem('resumegoPromoPayload'); } catch(e) {}
+            window.location.href = data.payment_url;
+            return;
+        }
         if (data && data.resume_text) {
             if (isPromo) {
                 try {
