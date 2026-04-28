@@ -657,6 +657,7 @@ function sendPayload(data, btn) {
         return;
     }
     data.user_email = email;
+    if (window.RESUMEGO_USER_ID) data.user_id = window.RESUMEGO_USER_ID;
     var promo = getPromoCode();
     if (promo) data.promo_code = promo;
 
