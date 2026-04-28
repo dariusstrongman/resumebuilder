@@ -71,6 +71,22 @@ if (jobText) {
     });
 }
 
+// Cleanup-only toggle: hides JD field + cover letter add-on when user has no target posting
+var cleanupChk = document.getElementById('cleanupOnly');
+var jobField = document.getElementById('jobField');
+var coverLetterWrap = document.getElementById('coverLetterWrap');
+if (cleanupChk) {
+    cleanupChk.addEventListener('change', function() {
+        var on = this.checked;
+        if (jobField) jobField.style.display = on ? 'none' : '';
+        if (coverLetterWrap) coverLetterWrap.style.display = on ? 'none' : '';
+        if (on && coverCheck) {
+            coverCheck.checked = false;
+            refreshPriceLabel();
+        }
+    });
+}
+
 // Price toggle
 var coverCheck = document.getElementById('coverLetter');
 var totalEl = document.getElementById('btnPrice');
@@ -426,22 +442,27 @@ var form = document.getElementById('resumeForm');
 if (form) {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        var cleanupOnly = !!(cleanupChk && cleanupChk.checked);
         var job = document.getElementById('jobText').value.trim();
-        if (!job || job.length < 50) {
-            toast('Paste the full job description (at least 50 characters).', 'error');
-            return;
+        if (!cleanupOnly) {
+            if (!job || job.length < 50) {
+                toast('Paste the full job description (at least 50 characters).', 'error');
+                return;
+            }
+            // Block bare-URL submissions: we cannot fetch pages, GPT only sees the literal text
+            var jobStripped = job.replace(/https?:\/\/\S+/g, '').trim();
+            if (jobStripped.length < 50) {
+                toast('Paste the full job description, not just the link. We cannot fetch URLs.', 'error');
+                return;
+            }
+            if (job.length > MAX_JOB_CHARS) {
+                toast('Job posting too long. Maximum ' + MAX_JOB_CHARS + ' characters.', 'error');
+                return;
+            }
+        } else {
+            job = '';
         }
-        // Block bare-URL submissions: we cannot fetch pages, GPT only sees the literal text
-        var jobStripped = job.replace(/https?:\/\/\S+/g, '').trim();
-        if (jobStripped.length < 50) {
-            toast('Paste the full job description, not just the link. We cannot fetch URLs.', 'error');
-            return;
-        }
-        if (job.length > MAX_JOB_CHARS) {
-            toast('Job posting too long. Maximum ' + MAX_JOB_CHARS + ' characters.', 'error');
-            return;
-        }
-        var wantCover = document.getElementById('coverLetter').checked;
+        var wantCover = !cleanupOnly && document.getElementById('coverLetter').checked;
         var btn = document.getElementById('submitBtn');
 
         if (resumeMode === 'paste') {

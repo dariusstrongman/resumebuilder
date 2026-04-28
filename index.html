@@ -192,17 +192,27 @@
                 </div>
 
                 <!-- 2. JOB POSTING -->
-                <div class="field">
+                <div class="field" id="jobField">
                     <label for="jobText" class="field-label">
                         <span class="field-num">2</span>
                         <span class="field-name">Job posting</span>
                         <span class="field-hint" id="jobHint"></span>
                     </label>
-                    <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5" required></textarea>
+                    <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5"></textarea>
                 </div>
 
+                <!-- CLEANUP-ONLY TOGGLE -->
+                <label class="cleanup-toggle">
+                    <input type="checkbox" id="cleanupOnly">
+                    <span class="check-box"></span>
+                    <span class="cleanup-toggle__body">
+                        <span class="cleanup-toggle__title">I don't have a specific job posting</span>
+                        <span class="cleanup-toggle__desc">Just clean up and ATS-format my resume.</span>
+                    </span>
+                </label>
+
                 <!-- ADD-ON -->
-                <label class="addon checkbox-wrap">
+                <label class="addon checkbox-wrap" id="coverLetterWrap">
                     <input type="checkbox" id="coverLetter">
                     <span class="check-box"></span>
                     <span class="addon__body">

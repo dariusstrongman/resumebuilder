@@ -3189,3 +3189,56 @@ textarea::placeholder {
     background: var(--bg-3) !important;
     color: var(--ink-0) !important;
 }
+
+
+/* Cleanup-only toggle (lighter than the cover-letter add-on; same hit area) */
+.cleanup-toggle {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.75rem 0.95rem;
+    border: 1px dashed var(--line-strong);
+    background: transparent;
+    border-radius: 10px;
+    margin: 0.25rem 0 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.cleanup-toggle:hover {
+    border-color: var(--accent);
+    background: rgba(197, 255, 74, 0.04);
+}
+.cleanup-toggle input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.cleanup-toggle input:checked + .check-box {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+.cleanup-toggle input:checked + .check-box::after {
+    content: '';
+    position: absolute;
+    left: 5px; top: 1px;
+    width: 5px; height: 10px;
+    border: solid var(--bg-0);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.cleanup-toggle__body {
+    display: block;
+    line-height: 1.4;
+}
+.cleanup-toggle__title {
+    display: block;
+    color: var(--ink-1);
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+.cleanup-toggle__desc {
+    display: block;
+    color: var(--ink-2);
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+}
