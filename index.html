@@ -253,6 +253,34 @@
                     <span class="submit-btn__label">Tailor my resume</span>
                     <span class="submit-btn__price" id="btnPrice">$1.00</span>
                 </button>
+                <script>
+                (function(){
+                    try {
+                        var auth = localStorage.getItem('sb-jjiizicwjldusuteffnb-auth-token');
+                        if (!auth) return;
+                        var raw = localStorage.getItem('resumegoProStatus');
+                        if (!raw) return;
+                        var s = JSON.parse(raw);
+                        if (!s || !s.isPro) return;
+                        var limit = s.periodLimit || 50;
+                        var left = Math.max(0, limit - (s.periodUsed || 0));
+                        var price = document.getElementById('btnPrice');
+                        var hint = document.getElementById('proHint');
+                        if (left > 0) {
+                            if (price) price.textContent = 'FREE';
+                            if (hint) {
+                                hint.textContent = 'Pro · free with your plan · ' + left + ' of ' + limit + ' left this period';
+                                hint.hidden = false;
+                            }
+                        } else if (hint) {
+                            var rt = s.periodEnd ? new Date(s.periodEnd).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'soon';
+                            hint.textContent = "Pro · you've used your 50 this period. Pay-as-you-go from here, resets " + rt + '.';
+                            hint.classList.add('pro-hint--cap');
+                            hint.hidden = false;
+                        }
+                    } catch(e){}
+                })();
+                </script>
 
                 <p class="form-fine">
                     Paid once via Stripe. Delivered to your inbox. We don't retain your resume.

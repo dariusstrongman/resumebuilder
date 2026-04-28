@@ -134,17 +134,42 @@ if (coverCheck) {
 }
 
 // Pro status check — runs once after auth resolves on the page.
-document.addEventListener('resumego:auth-ready', async function() {
-    if (!window.RESUMEGO_USER_ID || !window.__sb) return;
+// Caches result to localStorage so subsequent page loads can pre-render
+// "FREE" before paint without waiting for the network round-trip.
+function cacheProStatus() {
+    try {
+        localStorage.setItem('resumegoProStatus', JSON.stringify({
+            user_id: window.RESUMEGO_USER_ID || null,
+            isPro: proStatus.isPro,
+            periodUsed: proStatus.periodUsed,
+            periodLimit: proStatus.periodLimit,
+            periodEnd: proStatus.periodEnd,
+            ts: Date.now()
+        }));
+    } catch(e) {}
+}
+
+document.addEventListener('resumego:auth-ready', async function(e) {
+    var user = e && e.detail && e.detail.user;
+    if (!user || !window.__sb) {
+        try { localStorage.removeItem('resumegoProStatus'); } catch(eR) {}
+        return;
+    }
     try {
         var subR = await window.__sb.from('subscriptions')
             .select('plan,status,current_period_start,current_period_end')
-            .eq('user_id', window.RESUMEGO_USER_ID)
+            .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
             .maybeSingle();
         var sub = subR && subR.data;
-        if (!sub || sub.status !== 'active' || (sub.plan !== 'pro_monthly' && sub.plan !== 'pro_yearly')) return;
+        var isPro = !!(sub && sub.status === 'active' && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly'));
+        if (!isPro) {
+            proStatus.isPro = false;
+            cacheProStatus();
+            refreshPriceLabel();
+            return;
+        }
         proStatus.isPro = true;
         proStatus.periodEnd = sub.current_period_end || null;
         if (sub.current_period_start) {
@@ -153,8 +178,9 @@ document.addEventListener('resumego:auth-ready', async function() {
                 .gte('created_at', sub.current_period_start);
             proStatus.periodUsed = cR && cR.count != null ? cR.count : 0;
         }
+        cacheProStatus();
         refreshPriceLabel();
-    } catch(e) {}
+    } catch(eFetch) {}
 });
 
 // ========== PROMO CODE ==========
