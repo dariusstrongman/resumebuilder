@@ -679,6 +679,14 @@ function sendPayload(data, btn) {
     .then(function(r) { return r.json(); })
     .then(function(resp) {
         if (resp.payment_url) {
+            if (resp.pro_cap_reached) {
+                var amt = data.include_cover_letter ? '$1.50' : '$1.00';
+                var ok = confirm(
+                    "You've used your 50 monthly Pro tailorings. Resets on the 1st of next month.\n\n" +
+                    "Continue with this one for " + amt + "? Or cancel and grab a 10-pack ($5 for 10) from the Pricing section."
+                );
+                if (!ok) { resetBtn(btn); return; }
+            }
             window.location.href = resp.payment_url;
         } else if (resp.resume_text) {
             showResult(resp);
