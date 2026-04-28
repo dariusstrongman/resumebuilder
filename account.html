@@ -62,7 +62,7 @@
                     <p class="account-card__label">Plan</p>
                     <h3 class="account-card__value" id="planValue">Free</h3>
                     <p class="account-card__detail" id="planDetail">Pay-as-you-go</p>
-                    <a href="/#pricing" class="account-card__cta" id="planCta">Upgrade to Pro</a>
+                    <button type="button" class="account-card__cta" id="planCta">Upgrade to Pro &mdash; $15/mo</button>
                 </div>
                 <div class="account-card">
                     <p class="account-card__label">Resumes tailored</p>
@@ -88,9 +88,14 @@
             <section class="account-section">
                 <header class="account-section-head">
                     <h2>STAR interview coach</h2>
-                    <span class="account-pill">Coming soon</span>
+                    <span class="account-pill" id="starPill">Pro only</span>
                 </header>
-                <p class="account-soon">Practice behavioral interview questions with AI feedback. Pro plan only.</p>
+                <p class="account-soon">Practice behavioral interview questions with AI feedback. Generates 5 questions tailored to a target role, grades each STAR-format answer.</p>
+                <div class="success-buttons" style="margin-top:1rem;">
+                    <a href="/star.html" class="submit-btn submit-btn--inline" id="starCta">
+                        <span class="submit-btn__label">Open STAR coach</span>
+                    </a>
+                </div>
             </section>
 
             <section class="account-section">
@@ -150,6 +155,30 @@
 
     document.getElementById('userEmail').textContent = user.email || '';
 
+    // Handle post-checkout callback before loading dashboard data
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('upgrade') === '1' && params.get('session_id')) {
+        try {
+            var fulfillResp = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'fulfill_subscription', session_id: params.get('session_id') })
+            });
+            var fulfill = await fulfillResp.json();
+            if (fulfill.ok && window.gtag) {
+                gtag('event', 'purchase', {
+                    currency: 'USD',
+                    value: 15.00,
+                    items: [{ item_id: 'resumego_pro_monthly', item_name: 'ResumeGo Pro', quantity: 1 }]
+                });
+            }
+        } catch(e) {}
+        // Clean up URL
+        window.history.replaceState({}, '', '/account.html');
+    } else if (params.get('upgrade_cancelled') === '1') {
+        window.history.replaceState({}, '', '/account.html');
+    }
+
     // Load profile, subscription, packs, resume count in parallel
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
@@ -165,13 +194,66 @@
     var planValue = document.getElementById('planValue');
     var planDetail = document.getElementById('planDetail');
     var planCta = document.getElementById('planCta');
-    if (sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active') {
+    var starCta = document.getElementById('starCta');
+    var starPill = document.getElementById('starPill');
+    var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
+    if (isPro) {
         planValue.textContent = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
         planDetail.textContent = sub.current_period_end
             ? 'Renews ' + new Date(sub.current_period_end).toLocaleDateString()
             : 'Active';
         planCta.textContent = 'Manage subscription';
-        planCta.href = '#';
+        planCta.dataset.action = 'manage';
+        if (starPill) starPill.textContent = 'Active';
+    } else {
+        planCta.dataset.action = 'upgrade';
+        if (starCta) {
+            starCta.classList.add('submit-btn--light');
+            starCta.querySelector('.submit-btn__label').textContent = 'Upgrade to unlock';
+            starCta.dataset.locked = '1';
+        }
+    }
+
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+
+    planCta.addEventListener('click', async function() {
+        var action = planCta.dataset.action;
+        planCta.disabled = true;
+        var origText = planCta.textContent;
+        planCta.textContent = 'Loading…';
+        try {
+            if (action === 'upgrade') {
+                var r = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'create_subscription', user_id: user.id, user_email: user.email, site_url: window.location.origin })
+                });
+                var d = await r.json();
+                if (d.payment_url) window.location.href = d.payment_url;
+                else { alert(d.error || 'Could not start checkout.'); planCta.disabled = false; planCta.textContent = origText; }
+            } else if (action === 'manage') {
+                var r2 = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'customer_portal', user_id: user.id, site_url: window.location.origin })
+                });
+                var d2 = await r2.json();
+                if (d2.portal_url) window.location.href = d2.portal_url;
+                else { alert(d2.error || 'Could not open billing portal.'); planCta.disabled = false; planCta.textContent = origText; }
+            }
+        } catch (e) {
+            planCta.disabled = false;
+            planCta.textContent = origText;
+        }
+    });
+
+    if (starCta) {
+        starCta.addEventListener('click', function(e) {
+            if (starCta.dataset.locked) {
+                e.preventDefault();
+                planCta.click();
+            }
+        });
     }
 
     var packs = packsR.data || [];

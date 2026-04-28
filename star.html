@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RW4Z3ETF5P');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>STAR Coach &mdash; ResumeGo</title>
+    <meta name="theme-color" content="#07080a">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/account.html">Dashboard</a>
+            <a href="/#generate">Tailor a resume</a>
+            <a href="/#pricing">Pricing</a>
+        </nav>
+    </div>
+</header>
+
+<main class="account-main">
+    <div class="account-shell">
+
+        <header class="account-header">
+            <div>
+                <p class="account-eyebrow">Pro tools</p>
+                <h1 class="account-title">STAR coach.</h1>
+                <p class="account-soon" style="margin-top:0.6rem;max-width:520px;">Five behavioral questions, tailored to a target role. Answer in STAR format. Get a score and feedback per answer.</p>
+            </div>
+        </header>
+
+        <!-- LOADING -->
+        <div id="starLoading" class="account-loading">
+            <div class="spinner-large"></div>
+            <p>Loading&hellip;</p>
+        </div>
+
+        <!-- PAYWALL (non-Pro) -->
+        <section id="starPaywall" class="account-section" hidden>
+            <div class="account-card" style="max-width:560px;margin:0 auto;text-align:center;">
+                <p class="account-card__label">Pro feature</p>
+                <h3 class="account-card__value" style="font-size:1.6rem;margin:0.5rem 0;">$15 / month</h3>
+                <p class="account-card__detail" style="margin-bottom:1rem;">Unlimited resume tailoring + STAR coach + saved history.</p>
+                <button type="button" class="submit-btn submit-btn--inline" id="paywallUpgrade">
+                    <span class="submit-btn__label">Upgrade to Pro</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- INTAKE FORM -->
+        <section id="starIntake" class="account-section" hidden>
+            <div class="form-card" style="max-width:640px;margin:0 auto;">
+                <form id="starForm" class="form-body">
+                    <div class="field">
+                        <label class="field-label" for="starRole">
+                            <span class="field-num">1</span>
+                            <span class="field-name">Target role</span>
+                        </label>
+                        <input type="text" id="starRole" class="email-input" placeholder="e.g. Senior Software Engineer" required maxlength="120">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="starCompany">
+                            <span class="field-num">2</span>
+                            <span class="field-name">Target company <span class="field-hint">optional</span></span>
+                        </label>
+                        <input type="text" id="starCompany" class="email-input" placeholder="e.g. Stripe" maxlength="120">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="starJD">
+                            <span class="field-num">3</span>
+                            <span class="field-name">Job description <span class="field-hint">optional, sharper questions if you paste</span></span>
+                        </label>
+                        <textarea id="starJD" rows="5" placeholder="Paste the JD if you have one"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="starStartBtn">
+                        <span class="submit-btn__label">Generate questions</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- COACH -->
+        <section id="starCoach" class="account-section" hidden>
+            <div class="form-card" style="max-width:720px;margin:0 auto;">
+                <div class="star-progress">
+                    <span class="star-progress__label">Question <span id="qIdx">1</span> of <span id="qTotal">5</span></span>
+                    <div class="star-progress__bar"><div class="star-progress__fill" id="qFill" style="width:20%;"></div></div>
+                </div>
+
+                <h2 class="star-question" id="qText">Loading question…</h2>
+
+                <div class="star-tip">
+                    <strong>STAR format:</strong> <em>Situation</em> &middot; <em>Task</em> &middot; <em>Action</em> &middot; <em>Result</em>. Aim for 4&ndash;6 sentences.
+                </div>
+
+                <textarea id="qAnswer" rows="8" placeholder="Type your answer in STAR format…"></textarea>
+
+                <div class="success-buttons" style="margin-top:0.9rem;">
+                    <button type="button" class="submit-btn submit-btn--inline" id="qSubmit">
+                        <span class="submit-btn__label">Submit answer</span>
+                    </button>
+                    <button type="button" class="submit-btn submit-btn--inline submit-btn--light" id="qSkip" hidden>
+                        <span class="submit-btn__label">Skip</span>
+                    </button>
+                </div>
+
+                <!-- Feedback panel -->
+                <div id="qFeedback" class="star-feedback" hidden>
+                    <div class="star-feedback__head">
+                        <span class="star-score" id="qScore">3</span>
+                        <span class="star-score__label">/ 5</span>
+                    </div>
+                    <p class="star-feedback__text" id="qFeedbackText"></p>
+                    <div class="star-structure" id="qStructure"></div>
+                    <button type="button" class="submit-btn submit-btn--inline" id="qNext">
+                        <span class="submit-btn__label">Next question</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPLETE -->
+        <section id="starDone" class="account-section" hidden>
+            <div class="account-card" style="max-width:560px;margin:0 auto;text-align:center;">
+                <h3 class="account-card__value" style="font-size:1.6rem;margin:0.4rem 0;">Session complete.</h3>
+                <p class="account-card__detail" id="starDoneDetail">Average score: <strong id="starAvg">—</strong> / 5</p>
+                <div class="success-buttons" style="margin-top:1.1rem;justify-content:center;">
+                    <button type="button" class="submit-btn submit-btn--inline" id="starAgain">
+                        <span class="submit-btn__label">Run another session</span>
+                    </button>
+                    <a href="/account.html" class="submit-btn submit-btn--inline submit-btn--light">
+                        <span class="submit-btn__label">Back to dashboard</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script>
+(async function() {
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY);
+
+    var loading = document.getElementById('starLoading');
+    var paywall = document.getElementById('starPaywall');
+    var intake  = document.getElementById('starIntake');
+    var coach   = document.getElementById('starCoach');
+    var done    = document.getElementById('starDone');
+
+    function show(section) {
+        [loading, paywall, intake, coach, done].forEach(function(el) { el.hidden = el !== section; });
+    }
+
+    var userRes = await sb.auth.getUser();
+    var user = userRes && userRes.data ? userRes.data.user : null;
+    if (!user) { window.location.href = '/login.html?next=/star.html'; return; }
+
+    // Check subscription
+    var subR = await sb.from('subscriptions')
+        .select('plan,status,current_period_end')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1).maybeSingle();
+    var sub = subR.data;
+    var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
+
+    if (!isPro) {
+        show(paywall);
+        document.getElementById('paywallUpgrade').addEventListener('click', async function() {
+            var btn = this; btn.disabled = true;
+            var label = btn.querySelector('.submit-btn__label');
+            label.textContent = 'Loading…';
+            var r = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'create_subscription', user_id: user.id, user_email: user.email, site_url: window.location.origin })
+            });
+            var d = await r.json();
+            if (d.payment_url) window.location.href = d.payment_url;
+            else { alert(d.error || 'Could not start checkout.'); btn.disabled = false; label.textContent = 'Upgrade to Pro'; }
+        });
+        return;
+    }
+
+    show(intake);
+
+    var sessionId = null;
+    var questions = [];
+    var idx = 0;
+    var scores = [];
+
+    document.getElementById('starForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var role = document.getElementById('starRole').value.trim();
+        if (!role) return;
+        var company = document.getElementById('starCompany').value.trim();
+        var jd = document.getElementById('starJD').value.trim();
+        var btn = document.getElementById('starStartBtn');
+        var label = btn.querySelector('.submit-btn__label');
+        btn.disabled = true; label.innerHTML = '<span class="spinner"></span>Generating…';
+        try {
+            var r = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'star_create_session', user_id: user.id, target_role: role, target_company: company, job_description: jd })
+            });
+            var d = await r.json();
+            if (d.session_id && Array.isArray(d.questions) && d.questions.length > 0) {
+                sessionId = d.session_id;
+                questions = d.questions;
+                idx = 0; scores = [];
+                document.getElementById('qTotal').textContent = questions.length;
+                renderQuestion();
+                show(coach);
+            } else {
+                alert(d.error || 'Could not start session.');
+                btn.disabled = false; label.textContent = 'Generate questions';
+            }
+        } catch (err) {
+            alert('Network error. Try again.');
+            btn.disabled = false; label.textContent = 'Generate questions';
+        }
+    });
+
+    function renderQuestion() {
+        document.getElementById('qIdx').textContent = idx + 1;
+        document.getElementById('qFill').style.width = ((idx + 1) / questions.length * 100) + '%';
+        document.getElementById('qText').textContent = questions[idx];
+        document.getElementById('qAnswer').value = '';
+        document.getElementById('qFeedback').hidden = true;
+        document.getElementById('qSubmit').disabled = false;
+        document.getElementById('qSubmit').querySelector('.submit-btn__label').textContent = 'Submit answer';
+        document.getElementById('qAnswer').disabled = false;
+        document.getElementById('qAnswer').focus();
+    }
+
+    document.getElementById('qSubmit').addEventListener('click', async function() {
+        var answer = document.getElementById('qAnswer').value.trim();
+        if (answer.length < 50) { alert('Stretch the answer further (at least 50 characters).'); return; }
+        var btn = this;
+        var label = btn.querySelector('.submit-btn__label');
+        btn.disabled = true; label.innerHTML = '<span class="spinner"></span>Grading…';
+        document.getElementById('qAnswer').disabled = true;
+        try {
+            var r = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'star_submit_answer', user_id: user.id, session_id: sessionId, order_index: idx, answer: answer })
+            });
+            var d = await r.json();
+            if (d.error) { alert(d.error); btn.disabled = false; label.textContent = 'Submit answer'; document.getElementById('qAnswer').disabled = false; return; }
+            scores.push(d.score || 3);
+            document.getElementById('qScore').textContent = d.score;
+            document.getElementById('qFeedbackText').textContent = d.feedback || '';
+            var struct = d.structure || {};
+            var parts = ['situation','task','action','result'].map(function(k) {
+                var ok = !!struct[k];
+                return '<span class="star-structure__chip ' + (ok ? 'on' : 'off') + '">' + (ok ? '✓ ' : '✗ ') + k + '</span>';
+            }).join('');
+            document.getElementById('qStructure').innerHTML = parts;
+            document.getElementById('qFeedback').hidden = false;
+            document.getElementById('qFeedback').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            label.textContent = 'Submit answer';
+        } catch (err) {
+            alert('Network error. Try again.');
+            btn.disabled = false; label.textContent = 'Submit answer';
+            document.getElementById('qAnswer').disabled = false;
+        }
+    });
+
+    document.getElementById('qNext').addEventListener('click', function() {
+        if (idx + 1 >= questions.length) {
+            var avg = scores.length ? (scores.reduce(function(a,b){return a+b;}, 0) / scores.length) : 0;
+            document.getElementById('starAvg').textContent = avg.toFixed(1);
+            show(done);
+        } else {
+            idx++;
+            renderQuestion();
+        }
+    });
+
+    document.getElementById('starAgain').addEventListener('click', function() {
+        sessionId = null; questions = []; idx = 0; scores = [];
+        document.getElementById('starForm').reset();
+        show(intake);
+    });
+})();
+</script>
+
+</body>
+</html>
