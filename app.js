@@ -213,7 +213,7 @@ function getPromoCode() {
                 } else {
                     promoState = { code: '', valid: false, source: null, uses_remaining: null };
                     status.textContent = (resp.source === 'pack' && resp.uses_remaining === 0)
-                        ? 'No uses remaining on this code'
+                        ? 'Exhausted'
                         : 'Code not found';
                     setUI('invalid');
                 }
