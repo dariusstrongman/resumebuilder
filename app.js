@@ -113,14 +113,11 @@ if (coverCheck) {
 }
 
 // ========== PROMO CODE ==========
-// Codes are validated server-side (n8n). Frontend only mirrors the toggle UI.
+// Static codes are checked instantly; pack codes (PACK-XXXX-XXXX) are validated
+// server-side via mode:'validate_promo' so we can show 'X uses left' before submit.
 var KNOWN_PROMO_CODES = ['TEST1'];
-function isPromoApplied() {
-    var el = document.getElementById('promoCode');
-    if (!el) return false;
-    var v = (el.value || '').trim().toUpperCase();
-    return v && KNOWN_PROMO_CODES.indexOf(v) !== -1;
-}
+var promoState = { code: '', valid: false, source: null, uses_remaining: null };
+function isPromoApplied() { return !!promoState.valid; }
 function getPromoCode() {
     var el = document.getElementById('promoCode');
     return el ? (el.value || '').trim() : '';
@@ -131,6 +128,7 @@ function getPromoCode() {
     var input = document.getElementById('promoCode');
     var status = document.getElementById('promoStatus');
     if (!toggle || !wrap || !input) return;
+
     toggle.addEventListener('click', function() {
         var open = !wrap.hasAttribute('hidden');
         if (open) {
@@ -142,19 +140,92 @@ function getPromoCode() {
             input.focus();
         }
     });
-    input.addEventListener('input', function() {
-        var v = (this.value || '').trim().toUpperCase();
-        this.classList.remove('is-valid', 'is-invalid');
+
+    function setUI(state) {
+        input.classList.remove('is-valid', 'is-invalid');
         status.classList.remove('is-valid', 'is-invalid');
-        if (!v) { status.textContent = ''; }
-        else if (KNOWN_PROMO_CODES.indexOf(v) !== -1) {
-            this.classList.add('is-valid');
+        if (state === 'valid') {
+            input.classList.add('is-valid');
             status.classList.add('is-valid');
-            status.textContent = 'Applied';
-        } else {
-            status.textContent = '';
+        } else if (state === 'invalid') {
+            status.classList.add('is-invalid');
         }
+    }
+
+    function reset() {
+        promoState = { code: '', valid: false, source: null, uses_remaining: null };
+        status.textContent = '';
+        setUI('');
         refreshPriceLabel();
+    }
+
+    var debounceTimer;
+    var inflight;
+    input.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        var v = (this.value || '').trim().toUpperCase();
+        if (!v) { reset(); return; }
+
+        // Static codes — instant validation
+        if (KNOWN_PROMO_CODES.indexOf(v) !== -1) {
+            promoState = { code: v, valid: true, source: 'static', uses_remaining: null };
+            status.textContent = 'Applied';
+            setUI('valid');
+            refreshPriceLabel();
+            return;
+        }
+
+        // Looks like a pack code? Show 'Checking…' and validate via webhook
+        var packShape = /^PACK-[A-Z0-9]{2,}-[A-Z0-9]{2,}$/.test(v);
+        if (!packShape) {
+            // Unknown format — clear any prior state, no immediate verdict
+            promoState = { code: '', valid: false, source: null, uses_remaining: null };
+            status.textContent = '';
+            setUI('');
+            refreshPriceLabel();
+            return;
+        }
+
+        status.textContent = 'Checking…';
+        setUI('');
+        var thisCode = v;
+        debounceTimer = setTimeout(function() {
+            if (inflight) inflight.abort && inflight.abort();
+            inflight = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'validate_promo', code: thisCode }),
+                signal: inflight ? inflight.signal : undefined
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(resp) {
+                // Stale response — user kept typing
+                if (((input.value || '').trim().toUpperCase()) !== thisCode) return;
+                if (resp.valid) {
+                    promoState = { code: thisCode, valid: true, source: resp.source || 'pack', uses_remaining: (resp.uses_remaining != null ? resp.uses_remaining : null) };
+                    var msg = 'Applied';
+                    if (resp.source === 'pack' && resp.uses_remaining != null) {
+                        msg = 'Applied · ' + resp.uses_remaining + ' use' + (resp.uses_remaining === 1 ? '' : 's') + ' left';
+                    }
+                    status.textContent = msg;
+                    setUI('valid');
+                } else {
+                    promoState = { code: '', valid: false, source: null, uses_remaining: null };
+                    status.textContent = (resp.source === 'pack' && resp.uses_remaining === 0)
+                        ? 'No uses remaining on this code'
+                        : 'Code not found';
+                    setUI('invalid');
+                }
+                refreshPriceLabel();
+            })
+            .catch(function(err) {
+                if (err && err.name === 'AbortError') return;
+                if (((input.value || '').trim().toUpperCase()) !== thisCode) return;
+                status.textContent = '';
+                setUI('');
+            });
+        }, 350);
     });
 })();
 
