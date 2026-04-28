@@ -2630,6 +2630,45 @@ textarea::placeholder {
     margin-bottom: 0.4rem;
 }
 
+.pack-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0.25rem auto 0.75rem;
+    padding: 0.45rem 0.9rem;
+    background: rgba(197, 255, 74, 0.08);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    box-shadow: 0 0 24px -8px var(--accent-glow);
+}
+.pack-banner__label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.pack-banner__code {
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--accent);
+}
+.pack-banner__sep {
+    color: var(--ink-3);
+    opacity: 0.6;
+}
+.pack-banner__uses {
+    color: var(--ink-1);
+    letter-spacing: 0.05em;
+}
+.pack-banner__uses strong {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.2em;
+}
+
 .success-preview {
     margin-top: 2rem;
     width: 100%;

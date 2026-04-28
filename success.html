@@ -67,6 +67,12 @@
             </div>
             <h1 class="success-h">Your tailored resume is ready.</h1>
             <p class="success-sub">Download below. A copy was also sent to <strong id="deliveryEmail">your email</strong> &mdash; check your spam folder if you don't see it.</p>
+            <div id="packBanner" class="pack-banner" style="display:none;">
+                <span class="pack-banner__label">Pack credit used</span>
+                <span class="pack-banner__code" id="packBannerCode"></span>
+                <span class="pack-banner__sep">&middot;</span>
+                <span class="pack-banner__uses"><strong id="packBannerUses">0</strong> uses left</span>
+            </div>
             <div id="downloadBtns" class="success-buttons"></div>
             <div id="preview" class="success-preview"></div>
             <div class="success-footer-cta">
@@ -224,6 +230,14 @@
 
         if (data.email) {
             document.getElementById('deliveryEmail').textContent = data.email;
+        }
+
+        if (data.pack_code) {
+            var banner = document.getElementById('packBanner');
+            document.getElementById('packBannerCode').textContent = data.pack_code;
+            document.getElementById('packBannerUses').textContent =
+                (typeof data.pack_uses_remaining === 'number') ? data.pack_uses_remaining : '?';
+            banner.style.display = 'inline-flex';
         }
 
         if (window.gtag && !isPromo) {
