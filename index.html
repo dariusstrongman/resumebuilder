@@ -224,7 +224,7 @@
                     <input type="checkbox" id="coverLetter">
                     <span class="check-box"></span>
                     <span class="addon__body">
-                        <span class="addon__title">Add a matching cover letter <span class="addon__price">+$0.50</span></span>
+                        <span class="addon__title">Add a matching cover letter <span class="addon__price" id="coverLetterPrice">+$0.50</span></span>
                         <span class="addon__desc">Same tone, addressed to the company</span>
                     </span>
                 </label>
@@ -266,8 +266,10 @@
                         var left = Math.max(0, limit - (s.periodUsed || 0));
                         var price = document.getElementById('btnPrice');
                         var hint = document.getElementById('proHint');
+                        var coverPrice = document.getElementById('coverLetterPrice');
                         if (left > 0) {
                             if (price) price.textContent = 'FREE';
+                            if (coverPrice) coverPrice.textContent = 'included';
                             if (hint) {
                                 hint.textContent = 'Pro · free with your plan · ' + left + ' of ' + limit + ' left this period';
                                 hint.hidden = false;

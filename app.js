@@ -110,6 +110,10 @@ function currentPriceLabel() {
 }
 function refreshPriceLabel() {
     if (totalEl) totalEl.textContent = currentPriceLabel();
+    var coverPrice = document.getElementById('coverLetterPrice');
+    if (coverPrice) {
+        coverPrice.textContent = isProUnderCap() ? 'included' : '+$0.50';
+    }
     var hint = document.getElementById('proHint');
     if (!hint) return;
     if (proStatus.isPro) {
