@@ -48,6 +48,20 @@
 
         <div id="dashboard" class="account-dashboard" hidden>
 
+            <!-- UPGRADE FULFILL FAILURE BANNER (if any) -->
+            <div id="upgradeFailBanner" class="upgrade-banner" hidden>
+                <div class="upgrade-banner__head">
+                    <strong>We're finalizing your upgrade.</strong>
+                    <span>Your card was charged but our system needs another moment.</span>
+                </div>
+                <div class="upgrade-banner__actions">
+                    <button type="button" class="submit-btn submit-btn--inline" id="upgradeRetryBtn">
+                        <span class="submit-btn__label">Retry now</span>
+                    </button>
+                    <span class="upgrade-banner__id">If this keeps happening, email <a href="mailto:contact@stromation.com">contact@stromation.com</a> with session id <code id="upgradeFailId">&mdash;</code></span>
+                </div>
+            </div>
+
             <!-- HERO RIBBON -->
             <section class="hero-ribbon">
                 <div class="hero-ribbon__copy">
@@ -255,27 +269,63 @@
 
     document.getElementById('userEmail').textContent = user.email || '';
 
-    // Handle post-checkout callback before loading dashboard data
+    // Handle post-checkout callback before loading dashboard data.
+    // Stripe charged the card BEFORE redirecting, so even if our fulfill call
+    // fails (network blip, n8n cold start), the user paid — we must persist
+    // the session_id and keep retrying. The handler is idempotent
+    // (on_conflict=stripe_subscription_id), so safe to call multiple times.
     var params = new URLSearchParams(window.location.search);
     if (params.get('upgrade') === '1' && params.get('session_id')) {
+        try { localStorage.setItem('resumegoPendingUpgrade', params.get('session_id')); } catch(e) {}
+        window.history.replaceState({}, '', '/account.html');
+    } else if (params.get('upgrade_cancelled') === '1') {
+        window.history.replaceState({}, '', '/account.html');
+    }
+
+    var pendingUpgradeSession = null;
+    try { pendingUpgradeSession = localStorage.getItem('resumegoPendingUpgrade'); } catch(e) {}
+
+    async function tryFulfill(sessionId, attempt) {
+        attempt = attempt || 1;
         try {
-            var fulfillResp = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+            var r = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'fulfill_subscription', session_id: params.get('session_id') })
+                body: JSON.stringify({ mode: 'fulfill_subscription', session_id: sessionId })
             });
-            var fulfill = await fulfillResp.json();
-            if (fulfill.ok && window.gtag) {
+            var d = await r.json();
+            if (d && d.ok) return { ok: true };
+            if (attempt < 4) {
+                await new Promise(function(res) { setTimeout(res, attempt * 1500); });
+                return tryFulfill(sessionId, attempt + 1);
+            }
+            return { ok: false, error: (d && d.error) || 'Fulfill failed.' };
+        } catch(e) {
+            if (attempt < 4) {
+                await new Promise(function(res) { setTimeout(res, attempt * 1500); });
+                return tryFulfill(sessionId, attempt + 1);
+            }
+            return { ok: false, error: 'Network error. Your card was charged — please retry below.' };
+        }
+    }
+
+    var upgradeFailed = false;
+    var upgradeFailureSessionId = null;
+    if (pendingUpgradeSession) {
+        var fr = await tryFulfill(pendingUpgradeSession);
+        if (fr.ok) {
+            try { localStorage.removeItem('resumegoPendingUpgrade'); } catch(e) {}
+            if (window.gtag) {
                 gtag('event', 'purchase', {
                     currency: 'USD',
                     value: 15.00,
                     items: [{ item_id: 'resumego_pro_monthly', item_name: 'ResumeGo Pro', quantity: 1 }]
                 });
             }
-        } catch(e) {}
-        window.history.replaceState({}, '', '/account.html');
-    } else if (params.get('upgrade_cancelled') === '1') {
-        window.history.replaceState({}, '', '/account.html');
+        } else {
+            upgradeFailed = true;
+            upgradeFailureSessionId = pendingUpgradeSession;
+        }
     }
 
     // Load profile, subscription, packs, resumes in parallel.
@@ -459,6 +509,27 @@
 
     document.getElementById('loadingState').hidden = true;
     document.getElementById('dashboard').hidden = false;
+
+    if (upgradeFailed) {
+        var banner = document.getElementById('upgradeFailBanner');
+        document.getElementById('upgradeFailId').textContent = upgradeFailureSessionId;
+        banner.hidden = false;
+        document.getElementById('upgradeRetryBtn').addEventListener('click', async function() {
+            var rb = this;
+            var label = rb.querySelector('.submit-btn__label');
+            rb.disabled = true;
+            label.textContent = 'Retrying…';
+            var rr = await tryFulfill(upgradeFailureSessionId);
+            if (rr.ok) {
+                try { localStorage.removeItem('resumegoPendingUpgrade'); } catch(e) {}
+                window.location.reload();
+            } else {
+                rb.disabled = false;
+                label.textContent = 'Retry now';
+                alert(rr.error || 'Still could not finalize. Please email support with the session id.');
+            }
+        });
+    }
 
     document.getElementById('logoutBtn').addEventListener('click', async function() {
         await sb.auth.signOut();
