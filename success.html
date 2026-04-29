@@ -276,10 +276,44 @@
         btns.innerHTML = html;
 
         var preview = document.getElementById('preview');
-        preview.innerHTML = '<div class="success-preview-label">PREVIEW</div><div class="resume-preview">' + formatResume(data.resume_text) + '</div>';
+        var atsHtml = data.ats_report ? renderAtsCard(data.ats_report) : '';
+        preview.innerHTML = atsHtml + '<div class="success-preview-label">PREVIEW</div><div class="resume-preview">' + formatResume(data.resume_text) + '</div>';
         if (data.cover_letter_text) {
             preview.innerHTML += '<details class="success-cover"><summary>View cover letter</summary><div class="resume-preview" style="margin-top:.8rem;">' + formatResume(data.cover_letter_text) + '</div></details>';
         }
+    }
+
+    function renderAtsCard(rep) {
+        if (!rep || typeof rep.score !== 'number') return '';
+        var sc = rep.score;
+        var cls = sc >= 80 ? 'ats-card__score--good' : sc >= 60 ? 'ats-card__score--ok' : 'ats-card__score--low';
+        function chips(arr, kind) {
+            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">&mdash;</span>';
+            return arr.map(function(s) { return '<span class="ats-chip ats-chip--' + kind + '">' + esc(s) + '</span>'; }).join('');
+        }
+        var underHtml = '';
+        if (Array.isArray(rep.skills_underused) && rep.skills_underused.length) {
+            underHtml = '<div class="ats-card__row"><h5>Underused</h5><div class="ats-chips">'
+                + rep.skills_underused.map(function(o) {
+                    return '<span class="ats-chip ats-chip--warn" title="JD mentions ' + (o.jd_count||0) + 'x, your resume ' + (o.resume_count||0) + 'x">' + esc(o.skill || '') + ' <span class="ats-chip__count">' + (o.resume_count||0) + '/' + (o.jd_count||0) + '</span></span>';
+                }).join('') + '</div></div>';
+        }
+        var recsHtml = '';
+        if (Array.isArray(rep.recommendations) && rep.recommendations.length) {
+            recsHtml = '<div class="ats-card__recs"><h5>Quick wins</h5><ol>' + rep.recommendations.map(function(r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ol></div>';
+        }
+        return '<div class="ats-card">'
+            + '<div class="ats-card__head">'
+            +   '<div class="ats-card__score ' + cls + '"><span class="ats-card__score-value">' + sc + '</span><span class="ats-card__score-label">ATS match</span></div>'
+            +   '<p class="ats-card__summary">' + esc(rep.summary || '') + '</p>'
+            + '</div>'
+            + '<div class="ats-card__body">'
+            +   '<div class="ats-card__row"><h5>Matched</h5><div class="ats-chips">' + chips(rep.skills_matched, 'good') + '</div></div>'
+            +   '<div class="ats-card__row"><h5>Missing</h5><div class="ats-chips">' + chips(rep.skills_missing, 'bad') + '</div></div>'
+            +   underHtml
+            + '</div>'
+            + recsHtml
+            + '</div>';
     }
 
     function formatResume(text) {

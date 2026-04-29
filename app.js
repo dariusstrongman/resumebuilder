@@ -850,8 +850,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = '/login.html?next=/account.html';
                 return;
             }
+            var plan = (proBtn.dataset.plan === 'pro_yearly') ? 'pro_yearly' : 'pro_monthly';
             startCheckout(proBtn, {
                 mode: 'create_subscription',
+                plan: plan,
                 user_id: window.RESUMEGO_USER_ID,
                 user_email: window.RESUMEGO_USER_EMAIL,
                 site_url: window.location.origin

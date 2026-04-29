@@ -107,7 +107,19 @@
                     <p class="account-card__label">Plan</p>
                     <h3 class="account-card__value" id="planValue">Free</h3>
                     <p class="account-card__detail" id="planDetail">Pay-as-you-go</p>
-                    <button type="button" class="account-card__cta" id="planCta">Upgrade to Pro &mdash; $15/mo</button>
+                    <button type="button" class="account-card__cta" id="planCta">Upgrade to Pro</button>
+                    <div class="plan-picker" id="planPicker" hidden>
+                        <button type="button" class="plan-picker__opt" data-plan="pro_monthly">
+                            <span class="plan-picker__label">Monthly</span>
+                            <span class="plan-picker__price">$15<span>/mo</span></span>
+                        </button>
+                        <button type="button" class="plan-picker__opt plan-picker__opt--featured" data-plan="pro_yearly">
+                            <span class="plan-picker__badge">Save 45%</span>
+                            <span class="plan-picker__label">Annual</span>
+                            <span class="plan-picker__price">$99<span>/yr</span></span>
+                            <span class="plan-picker__sub">$8.25 effective monthly</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="account-card" id="packCreditsCard">
                     <p class="account-card__label">Pack credits</p>
@@ -443,22 +455,40 @@
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
 
+    var planPicker = document.getElementById('planPicker');
+
+    async function startPlanCheckout(plan, srcBtn) {
+        var origHTML = srcBtn ? srcBtn.innerHTML : '';
+        if (srcBtn) { srcBtn.disabled = true; srcBtn.innerHTML = '<span class="plan-picker__label">Redirecting…</span>'; }
+        try {
+            var r = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'create_subscription', plan: plan, user_id: user.id, user_email: user.email, site_url: window.location.origin })
+            });
+            var d = await r.json();
+            if (d.payment_url) { window.location.href = d.payment_url; return; }
+            alert(d.error || 'Could not start checkout.');
+        } catch(e) {
+            alert('Could not start checkout. Try again in a moment.');
+        }
+        if (srcBtn) { srcBtn.disabled = false; srcBtn.innerHTML = origHTML; }
+    }
+
     planCta.addEventListener('click', async function() {
         var action = planCta.dataset.action;
-        planCta.disabled = true;
-        var origText = planCta.textContent;
-        planCta.textContent = 'Loading…';
-        try {
-            if (action === 'upgrade') {
-                var r = await fetch(WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mode: 'create_subscription', user_id: user.id, user_email: user.email, site_url: window.location.origin })
-                });
-                var d = await r.json();
-                if (d.payment_url) window.location.href = d.payment_url;
-                else { alert(d.error || 'Could not start checkout.'); planCta.disabled = false; planCta.textContent = origText; }
-            } else if (action === 'manage') {
+        if (action === 'upgrade') {
+            // Toggle the inline plan picker rather than going straight to Stripe.
+            var open = !planPicker.hidden;
+            planPicker.hidden = open;
+            planCta.textContent = open ? 'Upgrade to Pro' : 'Choose below';
+            return;
+        }
+        if (action === 'manage') {
+            planCta.disabled = true;
+            var origText = planCta.textContent;
+            planCta.textContent = 'Loading…';
+            try {
                 var r2 = await fetch(WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -467,11 +497,17 @@
                 var d2 = await r2.json();
                 if (d2.portal_url) window.location.href = d2.portal_url;
                 else { alert(d2.error || 'Could not open billing portal.'); planCta.disabled = false; planCta.textContent = origText; }
+            } catch (e) {
+                planCta.disabled = false;
+                planCta.textContent = origText;
             }
-        } catch (e) {
-            planCta.disabled = false;
-            planCta.textContent = origText;
         }
+    });
+
+    planPicker.addEventListener('click', function(e) {
+        var b = e.target.closest('[data-plan]');
+        if (!b) return;
+        startPlanCheckout(b.dataset.plan, b);
     });
 
     toolkitStar.addEventListener('click', function(e) {
@@ -611,6 +647,48 @@
     });
 
     function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+
+    // Compact ATS gap report card, used on the modal and (mirrored) on the
+    // success page. Returns an HTML string ready to inject. Pass null to
+    // render the loading skeleton.
+    function renderAtsCard(rep) {
+        if (!rep) {
+            return '<div class="ats-card ats-card--loading">'
+                +   '<div class="ats-card__head"><div class="ats-card__score ats-card__score--loading"><span class="ats-card__score-value">&hellip;</span><span class="ats-card__score-label">scoring</span></div>'
+                +   '<p class="ats-card__summary">Analyzing how this resume matches the job posting&hellip;</p></div>'
+                + '</div>';
+        }
+        if (typeof rep.score !== 'number') return '';
+        var sc = rep.score;
+        var cls = sc >= 80 ? 'ats-card__score--good' : sc >= 60 ? 'ats-card__score--ok' : 'ats-card__score--low';
+        function chips(arr, kind) {
+            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">—</span>';
+            return arr.map(function(s) { return '<span class="ats-chip ats-chip--' + kind + '">' + esc(s) + '</span>'; }).join('');
+        }
+        var underHtml = '';
+        if (Array.isArray(rep.skills_underused) && rep.skills_underused.length) {
+            underHtml = '<div class="ats-card__row"><h5>Underused</h5><div class="ats-chips">'
+                + rep.skills_underused.map(function(o) {
+                    return '<span class="ats-chip ats-chip--warn" title="JD mentions ' + (o.jd_count||0) + 'x, your resume ' + (o.resume_count||0) + 'x">' + esc(o.skill || '') + ' <span class="ats-chip__count">' + (o.resume_count||0) + '/' + (o.jd_count||0) + '</span></span>';
+                }).join('') + '</div></div>';
+        }
+        var recsHtml = '';
+        if (Array.isArray(rep.recommendations) && rep.recommendations.length) {
+            recsHtml = '<div class="ats-card__recs"><h5>Quick wins</h5><ol>' + rep.recommendations.map(function(r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ol></div>';
+        }
+        return '<div class="ats-card">'
+            + '<div class="ats-card__head">'
+            +   '<div class="ats-card__score ' + cls + '"><span class="ats-card__score-value">' + sc + '</span><span class="ats-card__score-label">ATS match</span></div>'
+            +   '<p class="ats-card__summary">' + esc(rep.summary || '') + '</p>'
+            + '</div>'
+            + '<div class="ats-card__body">'
+            +   '<div class="ats-card__row"><h5>Matched</h5><div class="ats-chips">' + chips(rep.skills_matched, 'good') + '</div></div>'
+            +   '<div class="ats-card__row"><h5>Missing</h5><div class="ats-chips">' + chips(rep.skills_missing, 'bad') + '</div></div>'
+            +   underHtml
+            + '</div>'
+            + recsHtml
+            + '</div>';
+    }
 
     // Render markdown-ish resume text as the same paper-style HTML the
     // success page uses, so the modal preview matches the actual output.
@@ -754,6 +832,26 @@
                 if (currentResumeId === meta.id) applyDownloadFiles(data);
             }).catch(function() { data._filesPending = false; });
         }
+        // Background-fetch the ATS gap report (lazy-loaded when not cached).
+        if (!data.ats_report && !data._atsPending) {
+            data._atsPending = true;
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'ats_report', user_id: user.id, resume_id: meta.id })
+            }).then(function(r) { return r.json(); }).then(function(rep) {
+                data._atsPending = false;
+                if (!rep || rep.error) {
+                    if (currentResumeId === meta.id) {
+                        var slot = modalBody.querySelector('.ats-slot');
+                        if (slot) slot.innerHTML = '';
+                    }
+                    return;
+                }
+                data.ats_report = rep;
+                if (currentResumeId === meta.id) applyAtsReport(rep);
+            }).catch(function() { data._atsPending = false; });
+        }
     }
 
     function applyDownloadFiles(d) {
@@ -765,6 +863,12 @@
             + dlButton('Cover PDF', d.cover_pdf_base64, 'application/pdf', 'cover_letter.pdf')
             + dlButton('Cover DOCX', d.cover_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'cover_letter.docx');
         dlRow.innerHTML = html || '<span class="modal__dl modal__dl--empty">No downloads available.</span>';
+    }
+
+    function applyAtsReport(rep) {
+        var slot = modalBody.querySelector('.ats-slot');
+        if (!slot) return;
+        slot.innerHTML = renderAtsCard(rep);
     }
 
     listEl.addEventListener('click', async function(e) {
@@ -1013,6 +1117,9 @@
 
     function renderResumeView(d) {
         currentResumeId = d.id;
+        // ATS card (cached → render report; otherwise → loading skeleton that
+        // gets swapped by applyAtsReport when the background fetch lands).
+        var atsHtml = '<div class="ats-slot">' + renderAtsCard(d.ats_report || null) + '</div>';
         // If files are already cached, render real download links; otherwise
         // render "preparing…" placeholders that get swapped in by
         // applyDownloadFiles() when the background render returns.
@@ -1040,7 +1147,7 @@
             ? '<h3 class="modal__section-title">Cover letter</h3><div class="modal__paper"><div class="resume-preview">' + formatResume(d.cover_letter_text) + '</div></div>'
             : '';
         var deleteBlock = '<div class="modal__danger"><button type="button" class="modal__delete" id="modalDeleteBtn">Delete this resume</button></div>';
-        modalBody.innerHTML = dlRow + resumeBlock + coverBlock + deleteBlock;
+        modalBody.innerHTML = atsHtml + dlRow + resumeBlock + coverBlock + deleteBlock;
 
         var dangerBlock = modalBody.querySelector('.modal__danger');
         var deleteBtn = document.getElementById('modalDeleteBtn');

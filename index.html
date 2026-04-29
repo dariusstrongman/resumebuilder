@@ -539,19 +539,53 @@
             </div>
         </div>
         <div class="pricing-card">
+            <div class="pricing-toggle" id="pricingToggle" role="tablist">
+                <button type="button" class="pricing-toggle__btn pricing-toggle__btn--active" data-plan="pro_monthly" role="tab">Monthly</button>
+                <button type="button" class="pricing-toggle__btn" data-plan="pro_yearly" role="tab">Annual <span class="pricing-toggle__save">save 45%</span></button>
+            </div>
             <div class="pricing-figure">
-                <span class="pricing-currency">$</span><span class="pricing-amount">15</span>
-                <span class="pricing-per">per month</span>
+                <span class="pricing-currency">$</span><span class="pricing-amount" id="pricingAmount">15</span>
+                <span class="pricing-per" id="pricingPer">per month</span>
             </div>
             <div class="pricing-copy">
-                <p><strong>Pro.</strong> 50 tailored resumes a month, cover letters included, plus the STAR interview coach &mdash; behavioral questions tailored to a target role with AI feedback per answer.</p>
-                <p class="pricing-addon">Saved resume history in one dashboard. Run out? Buy more or roll over to next month. Cancel anytime.</p>
-                <button type="button" class="submit-btn submit-btn--inline" id="goProBtn">
+                <p><strong>Pro.</strong> 50 tailored resumes a month, cover letters included, ATS gap reports on every tailoring, plus the STAR interview coach &mdash; behavioral questions tailored to a target role with AI feedback per answer.</p>
+                <p class="pricing-addon" id="pricingAddon">Saved resume history in one dashboard. Run out? Buy more or roll over to next month. Cancel anytime.</p>
+                <button type="button" class="submit-btn submit-btn--inline" id="goProBtn" data-plan="pro_monthly">
                     <span class="submit-btn__label">Go Pro</span>
-                    <span class="submit-btn__price">$15/mo</span>
+                    <span class="submit-btn__price" id="goProPrice">$15/mo</span>
                 </button>
             </div>
         </div>
+        <script>
+            (function() {
+                var toggle = document.getElementById('pricingToggle');
+                if (!toggle) return;
+                var amount = document.getElementById('pricingAmount');
+                var per = document.getElementById('pricingPer');
+                var addon = document.getElementById('pricingAddon');
+                var btn = document.getElementById('goProBtn');
+                var price = document.getElementById('goProPrice');
+                var COPY = {
+                    pro_monthly: { amount: '15', per: 'per month', price: '$15/mo',
+                        addon: 'Saved resume history in one dashboard. Run out? Buy more or roll over to next month. Cancel anytime.' },
+                    pro_yearly:  { amount: '99', per: 'per year ($8.25/mo)', price: '$99/yr',
+                        addon: 'Two months free vs. monthly. Same 50/month cap, same dashboard, cancel anytime.' }
+                };
+                toggle.addEventListener('click', function(e) {
+                    var b = e.target.closest('[data-plan]');
+                    if (!b) return;
+                    toggle.querySelectorAll('.pricing-toggle__btn').forEach(function(x) { x.classList.remove('pricing-toggle__btn--active'); });
+                    b.classList.add('pricing-toggle__btn--active');
+                    var plan = b.dataset.plan;
+                    var c = COPY[plan];
+                    amount.textContent = c.amount;
+                    per.textContent = c.per;
+                    addon.textContent = c.addon;
+                    price.textContent = c.price;
+                    btn.dataset.plan = plan;
+                });
+            })();
+        </script>
     </div>
 </section>
 

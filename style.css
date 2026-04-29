@@ -1379,6 +1379,49 @@ textarea::placeholder {
     padding-top: 0.9rem;
     border-top: 1px solid var(--line);
 }
+.pricing-toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 2;
+}
+.pricing-toggle__btn {
+    background: none;
+    border: 0;
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s var(--ease), color 0.15s var(--ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.pricing-toggle__btn--active {
+    background: var(--accent);
+    color: #07080a;
+}
+.pricing-toggle__save {
+    background: rgba(0,0,0,0.18);
+    color: inherit;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+.pricing-toggle__btn:not(.pricing-toggle__btn--active) .pricing-toggle__save {
+    background: var(--accent);
+    color: #07080a;
+}
 .pricing-addon strong {
     color: var(--accent);
 }
@@ -4035,6 +4078,193 @@ textarea::placeholder {
 }
 .modal__dl--pending:hover { border-color: var(--line-strong); color: var(--ink-3); background: var(--bg-2); }
 .modal__dl--empty { color: var(--ink-3); }
+
+.plan-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+}
+.plan-picker__opt {
+    position: relative;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 0.85rem 0.7rem;
+    color: var(--ink-0);
+    font-family: var(--f-ui);
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.plan-picker__opt:hover { border-color: var(--accent); background: var(--bg-3); }
+.plan-picker__opt:disabled { opacity: 0.6; cursor: wait; }
+.plan-picker__opt--featured { border-color: var(--accent); }
+.plan-picker__badge {
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    background: var(--accent);
+    color: #07080a;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+.plan-picker__label {
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+.plan-picker__price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1;
+}
+.plan-picker__price span {
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    font-weight: 500;
+    margin-left: 2px;
+}
+.plan-picker__sub {
+    font-size: 0.7rem;
+    color: var(--ink-3);
+}
+
+/* ============================================================
+   ATS gap report card — used in modal preview + success page
+   ============================================================ */
+.ats-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    margin: 0 0 1.4rem;
+}
+.ats-card__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+}
+.ats-card__score {
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--line-strong);
+    background: var(--bg-3);
+}
+.ats-card__score--good { border-color: #c5ff4a; box-shadow: 0 0 24px -8px #c5ff4a; }
+.ats-card__score--ok   { border-color: #f5c451; }
+.ats-card__score--low  { border-color: #ef5a6b; }
+.ats-card__score--loading { opacity: 0.6; }
+.ats-card__score-value {
+    font-family: var(--f-ui);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1;
+}
+.ats-card__score-label {
+    font-family: var(--f-ui);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+    margin-top: 2px;
+}
+.ats-card__summary {
+    flex: 1;
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-1);
+    line-height: 1.4;
+}
+.ats-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+.ats-card__row h5 {
+    font-family: var(--f-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    margin: 0 0 0.4rem;
+}
+.ats-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+.ats-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.22rem 0.55rem;
+    border-radius: 999px;
+    font-family: var(--f-ui);
+    font-size: 0.78rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+.ats-chip--good { background: rgba(197,255,74,0.12); color: #a8e83b; border-color: rgba(197,255,74,0.3); }
+.ats-chip--bad  { background: rgba(239,90,107,0.12); color: #ef7c89; border-color: rgba(239,90,107,0.3); }
+.ats-chip--warn { background: rgba(245,196,81,0.12); color: #f5c451; border-color: rgba(245,196,81,0.3); }
+.ats-chip--empty { background: transparent; color: var(--ink-3); }
+.ats-chip__count {
+    font-size: 0.7rem;
+    color: inherit;
+    opacity: 0.7;
+    margin-left: 0.2rem;
+}
+.ats-card__recs {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+}
+.ats-card__recs h5 {
+    font-family: var(--f-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    margin: 0 0 0.5rem;
+}
+.ats-card__recs ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--ink-1);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+.ats-card__recs li { margin-bottom: 0.3rem; }
+
+/* On the success page, the card sits over the dark hero — make it pop */
+.success-preview .ats-card {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.12);
+    margin-bottom: 1.2rem;
+}
 
 .modal__paper { margin: 0 0 1.4rem; }
 .modal__paper .resume-preview {
