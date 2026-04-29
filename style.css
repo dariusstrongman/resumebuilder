@@ -1269,12 +1269,20 @@ textarea::placeholder {
     text-transform: uppercase;
 }
 .doc-enlarged {
-    transform: scale(1.6);
-    padding: 2rem 2.5rem;
-    max-height: 90vh;
-    max-width: 720px;
-    overflow-y: auto;
+    transform: none;
+    aspect-ratio: auto;
+    width: 90vw;
+    max-width: 760px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding: 2.5rem 3rem;
+    font-size: 1rem;
     cursor: default;
+}
+.doc-enlarged:hover {
+    transform: none;
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7);
 }
 .doc-score {
     font-family: var(--f-mono);

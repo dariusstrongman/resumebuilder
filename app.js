@@ -1138,7 +1138,7 @@ setInterval(function() { docIdx = (docIdx + 1) % docExamples.length; renderDocCo
 
 function enlargeDoc(el) {
     var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;cursor:pointer;overflow-y:auto;';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:flex;align-items:safe center;justify-content:safe center;padding:1.5rem;cursor:pointer;overflow-y:auto;';
     var box = el.cloneNode(true);
     box.classList.add('doc-enlarged');
     box.style.cursor = 'default';
