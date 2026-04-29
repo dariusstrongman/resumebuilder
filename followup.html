@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Follow-up email generator &mdash; ResumeGo</title>
+    <meta name="theme-color" content="#07080a">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ResumeGo</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/account.html">Dashboard</a>
+            <a href="/#generate">Tailor a resume</a>
+            <a href="/#pricing">Pricing</a>
+        </nav>
+    </div>
+</header>
+
+<main class="account-main">
+    <div class="account-shell">
+
+        <header class="account-header">
+            <div>
+                <p class="account-eyebrow">Pro tools</p>
+                <h1 class="account-title">Follow-up email.</h1>
+                <p class="account-soon" style="margin-top:0.6rem;max-width:560px;">A short, recruiter-tested follow-up email tailored to your scenario. Edit and send. Generate a new one any time.</p>
+            </div>
+        </header>
+
+        <div id="fuLoading" class="account-loading">
+            <div class="spinner-large"></div>
+            <p>Loading&hellip;</p>
+        </div>
+
+        <section id="fuPaywall" class="account-section" hidden>
+            <div class="account-card" style="max-width:560px;margin:0 auto;text-align:center;">
+                <p class="account-card__label">Pro feature</p>
+                <h3 class="account-card__value" style="font-size:1.6rem;margin:0.5rem 0;">$15 / month</h3>
+                <p class="account-card__detail" style="margin-bottom:1rem;">Includes the STAR coach, AI follow-up emails, ATS gap reports, 50 tailored resumes, cover letters, and saved history.</p>
+                <button type="button" class="submit-btn submit-btn--inline" id="fuPaywallUpgrade">
+                    <span class="submit-btn__label">Upgrade to Pro</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="fuIntake" class="account-section" hidden>
+            <div class="form-card" style="max-width:640px;margin:0 auto;">
+                <form id="fuForm" class="form-body">
+                    <div class="field">
+                        <label class="field-label">
+                            <span class="field-num">1</span>
+                            <span class="field-name">Type of email</span>
+                        </label>
+                        <div class="mode-picker" role="radiogroup" aria-label="Type of follow-up">
+                            <label class="mode-option">
+                                <input type="radio" name="fuType" value="post_application" checked>
+                                <span class="mode-card">
+                                    <span class="mode-title">Post-application</span>
+                                    <span class="mode-desc">7-10 days after applying. Restate interest, ask about timeline.</span>
+                                </span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="fuType" value="post_interview">
+                                <span class="mode-card">
+                                    <span class="mode-title">Post-interview</span>
+                                    <span class="mode-desc">Within 24 hours. Thank, reinforce one specific point.</span>
+                                </span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="fuType" value="ghosted_check_in">
+                                <span class="mode-card">
+                                    <span class="mode-title">Ghosted check-in</span>
+                                    <span class="mode-desc">2-3 weeks of silence. Polite, brief.</span>
+                                </span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="fuType" value="rejection_recovery">
+                                <span class="mode-card">
+                                    <span class="mode-title">After a rejection</span>
+                                    <span class="mode-desc">Stay in touch for future roles. Graceful.</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="fuCompany">
+                            <span class="field-num">2</span>
+                            <span class="field-name">Company</span>
+                        </label>
+                        <input type="text" id="fuCompany" class="email-input" placeholder="e.g. Stripe" required maxlength="120">
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="fuRole">
+                            <span class="field-num">3</span>
+                            <span class="field-name">Role</span>
+                        </label>
+                        <input type="text" id="fuRole" class="email-input" placeholder="e.g. Senior Software Engineer" required maxlength="120">
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="fuInterviewer">
+                            <span class="field-num">4</span>
+                            <span class="field-name">Interviewer or recruiter name <span class="field-hint">optional</span></span>
+                        </label>
+                        <input type="text" id="fuInterviewer" class="email-input" placeholder="e.g. Maya" maxlength="120">
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" for="fuNotes">
+                            <span class="field-num">5</span>
+                            <span class="field-name">Specific context <span class="field-hint">optional but makes it sharper</span></span>
+                        </label>
+                        <textarea id="fuNotes" rows="4" placeholder="Anything specific the email should reference. E.g. you discussed migrating their billing system to a new stack, or your prior work on Postgres replication."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="fuSubmit">
+                        <span class="submit-btn__label">Generate email</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="fuResult" class="account-section" hidden>
+            <div class="form-card" style="max-width:680px;margin:0 auto;">
+                <p class="account-card__label">Your follow-up</p>
+                <div class="fu-email">
+                    <div class="fu-email__row">
+                        <span class="fu-email__label">Subject</span>
+                        <input type="text" class="email-input" id="fuOutSubject" readonly>
+                        <button type="button" class="fu-copy" data-copy="fuOutSubject">Copy</button>
+                    </div>
+                    <div class="fu-email__row fu-email__row--body">
+                        <span class="fu-email__label">Body</span>
+                        <textarea id="fuOutBody" rows="10" readonly></textarea>
+                        <button type="button" class="fu-copy" data-copy="fuOutBody">Copy</button>
+                    </div>
+                </div>
+                <div class="success-buttons" style="margin-top:1rem;">
+                    <button type="button" class="submit-btn submit-btn--inline" id="fuRegenerate">
+                        <span class="submit-btn__label">Generate another</span>
+                    </button>
+                    <button type="button" class="submit-btn submit-btn--inline" id="fuStartOver" style="background:transparent;color:var(--ink-1);border:1px solid var(--line-strong);">
+                        <span class="submit-btn__label">Start over</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ResumeGo</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script>
+(async function() {
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY);
+
+    var loading = document.getElementById('fuLoading');
+    var paywall = document.getElementById('fuPaywall');
+    var intake  = document.getElementById('fuIntake');
+    var result  = document.getElementById('fuResult');
+
+    function show(section) {
+        [loading, paywall, intake, result].forEach(function(el) { el.hidden = el !== section; });
+    }
+
+    var userRes = await sb.auth.getUser();
+    var user = userRes && userRes.data ? userRes.data.user : null;
+    if (!user) { window.location.href = '/login.html?next=/followup.html'; return; }
+
+    var subR = await sb.from('subscriptions')
+        .select('plan,status').eq('user_id', user.id)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle();
+    var sub = subR.data;
+    var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
+
+    if (!isPro) {
+        show(paywall);
+        document.getElementById('fuPaywallUpgrade').addEventListener('click', async function() {
+            var btn = this; btn.disabled = true;
+            var label = btn.querySelector('.submit-btn__label');
+            label.textContent = 'Loading…';
+            try {
+                var r = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'create_subscription', plan: 'pro_monthly', user_id: user.id, user_email: user.email, site_url: window.location.origin })
+                });
+                var d = await r.json();
+                if (d.payment_url) window.location.href = d.payment_url;
+                else { alert(d.error || 'Could not start checkout.'); btn.disabled = false; label.textContent = 'Upgrade to Pro'; }
+            } catch (e) {
+                alert('Network error.'); btn.disabled = false; label.textContent = 'Upgrade to Pro';
+            }
+        });
+        return;
+    }
+
+    show(intake);
+
+    var lastInput = null;
+
+    async function generate(input) {
+        var btn = document.getElementById('fuSubmit');
+        var label = btn.querySelector('.submit-btn__label');
+        btn.disabled = true;
+        label.innerHTML = '<span class="spinner"></span>Generating…';
+        try {
+            var r = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(Object.assign({ mode: 'followup_email', user_id: user.id }, input))
+            });
+            var d = await r.json();
+            if (d.error) {
+                alert(d.error);
+            } else if (d.subject && d.body) {
+                document.getElementById('fuOutSubject').value = d.subject;
+                document.getElementById('fuOutBody').value = d.body;
+                lastInput = input;
+                show(result);
+            } else {
+                alert('Unexpected response. Try again.');
+            }
+        } catch (e) {
+            alert('Network error.');
+        } finally {
+            btn.disabled = false;
+            label.textContent = 'Generate email';
+        }
+    }
+
+    document.getElementById('fuForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var type = (document.querySelector('input[name="fuType"]:checked') || {}).value || 'post_application';
+        var company = document.getElementById('fuCompany').value.trim();
+        var role = document.getElementById('fuRole').value.trim();
+        var interviewer = document.getElementById('fuInterviewer').value.trim();
+        var notes = document.getElementById('fuNotes').value.trim();
+        if (!company || !role) return;
+        generate({ type: type, company: company, role: role, interviewer: interviewer, notes: notes });
+    });
+
+    document.getElementById('fuRegenerate').addEventListener('click', function() {
+        if (lastInput) generate(lastInput);
+    });
+
+    document.getElementById('fuStartOver').addEventListener('click', function() {
+        show(intake);
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.fu-copy').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var target = document.getElementById(btn.dataset.copy);
+            if (!target) return;
+            target.select();
+            try {
+                navigator.clipboard.writeText(target.value);
+            } catch (e) {
+                document.execCommand('copy');
+            }
+            var orig = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(function() { btn.textContent = orig; }, 1500);
+        });
+    });
+})();
+</script>
+
+</body>
+</html>

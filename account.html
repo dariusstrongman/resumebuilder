@@ -148,6 +148,12 @@
                         <p>Five behavioral questions tailored to a target role. AI feedback per answer, scored on STAR structure.</p>
                         <span class="toolkit-card__more">Open coach &rarr;</span>
                     </a>
+                    <a href="/followup.html" class="toolkit-card" id="toolkitFollowup">
+                        <span class="toolkit-card__pill" id="toolkitFollowupPill">Pro</span>
+                        <h3>AI follow-up email</h3>
+                        <p>Generate a recruiter-tested follow-up email tailored to your scenario &mdash; post-interview, ghosted, after a rejection. Edit and send.</p>
+                        <span class="toolkit-card__more">Open generator &rarr;</span>
+                    </a>
                     <a href="/behavioral-questions.html" class="toolkit-card">
                         <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
                         <h3>Behavioral question bank</h3>
@@ -420,6 +426,8 @@
     var statPlanSub = document.getElementById('statPlanSub');
     var toolkitStarPill = document.getElementById('toolkitStarPill');
     var toolkitStar = document.getElementById('toolkitStar');
+    var toolkitFollowup = document.getElementById('toolkitFollowup');
+    var toolkitFollowupPill = document.getElementById('toolkitFollowupPill');
     var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
     if (isPro) {
         var label = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
@@ -434,6 +442,10 @@
         planCta.dataset.action = 'manage';
         toolkitStarPill.textContent = 'Active';
         toolkitStarPill.classList.add('toolkit-card__pill--free');
+        if (toolkitFollowupPill) {
+            toolkitFollowupPill.textContent = 'Active';
+            toolkitFollowupPill.classList.add('toolkit-card__pill--free');
+        }
 
         // Pro cap is over the BILLING period, not calendar month. RLS blocks
         // the user from reading their own resumego_sessions, so go through
@@ -468,6 +480,7 @@
     } else {
         planCta.dataset.action = 'upgrade';
         toolkitStar.dataset.locked = '1';
+        if (toolkitFollowup) toolkitFollowup.dataset.locked = '1';
     }
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
@@ -533,6 +546,14 @@
             planCta.click();
         }
     });
+    if (toolkitFollowup) {
+        toolkitFollowup.addEventListener('click', function(e) {
+            if (toolkitFollowup.dataset.locked) {
+                e.preventDefault();
+                planCta.click();
+            }
+        });
+    }
 
     // ── PACKS ─────────────────────────────────────────────────────────────
     // packsR comes from the pack_status webhook: { packs: [...], total_credits: N }
