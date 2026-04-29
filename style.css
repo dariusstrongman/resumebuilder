@@ -3885,6 +3885,38 @@ textarea::placeholder {
     line-height: 1.3;
     color: var(--ink-0);
 }
+.modal__title-input {
+    font-family: var(--f-ui);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink-0);
+    background: var(--bg-2);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    width: 100%;
+    max-width: 420px;
+    outline: none;
+}
+.modal__rename {
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 0.4rem;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.modal__rename:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
 .modal__close {
     background: none;
     border: 0;

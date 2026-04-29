@@ -229,6 +229,7 @@
             <div class="modal__head-info">
                 <p class="modal__eyebrow" id="modalDate">&mdash;</p>
                 <h2 class="modal__title" id="modalTitle">Resume</h2>
+                <button type="button" class="modal__rename" id="modalRenameBtn" aria-label="Rename resume" hidden>Rename</button>
             </div>
             <div class="modal__nav">
                 <button type="button" class="modal__nav-btn" id="modalPrev" aria-label="Previous">&larr;</button>
@@ -405,17 +406,18 @@
         toolkitStarPill.textContent = 'Active';
         toolkitStarPill.classList.add('toolkit-card__pill--free');
 
-        // Pro cap is over the BILLING period, not calendar month — count
-        // resumes since current_period_start, label resets as period_end.
+        // Pro cap is over the BILLING period, not calendar month. RLS blocks
+        // the user from reading their own resumego_sessions, so go through
+        // the service-role webhook for an accurate count.
         var proPeriodCount = 0;
         try {
-            if (sub.current_period_start) {
-                var periodCountR = await sb.from('resumego_sessions')
-                    .select('id', { count: 'exact', head: true })
-                    .like('stripe_session_id', 'PRO:%')
-                    .gte('created_at', sub.current_period_start);
-                proPeriodCount = periodCountR && periodCountR.count != null ? periodCountR.count : 0;
-            }
+            var psR = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'pro_status', user_id: user.id })
+            });
+            var psJ = await psR.json();
+            if (psJ && typeof psJ.used === 'number') proPeriodCount = psJ.used;
         } catch(ePc) {}
         var proLeft = Math.max(0, 50 - proPeriodCount);
         document.getElementById('statMonthLabel').textContent = 'Pro tailorings';
@@ -612,6 +614,7 @@
     var modalPrev = document.getElementById('modalPrev');
     var modalNext = document.getElementById('modalNext');
     var modalCounter = document.getElementById('modalCounter');
+    var modalRenameBtn = document.getElementById('modalRenameBtn');
 
     // Carousel state
     var allResumes = resumes.slice(); // start with the 5 already loaded
@@ -620,7 +623,7 @@
     var allResumesLoaded = (allResumes.length >= totalCount);
 
     function openModal() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
-    function closeModal() { modal.hidden = true; document.body.style.overflow = ''; currentIndex = -1; }
+    function closeModal() { modal.hidden = true; document.body.style.overflow = ''; currentIndex = -1; modalRenameBtn.hidden = true; modalTitle.dataset.editing = ''; }
 
     modal.addEventListener('click', function(e) {
         if (e.target.dataset && e.target.dataset.close) closeModal();
@@ -672,6 +675,9 @@
         var meta = allResumes[index];
         var title = meta.title || [meta.target_role, meta.target_company].filter(Boolean).join(' at ') || 'Resume';
         modalTitle.textContent = title;
+        modalTitle.dataset.editing = '';
+        modalRenameBtn.hidden = false;
+        modalRenameBtn.textContent = 'Rename';
         modalDate.textContent = meta.created_at ? new Date(meta.created_at).toLocaleDateString() : '';
         modalBody.innerHTML = '<div class="account-loading" style="padding:2rem 0;"><div class="spinner-large"></div><p>Loading&hellip;</p></div>';
         if (modal.hidden) openModal();
@@ -707,6 +713,76 @@
         var idx = allResumes.findIndex(function(r) { return r.id === rid; });
         if (idx < 0) idx = 0;
         openResumeAt(idx);
+    });
+
+    // ── RENAME ────────────────────────────────────────────────────────────
+    function startRename() {
+        if (currentIndex < 0) return;
+        if (modalTitle.dataset.editing === '1') return;
+        var meta = allResumes[currentIndex];
+        if (!meta) return;
+        var current = meta.title || [meta.target_role, meta.target_company].filter(Boolean).join(' at ') || '';
+        modalTitle.dataset.editing = '1';
+        modalTitle.innerHTML = '';
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'modal__title-input';
+        input.maxLength = 120;
+        input.value = current;
+        modalTitle.appendChild(input);
+        input.focus();
+        input.select();
+        modalRenameBtn.textContent = 'Save';
+
+        var done = false;
+        function finish(commit) {
+            if (done) return;
+            done = true;
+            var newTitle = (input.value || '').trim();
+            modalTitle.dataset.editing = '';
+            modalRenameBtn.textContent = 'Rename';
+            if (!commit || !newTitle || newTitle === current) {
+                modalTitle.textContent = current || 'Resume';
+                return;
+            }
+            modalTitle.textContent = newTitle;
+            // optimistic update locally
+            meta.title = newTitle;
+            var listRow = listEl.querySelector('[data-resume-id="' + meta.id + '"] .resume-row__title');
+            if (listRow) listRow.textContent = newTitle;
+            // persist
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'rename_resume', user_id: user.id, resume_id: meta.id, title: newTitle })
+            }).then(function(r) { return r.json(); }).then(function(j) {
+                if (j && j.error) {
+                    alert(j.error);
+                    meta.title = current;
+                    modalTitle.textContent = current || 'Resume';
+                    if (listRow) listRow.textContent = current || 'Untitled resume';
+                }
+            }).catch(function() {
+                alert('Could not save the new name. Try again.');
+                meta.title = current;
+                modalTitle.textContent = current || 'Resume';
+                if (listRow) listRow.textContent = current || 'Untitled resume';
+            });
+        }
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+            else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+            e.stopPropagation();
+        });
+        input.addEventListener('blur', function() { finish(true); });
+    }
+    modalRenameBtn.addEventListener('click', function() {
+        if (modalTitle.dataset.editing === '1') {
+            var inp = modalTitle.querySelector('input');
+            if (inp) inp.blur();
+        } else {
+            startRename();
+        }
     });
 
     // View all → open carousel at the most recent.

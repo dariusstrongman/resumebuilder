@@ -176,13 +176,17 @@ document.addEventListener('resumego:auth-ready', async function(e) {
         }
         proStatus.isPro = true;
         proStatus.periodEnd = sub.current_period_end || null;
-        if (sub.current_period_start) {
-            var cR = await window.__sb.from('resumego_sessions')
-                .select('id', { count: 'exact', head: true })
-                .like('stripe_session_id', 'PRO:%')
-                .gte('created_at', sub.current_period_start);
-            proStatus.periodUsed = cR && cR.count != null ? cR.count : 0;
-        }
+        // RLS blocks user from counting their own resumego_sessions; use the
+        // service-role webhook so the period count is accurate.
+        try {
+            var psR = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'pro_status', user_id: user.id })
+            });
+            var psJ = await psR.json();
+            if (psJ && typeof psJ.used === 'number') proStatus.periodUsed = psJ.used;
+        } catch(ePsf) {}
         cacheProStatus();
         refreshPriceLabel();
     } catch(eFetch) {}
