@@ -358,7 +358,13 @@
 
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
-    var packsPromise = sb.from('resumego_packs').select('uses_remaining, code').eq('user_email', user.email).gt('uses_remaining', 0);
+    // resumego_packs is RLS-protected, so the user's own JWT can't read it.
+    // Fetch via the n8n webhook which uses service-role.
+    var packsPromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'pack_status', user_email: user.email })
+    }).then(function(r) { return r.json(); }).catch(function() { return { packs: [], total_credits: 0 }; });
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
     var monthCountPromise = sb.from('resumes').select('id', { count: 'exact', head: true }).gte('created_at', calMonthStart.toISOString());
 
@@ -518,8 +524,9 @@
     });
 
     // ── PACKS ─────────────────────────────────────────────────────────────
-    var packs = packsR.data || [];
-    var totalCredits = packs.reduce(function(sum, p) { return sum + (p.uses_remaining || 0); }, 0);
+    // packsR comes from the pack_status webhook: { packs: [...], total_credits: N }
+    var packs = (packsR && packsR.packs) || [];
+    var totalCredits = (packsR && typeof packsR.total_credits === 'number') ? packsR.total_credits : 0;
     document.getElementById('packCredits').textContent = totalCredits;
     if (totalCredits > 0) {
         document.getElementById('packDetail').textContent = packs.length + ' active pack' + (packs.length === 1 ? '' : 's');
