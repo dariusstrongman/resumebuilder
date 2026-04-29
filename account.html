@@ -366,9 +366,16 @@
         body: JSON.stringify({ mode: 'pack_status', user_email: user.email })
     }).then(function(r) { return r.json(); }).catch(function() { return { packs: [], total_credits: 0 }; });
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-    var monthCountPromise = sb.from('resumes').select('id', { count: 'exact', head: true }).gte('created_at', calMonthStart.toISOString());
+    // Stat strip counts come from resumego_sessions (lifetime tailorings) so
+    // deleting a saved resume from the dashboard doesn't decrement them.
+    // RLS blocks the user's direct read, so this goes through the webhook.
+    var usagePromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'usage_stats', user_id: user.id, month_start: calMonthStart.toISOString() })
+    }).then(function(r) { return r.json(); }).catch(function() { return { month_count: 0, total_count: 0 }; });
 
-    var [profileR, subR, packsR, resumesR, monthR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise, monthCountPromise]);
+    var [profileR, subR, packsR, resumesR, usageR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise, usagePromise]);
 
     var profile = profileR.data || {};
     var firstName = profile.display_name || (user.email || '').split('@')[0] || 'there';
@@ -389,9 +396,13 @@
     }
 
     // ── STATS STRIP ────────────────────────────────────────────────────────
-    var monthCount = monthR && monthR.count != null ? monthR.count : 0;
+    // Lifetime tailoring counts (don't decrement on delete). totalCount above
+    // is the count of currently-saved resumes and is still used for the
+    // recent-resumes list pill / "browse all" / delete-update logic.
+    var monthCount = (usageR && typeof usageR.month_count === 'number') ? usageR.month_count : 0;
+    var lifetimeCount = (usageR && typeof usageR.total_count === 'number') ? usageR.total_count : 0;
     document.getElementById('statMonth').textContent = monthCount;
-    document.getElementById('statTotal').textContent = totalCount;
+    document.getElementById('statTotal').textContent = lifetimeCount;
 
     if (user.created_at) {
         var d = new Date(user.created_at);
