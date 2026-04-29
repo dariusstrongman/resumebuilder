@@ -1235,6 +1235,7 @@ textarea::placeholder {
     border-radius: 10px;
     font-family: Georgia, 'Times New Roman', serif;
     aspect-ratio: 8.5 / 11;
+    min-height: 0;
     overflow: hidden;
     position: relative;
     cursor: zoom-in;
