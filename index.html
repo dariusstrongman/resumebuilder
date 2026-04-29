@@ -105,7 +105,7 @@
                 "name": "Why is ResumeGo so cheap?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Pay-as-you-go is $1 per resume — no account, no subscription. If you tailor a lot, Pro is $15 per month for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, an AI follow-up email generator, an application tracker with follow-up reminders, and paste-a-URL job extraction. Most competitors charge $25-100 per month for just a tailorer."
+                    "text": "Pay-as-you-go is $1 per resume — no account, no subscription. If you tailor a lot, Pro is $15 per month for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, an AI follow-up email generator, and an application tracker with follow-up reminders. Most competitors charge $25-100 per month for just a tailorer."
                 }
             },
             {
@@ -241,7 +241,7 @@
                         <span class="field-name">Job posting</span>
                         <span class="field-hint" id="jobHint"></span>
                     </label>
-                    <button type="button" class="jd-url-toggle" id="jdUrlToggle">Paste a URL instead<span class="jd-url-toggle__pro">Pro</span></button>
+                    <button type="button" class="jd-url-toggle" id="jdUrlToggle">Paste a URL instead</button>
                     <div class="jd-url-row" id="jdUrlRow" hidden>
                         <input type="url" id="jdUrlInput" placeholder="https://boards.greenhouse.io/&hellip;" class="jd-url-input">
                         <button type="button" class="jd-url-extract" id="jdUrlExtract">Extract</button>
@@ -264,14 +264,6 @@
                         statusEl.textContent = msg;
                         statusEl.classList.toggle('jd-url-status--err', !!isErr);
                     }
-                    function getUserId() {
-                        try {
-                            var raw = localStorage.getItem('sb-jjiizicwjldusuteffnb-auth-token');
-                            if (!raw) return '';
-                            var p = JSON.parse(raw);
-                            return (p && (p.user && p.user.id)) || (p && p.currentSession && p.currentSession.user && p.currentSession.user.id) || '';
-                        } catch(e) { return ''; }
-                    }
                     toggle.addEventListener('click', function() {
                         row.hidden = !row.hidden;
                         if (!row.hidden) { input.focus(); setStatus(''); }
@@ -279,11 +271,6 @@
                     btn.addEventListener('click', async function() {
                         var url = (input.value || '').trim();
                         if (!url) { setStatus('Enter a URL first.', true); return; }
-                        var userId = getUserId();
-                        if (!userId) {
-                            setStatus('Sign in with a Pro account to use URL extraction.', true);
-                            return;
-                        }
                         btn.disabled = true;
                         var origLabel = btn.textContent;
                         btn.textContent = 'Extracting…';
@@ -292,7 +279,7 @@
                             var r = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ mode: 'extract_job_url', url: url, user_id: userId })
+                                body: JSON.stringify({ mode: 'extract_job_url', url: url })
                             });
                             var d = await r.json();
                             if (d.error) {
@@ -566,7 +553,7 @@
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">Why is it so cheap?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">Pay-as-you-go is $1 per resume &mdash; no account, no commitment. Pro is $15/mo for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, AI follow-up email generator, application tracker with follow-up reminders, and paste-a-URL job extraction. Most competitors charge $25&ndash;100 per month for just a tailorer.</div>
+            <div class="faq-a">Pay-as-you-go is $1 per resume &mdash; no account, no commitment. Pro is $15/mo for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, AI follow-up email generator, and application tracker with follow-up reminders. Most competitors charge $25&ndash;100 per month for just a tailorer.</div>
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">What is the STAR interview coach?<span aria-hidden="true">+</span></button>
@@ -652,7 +639,7 @@
                 <span class="pricing-per" id="pricingPer">per month</span>
             </div>
             <div class="pricing-copy">
-                <p><strong>Pro.</strong> A real job-search workspace, not just bulk tailorings. STAR interview coach (5 AI-graded questions), AI follow-up email generator, application tracker with follow-up reminders, paste-a-URL job extraction. Plus 50 tailored resumes a month with cover letters and ATS gap reports on every one.</p>
+                <p><strong>Pro.</strong> A real job-search workspace, not just bulk tailorings. STAR interview coach (5 AI-graded questions), AI follow-up email generator, application tracker with follow-up reminders. Plus 50 tailored resumes a month with cover letters and ATS gap reports on every one.</p>
                 <p class="pricing-addon" id="pricingAddon">Saved resume history in one dashboard. Run out? Buy more or roll over to next month. Cancel anytime.</p>
                 <button type="button" class="submit-btn submit-btn--inline" id="goProBtn" data-plan="pro_monthly">
                     <span class="submit-btn__label">Go Pro</span>
