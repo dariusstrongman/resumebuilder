@@ -3647,13 +3647,15 @@ textarea::placeholder {
         radial-gradient(circle at 100% 0%, rgba(197, 255, 74, 0.1), transparent 60%),
         var(--bg-2);
     border-color: var(--accent);
-    align-self: start;
 }
 .account-card__value--tip {
+    font-family: var(--f-ui) !important;
+    font-style: normal !important;
     font-size: 1.05rem !important;
     font-weight: 600 !important;
     line-height: 1.4;
     margin: 0.3rem 0 0.4rem !important;
+    color: var(--ink-1) !important;
 }
 
 /* Toolkit grid */
