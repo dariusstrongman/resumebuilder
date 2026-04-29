@@ -187,6 +187,34 @@
                 <button type="button" class="resume-list__more" id="viewAllResumesBtn" hidden></button>
             </section>
 
+            <!-- APPLICATIONS (Pro tracker) -->
+            <section class="account-section" id="applicationsSection">
+                <header class="account-section-head">
+                    <h2>Applications</h2>
+                    <span class="account-pill" id="appsFollowUpPill" hidden></span>
+                </header>
+                <div class="apps-paywall" id="appsPaywall" hidden>
+                    <div class="account-card apps-paywall__card">
+                        <p class="account-card__label">Pro feature</p>
+                        <h3 class="apps-paywall__title">Track every application.</h3>
+                        <p class="account-card__detail">Status, applied date, follow-up reminders. Never miss a "circle back" again.</p>
+                        <button type="button" class="submit-btn submit-btn--inline apps-paywall__btn" id="appsPaywallUpgrade">
+                            <span class="submit-btn__label">Upgrade to Pro</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="apps-active" id="appsActive" hidden>
+                    <div class="apps-toolbar">
+                        <button type="button" class="apps-add-btn" id="appsAddBtn">+ Add application</button>
+                    </div>
+                    <div class="apps-empty" id="appsEmpty" hidden>
+                        <p>No applications tracked yet. Add one above to start tracking status and follow-ups.</p>
+                    </div>
+                    <div class="apps-list" id="appsList"></div>
+                </div>
+                <div class="apps-error" id="appsError" hidden></div>
+            </section>
+
             <!-- LATEST FROM PLAYBOOK -->
             <section class="account-section">
                 <header class="account-section-head">
@@ -261,6 +289,81 @@
                 <div class="spinner-large"></div>
                 <p>Loading&hellip;</p>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- APPLICATIONS MODAL -->
+<div class="modal apps-modal" id="appsModal" hidden>
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__panel apps-modal__panel" role="dialog" aria-modal="true" aria-labelledby="appsModalTitle">
+        <header class="modal__head">
+            <div class="modal__head-info">
+                <h2 class="modal__title" id="appsModalTitle">Add application</h2>
+            </div>
+            <div class="modal__nav">
+                <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            </div>
+        </header>
+        <div class="modal__body apps-modal__body">
+            <form id="appsForm" class="apps-form">
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="appCompany"><span class="field-name">Company</span></label>
+                        <input type="text" id="appCompany" class="email-input" required maxlength="120" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="appRole"><span class="field-name">Role</span></label>
+                        <input type="text" id="appRole" class="email-input" required maxlength="120" autocomplete="off">
+                    </div>
+                </div>
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="appStatus"><span class="field-name">Status</span></label>
+                        <select id="appStatus" class="email-input">
+                            <option value="applied">Applied</option>
+                            <option value="interview">Interview</option>
+                            <option value="offer">Offer</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="ghosted">Ghosted</option>
+                            <option value="withdrawn">Withdrawn</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="appAppliedAt"><span class="field-name">Applied date</span></label>
+                        <input type="date" id="appAppliedAt" class="email-input">
+                    </div>
+                </div>
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="appFollowUpAt"><span class="field-name">Follow-up <span class="field-hint">optional</span></span></label>
+                        <input type="date" id="appFollowUpAt" class="email-input">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="appResume"><span class="field-name">Linked resume <span class="field-hint">optional</span></span></label>
+                        <select id="appResume" class="email-input">
+                            <option value="">— none —</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="appSourceUrl"><span class="field-name">Job posting URL <span class="field-hint">optional</span></span></label>
+                    <input type="url" id="appSourceUrl" class="email-input" placeholder="https://" autocomplete="off">
+                </div>
+                <div class="field">
+                    <label class="field-label" for="appNotes"><span class="field-name">Notes <span class="field-hint">optional</span></span></label>
+                    <textarea id="appNotes" rows="3" placeholder="Recruiter contact, interview notes, anything else"></textarea>
+                </div>
+                <div class="apps-form__actions">
+                    <button type="button" class="apps-form__delete" id="appsDeleteBtn" hidden>Delete</button>
+                    <div class="apps-form__primary">
+                        <button type="button" class="apps-form__cancel" data-close="1">Cancel</button>
+                        <button type="submit" class="submit-btn submit-btn--inline" id="appsSaveBtn">
+                            <span class="submit-btn__label">Save</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -1260,6 +1363,209 @@
         }
 
         deleteBtn.addEventListener('click', showConfirmation);
+    }
+
+    // ── APPLICATIONS TRACKER (Pro feature) ────────────────────────────────
+    var appsPaywall = document.getElementById('appsPaywall');
+    var appsActive = document.getElementById('appsActive');
+    var appsListEl = document.getElementById('appsList');
+    var appsEmpty = document.getElementById('appsEmpty');
+    var appsErrorEl = document.getElementById('appsError');
+    var appsAddBtn = document.getElementById('appsAddBtn');
+    var appsModal = document.getElementById('appsModal');
+    var appsForm = document.getElementById('appsForm');
+    var appsModalTitle = document.getElementById('appsModalTitle');
+    var appsSaveBtn = document.getElementById('appsSaveBtn');
+    var appsDeleteBtn = document.getElementById('appsDeleteBtn');
+    var appsFollowUpPill = document.getElementById('appsFollowUpPill');
+    var appsPaywallUpgrade = document.getElementById('appsPaywallUpgrade');
+
+    if (!isPro) {
+        appsPaywall.hidden = false;
+        appsPaywallUpgrade.addEventListener('click', function() { planCta.click(); });
+    } else {
+        appsActive.hidden = false;
+        var apps = [];
+        var editingId = null;
+
+        function statusLabel(s) {
+            return ({ applied:'Applied', interview:'Interview', offer:'Offer', rejected:'Rejected', ghosted:'Ghosted', withdrawn:'Withdrawn' })[s] || s;
+        }
+        function dueText(iso) {
+            if (!iso) return '';
+            var d = new Date(iso); d.setHours(0,0,0,0);
+            var t = new Date(); t.setHours(0,0,0,0);
+            var days = Math.round((d.getTime() - t.getTime()) / 86400000);
+            if (days < 0) return Math.abs(days) + 'd overdue';
+            if (days === 0) return 'due today';
+            if (days === 1) return 'due tomorrow';
+            return 'in ' + days + 'd';
+        }
+        function isoDate(iso) {
+            if (!iso) return '';
+            var d = new Date(iso);
+            var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+            return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+        }
+        function appRowHtml(a) {
+            var due = a.follow_up_at ? dueText(a.follow_up_at) : '';
+            var dueAlert = !!due && (due.indexOf('overdue') !== -1 || due === 'due today' || due === 'due tomorrow');
+            var date = a.applied_at ? new Date(a.applied_at).toLocaleDateString() : '';
+            return '<div class="apps-row" data-app-id="' + a.id + '">'
+                + '<div class="apps-row__main">'
+                +   '<span class="apps-row__title">' + esc(a.company || '(no company)') + ' &middot; ' + esc(a.role || '(no role)') + '</span>'
+                +   '<span class="apps-row__sub">applied ' + esc(date)
+                +     (due ? ' &middot; <span class="apps-row__due' + (dueAlert ? ' apps-row__due--alert' : '') + '">follow-up ' + esc(due) + '</span>' : '')
+                +     (a.source_url ? ' &middot; <a class="apps-row__url" href="' + esc(a.source_url) + '" target="_blank" rel="noopener">posting &#x2197;</a>' : '')
+                +   '</span>'
+                + '</div>'
+                + '<span class="apps-row__status apps-row__status--' + esc(a.status) + '">' + statusLabel(a.status) + '</span>'
+                + '<button type="button" class="apps-row__edit" data-edit="' + esc(a.id) + '">Edit</button>'
+                + '</div>';
+        }
+        function renderApps() {
+            if (apps.length === 0) {
+                appsListEl.innerHTML = '';
+                appsEmpty.hidden = false;
+            } else {
+                appsEmpty.hidden = true;
+                appsListEl.innerHTML = apps.map(appRowHtml).join('');
+            }
+            var dueCount = apps.filter(function(a) {
+                if (!a.follow_up_at) return false;
+                var d = new Date(a.follow_up_at); d.setHours(23,59,59,999);
+                return d.getTime() <= Date.now();
+            }).length;
+            if (dueCount > 0) {
+                appsFollowUpPill.textContent = dueCount + ' follow-up' + (dueCount === 1 ? '' : 's') + ' due';
+                appsFollowUpPill.hidden = false;
+                appsFollowUpPill.classList.add('account-pill--alert');
+            } else {
+                appsFollowUpPill.hidden = true;
+                appsFollowUpPill.classList.remove('account-pill--alert');
+            }
+        }
+        function populateResumeOptions() {
+            var sel = document.getElementById('appResume');
+            sel.innerHTML = '<option value="">— none —</option>';
+            (resumes || []).forEach(function(r) {
+                var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
+                sel.innerHTML += '<option value="' + esc(r.id) + '">' + esc(title) + '</option>';
+            });
+        }
+        function openModal(app) {
+            editingId = app ? app.id : null;
+            appsModalTitle.textContent = app ? 'Edit application' : 'Add application';
+            appsDeleteBtn.hidden = !app;
+            populateResumeOptions();
+            document.getElementById('appCompany').value = (app && app.company) || '';
+            document.getElementById('appRole').value = (app && app.role) || '';
+            document.getElementById('appStatus').value = (app && app.status) || 'applied';
+            document.getElementById('appAppliedAt').value = app && app.applied_at ? isoDate(app.applied_at) : isoDate(new Date().toISOString());
+            document.getElementById('appFollowUpAt').value = app && app.follow_up_at ? isoDate(app.follow_up_at) : '';
+            document.getElementById('appResume').value = (app && app.resume_id) || '';
+            document.getElementById('appSourceUrl').value = (app && app.source_url) || '';
+            document.getElementById('appNotes').value = (app && app.notes) || '';
+            appsModal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            setTimeout(function() { document.getElementById('appCompany').focus(); }, 50);
+        }
+        function closeModal() {
+            appsModal.hidden = true;
+            document.body.style.overflow = '';
+            editingId = null;
+        }
+        appsModal.addEventListener('click', function(e) {
+            if (e.target.dataset && e.target.dataset.close) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !appsModal.hidden) closeModal();
+        });
+
+        appsAddBtn.addEventListener('click', function() { openModal(null); });
+
+        appsListEl.addEventListener('click', function(e) {
+            var btn = e.target.closest('[data-edit]');
+            if (!btn) return;
+            var id = btn.dataset.edit;
+            var a = apps.find(function(x) { return x.id === id; });
+            if (a) openModal(a);
+        });
+
+        appsForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var company = document.getElementById('appCompany').value.trim();
+            var role = document.getElementById('appRole').value.trim();
+            if (!company || !role) return;
+            var payload = {
+                user_id: user.id,
+                company: company,
+                role: role,
+                status: document.getElementById('appStatus').value,
+                applied_at: document.getElementById('appAppliedAt').value || new Date().toISOString().slice(0,10),
+                follow_up_at: document.getElementById('appFollowUpAt').value || null,
+                resume_id: document.getElementById('appResume').value || null,
+                source_url: document.getElementById('appSourceUrl').value.trim() || null,
+                notes: document.getElementById('appNotes').value.trim() || null
+            };
+            appsSaveBtn.disabled = true;
+            var label = appsSaveBtn.querySelector('.submit-btn__label');
+            var origLabel = label.textContent;
+            label.textContent = 'Saving…';
+            try {
+                if (editingId) {
+                    var u = await sb.from('applications').update(payload).eq('id', editingId).select().maybeSingle();
+                    if (u.error) throw u.error;
+                    var idx = apps.findIndex(function(x) { return x.id === editingId; });
+                    if (idx !== -1) apps[idx] = u.data;
+                } else {
+                    var ins = await sb.from('applications').insert(payload).select().maybeSingle();
+                    if (ins.error) throw ins.error;
+                    apps.unshift(ins.data);
+                }
+                renderApps();
+                closeModal();
+            } catch (err) {
+                alert('Could not save: ' + (err && err.message ? err.message : 'unknown error'));
+            } finally {
+                appsSaveBtn.disabled = false;
+                label.textContent = origLabel;
+            }
+        });
+
+        appsDeleteBtn.addEventListener('click', async function() {
+            if (!editingId) return;
+            if (!confirm('Delete this application? This cannot be undone.')) return;
+            appsDeleteBtn.disabled = true;
+            try {
+                var d = await sb.from('applications').delete().eq('id', editingId);
+                if (d.error) throw d.error;
+                apps = apps.filter(function(x) { return x.id !== editingId; });
+                renderApps();
+                closeModal();
+            } catch (err) {
+                alert('Could not delete: ' + (err && err.message ? err.message : 'unknown error'));
+            } finally {
+                appsDeleteBtn.disabled = false;
+            }
+        });
+
+        // Initial load
+        (async function loadApps() {
+            try {
+                var r = await sb.from('applications').select('*').order('applied_at', { ascending: false }).limit(100);
+                if (r.error) throw r.error;
+                apps = r.data || [];
+                renderApps();
+            } catch (err) {
+                appsErrorEl.hidden = false;
+                if (err && err.code === '42P01') {
+                    appsErrorEl.textContent = 'Applications table not yet provisioned. Run migrations/applications.sql in Supabase.';
+                } else {
+                    appsErrorEl.textContent = 'Could not load applications: ' + (err && err.message ? err.message : 'unknown error');
+                }
+            }
+        })();
     }
 })();
 </script>
