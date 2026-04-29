@@ -1105,19 +1105,22 @@ function renderDocCompare() {
     if (!docEl) return;
     var ex = docExamples[docIdx];
     function buildAfterDoc(summary, jobs, skills, edu) {
-        var h = '<div style="text-align:center;font-family:Georgia,serif;font-size:.85rem;font-weight:700;letter-spacing:.5px;margin-bottom:.1rem;">' + ex.name.toUpperCase() + '</div>';
-        h += '<div style="text-align:center;font-family:Georgia,serif;font-size:.42rem;color:#555;padding-bottom:.35rem;border-bottom:1px solid #ccc;margin-bottom:.4rem;">' + ex.contact + '</div>';
-        h += '<div style="font-family:Georgia,serif;font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #000;padding-bottom:.1rem;margin-top:.4rem;margin-bottom:.25rem;">Professional Summary</div>';
-        h += '<div style="font-family:Georgia,serif;font-size:.44rem;line-height:1.45;color:#1a1a1a;margin-bottom:.3rem;">' + summary + '</div>';
-        h += '<div style="font-family:Georgia,serif;font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #000;padding-bottom:.1rem;margin-top:.4rem;margin-bottom:.25rem;">Professional Experience</div>';
+        var h = '<div class="dp-name">' + ex.name.toUpperCase() + '</div>';
+        h += '<div class="dp-contact">' + ex.contact + '</div>';
+        h += '<div class="dp-section">Professional Summary</div>';
+        h += '<div class="dp-line">' + summary + '</div>';
+        h += '<div class="dp-section">Professional Experience</div>';
         for (var j = 0; j < jobs.length; j++) {
-            h += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:.3rem;font-family:Georgia,serif;"><div><span style="font-weight:700;font-size:.48rem;">' + jobs[j].title + '</span><span style="font-size:.44rem;color:#333;"> | ' + jobs[j].co + '</span></div><div style="font-size:.4rem;font-style:italic;color:#555;white-space:nowrap;">' + jobs[j].date + '</div></div>';
+            h += '<div class="dp-role">'
+                +   '<span class="dp-role-left"><strong>' + jobs[j].title + '</strong> | ' + jobs[j].co + '</span>'
+                +   '<span class="dp-role-date">' + jobs[j].date + '</span>'
+                + '</div>';
             for (var b = 0; b < jobs[j].bullets.length; b++) {
-                h += '<div style="font-family:Georgia,serif;font-size:.42rem;margin-left:.5rem;margin-bottom:.08rem;padding-left:.4rem;position:relative;line-height:1.4;color:#1a1a1a;"><span style="position:absolute;left:0;">&#8226;</span>' + jobs[j].bullets[b] + '</div>';
+                h += '<div class="dp-bullet">' + jobs[j].bullets[b] + '</div>';
             }
         }
-        if (skills) { h += '<div style="font-family:Georgia,serif;font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #000;padding-bottom:.1rem;margin-top:.4rem;margin-bottom:.2rem;">Skills</div><div style="font-family:Georgia,serif;font-size:.4rem;line-height:1.45;color:#333;">' + skills + '</div>'; }
-        if (edu) { h += '<div style="font-family:Georgia,serif;font-size:.48rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #000;padding-bottom:.1rem;margin-top:.4rem;margin-bottom:.2rem;">Education</div><div style="font-family:Georgia,serif;font-size:.4rem;color:#333;">' + edu + '</div>'; }
+        if (skills) { h += '<div class="dp-section">Skills</div><div class="dp-line">' + skills + '</div>'; }
+        if (edu)    { h += '<div class="dp-section">Education</div><div class="dp-line">' + edu + '</div>'; }
         return h;
     }
     var beforeContent = ex.beforeCustom ? ex.beforeHtml : '';

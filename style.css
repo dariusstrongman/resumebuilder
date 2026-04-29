@@ -1228,18 +1228,18 @@ textarea::placeholder {
     color: var(--accent);
 }
 .doc-preview {
-    background: #f7f4ed;
+    background: #fbf8f0;
     color: #1a1a1a;
-    padding: 1.5rem 1.8rem;
+    padding: 1.7rem 2rem;
     border: 1px solid var(--line);
     border-radius: 10px;
-    font-family: Georgia, serif;
+    font-family: Georgia, 'Times New Roman', serif;
     min-height: 420px;
     position: relative;
     cursor: zoom-in;
     transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
-    font-size: 0.72rem;
-    line-height: 1.45;
+    font-size: 0.78rem;
+    line-height: 1.55;
     box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7);
 }
 .doc-preview:hover {
@@ -1294,50 +1294,77 @@ textarea::placeholder {
     box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Styles for content app.js renders into doc-preview */
+/* Styles for content app.js renders into doc-preview — mirrors success.html
+   .rp-* classes so the homepage example matches what the user actually
+   downloads. */
 .dp-name {
     text-align: center;
-    font-family: Georgia, serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-weight: 700;
-    font-size: 1.1em;
-    letter-spacing: 0.04em;
-    margin-bottom: 0.1rem;
+    font-size: 1.18em;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+    margin-bottom: 0.15rem;
 }
 .dp-contact {
     text-align: center;
-    font-size: 0.72em;
-    color: #555;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.78em;
+    color: #666;
+    padding-bottom: 0.6rem;
     margin-bottom: 0.6rem;
-    font-family: Georgia, serif;
+    border-bottom: 1px solid #d8d2c2;
 }
 .dp-section {
-    font-size: 0.78em;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.86em;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
+    color: #1a1a1a;
     border-bottom: 1.5px solid #000;
     padding-bottom: 2px;
-    margin: 0.75rem 0 0.35rem;
-    font-family: Georgia, serif;
+    margin: 0.85rem 0 0.4rem;
 }
-.dp-job {
-    font-size: 0.78em;
-    margin-top: 0.45rem;
-    font-family: Georgia, serif;
+.dp-line {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.9em;
+    color: #333;
+    line-height: 1.5;
+    margin: 0.15rem 0;
+}
+.dp-role {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0.45rem 0 0.15rem;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+.dp-role-left {
+    flex: 1;
+    font-size: 0.9em;
+    color: #1a1a1a;
     line-height: 1.35;
 }
-.dp-job strong { font-weight: 700; }
-.dp-job em { font-style: italic; color: #555; font-size: 0.86em; display: block; }
+.dp-role-left strong { font-weight: 700; }
+.dp-role-date {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #555;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
 .dp-bullet {
-    font-size: 0.7em;
-    margin: 0.1rem 0 0.1rem 0.9rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.84em;
+    margin: 0.12rem 0 0.12rem 1rem;
     text-indent: -0.6rem;
     padding-left: 0.6rem;
     color: #333;
-    font-family: Georgia, serif;
-    line-height: 1.42;
+    line-height: 1.45;
 }
-.dp-bullet::before { content: '• '; }
+.dp-bullet::before { content: '• '; color: #1a1a1a; }
 .dp-kw {
     background: rgba(168, 230, 53, 0.28);
     border-bottom: 1.5px solid rgba(168, 230, 53, 0.8);
