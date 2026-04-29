@@ -4039,6 +4039,34 @@ textarea::placeholder {
 }
 .account-section-link:hover { text-decoration: underline; }
 
+/* Legal document body (privacy, ToS) */
+.legal-doc { color: var(--ink-1); line-height: 1.65; font-size: 0.96rem; }
+.legal-doc h2 {
+    font-family: var(--f-ui);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink-0);
+    margin: 2rem 0 0.6rem;
+    letter-spacing: -0.01em;
+}
+.legal-doc h3 {
+    font-family: var(--f-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink-0);
+    margin: 1.2rem 0 0.4rem;
+}
+.legal-doc p { margin: 0 0 0.8rem; color: var(--ink-1); }
+.legal-doc ul {
+    margin: 0 0 0.9rem;
+    padding-left: 1.2rem;
+    color: var(--ink-1);
+}
+.legal-doc li { margin-bottom: 0.3rem; }
+.legal-doc a { color: var(--accent); text-decoration: none; }
+.legal-doc a:hover { text-decoration: underline; }
+.legal-doc strong { color: var(--ink-0); }
+
 /* Resource page (behavioral, follow-up, salary) */
 .resource-main { padding: clamp(2rem, 5vw, 4rem) 1.5rem 4rem; }
 .resource-shell { max-width: 880px; margin: 0 auto; }
