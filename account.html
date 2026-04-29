@@ -612,6 +612,35 @@
 
     function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
 
+    // Render markdown-ish resume text as the same paper-style HTML the
+    // success page uses, so the modal preview matches the actual output.
+    function formatResume(text) {
+        if (!text) return '';
+        var lines = text.split('\n');
+        var h = '';
+        for (var i = 0; i < lines.length; i++) {
+            var l = lines[i].trim();
+            if (!l) { h += '<div style="height:6px;"></div>'; continue; }
+            if (i === 0) { h += '<div class="rp-name">' + esc(l) + '</div>'; continue; }
+            if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { h += '<div class="rp-contact">' + esc(l) + '</div>'; continue; }
+            if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { h += '<div class="rp-section">' + esc(l) + '</div>'; continue; }
+            var roleMatch = l.match(/^\*\*(.+?)\*\*\s*(.*?)\s*(?:\.{2,}|\s{4,})\s*(.+)$/);
+            if (roleMatch) {
+                var rTitle = esc(roleMatch[1]);
+                var rDetail = esc((roleMatch[2] || '').replace(/^\|\s*/, ''));
+                var rDate = esc(roleMatch[3]);
+                var leftHtml = '<strong>' + rTitle + '</strong>' + (rDetail ? ' | ' + rDetail : '');
+                h += '<div class="rp-role"><span class="rp-role-left">' + leftHtml + '</span><span class="rp-role-date">' + rDate + '</span></div>';
+                continue;
+            }
+            var escaped = esc(l).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            if (l.startsWith('* ') || l.startsWith('- ')) { h += '<div class="rp-bullet">' + escaped.substring(2) + '</div>'; continue; }
+            if (l.indexOf(':') !== -1 && l.match(/^[A-Z]/)) { escaped = escaped.replace(/^([^:]+:)/, '<strong>$1</strong>'); }
+            h += '<div class="rp-line">' + escaped + '</div>';
+        }
+        return h;
+    }
+
     // ── RESUME VIEWER (carousel) ───────────────────────────────────────────
     var modal = document.getElementById('resumeModal');
     var modalBody = document.getElementById('modalBody');
@@ -1005,10 +1034,10 @@
                 + '</div>';
         }
         var resumeBlock = d.resume_text
-            ? '<h3 class="modal__section-title">Tailored resume</h3><pre class="modal__pre">' + esc(d.resume_text) + '</pre>'
+            ? '<div class="modal__paper"><div class="resume-preview">' + formatResume(d.resume_text) + '</div></div>'
             : '<p style="color:var(--ink-2);">No resume content saved.</p>';
         var coverBlock = d.cover_letter_text
-            ? '<h3 class="modal__section-title">Cover letter</h3><pre class="modal__pre">' + esc(d.cover_letter_text) + '</pre>'
+            ? '<h3 class="modal__section-title">Cover letter</h3><div class="modal__paper"><div class="resume-preview">' + formatResume(d.cover_letter_text) + '</div></div>'
             : '';
         var deleteBlock = '<div class="modal__danger"><button type="button" class="modal__delete" id="modalDeleteBtn">Delete this resume</button></div>';
         modalBody.innerHTML = dlRow + resumeBlock + coverBlock + deleteBlock;
