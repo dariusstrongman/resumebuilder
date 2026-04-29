@@ -3647,6 +3647,7 @@ textarea::placeholder {
         radial-gradient(circle at 100% 0%, rgba(197, 255, 74, 0.1), transparent 60%),
         var(--bg-2);
     border-color: var(--accent);
+    align-self: start;
 }
 .account-card__value--tip {
     font-size: 1.05rem !important;
