@@ -553,10 +553,16 @@
     function rowHtml(r) {
         var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
         var date = r.created_at ? new Date(r.created_at).toLocaleDateString() : '';
-        return '<a href="#" class="resume-row" data-resume-id="' + r.id + '">'
-            + '<span class="resume-row__title">' + esc(title) + '</span>'
-            + '<span class="resume-row__date">' + date + '</span>'
-            + '</a>';
+        return '<div class="resume-row" data-resume-id="' + r.id + '">'
+            + '<button type="button" class="resume-row__open" data-action="open">'
+            +   '<span class="resume-row__title">' + esc(title) + '</span>'
+            +   '<span class="resume-row__date">' + date + '</span>'
+            + '</button>'
+            + '<div class="resume-row__actions">'
+            +   '<button type="button" class="resume-row__btn" data-action="rename" aria-label="Rename">Rename</button>'
+            +   '<button type="button" class="resume-row__btn resume-row__btn--danger" data-action="delete" aria-label="Delete">Delete</button>'
+            + '</div>'
+            + '</div>';
     }
     if (resumes.length > 0) {
         listEl.innerHTML = resumes.map(rowHtml).join('');
@@ -707,13 +713,155 @@
     listEl.addEventListener('click', async function(e) {
         var row = e.target.closest('[data-resume-id]');
         if (!row) return;
-        e.preventDefault();
+        var actionBtn = e.target.closest('[data-action]');
+        var action = actionBtn ? actionBtn.dataset.action : 'open';
         var rid = row.dataset.resumeId;
-        await ensureAllResumes();
-        var idx = allResumes.findIndex(function(r) { return r.id === rid; });
-        if (idx < 0) idx = 0;
-        openResumeAt(idx);
+        e.preventDefault();
+        if (action === 'rename') {
+            startRowRename(row, rid);
+        } else if (action === 'delete') {
+            startRowDelete(row, rid);
+        } else {
+            await ensureAllResumes();
+            var idx = allResumes.findIndex(function(r) { return r.id === rid; });
+            if (idx < 0) idx = 0;
+            openResumeAt(idx);
+        }
     });
+
+    function refreshTotalsAfterDelete() {
+        var pill = document.getElementById('resumeCountPill');
+        var newTotal = Math.max(0, totalCount - 1);
+        if (pill) pill.textContent = newTotal + ' total';
+        var statTotal = document.getElementById('statTotal');
+        if (statTotal) statTotal.textContent = newTotal;
+        totalCount = newTotal;
+        if (newTotal <= 5 && !viewAllBtn.hidden) viewAllBtn.hidden = true;
+        else if (!viewAllBtn.hidden) viewAllBtn.textContent = 'Browse all ' + newTotal + ' resumes';
+        if (!listEl.querySelector('[data-resume-id]')) {
+            listEl.innerHTML = '<div class="resume-empty">No resumes yet. <a href="/#generate">Tailor your first one.</a></div>';
+        }
+    }
+
+    function startRowRename(row, rid) {
+        if (row.dataset.editing === '1') return;
+        row.dataset.editing = '1';
+        var titleSpan = row.querySelector('.resume-row__title');
+        var openBtn = row.querySelector('.resume-row__open');
+        var actions = row.querySelector('.resume-row__actions');
+        var current = titleSpan.textContent;
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'resume-row__title-input';
+        input.maxLength = 120;
+        input.value = current;
+        // disable the row's open button click while editing
+        openBtn.disabled = true;
+        titleSpan.replaceWith(input);
+        // swap actions to Save / Cancel
+        var origActions = actions.innerHTML;
+        actions.innerHTML = '<button type="button" class="resume-row__btn" data-action="row-rename-save">Save</button>'
+            + '<button type="button" class="resume-row__btn" data-action="row-rename-cancel">Cancel</button>';
+
+        input.focus();
+        input.select();
+
+        var done = false;
+        function finish(commit) {
+            if (done) return;
+            done = true;
+            var newTitle = (input.value || '').trim();
+            row.dataset.editing = '';
+            openBtn.disabled = false;
+            actions.innerHTML = origActions;
+            var span = document.createElement('span');
+            span.className = 'resume-row__title';
+            input.replaceWith(span);
+            if (!commit || !newTitle || newTitle === current) {
+                span.textContent = current;
+                return;
+            }
+            span.textContent = newTitle;
+            // local cache update
+            var meta = allResumes.find(function(r) { return r.id === rid; });
+            if (meta) meta.title = newTitle;
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'rename_resume', user_id: user.id, resume_id: rid, title: newTitle })
+            }).then(function(r) { return r.json(); }).then(function(j) {
+                if (j && j.error) {
+                    alert(j.error);
+                    span.textContent = current;
+                    if (meta) meta.title = current;
+                }
+            }).catch(function() {
+                alert('Could not save the new name. Try again.');
+                span.textContent = current;
+                if (meta) meta.title = current;
+            });
+        }
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+            else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+            e.stopPropagation();
+        });
+        input.addEventListener('blur', function() {
+            // allow click on Save/Cancel buttons to win the race
+            setTimeout(function() { if (!done) finish(true); }, 150);
+        });
+        actions.addEventListener('click', function handler(e) {
+            var b = e.target.closest('[data-action]');
+            if (!b) return;
+            if (b.dataset.action === 'row-rename-save') finish(true);
+            else if (b.dataset.action === 'row-rename-cancel') finish(false);
+        });
+    }
+
+    function startRowDelete(row, rid) {
+        if (row.dataset.confirming === '1') return;
+        row.dataset.confirming = '1';
+        var actions = row.querySelector('.resume-row__actions');
+        var origActions = actions.innerHTML;
+        actions.innerHTML = '<span class="resume-row__confirm">Delete?</span>'
+            + '<button type="button" class="resume-row__btn" data-action="row-delete-cancel">Cancel</button>'
+            + '<button type="button" class="resume-row__btn resume-row__btn--danger" data-action="row-delete-yes">Yes, delete</button>';
+        actions.addEventListener('click', async function handler(e) {
+            var b = e.target.closest('[data-action]');
+            if (!b) return;
+            e.stopPropagation();
+            if (b.dataset.action === 'row-delete-cancel') {
+                row.dataset.confirming = '';
+                actions.innerHTML = origActions;
+            } else if (b.dataset.action === 'row-delete-yes') {
+                b.disabled = true;
+                b.textContent = 'Deleting…';
+                try {
+                    var r = await fetch(WEBHOOK, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ mode: 'delete_resume', user_id: user.id, resume_id: rid })
+                    });
+                    var data = await r.json();
+                    if (data.error) {
+                        alert(data.error);
+                        row.dataset.confirming = '';
+                        actions.innerHTML = origActions;
+                        return;
+                    }
+                    var idx = allResumes.findIndex(function(x) { return x.id === rid; });
+                    if (idx >= 0) allResumes.splice(idx, 1);
+                    delete resumeContentCache[rid];
+                    row.remove();
+                    refreshTotalsAfterDelete();
+                } catch(err) {
+                    alert('Could not delete. Try again.');
+                    row.dataset.confirming = '';
+                    actions.innerHTML = origActions;
+                }
+            }
+        });
+    }
 
     // ── RENAME ────────────────────────────────────────────────────────────
     function startRename() {

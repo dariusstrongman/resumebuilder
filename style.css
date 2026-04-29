@@ -3134,12 +3134,11 @@ textarea::placeholder {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    padding: 0.85rem 1rem;
+    gap: 0.6rem;
+    padding: 0.5rem 0.6rem 0.5rem 0;
     background: var(--bg-2);
     border: 1px solid var(--line);
     border-radius: 10px;
-    text-decoration: none;
     color: inherit;
     transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
 }
@@ -3147,10 +3146,42 @@ textarea::placeholder {
     border-color: var(--line-strong);
     background: var(--bg-3);
 }
+.resume-row__open {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 1rem;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.resume-row__open:disabled { cursor: default; }
 .resume-row__title {
     color: var(--ink-0);
     font-weight: 500;
     font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.resume-row__title-input {
+    flex: 1;
+    margin: 0 1rem;
+    padding: 0.3rem 0.5rem;
+    font-family: var(--f-ui);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink-0);
+    background: var(--bg-3);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    outline: none;
 }
 .resume-row__date {
     color: var(--ink-3);
@@ -3158,6 +3189,44 @@ textarea::placeholder {
     font-size: 0.78rem;
     letter-spacing: 0.05em;
     flex-shrink: 0;
+}
+.resume-row__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+.resume-row__btn {
+    background: none;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.resume-row__btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.resume-row__btn--danger:hover {
+    border-color: #ef5a6b;
+    color: #ef5a6b;
+}
+.resume-row__btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+.resume-row__confirm {
+    color: var(--ink-2);
+    font-family: var(--f-ui);
+    font-size: 0.78rem;
+    margin-right: 0.2rem;
 }
 .account-settings {
     display: flex;
