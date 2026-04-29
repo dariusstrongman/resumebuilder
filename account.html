@@ -1036,8 +1036,10 @@
         var pill = document.getElementById('resumeCountPill');
         var newTotal = Math.max(0, totalCount - 1);
         if (pill) pill.textContent = newTotal + ' total';
-        var statTotal = document.getElementById('statTotal');
-        if (statTotal) statTotal.textContent = newTotal;
+        // statTotal is the lifetime tailoring count (from resumego_sessions),
+        // not the saved-resume count — deleting a saved resume must not
+        // decrement it. Only the resume-list pill / Browse-all button reflect
+        // the saved count.
         totalCount = newTotal;
         if (newTotal <= 5 && !viewAllBtn.hidden) viewAllBtn.hidden = true;
         else if (!viewAllBtn.hidden) viewAllBtn.textContent = 'Browse all ' + newTotal + ' resumes';
@@ -1331,7 +1333,8 @@
                 if (pill) {
                     var newTotal = Math.max(0, totalCount - 1);
                     pill.textContent = newTotal + ' total';
-                    document.getElementById('statTotal').textContent = newTotal;
+                    // Don't touch statTotal — it tracks lifetime tailorings
+                    // (from resumego_sessions), not saved resumes.
                     totalCount = newTotal;
                     if (newTotal <= 5 && !viewAllBtn.hidden) viewAllBtn.hidden = true;
                     else if (!viewAllBtn.hidden) viewAllBtn.textContent = 'Browse all ' + newTotal + ' resumes';
