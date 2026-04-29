@@ -692,6 +692,7 @@
         var data = resumeContentCache[meta.id];
         if (!data) {
             try {
+                // Fast path: text-only payload (~600ms vs 4s with files)
                 var r = await fetch(WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -708,6 +709,33 @@
         // If user advanced before fetch finished, ignore.
         if (currentIndex !== index) return;
         renderResumeView(data);
+        // Background-fetch the rendered files so downloads are ready when the
+        // user reaches for them. Skip if cache already has them.
+        if (!data.resume_pdf_base64 && !data._filesPending) {
+            data._filesPending = true;
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'get_resume', user_id: user.id, resume_id: meta.id, with_files: true })
+            }).then(function(r) { return r.json(); }).then(function(full) {
+                if (!full || full.error) return;
+                Object.assign(data, full);
+                data._filesPending = false;
+                // Only swap UI if the modal is still showing this resume.
+                if (currentResumeId === meta.id) applyDownloadFiles(data);
+            }).catch(function() { data._filesPending = false; });
+        }
+    }
+
+    function applyDownloadFiles(d) {
+        var dlRow = modalBody.querySelector('.modal__downloads');
+        if (!dlRow) return;
+        var html = ''
+            + dlButton('Resume PDF', d.resume_pdf_base64, 'application/pdf', 'resume.pdf')
+            + dlButton('Resume DOCX', d.resume_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'resume.docx')
+            + dlButton('Cover PDF', d.cover_pdf_base64, 'application/pdf', 'cover_letter.pdf')
+            + dlButton('Cover DOCX', d.cover_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'cover_letter.docx');
+        dlRow.innerHTML = html || '<span class="modal__dl modal__dl--empty">No downloads available.</span>';
     }
 
     listEl.addEventListener('click', async function(e) {
@@ -948,17 +976,34 @@
         if (!base64) return '';
         return '<a class="modal__dl" href="data:' + mime + ';base64,' + base64 + '" download="' + esc(filename) + '">' + esc(label) + '</a>';
     }
+    function dlPending(label) {
+        return '<span class="modal__dl modal__dl--pending">' + esc(label) + ' &middot; preparing&hellip;</span>';
+    }
 
     var currentResumeId = null;
 
     function renderResumeView(d) {
         currentResumeId = d.id;
-        var dlRow = '<div class="modal__downloads">'
-            + dlButton('Resume PDF', d.resume_pdf_base64, 'application/pdf', 'resume.pdf')
-            + dlButton('Resume DOCX', d.resume_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'resume.docx')
-            + dlButton('Cover PDF', d.cover_pdf_base64, 'application/pdf', 'cover_letter.pdf')
-            + dlButton('Cover DOCX', d.cover_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'cover_letter.docx')
-            + '</div>';
+        // If files are already cached, render real download links; otherwise
+        // render "preparing…" placeholders that get swapped in by
+        // applyDownloadFiles() when the background render returns.
+        var hasFiles = !!(d.resume_pdf_base64 || d.resume_docx_base64);
+        var dlRow;
+        if (hasFiles) {
+            dlRow = '<div class="modal__downloads">'
+                + dlButton('Resume PDF', d.resume_pdf_base64, 'application/pdf', 'resume.pdf')
+                + dlButton('Resume DOCX', d.resume_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'resume.docx')
+                + dlButton('Cover PDF', d.cover_pdf_base64, 'application/pdf', 'cover_letter.pdf')
+                + dlButton('Cover DOCX', d.cover_docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'cover_letter.docx')
+                + '</div>';
+        } else {
+            dlRow = '<div class="modal__downloads">'
+                + dlPending('Resume PDF')
+                + dlPending('Resume DOCX')
+                + (d.cover_letter_text ? dlPending('Cover PDF') : '')
+                + (d.cover_letter_text ? dlPending('Cover DOCX') : '')
+                + '</div>';
+        }
         var resumeBlock = d.resume_text
             ? '<h3 class="modal__section-title">Tailored resume</h3><pre class="modal__pre">' + esc(d.resume_text) + '</pre>'
             : '<p style="color:var(--ink-2);">No resume content saved.</p>';

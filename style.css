@@ -4027,6 +4027,14 @@ textarea::placeholder {
     transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
 }
 .modal__dl:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-3); }
+.modal__dl--pending {
+    color: var(--ink-3);
+    cursor: default;
+    opacity: 0.7;
+    font-style: italic;
+}
+.modal__dl--pending:hover { border-color: var(--line-strong); color: var(--ink-3); background: var(--bg-2); }
+.modal__dl--empty { color: var(--ink-3); }
 .modal__danger {
     margin-top: 1.8rem;
     padding-top: 1.2rem;
