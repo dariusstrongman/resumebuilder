@@ -107,6 +107,14 @@
                     "@type": "Answer",
                     "text": "Pay-as-you-go is $1 per resume — no account, no subscription. If you tailor a lot, Pro is $15 per month for 50 tailorings, cover letters, ATS gap reports, and the STAR interview coach. Most competitors start at $25-100 per month and bundle features you may not use."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the STAR interview coach?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "STAR (Situation, Task, Action, Result) is the structure recruiters score behavioral answers on. The Pro plan gives you five behavioral questions tailored to your target role, you answer in your own words, and AI grades each answer on STAR structure — what is strong, what is missing, and how to tighten it before the interview. Included with Pro at $15 per month."
+                }
             }
         ]
     }
@@ -233,8 +241,83 @@
                         <span class="field-name">Job posting</span>
                         <span class="field-hint" id="jobHint"></span>
                     </label>
+                    <button type="button" class="jd-url-toggle" id="jdUrlToggle">Paste a URL instead<span class="jd-url-toggle__pro">Pro</span></button>
+                    <div class="jd-url-row" id="jdUrlRow" hidden>
+                        <input type="url" id="jdUrlInput" placeholder="https://boards.greenhouse.io/&hellip;" class="jd-url-input">
+                        <button type="button" class="jd-url-extract" id="jdUrlExtract">Extract</button>
+                    </div>
+                    <p class="jd-url-status" id="jdUrlStatus" aria-live="polite" hidden></p>
                     <textarea id="jobText" placeholder="Paste the job description from LinkedIn, Indeed, or any job board." rows="5"></textarea>
                 </div>
+                <script>
+                (function() {
+                    var toggle = document.getElementById('jdUrlToggle');
+                    var row = document.getElementById('jdUrlRow');
+                    var input = document.getElementById('jdUrlInput');
+                    var btn = document.getElementById('jdUrlExtract');
+                    var statusEl = document.getElementById('jdUrlStatus');
+                    var jdText = document.getElementById('jobText');
+                    if (!toggle) return;
+                    function setStatus(msg, isErr) {
+                        if (!msg) { statusEl.hidden = true; statusEl.textContent = ''; return; }
+                        statusEl.hidden = false;
+                        statusEl.textContent = msg;
+                        statusEl.classList.toggle('jd-url-status--err', !!isErr);
+                    }
+                    function getUserId() {
+                        try {
+                            var raw = localStorage.getItem('sb-jjiizicwjldusuteffnb-auth-token');
+                            if (!raw) return '';
+                            var p = JSON.parse(raw);
+                            return (p && (p.user && p.user.id)) || (p && p.currentSession && p.currentSession.user && p.currentSession.user.id) || '';
+                        } catch(e) { return ''; }
+                    }
+                    toggle.addEventListener('click', function() {
+                        row.hidden = !row.hidden;
+                        if (!row.hidden) { input.focus(); setStatus(''); }
+                    });
+                    btn.addEventListener('click', async function() {
+                        var url = (input.value || '').trim();
+                        if (!url) { setStatus('Enter a URL first.', true); return; }
+                        var userId = getUserId();
+                        if (!userId) {
+                            setStatus('Sign in with a Pro account to use URL extraction.', true);
+                            return;
+                        }
+                        btn.disabled = true;
+                        var origLabel = btn.textContent;
+                        btn.textContent = 'Extracting…';
+                        setStatus('');
+                        try {
+                            var r = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ mode: 'extract_job_url', url: url, user_id: userId })
+                            });
+                            var d = await r.json();
+                            if (d.error) {
+                                setStatus(d.error, true);
+                            } else if (d.text) {
+                                jdText.value = d.text;
+                                var host = '';
+                                try { host = new URL(url).hostname; } catch(e2) {}
+                                setStatus('Extracted' + (host ? ' from ' + host : '') + '. Edit if needed.');
+                                row.hidden = true;
+                            } else {
+                                setStatus('No description found on that page.', true);
+                            }
+                        } catch(e) {
+                            setStatus('Network error — try pasting manually.', true);
+                        } finally {
+                            btn.disabled = false;
+                            btn.textContent = origLabel;
+                        }
+                    });
+                    input.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') { e.preventDefault(); btn.click(); }
+                    });
+                })();
+                </script>
 
                 <!-- ADD-ON -->
                 <label class="addon checkbox-wrap" id="coverLetterWrap">
@@ -485,6 +568,10 @@
             <button class="faq-q" onclick="toggleFaq(this)">Why is it so cheap?<span aria-hidden="true">+</span></button>
             <div class="faq-a">Pay-as-you-go is $1 per resume &mdash; no account, no commitment. If you tailor a lot, Pro is $15/mo for 50 tailorings, cover letters, ATS gap reports, and the STAR interview coach. Most competitors start at $25&ndash;100 per month and bundle features you may not use.</div>
         </div>
+        <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">What is the STAR interview coach?<span aria-hidden="true">+</span></button>
+            <div class="faq-a">STAR (Situation, Task, Action, Result) is the structure recruiters score behavioral answers on. Pro gets you five questions tailored to a target role, you answer in your own words, and AI grades each answer on STAR structure &mdash; what is strong, what is missing, what to tighten before the interview. Included with Pro at $15/mo.</div>
+        </div>
     </div>
 </section>
 
@@ -565,7 +652,7 @@
                 <span class="pricing-per" id="pricingPer">per month</span>
             </div>
             <div class="pricing-copy">
-                <p><strong>Pro.</strong> 50 tailored resumes a month, cover letters included, ATS gap reports on every tailoring, plus the STAR interview coach &mdash; behavioral questions tailored to a target role with AI feedback per answer.</p>
+                <p><strong>Pro.</strong> Five behavioral interview questions tailored to your target role, answered in your own words, AI-graded on STAR structure &mdash; the interview coach is the part nobody else offers at this price. Plus 50 tailored resumes a month, cover letters included, and ATS gap reports on every tailoring.</p>
                 <p class="pricing-addon" id="pricingAddon">Saved resume history in one dashboard. Run out? Buy more or roll over to next month. Cancel anytime.</p>
                 <button type="button" class="submit-btn submit-btn--inline" id="goProBtn" data-plan="pro_monthly">
                     <span class="submit-btn__label">Go Pro</span>
