@@ -588,6 +588,59 @@
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
 
+    // Refetch stat-strip counts on tab return so a tailoring done in another
+    // tab (or after navigating back from /success) shows up without a
+    // manual reload. Throttled so rapid visibility flips don't hammer n8n.
+    var lastStatRefresh = Date.now();
+    async function refreshStatStrip() {
+        try {
+            var usagePromise = fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'usage_stats', user_id: user.id, month_start: calMonthStart.toISOString() })
+            }).then(function(r) { return r.json(); }).catch(function() { return null; });
+            var proPromise = isPro ? fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'pro_status', user_id: user.id })
+            }).then(function(r) { return r.json(); }).catch(function() { return null; }) : Promise.resolve(null);
+            var results = await Promise.all([usagePromise, proPromise]);
+            var u = results[0], p = results[1];
+            if (u && typeof u.total_count === 'number') {
+                document.getElementById('statTotal').textContent = u.total_count;
+            }
+            if (isPro) {
+                if (p && typeof p.used === 'number') {
+                    var left = Math.max(0, 50 - p.used);
+                    document.getElementById('statMonth').textContent = left + ' left';
+                    var heroCtaEl = document.getElementById('heroCta');
+                    var heroCtaHintEl = document.getElementById('heroCtaHint');
+                    if (heroCtaEl && heroCtaEl.querySelector('.submit-btn__label')) {
+                        heroCtaEl.querySelector('.submit-btn__label').textContent = left > 0 ? 'Tailor a resume — free' : 'Tailor a resume — $1';
+                    }
+                    if (heroCtaHintEl) {
+                        heroCtaHintEl.textContent = left > 0
+                            ? 'Included with Pro · ' + left + ' of 50 left this period'
+                            : "You've used your 50 this period · resets " + (sub && sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'soon');
+                    }
+                }
+            } else if (u && typeof u.month_count === 'number') {
+                document.getElementById('statMonth').textContent = u.month_count;
+            }
+        } catch (e) { /* keep last known values on failure */ }
+    }
+    function maybeRefreshStatStrip() {
+        if (document.visibilityState !== 'visible') return;
+        if (Date.now() - lastStatRefresh < 5000) return;
+        lastStatRefresh = Date.now();
+        refreshStatStrip();
+    }
+    document.addEventListener('visibilitychange', maybeRefreshStatStrip);
+    window.addEventListener('pageshow', function(e) {
+        // bfcache restore — visibilitychange may not fire
+        if (e.persisted) maybeRefreshStatStrip();
+    });
+
     var planPicker = document.getElementById('planPicker');
 
     async function startPlanCheckout(plan, srcBtn) {
