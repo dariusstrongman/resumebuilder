@@ -1375,6 +1375,25 @@ textarea::placeholder {
     font-weight: 500;
 }
 
+/* After card matches the actual /success.html output: white paper, no
+   tan contact divider, sizing aligned with .rp-* */
+.doc-col:last-child .doc-preview {
+    background: #ffffff;
+    font-size: 0.82rem;
+}
+.doc-col:last-child .dp-contact {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0.8rem;
+    font-size: 0.72rem;
+}
+.doc-col:last-child .dp-name { font-size: 1.15rem; }
+.doc-col:last-child .dp-section { font-size: 0.78rem; }
+.doc-col:last-child .dp-line,
+.doc-col:last-child .dp-role-left { font-size: 0.78rem; }
+.doc-col:last-child .dp-role-date { font-size: 0.7rem; }
+.doc-col:last-child .dp-bullet { font-size: 0.72rem; }
+
 @media (max-width: 720px) {
     .doc-compare { grid-template-columns: 1fr; }
 }
