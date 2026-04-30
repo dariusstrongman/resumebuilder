@@ -1,4 +1,4 @@
-// Public Supabase config — safe to ship to browsers.
+// Public Supabase config: safe to ship to browsers.
 // The anon/publishable key only grants access through Row-Level-Security policies.
 // The service-role key NEVER goes here.
 window.SUPABASE_URL = 'https://jjiizicwjldusuteffnb.supabase.co';

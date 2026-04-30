@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Account &mdash; ResumeGo</title>
+    <title>Account | ResumeGo</title>
     <meta name="theme-color" content="#07080a">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
                     <button type="button" class="submit-btn submit-btn--inline" id="upgradeRetryBtn">
                         <span class="submit-btn__label">Retry now</span>
                     </button>
-                    <span class="upgrade-banner__id">If this keeps happening, email <a href="mailto:contact@stromation.com">contact@stromation.com</a> with session id <code id="upgradeFailId">&mdash;</code></span>
+                    <span class="upgrade-banner__id">If this keeps happening, email <a href="mailto:contact@stromation.com">contact@stromation.com</a> with session id <code id="upgradeFailId">--</code></span>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                 </div>
                 <div class="stat-cell">
                     <span class="stat-cell__label">Member since</span>
-                    <span class="stat-cell__value stat-cell__value--small" id="statSince">&mdash;</span>
+                    <span class="stat-cell__value stat-cell__value--small" id="statSince">--</span>
                     <span class="stat-cell__sub" id="statSinceSub">welcome aboard</span>
                 </div>
             </section>
@@ -129,7 +129,7 @@
                 </div>
                 <div class="account-card account-card--tip">
                     <p class="account-card__label">Tip of the week</p>
-                    <h3 class="account-card__value account-card__value--tip" id="tipTitle">&mdash;</h3>
+                    <h3 class="account-card__value account-card__value--tip" id="tipTitle">--</h3>
                     <p class="account-card__detail" id="tipBody">Loading&hellip;</p>
                 </div>
             </section>
@@ -140,7 +140,7 @@
                     <h2>Your toolkit</h2>
                     <span class="account-pill account-pill--quiet">Free for members</span>
                 </header>
-                <p class="account-soon">Resources to take you from "applied" to "offer accepted." Built for the rest of the job hunt &mdash; not just the resume.</p>
+                <p class="account-soon">Resources to take you from "applied" to "offer accepted." Built for the rest of the job hunt, not just the resume.</p>
                 <div class="toolkit-grid">
                     <a href="/star.html" class="toolkit-card" id="toolkitStar">
                         <span class="toolkit-card__pill" id="toolkitStarPill">Pro</span>
@@ -151,13 +151,13 @@
                     <a href="/followup.html" class="toolkit-card" id="toolkitFollowup">
                         <span class="toolkit-card__pill" id="toolkitFollowupPill">Pro</span>
                         <h3>AI follow-up email</h3>
-                        <p>Generate a recruiter-tested follow-up email tailored to your scenario &mdash; post-interview, ghosted, after a rejection. Edit and send.</p>
+                        <p>Generate a recruiter-tested follow-up email tailored to your scenario: post-interview, ghosted, after a rejection. Edit and send.</p>
                         <span class="toolkit-card__more">Open generator &rarr;</span>
                     </a>
                     <a href="/behavioral-questions.html" class="toolkit-card">
                         <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
                         <h3>Behavioral question bank</h3>
-                        <p>40+ real interview questions organized by competency. Print, study, practice &mdash; yours to keep.</p>
+                        <p>40+ real interview questions organized by competency. Print, study, practice. Yours to keep.</p>
                         <span class="toolkit-card__more">Open bank &rarr;</span>
                     </a>
                     <a href="/follow-up-emails.html" class="toolkit-card">
@@ -197,7 +197,7 @@
                     <div class="account-card apps-paywall__card">
                         <p class="account-card__label">Pro feature</p>
                         <h3 class="apps-paywall__title">Track every application.</h3>
-                        <p class="account-card__detail">Status, applied date, follow-up reminders. Never miss a "circle back" again.</p>
+                        <p class="account-card__detail">Status, applied date, follow-up reminders. Never lose track of an open application.</p>
                         <button type="button" class="submit-btn submit-btn--inline apps-paywall__btn" id="appsPaywallUpgrade">
                             <span class="submit-btn__label">Upgrade to Pro</span>
                         </button>
@@ -235,7 +235,7 @@
                     <a href="/blog/resume-keywords-that-get-interviews.html" class="playbook-card">
                         <span class="blog-tag">Keywords</span>
                         <h3>Resume keywords that get interviews</h3>
-                        <p>The exact words to mirror from a job description &mdash; and how to do it without sounding robotic.</p>
+                        <p>The exact words to mirror from a job description, and how to do it without sounding robotic.</p>
                     </a>
                 </div>
             </section>
@@ -249,7 +249,7 @@
                     <div class="account-row">
                         <div>
                             <p class="account-row__label">Email</p>
-                            <p class="account-row__value" id="userEmail">&mdash;</p>
+                            <p class="account-row__value" id="userEmail">--</p>
                         </div>
                     </div>
                     <div class="account-row">
@@ -273,7 +273,7 @@
     <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <header class="modal__head">
             <div class="modal__head-info">
-                <p class="modal__eyebrow" id="modalDate">&mdash;</p>
+                <p class="modal__eyebrow" id="modalDate">--</p>
                 <h2 class="modal__title" id="modalTitle">Resume</h2>
                 <button type="button" class="modal__rename" id="modalRenameBtn" aria-label="Rename resume" hidden>Rename</button>
             </div>
@@ -342,7 +342,7 @@
                     <div class="field">
                         <label class="field-label" for="appResume"><span class="field-name">Linked resume <span class="field-hint">optional</span></span></label>
                         <select id="appResume" class="email-input">
-                            <option value="">— none —</option>
+                            <option value="">(none)</option>
                         </select>
                     </div>
                 </div>
@@ -378,6 +378,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
+            <a href="/privacy.html">Privacy</a>
             <a href="mailto:contact@stromation.com">contact@stromation.com</a>
         </div>
         <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
@@ -401,7 +402,7 @@
 
     // Handle post-checkout callback before loading dashboard data.
     // Stripe charged the card BEFORE redirecting, so even if our fulfill call
-    // fails (network blip, n8n cold start), the user paid — we must persist
+    // fails (network blip, n8n cold start), the user paid, so we must persist
     // the session_id and keep retrying. The handler is idempotent
     // (on_conflict=stripe_subscription_id), so safe to call multiple times.
     var params = new URLSearchParams(window.location.search);
@@ -435,7 +436,7 @@
                 await new Promise(function(res) { setTimeout(res, attempt * 1500); });
                 return tryFulfill(sessionId, attempt + 1);
             }
-            return { ok: false, error: 'Network error. Your card was charged — please retry below.' };
+            return { ok: false, error: 'Network error. Your card was charged. Please retry below.' };
         }
     }
 
@@ -575,7 +576,7 @@
         // Hero CTA: signal that the next tailoring is free for Pro users.
         var heroCta = document.getElementById('heroCta');
         var heroCtaHint = document.getElementById('heroCtaHint');
-        heroCta.querySelector('.submit-btn__label').textContent = proLeft > 0 ? 'Tailor a resume — free' : 'Tailor a resume — $1';
+        heroCta.querySelector('.submit-btn__label').textContent = proLeft > 0 ? 'Tailor a resume · free' : 'Tailor a resume · $1';
         heroCtaHint.hidden = false;
         heroCtaHint.textContent = proLeft > 0
             ? 'Included with Pro · ' + proLeft + ' of 50 left this period'
@@ -616,7 +617,7 @@
                     var heroCtaEl = document.getElementById('heroCta');
                     var heroCtaHintEl = document.getElementById('heroCtaHint');
                     if (heroCtaEl && heroCtaEl.querySelector('.submit-btn__label')) {
-                        heroCtaEl.querySelector('.submit-btn__label').textContent = left > 0 ? 'Tailor a resume — free' : 'Tailor a resume — $1';
+                        heroCtaEl.querySelector('.submit-btn__label').textContent = left > 0 ? 'Tailor a resume · free' : 'Tailor a resume · $1';
                     }
                     if (heroCtaHintEl) {
                         heroCtaHintEl.textContent = left > 0
@@ -637,7 +638,7 @@
     }
     document.addEventListener('visibilitychange', maybeRefreshStatStrip);
     window.addEventListener('pageshow', function(e) {
-        // bfcache restore — visibilitychange may not fire
+        // bfcache restore: visibilitychange may not fire
         if (e.persisted) maybeRefreshStatStrip();
     });
 
@@ -762,7 +763,7 @@
         { t: "Lead with the result, not the task.", b: "'Cut deploy time 40%' beats 'responsible for deployments.' Numbers earn the second read." },
         { t: "One page is a myth past 8 years.", b: "Two pages is normal at the senior level. Don't drop relevant work to hit a folklore rule." },
         { t: "Tailor in 60 seconds, not 60 minutes.", b: "Open the JD, copy 5 phrases, weave them into your top 3 bullets. Done." },
-        { t: "Skip the objective.", b: "Recruiters skim. A summary statement with hard skills + years beats 'seeking a challenging role to leverage…' every time." },
+        { t: "Skip the objective.", b: "Recruiters skim. A summary statement with hard skills + years beats 'seeking a challenging role where I can grow…' every time." },
         { t: "Apply within 72 hours of posting.", b: "First-week applicants get 4x the callbacks. Speed beats polish past a baseline." },
         { t: "Follow up on day 7.", b: "A short 'still excited about the role' email pulls your application back to the top of the inbox. Templates in your toolkit." },
         { t: "Quantify three things minimum.", b: "Team size, budget, time saved, customers served, revenue. Pick whatever's true and put it in." },
@@ -770,7 +771,7 @@
         { t: "The cover letter still matters.", b: "For senior roles especially. 4 short paragraphs: hook, what they want, your match, ask for the call." },
         { t: "Recruiter Linkedin > applying cold.", b: "If you can name the recruiter, message them with one specific reason you're a fit. Conversion is dramatically higher." },
         { t: "Don't list every job.", b: "Last 10-15 years is plenty. Old jobs get a one-line callout if relevant, not a bullet treatment." },
-        { t: "Skills sections are scanned, not read.", b: "Front-load the 8-10 keywords that match the JD. Drop the irrelevant ones — they dilute the match score." },
+        { t: "Skills sections are scanned, not read.", b: "Front-load the 8-10 keywords that match the JD. Drop the irrelevant ones; they dilute the match score." },
         { t: "Negotiate every offer.", b: "75% of recruiters expect it and have room. Counter at +10-15%; ask once, politely, and stop." }
     ];
     var weekIdx = Math.floor((Date.now() / 86400000) / 7) % TIPS.length;
@@ -857,7 +858,7 @@
         var sc = rep.score;
         var cls = sc >= 80 ? 'ats-card__score--good' : sc >= 60 ? 'ats-card__score--ok' : 'ats-card__score--low';
         function chips(arr, kind) {
-            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">—</span>';
+            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">--</span>';
             return arr.map(function(s) { return '<span class="ats-chip ats-chip--' + kind + '">' + esc(s) + '</span>'; }).join('');
         }
         var underHtml = '';
@@ -1090,7 +1091,7 @@
         var newTotal = Math.max(0, totalCount - 1);
         if (pill) pill.textContent = newTotal + ' total';
         // statTotal is the lifetime tailoring count (from resumego_sessions),
-        // not the saved-resume count — deleting a saved resume must not
+        // not the saved-resume count, so deleting a saved resume must not
         // decrement it. Only the resume-list pill / Browse-all button reflect
         // the saved count.
         totalCount = newTotal;
@@ -1386,7 +1387,7 @@
                 if (pill) {
                     var newTotal = Math.max(0, totalCount - 1);
                     pill.textContent = newTotal + ' total';
-                    // Don't touch statTotal — it tracks lifetime tailorings
+                    // Don't touch statTotal: it tracks lifetime tailorings
                     // (from resumego_sessions), not saved resumes.
                     totalCount = newTotal;
                     if (newTotal <= 5 && !viewAllBtn.hidden) viewAllBtn.hidden = true;
@@ -1503,7 +1504,7 @@
         }
         function populateResumeOptions() {
             var sel = document.getElementById('appResume');
-            sel.innerHTML = '<option value="">— none —</option>';
+            sel.innerHTML = '<option value="">(none)</option>';
             (resumes || []).forEach(function(r) {
                 var title = r.title || [r.target_role, r.target_company].filter(Boolean).join(' at ') || 'Untitled resume';
                 sel.innerHTML += '<option value="' + esc(r.id) + '">' + esc(title) + '</option>';

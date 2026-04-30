@@ -1,5 +1,5 @@
 // Auth-aware nav: swaps 'Sign in' to 'Account' when the visitor is signed in.
-// Reads the persisted Supabase session synchronously so there's no flicker —
+// Reads the persisted Supabase session synchronously so there's no flicker:
 // the link is set BEFORE first paint, and the async getUser() reconciles
 // later in case the local token has been revoked.
 (function() {
@@ -20,7 +20,7 @@
         }
     }
 
-    // Synchronous local session probe — Supabase v2 stores the session under
+    // Synchronous local session probe: Supabase v2 stores the session under
     // localStorage key sb-<project-ref>-auth-token.
     var hasLocal = false;
     try {

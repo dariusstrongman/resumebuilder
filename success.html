@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Your Resume is Ready &mdash; ResumeGo</title>
+    <title>Your Resume is Ready | ResumeGo</title>
     <meta name="theme-color" content="#07080a">
     <link rel="canonical" href="https://resume.stromation.com/success.html">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -66,7 +66,7 @@
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
             </div>
             <h1 class="success-h">Your tailored resume is ready.</h1>
-            <p class="success-sub">Download below. A copy was also sent to <strong id="deliveryEmail">your email</strong> &mdash; check your spam folder if you don't see it.</p>
+            <p class="success-sub">Download below. A copy was also sent to <strong id="deliveryEmail">your email</strong>. Check your spam folder if you don't see it.</p>
             <div id="packBanner" class="pack-banner" style="display:none;">
                 <span class="pack-banner__label">Pack credit used</span>
                 <span class="pack-banner__code" id="packBannerCode"></span>
@@ -88,14 +88,14 @@
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
             </div>
             <h1 class="success-h">Your 10-pack is ready.</h1>
-            <p class="success-sub">A copy was emailed to <strong id="packDeliveryEmail">your email</strong>. If you don't see it within a few minutes, please check your spam folder. Save this code &mdash; it never expires.</p>
+            <p class="success-sub">A copy was emailed to <strong id="packDeliveryEmail">your email</strong>. If you don't see it within a few minutes, please check your spam folder. Save this code, it never expires.</p>
             <div class="pack-code-box">
                 <div class="pack-code-label">Your code</div>
-                <div class="pack-code" id="packCode">&mdash;</div>
+                <div class="pack-code" id="packCode">--</div>
                 <div class="pack-code-meta"><span id="packUses">10</span> uses remaining</div>
                 <button type="button" class="submit-btn submit-btn--inline" id="packCopyBtn"><span class="submit-btn__label">Copy code</span></button>
             </div>
-            <p class="success-sub" style="margin-top:1.5rem;">Paste your code in the <em>Promo code</em> field on the home page when you tailor &mdash; one use per resume.</p>
+            <p class="success-sub" style="margin-top:1.5rem;">Paste your code in the <em>Promo code</em> field on the home page when you tailor. One use per resume.</p>
             <div class="success-buttons">
                 <a href="/#generate" class="submit-btn submit-btn--inline">
                     <span class="submit-btn__label">Tailor my first resume</span>
@@ -133,6 +133,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
+            <a href="/privacy.html">Privacy</a>
             <a href="mailto:contact@stromation.com">contact@stromation.com</a>
         </div>
         <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
@@ -288,7 +289,7 @@
         var sc = rep.score;
         var cls = sc >= 80 ? 'ats-card__score--good' : sc >= 60 ? 'ats-card__score--ok' : 'ats-card__score--low';
         function chips(arr, kind) {
-            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">&mdash;</span>';
+            if (!arr || !arr.length) return '<span class="ats-chip ats-chip--empty">--</span>';
             return arr.map(function(s) { return '<span class="ats-chip ats-chip--' + kind + '">' + esc(s) + '</span>'; }).join('');
         }
         var underHtml = '';
@@ -325,7 +326,7 @@
             if (i === 0) { h += '<div class="rp-name">' + esc(l) + '</div>'; continue; }
             if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { h += '<div class="rp-contact">' + esc(l) + '</div>'; continue; }
             if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { h += '<div class="rp-section">' + esc(l) + '</div>'; continue; }
-            // Role line: "**Title** | Company | Location ............ Dates" — split into left/right
+            // Role line: "**Title** | Company | Location ............ Dates" split into left/right
             var roleMatch = l.match(/^\*\*(.+?)\*\*\s*(.*?)\s*(?:\.{2,}|\s{4,})\s*(.+)$/);
             if (roleMatch) {
                 var rTitle = esc(roleMatch[1]);
