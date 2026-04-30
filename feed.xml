@@ -5,8 +5,15 @@
     <link>https://resume.stromation.com/blog.html</link>
     <description>Practical resume advice backed by how hiring actually works. Learn what ATS systems scan for, which keywords matter, and how to stand out in 7 seconds.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 30 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://resume.stromation.com/feed.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>Effective Resume Design Tips for Job Seekers</title>
+      <link>https://resume.stromation.com/blog/resume-design-tips.html</link>
+      <description>Design tips to make your resume stand out and get noticed by employers without breaking ATS parsing.</description>
+      <guid isPermaLink="true">https://resume.stromation.com/blog/resume-design-tips.html</guid>
+    </item>
 
     <item>
       <title>Why Sending the Same Resume to Every Job is Costing You Interviews</title>
