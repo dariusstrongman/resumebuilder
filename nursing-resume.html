@@ -71,9 +71,9 @@
         <section class="resource-section">
             <h2>What ResumeGo formats correctly for nursing</h2>
             <div class="resource-q-list">
-                <div class="resource-q"><span>01</span>Credentials block at the top: RN license, BSN, BLS, ACLS, PALS, NIHSS, with expiration dates preserved.</div>
-                <div class="resource-q"><span>02</span>Clinical rotations in their own section, with hours, setting (med-surg, ICU, ER, L&amp;D), and preceptor where relevant.</div>
-                <div class="resource-q"><span>03</span>EHR systems written exactly as listed in the posting. Epic, Cerner, Meditech, Allscripts, Sunrise: matched verbatim.</div>
+                <div class="resource-q"><span>01</span>RN license # placed at the top of the resume, right under the summary. State, license number, and expiration kept on a single line so recruiters scan it first.</div>
+                <div class="resource-q"><span>02</span>BSN, BLS, ACLS, PALS, and NIHSS preserved in their own dedicated sections (Education for the degree, Certifications for the cert list with expirations). No duplicating the same cert across three places.</div>
+                <div class="resource-q"><span>03</span>EHR systems matched to the posting verbatim. If the job lists Epic, Cerner, Meditech, Allscripts, or Sunrise, we mirror the exact spelling.</div>
                 <div class="resource-q"><span>04</span>Charge nurse, preceptor, and unit-specific experience surfaced in bullets, not buried.</div>
                 <div class="resource-q"><span>05</span>Refusal to fabricate. We will not add NCLEX dates, certifications, or floor experience that isn't in your source resume. Hospital HR verifies credentials before extending offers.</div>
             </div>
@@ -81,7 +81,7 @@
 
         <section class="resource-section">
             <h2>Hospital ATS we format for</h2>
-            <p>Workday (HCA, Ascension, Banner Health, Cleveland Clinic), Cerner Recruit, iCIMS (Tenet, CommonSpirit), Lever, Greenhouse, and Taleo. Our output is single-column plain text that all of these parse cleanly. No tables, no graphics, no skills bars that recruiters can't read.</p>
+            <p>Workday (HCA, Ascension, Banner Health, Cleveland Clinic), Cerner Recruit, iCIMS (Tenet, CommonSpirit), Lever, Greenhouse, and Taleo. Our output is a single-column PDF that all of these parse cleanly. No tables, no graphics, no skills bars that recruiters can't read.</p>
         </section>
 
         <section class="resource-section">
@@ -89,15 +89,15 @@
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Does it work for new-grad RN applications?<span aria-hidden="true">+</span></button>
-                    <div class="faq-a">Yes. New-grad resumes lean heavily on clinical rotations, capstone projects, and student involvement. We keep that emphasis instead of compressing it into a generic Work History block.</div>
+                    <div class="faq-a">Yes. The catch: keep clinical rotations and capstone projects as their own sections in your source resume (don't list rotations as "jobs" in Work History). We preserve that structure rather than reformatting it for you. If your source already separates clinical experience, capstone, and student involvement, those stay as their own sections in the output.</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Will it preserve my BLS / ACLS expiration dates?<span aria-hidden="true">+</span></button>
-                    <div class="faq-a">Yes. Include them in your source resume and we keep them on the credential. Workday compliance checks need them present.</div>
+                    <div class="faq-a">Yes. If your source resume has the expiration dates, we keep them on each cert in the Certifications section. Workday compliance checks need them present.</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Can it format travel nursing experience correctly?<span aria-hidden="true">+</span></button>
-                    <div class="faq-a">Yes. Travel contracts get listed with the agency, the host hospital, the unit, the dates, and the floor type. Recruiters need all five to evaluate fit.</div>
+                    <div class="faq-a">If your source resume lists agency, host hospital, unit, dates, and floor type per contract, we preserve all of it. We won't infer a host hospital or floor type when your source doesn't specify it (recruiters verify this and a fabricated detail tanks an offer).</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Will it claim certifications I don't have?<span aria-hidden="true">+</span></button>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Does it handle CNA, MA, LPN, NP applications?<span aria-hidden="true">+</span></button>
-                    <div class="faq-a">Yes for all four. The credential block adapts: CNA license, MA certification, LPN license, NP board certification with population focus (FNP, AGNP, PMHNP, etc.).</div>
+                    <div class="faq-a">Yes, with one note. The top-of-resume credential placement is tuned for RN applications. CNA, MA, LPN, and NP work too, but their certifications fold into the Skills section in standard resume layout. Your license number, board cert, or population focus (FNP, AGNP, PMHNP) is preserved exactly as your source resume lists it.</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">Is this enough for Magnet hospital applications?<span aria-hidden="true">+</span></button>
