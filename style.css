@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   ResumeGo — dark / refined / cool
+   ResumeGo | dark / refined / cool
    Host Grotesk (UI) · Instrument Serif (display italic) · JetBrains Mono (meta)
    Lime accent against deep obsidian. Built for speed, priced for one dollar.
    ══════════════════════════════════════════════════════════════ */
@@ -19,7 +19,7 @@
     --ink-3:        #61697a;
     --ink-4:        #3a4150;
 
-    /* Accent — electric lime */
+    /* Accent | electric lime */
     --accent:       #c5ff4a;
     --accent-2:     #a8e635;
     --accent-dim:   rgba(197, 255, 74, 0.12);
@@ -573,7 +573,7 @@ img, svg { max-width: 100%; display: block; }
     border-color: rgba(217, 119, 6, 0.4);
 }
 
-/* Apps modal panel — narrower than the resume preview modal */
+/* Apps modal panel | narrower than the resume preview modal */
 .apps-modal__panel {
     max-width: 640px;
     width: calc(100vw - 2rem);
@@ -890,6 +890,7 @@ textarea::placeholder {
     gap: 0.5rem;
     align-items: center;
 }
+.promo-input-wrap[hidden] { display: none; }
 .promo-input {
     flex: 1;
     padding: 0.7rem 0.85rem;
@@ -963,6 +964,7 @@ textarea::placeholder {
     cursor: not-allowed;
     box-shadow: none;
 }
+.submit-btn[hidden] { display: none; }
 .submit-btn__label { position: relative; z-index: 1; }
 .submit-btn__price {
     font-family: var(--f-mono);
@@ -1304,7 +1306,7 @@ textarea::placeholder {
     box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Styles for content app.js renders into doc-preview — mirrors success.html
+/* Styles for content app.js renders into doc-preview | mirrors success.html
    .rp-* classes so the homepage example matches what the user actually
    downloads. */
 .dp-name {
@@ -3207,6 +3209,7 @@ textarea::placeholder {
     flex-direction: column;
     gap: 1rem;
 }
+.auth-form[hidden] { display: none; }
 .auth-h {
     font-family: var(--f-display);
     font-style: italic;
@@ -3625,7 +3628,7 @@ textarea::placeholder {
 }
 
 
-/* Mode picker — radio cards at top of form (Option 2) */
+/* Mode picker | radio cards at top of form (Option 2) */
 .mode-picker {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4434,7 +4437,7 @@ textarea::placeholder {
 }
 
 /* ============================================================
-   ATS gap report card — used in modal preview + success page
+   ATS gap report card | used in modal preview + success page
    ============================================================ */
 .ats-card {
     background: var(--bg-2);
@@ -4552,7 +4555,7 @@ textarea::placeholder {
 }
 .ats-card__recs li { margin-bottom: 0.3rem; }
 
-/* On the success page, the card sits over the dark hero — make it pop */
+/* On the success page, the card sits over the dark hero | make it pop */
 .success-preview .ats-card {
     background: rgba(255,255,255,0.04);
     border-color: rgba(255,255,255,0.12);

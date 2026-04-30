@@ -14,3 +14,8 @@ Thumbs.db
 *.swp
 resume example/
 schema.sql
+
+# Test artifacts (real or synthetic resumes used for local testing)
+long_test_resume.*
+sample_resumes/
+v2_init.sql

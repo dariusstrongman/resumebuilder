@@ -137,7 +137,7 @@ if (coverCheck) {
     coverCheck.addEventListener('change', refreshPriceLabel);
 }
 
-// Pro status check — runs once after auth resolves on the page.
+// Pro status check: runs once after auth resolves on the page.
 // Caches result to localStorage so subsequent page loads can pre-render
 // "FREE" before paint without waiting for the network round-trip.
 function cacheProStatus() {
@@ -246,7 +246,7 @@ function getPromoCode() {
         var v = (this.value || '').trim().toUpperCase();
         if (!v) { reset(); return; }
 
-        // Static codes — instant validation
+        // Static codes: instant validation
         if (KNOWN_PROMO_CODES.indexOf(v) !== -1) {
             promoState = { code: v, valid: true, source: 'static', uses_remaining: null };
             status.textContent = 'Applied';
@@ -258,7 +258,7 @@ function getPromoCode() {
         // Looks like a pack code? Show 'Checking…' and validate via webhook
         var packShape = /^PACK-[A-Z0-9]{2,}-[A-Z0-9]{2,}$/.test(v);
         if (!packShape) {
-            // Unknown format — clear any prior state, no immediate verdict
+            // Unknown format: clear any prior state, no immediate verdict
             promoState = { code: '', valid: false, source: null, uses_remaining: null };
             status.textContent = '';
             setUI('');
@@ -280,7 +280,7 @@ function getPromoCode() {
             })
             .then(function(r) { return r.json(); })
             .then(function(resp) {
-                // Stale response — user kept typing
+                // Stale response: user kept typing
                 if (((input.value || '').trim().toUpperCase()) !== thisCode) return;
                 if (resp.valid) {
                     promoState = { code: thisCode, valid: true, source: resp.source || 'pack', uses_remaining: (resp.uses_remaining != null ? resp.uses_remaining : null) };
@@ -543,7 +543,7 @@ function renderGraderResult(d) {
     }
 
     html += '<div class="grader-upsell">'
-      + '<h3>Fix all of this <em>automatically</em> &mdash; $1</h3>'
+      + '<h3>Fix all of this <em>automatically</em> for $1</h3>'
       + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses above. ATS-optimized PDF in 60 seconds.</p>'
       + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
       + '</div>';
@@ -834,7 +834,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             var email = readEmail();
             if (!email) {
-                toast('Enter your email above first — that\'s where we\'ll send the pack code.', 'error');
+                toast('Enter your email above first. That\'s where we\'ll send the pack code.', 'error');
                 var input = document.getElementById('userEmail');
                 if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
                 return;
@@ -914,14 +914,15 @@ function formatResumePreview(text) {
             html += '<div style="font-size:.82rem;font-weight:700;border-bottom:1px solid #444;padding-bottom:2px;margin-top:.75rem;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.03em;">' + escapeHtml(line) + '</div>';
             continue;
         }
-        line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        if (line.startsWith('* ') || line.startsWith('- ')) {
-            html += '<div style="font-size:.78rem;margin-left:1rem;margin-bottom:.15rem;position:relative;padding-left:.75rem;color:#ccc;"><span style="position:absolute;left:0;">&#8226;</span>' + line.substring(2) + '</div>';
+        var isBullet = line.startsWith('* ') || line.startsWith('- ');
+        var safe = escapeHtml(isBullet ? line.substring(2) : line).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        if (isBullet) {
+            html += '<div style="font-size:.78rem;margin-left:1rem;margin-bottom:.15rem;position:relative;padding-left:.75rem;color:#ccc;"><span style="position:absolute;left:0;">&#8226;</span>' + safe + '</div>';
             continue;
         }
         if (line.match(/\|.*\d{4}/)) { html += '<div style="font-size:.75rem;color:#888;font-style:italic;">' + escapeHtml(line) + '</div>'; continue; }
         if (line.match(/^[A-Z]/) && lines[i+1] && lines[i+1].match(/[,|].*\d{4}/)) { html += '<div style="font-size:.85rem;font-weight:700;margin-top:.5rem;">' + escapeHtml(line) + '</div>'; continue; }
-        html += '<div style="font-size:.78rem;color:#ccc;">' + line + '</div>';
+        html += '<div style="font-size:.78rem;color:#ccc;">' + safe + '</div>';
     }
     return html;
 }
@@ -933,13 +934,12 @@ function printResume() {
 
     // Build HTML for rendering
     var html = '';
-    var inEdu = false;
     for (var i = 0; i < lines.length; i++) {
         var l = lines[i].trim();
         if (!l) { html += '<div style="height:4px;"></div>'; continue; }
         if (i === 0) { html += '<div style="text-align:center;font-size:22px;font-weight:bold;font-family:Georgia,serif;letter-spacing:1px;">' + escapeHtml(l) + '</div>'; continue; }
         if (i <= 2 && (l.indexOf('|') !== -1 || l.indexOf('@') !== -1)) { html += '<div style="text-align:center;font-size:9px;color:#333;margin-bottom:6px;font-family:Georgia,serif;">' + escapeHtml(l) + '</div>'; continue; }
-        if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { if (l.match(/EDUCATION/)) inEdu = true; else inEdu = false; html += '<div style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:10px;padding-bottom:2px;border-bottom:1.5px solid #000;margin-bottom:6px;font-family:Georgia,serif;">' + escapeHtml(l) + '</div>'; continue; }
+        if (l.match(/^[A-Z][A-Z &]+$/) && l.length > 3) { html += '<div style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:10px;padding-bottom:2px;border-bottom:1.5px solid #000;margin-bottom:6px;font-family:Georgia,serif;">' + escapeHtml(l) + '</div>'; continue; }
         var cleaned = escapeHtml(l).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
         if (l.startsWith('* ') || l.startsWith('- ')) { html += '<div style="font-size:10.5px;margin-left:14px;margin-bottom:1px;font-family:Georgia,serif;text-indent:-10px;padding-left:10px;line-height:1.45;">&#8226; ' + cleaned.substring(2) + '</div>'; continue; }
         if (l.indexOf(':') !== -1 && l.match(/^[A-Z]/)) { cleaned = cleaned.replace(/^([^:]+:)/, '<b>$1</b>'); }
