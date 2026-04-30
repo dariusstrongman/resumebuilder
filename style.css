@@ -4375,6 +4375,9 @@ textarea::placeholder {
     gap: 0.6rem;
     margin-top: 0.8rem;
 }
+.plan-picker[hidden] {
+    display: none;
+}
 .plan-picker__opt {
     position: relative;
     background: var(--bg-2);
