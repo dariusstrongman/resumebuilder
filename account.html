@@ -489,25 +489,48 @@
     calMonthStart.setUTCDate(1);
     calMonthStart.setUTCHours(0, 0, 0, 0);
 
+    // After the dashboard_read_rls migration, users can SELECT their own rows
+    // from resumego_sessions and resumego_packs directly with their JWT, so the
+    // dashboard reads no longer route through n8n. n8n is reserved for things
+    // that genuinely need the service role (Stripe, GPT, RLS-blocked writes).
+    var monthStartIso = calMonthStart.toISOString();
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-    // One batched webhook (dashboard_load) returns pack_status + usage_stats +
-    // pro_status. Replaces what used to be 3 separate calls (and a 4th pro_status
-    // call further down for Pro users). resumego_packs and resumego_sessions are
-    // RLS-protected, so this still has to route through the service-role webhook.
-    var dashPromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'dashboard_load', user_id: user.id, user_email: user.email, month_start: calMonthStart.toISOString() })
-    }).then(function(r) { return r.json(); }).catch(function() {
-        return { pro_status: { is_pro: false }, usage_stats: { month_count: 0, total_count: 0 }, pack_status: { packs: [], total_credits: 0 } };
-    });
+    var totalSessionsPromise = sb.from('resumego_sessions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'complete');
+    var monthSessionsPromise = sb.from('resumego_sessions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'complete').gte('created_at', monthStartIso);
+    var userEmailLower = (user.email || '').toLowerCase().trim();
+    var packsPromise = sb.from('resumego_packs').select('code, uses_remaining, uses_total, created_at').eq('user_email', userEmailLower).gt('uses_remaining', 0).order('created_at', { ascending: true });
 
-    var [profileR, subR, dashR, resumesR] = await Promise.all([profilePromise, subPromise, dashPromise, resumesPromise]);
-    var packsR = (dashR && dashR.pack_status) || { packs: [], total_credits: 0 };
-    var usageR = (dashR && dashR.usage_stats) || { month_count: 0, total_count: 0 };
-    var proStatusFromDash = (dashR && dashR.pro_status) || null;
+    var [profileR, subR, resumesR, totalSessionsR, monthSessionsR, packsListR] = await Promise.all([profilePromise, subPromise, resumesPromise, totalSessionsPromise, monthSessionsPromise, packsPromise]);
+
+    var packsArr = packsListR.data || [];
+    var packsR = {
+        packs: packsArr,
+        total_credits: packsArr.reduce(function(s, p) { return s + (p.uses_remaining || 0); }, 0)
+    };
+    var usageR = {
+        month_count: monthSessionsR.count || 0,
+        total_count: totalSessionsR.count || 0
+    };
+
+    // Pro period window math, ported from n8n so we can compute proUsed
+    // without a server round-trip.
+    function getCapWindowStart(periodStartIso, plan) {
+        if (!periodStartIso) return null;
+        if (plan !== 'pro_yearly') return periodStartIso;
+        var ps = new Date(periodStartIso);
+        var now = new Date();
+        var anchorDay = ps.getUTCDate();
+        var anchor = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), anchorDay,
+            ps.getUTCHours(), ps.getUTCMinutes(), ps.getUTCSeconds()));
+        if (anchor > now) {
+            anchor = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, anchorDay,
+                ps.getUTCHours(), ps.getUTCMinutes(), ps.getUTCSeconds()));
+        }
+        if (anchor < ps) return periodStartIso;
+        return anchor.toISOString();
+    }
 
     var profile = profileR.data || {};
     var firstName = profile.display_name || (user.email || '').split('@')[0] || 'there';
@@ -573,10 +596,21 @@
             toolkitFollowupPill.classList.add('toolkit-card__pill--free');
         }
 
-        // Pro cap is over the BILLING period, not calendar month. The count
-        // already came back in the batched dashboard_load response above, so
-        // no second webhook call is needed.
-        var proPeriodCount = (proStatusFromDash && typeof proStatusFromDash.used === 'number') ? proStatusFromDash.used : 0;
+        // Pro cap is over the BILLING period, not calendar month. Count
+        // pro-tagged sessions since the window start. Direct Supabase read,
+        // gated by the user's own SELECT policy.
+        var proPeriodCount = 0;
+        var capWindowStart = getCapWindowStart(sub && sub.current_period_start, sub && sub.plan);
+        if (capWindowStart) {
+            try {
+                var proCountR = await sb.from('resumego_sessions')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('user_id', user.id)
+                    .like('stripe_session_id', 'PRO:%')
+                    .gte('created_at', capWindowStart);
+                proPeriodCount = proCountR.count || 0;
+            } catch (ePc) {}
+        }
         var proLeft = Math.max(0, 50 - proPeriodCount);
         document.getElementById('statMonthLabel').textContent = 'Pro tailorings';
         document.getElementById('statMonth').textContent = proLeft + ' left';
@@ -608,34 +642,35 @@
     var lastStatRefresh = Date.now();
     async function refreshStatStrip() {
         try {
-            var dash = await fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'dashboard_load', user_id: user.id, user_email: user.email, month_start: calMonthStart.toISOString() })
-            }).then(function(r) { return r.json(); }).catch(function() { return null; });
-            if (!dash) return;
-            var u = dash.usage_stats || null;
-            var p = dash.pro_status || null;
-            if (u && typeof u.total_count === 'number') {
-                document.getElementById('statTotal').textContent = u.total_count;
+            var totalR = await sb.from('resumego_sessions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'complete');
+            if (typeof totalR.count === 'number') {
+                document.getElementById('statTotal').textContent = totalR.count;
             }
             if (isPro) {
-                if (p && typeof p.used === 'number') {
-                    var left = Math.max(0, 50 - p.used);
-                    document.getElementById('statMonth').textContent = left + ' left';
-                    var heroCtaEl = document.getElementById('heroCta');
-                    var heroCtaHintEl = document.getElementById('heroCtaHint');
-                    if (heroCtaEl && heroCtaEl.querySelector('.submit-btn__label')) {
-                        heroCtaEl.querySelector('.submit-btn__label').textContent = left > 0 ? 'Tailor a resume · free' : 'Tailor a resume · $1';
-                    }
-                    if (heroCtaHintEl) {
-                        heroCtaHintEl.textContent = left > 0
-                            ? 'Included with Pro · ' + left + ' of 50 left this period'
-                            : "You've used your 50 this period · resets " + (sub && sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'soon');
+                var capWS = getCapWindowStart(sub && sub.current_period_start, sub && sub.plan);
+                if (capWS) {
+                    var proR = await sb.from('resumego_sessions').select('id', { count: 'exact', head: true })
+                        .eq('user_id', user.id).like('stripe_session_id', 'PRO:%').gte('created_at', capWS);
+                    if (typeof proR.count === 'number') {
+                        var left = Math.max(0, 50 - proR.count);
+                        document.getElementById('statMonth').textContent = left + ' left';
+                        var heroCtaEl = document.getElementById('heroCta');
+                        var heroCtaHintEl = document.getElementById('heroCtaHint');
+                        if (heroCtaEl && heroCtaEl.querySelector('.submit-btn__label')) {
+                            heroCtaEl.querySelector('.submit-btn__label').textContent = left > 0 ? 'Tailor a resume · free' : 'Tailor a resume · $1';
+                        }
+                        if (heroCtaHintEl) {
+                            heroCtaHintEl.textContent = left > 0
+                                ? 'Included with Pro · ' + left + ' of 50 left this period'
+                                : "You've used your 50 this period · resets " + (sub && sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'soon');
+                        }
                     }
                 }
-            } else if (u && typeof u.month_count === 'number') {
-                document.getElementById('statMonth').textContent = u.month_count;
+            } else {
+                var monthR = await sb.from('resumego_sessions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'complete').gte('created_at', calMonthStart.toISOString());
+                if (typeof monthR.count === 'number') {
+                    document.getElementById('statMonth').textContent = monthR.count;
+                }
             }
         } catch (e) { /* keep last known values on failure */ }
     }
