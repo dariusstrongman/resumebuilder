@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config','AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is an ATS? How Applicant Tracking Systems Work | ATSHack</title>
+    <meta name="description" content="Plain-English guide to applicant tracking systems. How ATS scores resumes, what gets you auto-rejected, and the rules for actually beating it. From ATSHack, $1 resume tailoring.">
+    <meta property="og:title" content="What is an ATS? How Applicant Tracking Systems Work | ATSHack">
+    <meta property="og:description" content="Roughly 75% of resumes get filtered before a human reads them. Here's how ATS software actually works, what gets you auto-rejected, and the concrete rules for getting through.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://resume.stromation.com/ats.html">
+    <meta property="og:image" content="https://resume.stromation.com/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What is an ATS? How Applicant Tracking Systems Work">
+    <meta name="twitter:description" content="The actual rules for getting past Workday, Greenhouse, Lever, iCIMS, and Taleo.">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://resume.stromation.com/ats.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "What is an Applicant Tracking System (and how to beat it)",
+        "description": "A plain-English guide to how ATS software scores resumes, what gets you auto-rejected, and the concrete rules for getting your resume through to a human.",
+        "author": { "@type": "Organization", "name": "ATSHack" },
+        "publisher": {
+            "@type": "Organization",
+            "name": "ATSHack",
+            "logo": { "@type": "ImageObject", "url": "https://resume.stromation.com/favicon.svg" }
+        },
+        "mainEntityOfPage": "https://resume.stromation.com/ats.html",
+        "url": "https://resume.stromation.com/ats.html",
+        "datePublished": "2026-05-01",
+        "dateModified": "2026-05-01"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Does my resume really get filtered before a human sees it?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For most large and mid-sized companies, yes. Recruiters at high-volume employers rely on ATS keyword filters to cut a stack of 250+ applicants down to 10-25 they actually read. Smaller employers (under ~50 people) often skim everything, but anything Fortune 1000 is filtering by default."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can ATS read PDF resumes?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most modern ATS (Workday, Greenhouse, Lever, iCIMS) parse PDFs fine, as long as the PDF is text-based and not a scanned image. Older Taleo instances and some legacy government systems still struggle with PDFs and prefer DOCX. If a posting says 'upload Word format,' submit DOCX. Otherwise PDF is safe."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Should I keyword-stuff my resume?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Modern ATS and recruiter tools detect repeated keywords and white-text tricks, and a good recruiter throws out anything that reads like spam. Match the language of the job posting where it's honestly true of your experience. If you've genuinely done the thing, use the words the posting uses for it. Don't list skills you don't have."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What ATS does a specific company use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can usually tell from the application URL. If it's myworkdayjobs.com, it's Workday. boards.greenhouse.io is Greenhouse. jobs.lever.co is Lever. icims.com is iCIMS. taleo.net is Taleo. Once you know the system, you can avoid known parsing issues (no tables on Workday, simple text on Taleo, etc.). The good news is that a clean single-column resume with standard headers passes all of them."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is ATSHack worth it for one application?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "It costs $1 with no account or subscription. If the role pays even $40k, a tailored resume that gets read is worth a dollar. The $1 path is the whole product for most people. Pro at $15/mo only makes sense if you're sending 10+ tailored applications a month."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Do small companies use ATS too?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "More than you'd think. Greenhouse, Lever, and BambooHR all have plans aimed at startups under 100 people. If the company posts on a careers page that isn't just a mailto link, there's a good chance an ATS is involved. The format that beats Workday also beats a recruiter eyeballing 30 PDFs over coffee, so you don't lose anything by writing for the bot."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What's the single biggest ATS mistake?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Multi-column layouts. The pretty two-column resumes from Canva, Novoresume, and most template sites get read by ATS in the wrong order, jumbling your job titles into your skills section. A clean single-column layout with standard section headers fixes 80% of parsing failures by itself."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<!-- ───────────────── NAV ───────────────── -->
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="resource-shell">
+
+        <p class="resource-eyebrow">Guide</p>
+        <h1 class="resource-title">What is an applicant tracking system (and how to beat it).</h1>
+        <p class="resource-lede">Roughly 75% of resumes get filtered out by software before a human ever sees them. Here's what that software actually does, what gets you auto-rejected, and the concrete rules for getting through.</p>
+
+        <p style="margin: 1.5rem 0 2.5rem;">
+            <a href="/#generate" class="submit-btn submit-btn--inline">
+                <span class="submit-btn__label">Tailor your resume now</span>
+                <span class="submit-btn__price">$1.00</span>
+            </a>
+        </p>
+
+        <article class="legal-doc">
+
+            <h2>What is an ATS?</h2>
+            <p>An applicant tracking system (ATS) is the software companies use to receive, scan, score, and filter resumes before any human looks at them. When you upload a resume to a careers page, you're almost never sending it straight to a recruiter's inbox. You're feeding it into a database that parses your text, tags your skills, scores you against the job posting, and ranks you in a list the recruiter pulls up in the morning.</p>
+
+            <p>The big systems most US applicants run into are <strong>Workday</strong>, <strong>Greenhouse</strong>, <strong>Lever</strong>, <strong>iCIMS</strong>, <strong>Taleo</strong> (now Oracle Recruiting), <strong>BambooHR</strong>, and <strong>ADP</strong>. Workday dominates the Fortune 500. Greenhouse and Lever own most of tech. iCIMS and Taleo show up everywhere from healthcare systems to federal contractors. BambooHR and ADP are the small-and-mid-size workhorses.</p>
+
+            <p>Companies use them for one reason: volume. A single role at a Fortune 500 company can pull 250 to 500 applications in the first 48 hours after it's posted. There is no recruiter alive who reads 250 resumes per role per week. So they don't. They search the ATS for keywords, sort by score, and read the top 20.</p>
+
+            <h2>How an ATS actually scores you</h2>
+            <p>Forget the marketing fluff about "AI-powered candidate matching." The actual scoring is mostly four things, and they're not subtle.</p>
+
+            <p><strong>1. Keyword matching against the job description.</strong> The system extracts the skills, tools, and titles from the posting, then looks for those exact strings in your resume. If the posting says "Snowflake" 6 times and your resume says "data warehouse," you don't get the credit. The match is literal.</p>
+
+            <p><strong>2. Format parsing.</strong> The ATS converts your file into structured data: name here, email there, work history in this table, skills in that one. Multi-column layouts, text boxes, headers/footers, and tables all break parsers. When parsing breaks, your job titles end up in the wrong field, or vanish entirely, and you score zero on things you've actually done.</p>
+
+            <p><strong>3. Section header matching.</strong> The parser looks for standard headings: <em>Work Experience</em>, <em>Education</em>, <em>Skills</em>, <em>Certifications</em>. If you got cute and named your work history "My Journey" or "Where I've Been," the parser may not recognize it as work history at all.</p>
+
+            <p><strong>4. File format.</strong> Most modern ATS handle PDF and DOCX equally well, as long as the PDF is text-based (not a scan or a screenshot). Some older Taleo instances and a handful of legacy government portals still choke on PDFs and prefer DOCX. When in doubt, submit whatever the posting asks for. If the posting doesn't say, PDF is the safer default.</p>
+
+            <h3>ATS quirks worth knowing</h3>
+            <ul>
+                <li><strong>Workday</strong> hates tables and two-column layouts. It also auto-fills fields from your uploaded resume, and any parsing error there shows up as a blank or wrong field on your application. Always review the auto-filled form.</li>
+                <li><strong>iCIMS</strong> strips most formatting on intake. Bold, italics, and bullet styles often disappear, so don't rely on visual emphasis to convey importance. Plain text wins.</li>
+                <li><strong>Greenhouse</strong> and <strong>Lever</strong> parse cleanly and handle PDFs well. They're the most forgiving of the major systems. If a startup uses one of these, you're in a fair fight.</li>
+                <li><strong>Taleo</strong> is the worst-aged system in wide use. Older instances mangle PDFs, ignore non-standard headers, and frequently strip apostrophes and special characters. If you see <code>taleo.net</code> in the URL, submit DOCX and keep formatting minimal.</li>
+                <li><strong>BambooHR</strong> is small-business friendly and parses well, but a real human at the company is usually reading every applicant anyway.</li>
+            </ul>
+
+            <h2>The 7 things that get you auto-rejected</h2>
+            <p>These are the patterns the bots punish hardest. None of them are about the quality of your experience. They're about formatting choices that quietly break the system before anyone reads a word.</p>
+
+            <ul>
+                <li><strong>Missing keywords from the job description.</strong> If the posting wants "project management, Agile, Jira" and your resume says "ran software teams," the score is low even if you did exactly that.</li>
+                <li><strong>Multi-column or two-column layouts.</strong> The biggest single cause of parsing failure. Beautiful in Canva, broken in Workday.</li>
+                <li><strong>Headers and footers with key info.</strong> Many parsers ignore the header/footer regions entirely. Put your name, email, and phone in the body of the document, not in a Word header.</li>
+                <li><strong>Images, icons, and graphics.</strong> Logos, skill bars, photos, charts. The ATS can't read them and they often confuse the parser around them.</li>
+                <li><strong>Non-standard section names.</strong> "Career Story," "What I'm Good At," "Hustle History." Use <em>Work Experience</em>, <em>Education</em>, <em>Skills</em>, <em>Certifications</em>.</li>
+                <li><strong>Custom fonts not embedded in the file.</strong> When the parser substitutes a fallback font, character spacing breaks and dates and titles can run together.</li>
+                <li><strong>Date typos and inconsistent date formats.</strong> If the parser can't read your employment dates, it can't compute years of experience, which is one of the top filters recruiters set.</li>
+            </ul>
+
+            <h2>How to actually beat the ATS</h2>
+            <p>The fix is boring on purpose. Boring formatting parses cleanly and frees the recruiter to actually read your bullets.</p>
+
+            <ul>
+                <li><strong>Tailor every resume to the job description.</strong> Pull the skills and phrases out of the posting and reflect them honestly in your bullets. This is what ATSHack does in 60 seconds for a dollar. You can also <a href="/#generate">tailor your resume here</a> if you want to see it work.</li>
+                <li><strong>Single-column, simple layout.</strong> One column, standard margins, no text boxes, no tables.</li>
+                <li><strong>Standard section headers.</strong> <em>Summary</em>, <em>Work Experience</em>, <em>Education</em>, <em>Skills</em>, <em>Certifications</em>. That's it.</li>
+                <li><strong>Use the posting's exact phrasing where it's honestly true.</strong> If they say "stakeholder management," and you've done that, write "stakeholder management." Don't translate it into your own words just to sound original.</li>
+                <li><strong>Save as DOCX or PDF.</strong> No images-of-text PDFs. No .pages, no .rtf, no Google Docs share links.</li>
+                <li><strong>No tables, no columns, no graphics.</strong> If you can't paste your resume into Notepad and have it still make sense, the parser is going to struggle.</li>
+                <li><strong>Lead each bullet with a verb plus a metric.</strong> "Reduced onboarding time 38% by rewriting the new-hire checklist." Verb, number, outcome. ATS scoring rewards measurable claims and so do humans.</li>
+                <li><strong>Common fonts only.</strong> Calibri, Arial, Helvetica, Times New Roman, Georgia. Save the typography for your portfolio site.</li>
+            </ul>
+
+            <p>Do those eight things and you've cleared the bar that filters out three quarters of applicants. The rest is whether your bullets actually sell what you did.</p>
+
+            <h2>What ATSHack does for you</h2>
+            <p>ATSHack is the dollar version of all of this. You paste your resume, you paste the job posting, the AI rewrites your resume tailored to that specific role, and you get an ATS-clean PDF and DOCX in 60 seconds for $1. Single column, standard headers, keywords matched against the posting. No account required, no subscription. Most people use it once or twice and never come back, which is fine.</p>
+
+            <p>If you want to check your current resume before you spend anything, the <a href="/#grader">free ATS grader</a> reads it and tells you the top weaknesses. No payment, no account.</p>
+
+            <p>If you're in an active job search and tailoring 10+ resumes a month, <a href="/#pricing">Pro at $15/mo</a> gets you 50 tailorings, ATS gap reports on every one, an applications tracker, an AI follow-up email writer, and a STAR interview coach with five behavioral questions per role. Cancel any time. Most Pro users subscribe for one month during a job hunt and cancel after they land.</p>
+
+            <p>One thing we won't do: invent experience you don't have. The AI only rewrites what's already on your resume. If you've never used Snowflake, it won't put Snowflake on the page, even if the posting demands it.</p>
+
+            <h2>FAQ</h2>
+        </article>
+
+        <div class="faq-list" style="margin-top:1.5rem;">
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Does my resume really get filtered before a human sees it?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">For most large and mid-sized companies, yes. Recruiters at high-volume employers rely on ATS keyword filters to cut a stack of 250+ applicants down to 10-25 they actually read. Smaller employers (under ~50 people) often skim everything, but anything Fortune 1000 is filtering by default.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can ATS read PDF resumes?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">Most modern ATS (Workday, Greenhouse, Lever, iCIMS) parse PDFs fine, as long as the PDF is text-based and not a scanned image. Older Taleo instances and some legacy government systems still struggle with PDFs and prefer DOCX. If a posting says "upload Word format," submit DOCX. Otherwise PDF is safe.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Should I keyword-stuff my resume?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">No. Modern ATS and recruiter tools detect repeated keywords and white-text tricks, and a good recruiter throws out anything that reads like spam. Match the language of the job posting where it's honestly true of your experience. If you've genuinely done the thing, use the words the posting uses for it. Don't list skills you don't have.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What ATS does a specific company use?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">You can usually tell from the application URL. If it's myworkdayjobs.com, it's Workday. boards.greenhouse.io is Greenhouse. jobs.lever.co is Lever. icims.com is iCIMS. taleo.net is Taleo. Once you know the system, you can avoid known parsing issues (no tables on Workday, simple text on Taleo, etc.). The good news is that a clean single-column resume with standard headers passes all of them.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Is ATSHack worth it for one application?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">It costs $1 with no account or subscription. If the role pays even $40k, a tailored resume that gets read is worth a dollar. The $1 path is the whole product for most people. <a href="/#pricing">Pro at $15/mo</a> only makes sense if you're sending 10+ tailored applications a month.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Do small companies use ATS too?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">More than you'd think. Greenhouse, Lever, and BambooHR all have plans aimed at startups under 100 people. If the company posts on a careers page that isn't just a mailto link, there's a good chance an ATS is involved. The format that beats Workday also beats a recruiter eyeballing 30 PDFs over coffee, so you don't lose anything by writing for the bot.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What's the single biggest ATS mistake?<span aria-hidden="true">+</span></button>
+                <div class="faq-a">Multi-column layouts. The pretty two-column resumes from Canva, Novoresume, and most template sites get read by ATS in the wrong order, jumbling your job titles into your skills section. A clean single-column layout with standard section headers fixes 80% of parsing failures by itself.</div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- ───────────────── FINAL CTA ───────────────── -->
+<section class="final-cta">
+    <h2>Stop letting the bots win.</h2>
+    <p>One dollar. Sixty seconds. A resume the ATS can actually read.</p>
+    <a href="/#generate" class="submit-btn submit-btn--inline submit-btn--light">
+        <span class="submit-btn__label">Tailor your resume for $1 &rarr;</span>
+    </a>
+    <p style="margin-top:1.25rem;font-size:.9rem;opacity:.75;">
+        Or <a href="/#grader" style="color:inherit;text-decoration:underline;">grade your current resume free</a> first.
+    </p>
+</section>
+
+<!-- ───────────────── FOOTER ───────────────── -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-dot"></span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/#faq">FAQ</a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/federal-resume.html">Federal</a>
+            <a href="/nursing-resume.html">Nursing</a>
+            <a href="/trades-resume.html">Trades</a>
+            <a href="/blog/">Blog</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
+        </div>
+        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
+    </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+    var item = btn.parentElement;
+    item.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
