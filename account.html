@@ -66,7 +66,13 @@
             <section class="hero-ribbon">
                 <div class="hero-ribbon__copy">
                     <p class="account-eyebrow">Your dashboard</p>
-                    <h1 class="account-title">Welcome back, <span id="userName">there</span>.</h1>
+                    <h1 class="account-title">Welcome back, <span class="name-display" id="nameDisplay"><span id="userName">there</span><button type="button" id="editNameBtn" class="name-edit-btn" aria-label="Edit name" title="Edit name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button></span>.</h1>
+                    <form id="editNameForm" class="name-edit-form" hidden>
+                        <input type="text" id="editNameInput" class="email-input name-edit-input" maxlength="40" placeholder="Your name" autocomplete="given-name">
+                        <button type="submit" class="submit-btn submit-btn--inline"><span class="submit-btn__label">Save</span></button>
+                        <button type="button" id="editNameCancel" class="nav-cta nav-cta--ghost">Cancel</button>
+                        <span class="name-edit-msg" id="editNameMsg" aria-live="polite"></span>
+                    </form>
                     <p class="hero-ribbon__sub" id="heroSub">Your job hunt, one tailored resume at a time.</p>
                 </div>
                 <div class="hero-ribbon__cta">
@@ -535,6 +541,61 @@
     var profile = profileR.data || {};
     var firstName = profile.display_name || (user.email || '').split('@')[0] || 'there';
     document.getElementById('userName').textContent = firstName;
+
+    // Inline display-name edit. Pencil button swaps the heading line for a
+    // small input + save / cancel. On save, updates profiles.display_name
+    // directly (the user's JWT can update their own row under existing RLS).
+    (function() {
+        var nameDisplay = document.getElementById('nameDisplay');
+        var editBtn = document.getElementById('editNameBtn');
+        var editForm = document.getElementById('editNameForm');
+        var editInput = document.getElementById('editNameInput');
+        var editCancel = document.getElementById('editNameCancel');
+        var editMsg = document.getElementById('editNameMsg');
+        var nameSpan = document.getElementById('userName');
+        if (!editBtn || !editForm) return;
+
+        function openEdit() {
+            editInput.value = nameSpan.textContent === 'there' ? '' : nameSpan.textContent;
+            editForm.hidden = false;
+            nameDisplay.hidden = true;
+            editMsg.textContent = '';
+            editInput.focus();
+            editInput.select();
+        }
+        function closeEdit() {
+            editForm.hidden = true;
+            nameDisplay.hidden = false;
+        }
+
+        editBtn.addEventListener('click', openEdit);
+        editCancel.addEventListener('click', closeEdit);
+        editInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { e.preventDefault(); closeEdit(); }
+        });
+
+        editForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var newName = (editInput.value || '').trim().slice(0, 40);
+            if (!newName) { editMsg.textContent = "Name can't be empty."; return; }
+            if (newName === nameSpan.textContent) { closeEdit(); return; }
+
+            var btn = editForm.querySelector('button[type="submit"]');
+            var label = btn.querySelector('.submit-btn__label');
+            btn.disabled = true; label.textContent = 'Saving...'; editMsg.textContent = '';
+
+            var res = await sb.from('profiles').upsert({ id: user.id, display_name: newName, email: user.email }).select().single();
+
+            btn.disabled = false; label.textContent = 'Save';
+
+            if (res.error) {
+                editMsg.textContent = 'Could not save. ' + (res.error.message || '');
+                return;
+            }
+            nameSpan.textContent = newName;
+            closeEdit();
+        });
+    })();
 
     // ── HERO SUB-LINE (adaptive) ───────────────────────────────────────────
     var resumes = resumesR.data || [];

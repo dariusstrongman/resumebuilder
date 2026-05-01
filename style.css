@@ -3912,6 +3912,43 @@ textarea::placeholder {
 }
 .hero-ribbon__hint[hidden] { display: none; }
 
+/* Inline display-name edit on the dashboard welcome heading */
+.name-display { display: inline-flex; align-items: baseline; gap: 0.4rem; }
+.name-display[hidden] { display: none; }
+.name-edit-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0.2rem 0.3rem;
+    margin-left: 0.15rem;
+    cursor: pointer;
+    color: var(--ink-3);
+    line-height: 0;
+    opacity: 0.55;
+    transform: translateY(-0.18em);
+    transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.name-edit-btn:hover, .name-edit-btn:focus-visible {
+    opacity: 1;
+    color: var(--accent);
+    border-color: var(--line);
+    outline: none;
+}
+.name-edit-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.5rem 0 0.25rem;
+}
+.name-edit-form[hidden] { display: none; }
+.name-edit-input { max-width: 18rem; margin: 0; }
+.name-edit-msg {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+    flex-basis: 100%;
+}
+
 /* Inline Pro status hint above the form's submit button */
 .pro-hint {
     margin: 0 0 0.6rem;
