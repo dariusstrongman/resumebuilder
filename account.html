@@ -1381,14 +1381,13 @@
         var data = resumeContentCache[meta.id];
         if (!data) {
             try {
-                // Fast path: text-only payload (~600ms vs 4s with files)
-                var r = await fetch(WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mode: 'get_resume', user_id: user.id, resume_id: meta.id })
-                });
-                data = await r.json();
-                if (data.error) { modalBody.innerHTML = '<p style="color:var(--ink-2);">' + esc(data.error) + '</p>'; return; }
+                var r = await sb.from('resumego_sessions')
+                    .select('id, resume_text, cover_letter_text')
+                    .eq('id', meta.id)
+                    .eq('user_id', user.id)
+                    .maybeSingle();
+                if (r.error || !r.data) { modalBody.innerHTML = '<p style="color:var(--ink-2);">Could not load this resume.</p>'; return; }
+                data = r.data;
                 resumeContentCache[meta.id] = data;
             } catch(eFetch) {
                 modalBody.innerHTML = '<p style="color:var(--ink-2);">Could not load this resume. Try again.</p>';
@@ -1402,17 +1401,18 @@
         // user reaches for them. Skip if cache already has them.
         if (!data.resume_pdf_base64 && !data._filesPending) {
             data._filesPending = true;
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'get_resume', user_id: user.id, resume_id: meta.id, with_files: true })
-            }).then(function(r) { return r.json(); }).then(function(full) {
-                if (!full || full.error) return;
-                Object.assign(data, full);
-                data._filesPending = false;
-                // Only swap UI if the modal is still showing this resume.
-                if (currentResumeId === meta.id) applyDownloadFiles(data);
-            }).catch(function() { data._filesPending = false; });
+            sb.from('resumego_sessions')
+                .select('resume_pdf_base64, resume_docx_base64, cover_pdf_base64, cover_docx_base64')
+                .eq('id', meta.id)
+                .eq('user_id', user.id)
+                .maybeSingle()
+                .then(function(res) {
+                    if (!res || res.error || !res.data) return;
+                    Object.assign(data, res.data);
+                    data._filesPending = false;
+                    if (currentResumeId === meta.id) applyDownloadFiles(data);
+                })
+                .catch(function() { data._filesPending = false; });
         }
     }
 
@@ -1510,21 +1510,22 @@
             // local cache update
             var meta = allResumes.find(function(r) { return r.id === rid; });
             if (meta) meta.title = newTitle;
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'rename_resume', user_id: user.id, resume_id: rid, title: newTitle })
-            }).then(function(r) { return r.json(); }).then(function(j) {
-                if (j && j.error) {
-                    alert(j.error);
+            sb.from('resumego_sessions')
+                .update({ title: newTitle })
+                .eq('id', rid)
+                .eq('user_id', user.id)
+                .then(function(res) {
+                    if (res && res.error) {
+                        alert(res.error.message || 'Could not save the new name.');
+                        span.textContent = current;
+                        if (meta) meta.title = current;
+                    }
+                })
+                .catch(function() {
+                    alert('Could not save the new name. Try again.');
                     span.textContent = current;
                     if (meta) meta.title = current;
-                }
-            }).catch(function() {
-                alert('Could not save the new name. Try again.');
-                span.textContent = current;
-                if (meta) meta.title = current;
-            });
+                });
         }
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') { e.preventDefault(); finish(true); }
@@ -1562,14 +1563,12 @@
                 b.disabled = true;
                 b.textContent = 'Deleting…';
                 try {
-                    var r = await fetch(WEBHOOK, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ mode: 'delete_resume', user_id: user.id, resume_id: rid })
-                    });
-                    var data = await r.json();
-                    if (data.error) {
-                        alert(data.error);
+                    var r = await sb.from('resumego_sessions')
+                        .delete()
+                        .eq('id', rid)
+                        .eq('user_id', user.id);
+                    if (r.error) {
+                        alert(r.error.message || 'Could not delete.');
                         row.dataset.confirming = '';
                         actions.innerHTML = origActions;
                         return;
@@ -1624,23 +1623,24 @@
             var listRow = listEl.querySelector('[data-resume-id="' + meta.id + '"] .resume-row__title');
             if (listRow) listRow.textContent = newTitle;
             // persist
-            fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'rename_resume', user_id: user.id, resume_id: meta.id, title: newTitle })
-            }).then(function(r) { return r.json(); }).then(function(j) {
-                if (j && j.error) {
-                    alert(j.error);
+            sb.from('resumego_sessions')
+                .update({ title: newTitle })
+                .eq('id', meta.id)
+                .eq('user_id', user.id)
+                .then(function(res) {
+                    if (res && res.error) {
+                        alert(res.error.message || 'Could not save the new name.');
+                        meta.title = current;
+                        modalTitle.textContent = current || 'Resume';
+                        if (listRow) listRow.textContent = current || 'Untitled resume';
+                    }
+                })
+                .catch(function() {
+                    alert('Could not save the new name. Try again.');
                     meta.title = current;
                     modalTitle.textContent = current || 'Resume';
                     if (listRow) listRow.textContent = current || 'Untitled resume';
-                }
-            }).catch(function() {
-                alert('Could not save the new name. Try again.');
-                meta.title = current;
-                modalTitle.textContent = current || 'Resume';
-                if (listRow) listRow.textContent = current || 'Untitled resume';
-            });
+                });
         }
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') { e.preventDefault(); finish(true); }
@@ -1726,14 +1726,12 @@
             cancelBtn.disabled = true;
             confirmBtn.textContent = 'Deleting…';
             try {
-                var r = await fetch(WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mode: 'delete_resume', user_id: user.id, resume_id: currentResumeId })
-                });
-                var data = await r.json();
-                if (data.error) {
-                    alert(data.error);
+                var r = await sb.from('resumego_sessions')
+                    .delete()
+                    .eq('id', currentResumeId)
+                    .eq('user_id', user.id);
+                if (r.error) {
+                    alert(r.error.message || 'Could not delete.');
                     restoreDeleteButton();
                     return;
                 }
