@@ -491,24 +491,23 @@
 
     var profilePromise = sb.from('profiles').select('display_name, email').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
-    // resumego_packs is RLS-protected, so the user's own JWT can't read it.
-    // Fetch via the n8n webhook which uses service-role.
-    var packsPromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'pack_status', user_email: user.email })
-    }).then(function(r) { return r.json(); }).catch(function() { return { packs: [], total_credits: 0 }; });
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-    // Stat strip counts come from resumego_sessions (lifetime tailorings) so
-    // deleting a saved resume from the dashboard doesn't decrement them.
-    // RLS blocks the user's direct read, so this goes through the webhook.
-    var usagePromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+    // One batched webhook (dashboard_load) returns pack_status + usage_stats +
+    // pro_status. Replaces what used to be 3 separate calls (and a 4th pro_status
+    // call further down for Pro users). resumego_packs and resumego_sessions are
+    // RLS-protected, so this still has to route through the service-role webhook.
+    var dashPromise = fetch('https://n8n.stromation.com/webhook/resume-tailor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'usage_stats', user_id: user.id, month_start: calMonthStart.toISOString() })
-    }).then(function(r) { return r.json(); }).catch(function() { return { month_count: 0, total_count: 0 }; });
+        body: JSON.stringify({ mode: 'dashboard_load', user_id: user.id, user_email: user.email, month_start: calMonthStart.toISOString() })
+    }).then(function(r) { return r.json(); }).catch(function() {
+        return { pro_status: { is_pro: false }, usage_stats: { month_count: 0, total_count: 0 }, pack_status: { packs: [], total_credits: 0 } };
+    });
 
-    var [profileR, subR, packsR, resumesR, usageR] = await Promise.all([profilePromise, subPromise, packsPromise, resumesPromise, usagePromise]);
+    var [profileR, subR, dashR, resumesR] = await Promise.all([profilePromise, subPromise, dashPromise, resumesPromise]);
+    var packsR = (dashR && dashR.pack_status) || { packs: [], total_credits: 0 };
+    var usageR = (dashR && dashR.usage_stats) || { month_count: 0, total_count: 0 };
+    var proStatusFromDash = (dashR && dashR.pro_status) || null;
 
     var profile = profileR.data || {};
     var firstName = profile.display_name || (user.email || '').split('@')[0] || 'there';
@@ -574,19 +573,10 @@
             toolkitFollowupPill.classList.add('toolkit-card__pill--free');
         }
 
-        // Pro cap is over the BILLING period, not calendar month. RLS blocks
-        // the user from reading their own resumego_sessions, so go through
-        // the service-role webhook for an accurate count.
-        var proPeriodCount = 0;
-        try {
-            var psR = await fetch('https://n8n.stromation.com/webhook/resume-tailor', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'pro_status', user_id: user.id })
-            });
-            var psJ = await psR.json();
-            if (psJ && typeof psJ.used === 'number') proPeriodCount = psJ.used;
-        } catch(ePc) {}
+        // Pro cap is over the BILLING period, not calendar month. The count
+        // already came back in the batched dashboard_load response above, so
+        // no second webhook call is needed.
+        var proPeriodCount = (proStatusFromDash && typeof proStatusFromDash.used === 'number') ? proStatusFromDash.used : 0;
         var proLeft = Math.max(0, 50 - proPeriodCount);
         document.getElementById('statMonthLabel').textContent = 'Pro tailorings';
         document.getElementById('statMonth').textContent = proLeft + ' left';
@@ -618,18 +608,14 @@
     var lastStatRefresh = Date.now();
     async function refreshStatStrip() {
         try {
-            var usagePromise = fetch(WEBHOOK, {
+            var dash = await fetch(WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'usage_stats', user_id: user.id, month_start: calMonthStart.toISOString() })
+                body: JSON.stringify({ mode: 'dashboard_load', user_id: user.id, user_email: user.email, month_start: calMonthStart.toISOString() })
             }).then(function(r) { return r.json(); }).catch(function() { return null; });
-            var proPromise = isPro ? fetch(WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: 'pro_status', user_id: user.id })
-            }).then(function(r) { return r.json(); }).catch(function() { return null; }) : Promise.resolve(null);
-            var results = await Promise.all([usagePromise, proPromise]);
-            var u = results[0], p = results[1];
+            if (!dash) return;
+            var u = dash.usage_stats || null;
+            var p = dash.pro_status || null;
             if (u && typeof u.total_count === 'number') {
                 document.getElementById('statTotal').textContent = u.total_count;
             }
