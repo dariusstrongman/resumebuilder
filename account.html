@@ -368,6 +368,21 @@
     </div>
 </div>
 
+<div class="modal apps-modal" id="appsViewModal" hidden>
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__panel apps-modal__panel" role="dialog" aria-modal="true" aria-labelledby="appsViewModalTitle">
+        <header class="modal__head">
+            <div class="modal__head-info">
+                <h2 class="modal__title" id="appsViewModalTitle">What's next</h2>
+            </div>
+            <div class="modal__nav">
+                <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            </div>
+        </header>
+        <div class="modal__body apps-modal__body" id="appsViewModalBody"></div>
+    </div>
+</div>
+
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-brand">
@@ -1454,6 +1469,7 @@
                 +   '</span>'
                 + '</div>'
                 + '<span class="apps-row__status apps-row__status--' + esc(a.status) + '">' + statusLabel(a.status) + '</span>'
+                + '<button type="button" class="apps-row__view" data-view="' + esc(a.id) + '">View</button>'
                 + '<button type="button" class="apps-row__edit" data-edit="' + esc(a.id) + '">Edit</button>'
                 + '</div>';
         }
@@ -1518,7 +1534,136 @@
 
         appsAddBtn.addEventListener('click', function() { openAppsModal(null); });
 
+        // Insights modal
+        var appsViewModal = document.getElementById('appsViewModal');
+        var appsViewModalTitle = document.getElementById('appsViewModalTitle');
+        var appsViewModalBody = document.getElementById('appsViewModalBody');
+
+        function buildAppInsight(app) {
+            var status = app.status || 'applied';
+            var appliedAt = app.applied_at ? new Date(app.applied_at) : null;
+            var now = new Date();
+            var daysSince = appliedAt ? Math.floor((now.setHours(0,0,0,0) - new Date(appliedAt).setHours(0,0,0,0)) / 86400000) : null;
+            now = new Date();
+            var followUpAt = app.follow_up_at ? new Date(app.follow_up_at) : null;
+            var followUpDays = followUpAt ? Math.floor((new Date(followUpAt).setHours(0,0,0,0) - now.setHours(0,0,0,0)) / 86400000) : null;
+
+            var POST_APP = '/follow-up-emails.html';
+            var SALARY = '/salary-playbook.html';
+            var FOLLOWUP_AI = '/followup.html';
+
+            var rec;
+            if (status === 'applied') {
+                if (daysSince === null || daysSince <= 2) {
+                    rec = { action: 'Sit tight. Apply to two more roles in the meantime.',
+                            why: 'Recruiters need 3+ business days to start screening. Following up earlier reads as anxious.' };
+                } else if (daysSince <= 6) {
+                    rec = { action: 'Send a polite nudge today.',
+                            why: "You're at the sweet spot for a friendly check-in. Short, warm, signals enthusiasm without pressure.",
+                            cta: { label: 'Use post-application template', href: POST_APP } };
+                } else if (daysSince <= 13) {
+                    rec = { action: 'Send the "still excited" nudge.',
+                            why: 'Pulls your application back to the top of a busy inbox. Recruiters expect this kind of follow-up.',
+                            cta: { label: 'Use day-7 template', href: POST_APP } };
+                } else if (daysSince <= 20) {
+                    rec = { action: 'One sharper nudge with a one-line pitch, then move on.',
+                            why: 'After two weeks of silence, the application is likely cold. A final, specific nudge sometimes works.',
+                            cta: { label: 'Generate a custom follow-up', href: FOLLOWUP_AI } };
+                } else {
+                    rec = { action: 'Mark as ghosted and prioritize fresh applications.',
+                            why: 'Past 3 weeks, the role has almost certainly moved on. Spend that energy on new openings.' };
+                }
+            } else if (status === 'interview') {
+                if (daysSince === null || daysSince <= 1) {
+                    rec = { action: 'Send a thank-you email today, ideally within 24 hours.',
+                            why: 'Reference one specific moment from the conversation. Generic thank-yous read as templates.',
+                            cta: { label: 'Use thank-you template', href: POST_APP } };
+                } else if (daysSince <= 4) {
+                    rec = { action: "If you didn't send a thank-you, send a short check-in instead.",
+                            why: "Don't apologize for missing the 24-hour window, just move forward.",
+                            cta: { label: 'Use status-check template', href: POST_APP } };
+                } else if (daysSince <= 9) {
+                    rec = { action: 'Send a friendly status check.',
+                            why: "If they promised a timeline that's now passed, asking is reasonable. Tone: no pressure.",
+                            cta: { label: 'Use status-check template', href: POST_APP } };
+                } else {
+                    rec = { action: 'One last polite nudge, then assume the answer is no.',
+                            why: 'Long silence after an interview usually means you didn\'t make the cut. Recruiters often ghost rather than reject formally.',
+                            cta: { label: 'Generate a custom follow-up', href: FOLLOWUP_AI } };
+                }
+            } else if (status === 'offer') {
+                rec = { action: "Don't sign yet. Counter at +10 to 15% base.",
+                        why: '75% of recruiters expect a counter and have authority to move. Always negotiate once.',
+                        cta: { label: 'Open salary playbook', href: SALARY } };
+            } else if (status === 'rejected') {
+                rec = { action: 'Send a graceful close. Keep the door open.',
+                        why: 'Recruiters remember candidates who handle a no well. Many follow up months later when a different role opens.',
+                        cta: { label: 'Use post-rejection template', href: POST_APP } };
+            } else if (status === 'ghosted') {
+                rec = { action: 'Move on. One last optional nudge is fine.',
+                        why: 'Long silence is its own answer. Spend the energy on fresh applications.' };
+            } else {
+                rec = { action: 'No action needed. You self-removed from this one.', why: '' };
+            }
+
+            // Layered "also" notes
+            var also = null;
+            if (followUpDays !== null && followUpDays < 0) {
+                also = 'Follow-up was due ' + Math.abs(followUpDays) + ' day' + (Math.abs(followUpDays) === 1 ? '' : 's') + ' ago. Move on it today.';
+            } else if (followUpDays !== null && followUpDays === 0) {
+                also = "Follow-up is due today. Don't let it slip.";
+            }
+
+            return { rec: rec, daysSince: daysSince, also: also };
+        }
+
+        function openInsightsModal(app) {
+            var title = (app.company || '(no company)') + ' · ' + (app.role || '(no role)');
+            appsViewModalTitle.textContent = "What's next: " + title;
+
+            var ins = buildAppInsight(app);
+            var statusHtml = '<span class="apps-row__status apps-row__status--' + esc(app.status) + '">' + statusLabel(app.status) + '</span>';
+            var sinceHtml = ins.daysSince !== null
+                ? (ins.daysSince === 0 ? 'applied today' : 'applied ' + ins.daysSince + ' day' + (ins.daysSince === 1 ? '' : 's') + ' ago')
+                : '';
+            var ctaHtml = ins.rec.cta
+                ? '<a class="insights-cta" href="' + esc(ins.rec.cta.href) + '" target="_blank" rel="noopener">' + esc(ins.rec.cta.label) + ' &rarr;</a>'
+                : '';
+            var whyHtml = ins.rec.why ? '<p class="insights-why">' + esc(ins.rec.why) + '</p>' : '';
+            var alsoHtml = ins.also ? '<div class="insights-also"><strong>Also:</strong> ' + esc(ins.also) + '</div>' : '';
+
+            appsViewModalBody.innerHTML =
+                  '<div class="insights-meta">' + statusHtml + (sinceHtml ? '<span>' + esc(sinceHtml) + '</span>' : '') + '</div>'
+                + '<div class="insights-section">'
+                +   '<div class="insights-section__label">Recommended action</div>'
+                +   '<p class="insights-action">' + esc(ins.rec.action) + '</p>'
+                +   whyHtml
+                +   ctaHtml
+                + '</div>'
+                + alsoHtml;
+
+            appsViewModal.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+        function closeInsightsModal() {
+            appsViewModal.hidden = true;
+            document.body.style.overflow = '';
+        }
+        appsViewModal.addEventListener('click', function(e) {
+            if (e.target.dataset && e.target.dataset.close) closeInsightsModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !appsViewModal.hidden) closeInsightsModal();
+        });
+
         appsListEl.addEventListener('click', function(e) {
+            var viewBtn = e.target.closest('[data-view]');
+            if (viewBtn) {
+                var vid = viewBtn.dataset.view;
+                var va = apps.find(function(x) { return x.id === vid; });
+                if (va) openInsightsModal(va);
+                return;
+            }
             var btn = e.target.closest('[data-edit]');
             if (!btn) return;
             var id = btn.dataset.edit;
