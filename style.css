@@ -512,14 +512,15 @@ img, svg { max-width: 100%; display: block; }
 .apps-list { display: flex; flex-direction: column; gap: 0.55rem; }
 .apps-row {
     display: grid;
-    grid-template-columns: 1fr auto auto auto;
-    gap: 0.6rem;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.85rem;
     align-items: center;
     padding: 0.85rem 1rem;
     background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
     border: 1px solid var(--line-strong);
     border-radius: 12px;
     transition: border-color 0.15s var(--ease);
+    cursor: pointer;
 }
 .apps-row:hover { border-color: rgba(197, 255, 74, 0.4); }
 .apps-row__main { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
@@ -545,8 +546,7 @@ img, svg { max-width: 100%; display: block; }
 .apps-row__status--rejected  { background: rgba(220, 80, 80, 0.18);   color: #f87171; }
 .apps-row__status--ghosted   { background: rgba(180, 140, 110, 0.18); color: #c4a484; }
 .apps-row__status--withdrawn { background: rgba(120, 120, 120, 0.18); color: #a0a0a0; }
-.apps-row__edit,
-.apps-row__view {
+.apps-row__edit {
     background: transparent;
     border: 1px solid var(--line-strong);
     color: var(--ink-2);
@@ -559,8 +559,7 @@ img, svg { max-width: 100%; display: block; }
     text-transform: uppercase;
     transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
 }
-.apps-row__edit:hover,
-.apps-row__view:hover { border-color: var(--accent); color: var(--accent); }
+.apps-row__edit:hover { border-color: var(--accent); color: var(--accent); }
 .apps-error {
     border: 1px dashed #d97706;
     border-radius: 10px;
@@ -591,9 +590,8 @@ img, svg { max-width: 100%; display: block; }
 @media (max-width: 600px) {
     .apps-form-row { grid-template-columns: 1fr; }
     .apps-row { grid-template-columns: 1fr auto; }
-    .apps-row__status { grid-column: 1; justify-self: start; }
-    .apps-row__view { grid-column: 1; justify-self: start; }
     .apps-row__edit { grid-column: 2; }
+    .apps-row__status { grid-column: 1; justify-self: start; }
 }
 .apps-form__actions {
     display: flex;

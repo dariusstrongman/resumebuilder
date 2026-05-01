@@ -1469,7 +1469,6 @@
                 +   '</span>'
                 + '</div>'
                 + '<span class="apps-row__status apps-row__status--' + esc(a.status) + '">' + statusLabel(a.status) + '</span>'
-                + '<button type="button" class="apps-row__view" data-view="' + esc(a.id) + '">View</button>'
                 + '<button type="button" class="apps-row__edit" data-edit="' + esc(a.id) + '">Edit</button>'
                 + '</div>';
         }
@@ -1657,18 +1656,22 @@
         });
 
         appsListEl.addEventListener('click', function(e) {
-            var viewBtn = e.target.closest('[data-view]');
-            if (viewBtn) {
-                var vid = viewBtn.dataset.view;
-                var va = apps.find(function(x) { return x.id === vid; });
-                if (va) openInsightsModal(va);
+            // Edit button: route to edit modal
+            var editBtn = e.target.closest('[data-edit]');
+            if (editBtn) {
+                var id = editBtn.dataset.edit;
+                var a = apps.find(function(x) { return x.id === id; });
+                if (a) openAppsModal(a);
                 return;
             }
-            var btn = e.target.closest('[data-edit]');
-            if (!btn) return;
-            var id = btn.dataset.edit;
-            var a = apps.find(function(x) { return x.id === id; });
-            if (a) openAppsModal(a);
+            // Row default: open insights
+            var row = e.target.closest('[data-app-id]');
+            if (!row) return;
+            // Don't fire if user clicked an inline link (e.g., posting URL)
+            if (e.target.closest('a')) return;
+            var rid = row.dataset.appId;
+            var ra = apps.find(function(x) { return x.id === rid; });
+            if (ra) openInsightsModal(ra);
         });
 
         appsForm.addEventListener('submit', async function(e) {
