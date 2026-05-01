@@ -1127,7 +1127,7 @@ function renderDocCompare() {
     docEl.innerHTML = '<div class="doc-col"><div class="doc-col-label">Before</div>'
         + '<div class="doc-preview" onclick="enlargeDoc(this)"><div class="enlarge-hint">Click to enlarge</div>' + beforeContent + '</div>'
         + '<div class="doc-score">' + ex.beforeScore + '% ATS match</div></div>'
-        + '<div class="doc-col"><div class="doc-col-label">After ResumeGo</div>'
+        + '<div class="doc-col"><div class="doc-col-label">After BeatTheJob</div>'
         + '<div class="doc-preview" onclick="enlargeDoc(this)"><div class="enlarge-hint">Click to enlarge</div>' + buildAfterDoc(ex.afterSummary, ex.afterJobs, ex.afterSkills, ex.afterEdu) + '</div>'
         + '<div class="doc-score">' + ex.afterScore + '% ATS match</div></div>';
     docEl.style.opacity = '0';
