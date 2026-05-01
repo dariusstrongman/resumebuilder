@@ -349,6 +349,23 @@ img, svg { max-width: 100%; display: block; }
     box-shadow: 0 0 10px var(--accent-glow);
 }
 
+.hero-grader-cta {
+    margin: 1.4rem 0 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+}
+.hero-grader-cta a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding-bottom: 1px;
+    transition: border-color 0.15s ease;
+}
+.hero-grader-cta a:hover {
+    border-bottom-color: var(--accent);
+}
+
 /* ══════════════════════════ FORM CARD ══════════════════════════ */
 .form-card {
     position: relative;
