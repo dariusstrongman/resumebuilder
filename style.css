@@ -3936,6 +3936,83 @@ textarea::placeholder {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06), 0 6px 18px -6px rgba(0, 0, 0, 0.45);
     user-select: none;
     line-height: 1;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background-clip: padding-box;
+}
+.profile-avatar:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1), 0 8px 22px -6px rgba(0, 0, 0, 0.5);
+}
+.profile-avatar:focus-visible { outline: 2px solid var(--accent, #8aff3f); outline-offset: 3px; }
+.profile-avatar--image { color: transparent; }
+.profile-avatar--preset { font-size: 1.7rem; }
+
+/* Avatar picker modal */
+.modal__panel--narrow { max-width: 32rem; }
+.avatar-modal-body {
+    padding: 0.5rem 1.5rem 1.5rem;
+}
+.avatar-section-label {
+    margin: 1.2rem 0 0.6rem;
+    font-family: var(--f-mono, 'JetBrains Mono', monospace);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.avatar-preset-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+}
+.avatar-preset {
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    color: #fff;
+    line-height: 1;
+}
+.avatar-preset:hover {
+    transform: scale(1.06);
+    box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.4);
+}
+.avatar-preset:focus-visible { outline: 2px solid var(--accent, #8aff3f); outline-offset: 2px; }
+
+.avatar-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-start;
+}
+.avatar-upload-hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--ink-3);
+}
+.avatar-current {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line, rgba(255,255,255,0.08));
+}
+.avatar-msg {
+    margin-top: 1rem;
+    min-height: 1em;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+}
+.avatar-msg--err { color: #ef4444; }
+@media (max-width: 540px) {
+    .avatar-preset-grid { grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .avatar-preset { font-size: 1.4rem; border-radius: 10px; }
 }
 
 /* Looking-for target role pill below the heroSub */
