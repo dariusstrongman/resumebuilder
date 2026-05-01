@@ -19,3 +19,4 @@ schema.sql
 long_test_resume.*
 sample_resumes/
 v2_init.sql
+.claude/
