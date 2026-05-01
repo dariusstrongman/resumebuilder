@@ -512,8 +512,8 @@ img, svg { max-width: 100%; display: block; }
 .apps-list { display: flex; flex-direction: column; gap: 0.55rem; }
 .apps-row {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 0.85rem;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 0.6rem;
     align-items: center;
     padding: 0.85rem 1rem;
     background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
@@ -560,6 +560,27 @@ img, svg { max-width: 100%; display: block; }
     transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
 }
 .apps-row__edit:hover { border-color: var(--accent); color: var(--accent); }
+.apps-row__delete {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-3);
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s var(--ease), color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.apps-row__delete:hover {
+    border-color: #f87171;
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.08);
+}
+.apps-row__delete:disabled { opacity: 0.5; cursor: wait; }
 .apps-error {
     border: 1px dashed #d97706;
     border-radius: 10px;
@@ -589,9 +610,10 @@ img, svg { max-width: 100%; display: block; }
 }
 @media (max-width: 600px) {
     .apps-form-row { grid-template-columns: 1fr; }
-    .apps-row { grid-template-columns: 1fr auto; }
-    .apps-row__edit { grid-column: 2; }
+    .apps-row { grid-template-columns: 1fr auto auto; }
     .apps-row__status { grid-column: 1; justify-self: start; }
+    .apps-row__edit { grid-column: 2; }
+    .apps-row__delete { grid-column: 3; }
 }
 .apps-form__actions {
     display: flex;

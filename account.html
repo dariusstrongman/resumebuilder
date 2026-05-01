@@ -1470,6 +1470,7 @@
                 + '</div>'
                 + '<span class="apps-row__status apps-row__status--' + esc(a.status) + '">' + statusLabel(a.status) + '</span>'
                 + '<button type="button" class="apps-row__edit" data-edit="' + esc(a.id) + '">Edit</button>'
+                + '<button type="button" class="apps-row__delete" data-delete="' + esc(a.id) + '" aria-label="Delete">&times;</button>'
                 + '</div>';
         }
         function renderApps() {
@@ -1655,7 +1656,15 @@
             if (e.key === 'Escape' && !appsViewModal.hidden) closeInsightsModal();
         });
 
-        appsListEl.addEventListener('click', function(e) {
+        appsListEl.addEventListener('click', async function(e) {
+            // Delete button: confirm + remove
+            var delBtn = e.target.closest('[data-delete]');
+            if (delBtn) {
+                e.stopPropagation();
+                delBtn.disabled = true;
+                await deleteAppById(delBtn.dataset.delete);
+                return;
+            }
             // Edit button: route to edit modal
             var editBtn = e.target.closest('[data-edit]');
             if (editBtn) {
@@ -1715,21 +1724,27 @@
             }
         });
 
-        appsDeleteBtn.addEventListener('click', async function() {
-            if (!editingId) return;
-            if (!confirm('Delete this application? This cannot be undone.')) return;
-            appsDeleteBtn.disabled = true;
+        async function deleteAppById(id) {
+            if (!id) return false;
+            if (!confirm('Delete this application? This cannot be undone.')) return false;
             try {
-                var d = await sb.from('applications').delete().eq('id', editingId);
+                var d = await sb.from('applications').delete().eq('id', id);
                 if (d.error) throw d.error;
-                apps = apps.filter(function(x) { return x.id !== editingId; });
+                apps = apps.filter(function(x) { return x.id !== id; });
                 renderApps();
-                closeAppsModal();
+                return true;
             } catch (err) {
                 alert('Could not delete: ' + (err && err.message ? err.message : 'unknown error'));
-            } finally {
-                appsDeleteBtn.disabled = false;
+                return false;
             }
+        }
+
+        appsDeleteBtn.addEventListener('click', async function() {
+            if (!editingId) return;
+            appsDeleteBtn.disabled = true;
+            var ok = await deleteAppById(editingId);
+            appsDeleteBtn.disabled = false;
+            if (ok) closeAppsModal();
         });
 
         // Initial load
