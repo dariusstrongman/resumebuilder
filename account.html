@@ -1510,7 +1510,7 @@
                 sel.innerHTML += '<option value="' + esc(r.id) + '">' + esc(title) + '</option>';
             });
         }
-        function openModal(app) {
+        function openAppsModal(app) {
             editingId = app ? app.id : null;
             appsModalTitle.textContent = app ? 'Edit application' : 'Add application';
             appsDeleteBtn.hidden = !app;
@@ -1527,26 +1527,26 @@
             document.body.style.overflow = 'hidden';
             setTimeout(function() { document.getElementById('appCompany').focus(); }, 50);
         }
-        function closeModal() {
+        function closeAppsModal() {
             appsModal.hidden = true;
             document.body.style.overflow = '';
             editingId = null;
         }
         appsModal.addEventListener('click', function(e) {
-            if (e.target.dataset && e.target.dataset.close) closeModal();
+            if (e.target.dataset && e.target.dataset.close) closeAppsModal();
         });
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && !appsModal.hidden) closeModal();
+            if (e.key === 'Escape' && !appsModal.hidden) closeAppsModal();
         });
 
-        appsAddBtn.addEventListener('click', function() { openModal(null); });
+        appsAddBtn.addEventListener('click', function() { openAppsModal(null); });
 
         appsListEl.addEventListener('click', function(e) {
             var btn = e.target.closest('[data-edit]');
             if (!btn) return;
             var id = btn.dataset.edit;
             var a = apps.find(function(x) { return x.id === id; });
-            if (a) openModal(a);
+            if (a) openAppsModal(a);
         });
 
         appsForm.addEventListener('submit', async function(e) {
@@ -1581,7 +1581,7 @@
                     apps.unshift(ins.data);
                 }
                 renderApps();
-                closeModal();
+                closeAppsModal();
             } catch (err) {
                 alert('Could not save: ' + (err && err.message ? err.message : 'unknown error'));
             } finally {
@@ -1599,7 +1599,7 @@
                 if (d.error) throw d.error;
                 apps = apps.filter(function(x) { return x.id !== editingId; });
                 renderApps();
-                closeModal();
+                closeAppsModal();
             } catch (err) {
                 alert('Could not delete: ' + (err && err.message ? err.message : 'unknown error'));
             } finally {
