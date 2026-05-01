@@ -3912,6 +3912,90 @@ textarea::placeholder {
 }
 .hero-ribbon__hint[hidden] { display: none; }
 
+/* Avatar + greeting layout in the hero ribbon head */
+.hero-ribbon__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.hero-ribbon__head-text { min-width: 0; flex: 1 1 auto; }
+.profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--f-display, 'Host Grotesk', sans-serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    background: var(--accent, #8aff3f);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06), 0 6px 18px -6px rgba(0, 0, 0, 0.45);
+    user-select: none;
+    line-height: 1;
+}
+
+/* Looking-for target role pill below the heroSub */
+.target-role { margin-top: 0.85rem; }
+.target-role__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem 0.4rem 0.55rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line, rgba(255,255,255,0.08));
+    border-radius: 999px;
+    font-family: var(--f-mono, 'JetBrains Mono', monospace);
+    font-size: 0.78rem;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+.target-role__pill:hover {
+    border-color: var(--ink-3);
+    background: rgba(255,255,255,0.06);
+}
+.target-role__pill[hidden] { display: none; }
+.target-role__icon {
+    display: inline-flex;
+    color: var(--accent, #8aff3f);
+    line-height: 0;
+}
+.target-role__label {
+    color: var(--ink-3);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+}
+.target-role__value {
+    color: var(--ink-0);
+    letter-spacing: 0.01em;
+    font-family: var(--f-sans, 'Host Grotesk', sans-serif);
+    font-size: 0.88rem;
+}
+.target-role__value--empty {
+    color: var(--ink-3);
+    font-style: italic;
+}
+.target-role__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+.target-role__form[hidden] { display: none; }
+.target-role__input { max-width: 22rem; margin: 0; }
+.target-role__clear[hidden] { display: none; }
+
+@media (max-width: 540px) {
+    .hero-ribbon__head { gap: 0.8rem; }
+    .profile-avatar { width: 46px; height: 46px; font-size: 1.3rem; }
+}
+
 /* Inline display-name edit on the dashboard welcome heading */
 .name-display { display: inline-flex; align-items: baseline; gap: 0.4rem; }
 .name-display[hidden] { display: none; }
