@@ -415,6 +415,14 @@
 
     document.getElementById('userEmail').textContent = user.email || '';
 
+    // Show the dashboard shell immediately. Stat values, plan info, and the
+    // resume list start with sensible defaults ("0", "Free", "--", "Welcome
+    // back, there.") and get replaced as the parallel queries below resolve.
+    // This trades a sub-second flash of placeholders for cutting the
+    // perceived load time from ~2-4s (n8n cold start) down to <300ms.
+    document.getElementById('loadingState').hidden = true;
+    document.getElementById('dashboard').hidden = false;
+
     // Handle post-checkout callback before loading dashboard data.
     // Stripe charged the card BEFORE redirecting, so even if our fulfill call
     // fails (network blip, n8n cold start), the user paid, so we must persist
@@ -819,9 +827,6 @@
         viewAllBtn.textContent = 'Browse all ' + totalCount + ' resumes';
         viewAllBtn.hidden = false;
     }
-
-    document.getElementById('loadingState').hidden = true;
-    document.getElementById('dashboard').hidden = false;
 
     if (upgradeFailed) {
         var banner = document.getElementById('upgradeFailBanner');
