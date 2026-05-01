@@ -1820,6 +1820,52 @@ textarea::placeholder {
     .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
+/* ══════════════════════════ TESTIMONIAL MARQUEE ══════════════════════════ */
+.marquee {
+    overflow: hidden;
+    background: var(--bg-1);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.95rem 0;
+    position: relative;
+    z-index: 2;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+    display: flex;
+    gap: 3rem;
+    width: max-content;
+    animation: marquee-scroll 40s linear infinite;
+    will-change: transform;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.marquee-quote {
+    color: var(--ink-0);
+    font-style: italic;
+    font-size: 0.98rem;
+}
+.marquee-name {
+    color: var(--accent);
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+}
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+}
+
 /* ══════════════════════════ TRUST STRIP ══════════════════════════ */
 .trust-strip {
     padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
