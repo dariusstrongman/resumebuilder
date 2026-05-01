@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://resume.stromation.com/sitemap.xml
+Sitemap: https://www.atshack.com/sitemap.xml
