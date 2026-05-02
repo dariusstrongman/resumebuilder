@@ -1446,7 +1446,7 @@
 
         // Path A: URLs present on the row (new saves) — show instant download links.
         if (data.resume_pdf_url || data.resume_docx_url || data.cover_pdf_url || data.cover_docx_url) {
-            applyDownloadFilesFromUrls(data);
+            applyDownloadFilesFromUrls(data, meta.created_at);
             return;
         }
         // Path B: legacy save with no URLs — re-render via n8n in the background.
@@ -1465,7 +1465,7 @@
         }
     }
 
-    function applyDownloadFilesFromUrls(d) {
+    function applyDownloadFilesFromUrls(d, createdAt) {
         var dlRow = modalBody.querySelector('.modal__downloads');
         if (!dlRow) return;
         function urlBtn(label, url) {
@@ -1477,6 +1477,14 @@
             + urlBtn('Resume DOCX', d.resume_docx_url)
             + urlBtn('Cover PDF', d.cover_pdf_url)
             + urlBtn('Cover DOCX', d.cover_docx_url);
+        if (html && createdAt) {
+            var created = new Date(createdAt).getTime();
+            var daysLeft = Math.max(0, 30 - Math.floor((Date.now() - created) / 86400000));
+            var msg = daysLeft > 1
+                ? 'Files available for ' + daysLeft + ' more days. Save a copy to your computer.'
+                : (daysLeft === 1 ? 'Files expire tomorrow. Save a copy to your computer.' : 'Files have expired and may be unavailable.');
+            html += '<p class="modal__retention">' + esc(msg) + '</p>';
+        }
         dlRow.innerHTML = html || '<span class="modal__dl modal__dl--empty">No downloads available.</span>';
     }
 
