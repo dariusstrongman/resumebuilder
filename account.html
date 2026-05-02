@@ -445,6 +445,51 @@
     </div>
 </div>
 
+<!-- FOLLOW-UP DRAFT MODAL -->
+<div class="modal apps-modal" id="followupDraftModal" hidden>
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__panel apps-modal__panel" role="dialog" aria-modal="true" aria-labelledby="followupDraftTitle">
+        <header class="modal__head">
+            <div class="modal__head-info">
+                <h2 class="modal__title" id="followupDraftTitle">Follow-up draft</h2>
+                <p class="modal__sub" id="followupDraftSub"></p>
+            </div>
+            <div class="modal__nav">
+                <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            </div>
+        </header>
+        <div class="modal__body apps-modal__body">
+            <div id="followupDraftLoading" class="account-loading" style="padding:1.5rem 0;text-align:center;">
+                <div class="spinner-large"></div>
+                <p>Drafting the email&hellip;</p>
+            </div>
+            <div id="followupDraftContent" hidden>
+                <div class="field">
+                    <label class="field-label" for="followupDraftSubject"><span class="field-name">Subject</span></label>
+                    <input type="text" id="followupDraftSubject" class="email-input" maxlength="200">
+                </div>
+                <div class="field">
+                    <label class="field-label" for="followupDraftBody"><span class="field-name">Body <span class="field-hint">edit before sending</span></span></label>
+                    <textarea id="followupDraftBody" rows="10" style="font-family:inherit;width:100%;"></textarea>
+                </div>
+                <div class="apps-form__actions" style="flex-wrap:wrap;gap:0.5rem;">
+                    <div class="apps-form__primary" style="flex-wrap:wrap;gap:0.5rem;">
+                        <button type="button" class="apps-form__cancel" id="followupCopyBtn">Copy to clipboard</button>
+                        <a href="#" class="submit-btn submit-btn--inline" id="followupGmailBtn" target="_blank" rel="noopener">
+                            <span class="submit-btn__label">Open in Gmail</span>
+                        </a>
+                        <button type="button" class="submit-btn submit-btn--inline" id="followupMarkSentBtn">
+                            <span class="submit-btn__label">Mark sent &amp; reschedule</span>
+                        </button>
+                    </div>
+                </div>
+                <p id="followupDraftStatus" class="apps-row__sub" style="margin-top:0.5rem;"></p>
+            </div>
+            <div id="followupDraftError" hidden class="apps-row__sub" style="color:#ff8a8a;padding:1rem 0;"></div>
+        </div>
+    </div>
+</div>
+
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-brand">
@@ -1823,18 +1868,53 @@
             var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
             return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
         }
+        function relativeApplied(iso) {
+            if (!iso) return '';
+            var d = new Date(iso); d.setHours(0,0,0,0);
+            var t = new Date(); t.setHours(0,0,0,0);
+            var days = Math.round((t.getTime() - d.getTime()) / 86400000);
+            if (days <= 0) return 'applied today';
+            if (days === 1) return 'applied 1 day ago';
+            if (days < 14) return 'applied ' + days + ' days ago';
+            if (days < 30) return 'applied ' + Math.round(days / 7) + ' weeks ago';
+            return 'applied ' + new Date(iso).toLocaleDateString();
+        }
+        function followupKind(a) {
+            // returns null | 'first' | 'overdue' | 'ghosted'
+            if (a.status !== 'applied') return null;
+            var appliedAt = a.applied_at ? new Date(a.applied_at) : null;
+            if (!appliedAt) return null;
+            var t = new Date(); t.setHours(0,0,0,0);
+            appliedAt.setHours(0,0,0,0);
+            var days = Math.round((t.getTime() - appliedAt.getTime()) / 86400000);
+            // honor explicit follow_up_at if set and past/today
+            if (a.follow_up_at) {
+                var f = new Date(a.follow_up_at); f.setHours(23,59,59,999);
+                if (f.getTime() <= Date.now()) return days >= 14 ? 'ghosted' : 'overdue';
+                return null;
+            }
+            if (days >= 14) return 'ghosted';
+            if (days >= 7) return 'first';
+            return null;
+        }
         function appRowHtml(a) {
             var due = a.follow_up_at ? dueText(a.follow_up_at) : '';
             var dueAlert = !!due && (due.indexOf('overdue') !== -1 || due === 'due today' || due === 'due tomorrow');
-            var date = a.applied_at ? new Date(a.applied_at).toLocaleDateString() : '';
+            var rel = relativeApplied(a.applied_at);
+            var kind = followupKind(a);
+            var fuBtn = '';
+            if (kind === 'first') fuBtn = '<button type="button" class="apps-row__followup" data-followup="' + esc(a.id) + '" data-followup-type="post_application">Draft follow-up</button>';
+            else if (kind === 'overdue') fuBtn = '<button type="button" class="apps-row__followup apps-row__followup--alert" data-followup="' + esc(a.id) + '" data-followup-type="post_application">Draft follow-up</button>';
+            else if (kind === 'ghosted') fuBtn = '<button type="button" class="apps-row__followup apps-row__followup--alert" data-followup="' + esc(a.id) + '" data-followup-type="ghosted_check_in">Check in</button>';
             return '<div class="apps-row" data-app-id="' + a.id + '">'
                 + '<div class="apps-row__main">'
                 +   '<span class="apps-row__title">' + esc(a.company || '(no company)') + ' &middot; ' + esc(a.role || '(no role)') + '</span>'
-                +   '<span class="apps-row__sub">applied ' + esc(date)
+                +   '<span class="apps-row__sub">' + esc(rel)
                 +     (due ? ' &middot; <span class="apps-row__due' + (dueAlert ? ' apps-row__due--alert' : '') + '">follow-up ' + esc(due) + '</span>' : '')
                 +     (a.source_url ? ' &middot; <a class="apps-row__url" href="' + esc(a.source_url) + '" target="_blank" rel="noopener">posting &#x2197;</a>' : '')
                 +   '</span>'
                 + '</div>'
+                + fuBtn
                 + '<span class="apps-row__status apps-row__status--' + esc(a.status) + '">' + statusLabel(a.status) + '</span>'
                 + '<button type="button" class="apps-row__edit" data-edit="' + esc(a.id) + '">Edit</button>'
                 + '<button type="button" class="apps-row__delete" data-delete="' + esc(a.id) + '" aria-label="Delete">&times;</button>'
@@ -2023,6 +2103,117 @@
             if (e.key === 'Escape' && !appsViewModal.hidden) closeInsightsModal();
         });
 
+        // ===== FOLLOW-UP DRAFT MODAL =====
+        var followupDraftModal = document.getElementById('followupDraftModal');
+        var followupDraftLoading = document.getElementById('followupDraftLoading');
+        var followupDraftContent = document.getElementById('followupDraftContent');
+        var followupDraftError = document.getElementById('followupDraftError');
+        var followupDraftSubject = document.getElementById('followupDraftSubject');
+        var followupDraftBody = document.getElementById('followupDraftBody');
+        var followupDraftSub = document.getElementById('followupDraftSub');
+        var followupDraftStatus = document.getElementById('followupDraftStatus');
+        var followupCopyBtn = document.getElementById('followupCopyBtn');
+        var followupGmailBtn = document.getElementById('followupGmailBtn');
+        var followupMarkSentBtn = document.getElementById('followupMarkSentBtn');
+        var followupCurrentApp = null;
+
+        function closeFollowupDraft() {
+            followupDraftModal.hidden = true;
+            document.body.style.overflow = '';
+            followupCurrentApp = null;
+        }
+        followupDraftModal.addEventListener('click', function(e) {
+            if (e.target.dataset && e.target.dataset.close) closeFollowupDraft();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !followupDraftModal.hidden) closeFollowupDraft();
+        });
+
+        async function openFollowupDraft(app, type) {
+            followupCurrentApp = app;
+            followupDraftLoading.hidden = false;
+            followupDraftContent.hidden = true;
+            followupDraftError.hidden = true;
+            followupDraftStatus.textContent = '';
+            followupDraftSub.textContent = (app.company || '') + ' · ' + (app.role || '');
+            followupDraftModal.hidden = false;
+            document.body.style.overflow = 'hidden';
+
+            try {
+                var resp = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mode: 'followup_email',
+                        user_id: user.id,
+                        company: app.company || '',
+                        role: app.role || '',
+                        type: type || 'post_application',
+                        notes: app.notes || ''
+                    })
+                });
+                var data = await resp.json();
+                if (data.error) throw new Error(data.error);
+                var subject = data.subject || ((type === 'ghosted_check_in' ? 'Following up on ' : 'Re: ') + (app.role || 'application'));
+                var body = data.body || '';
+                followupDraftSubject.value = subject;
+                followupDraftBody.value = body;
+                followupDraftLoading.hidden = true;
+                followupDraftContent.hidden = false;
+                updateGmailLink();
+            } catch (err) {
+                followupDraftLoading.hidden = true;
+                followupDraftError.textContent = 'Could not draft email: ' + (err.message || 'unknown error');
+                followupDraftError.hidden = false;
+            }
+        }
+
+        function updateGmailLink() {
+            var subj = encodeURIComponent(followupDraftSubject.value);
+            var body = encodeURIComponent(followupDraftBody.value);
+            followupGmailBtn.href = 'https://mail.google.com/mail/?view=cm&fs=1&su=' + subj + '&body=' + body;
+        }
+        followupDraftSubject.addEventListener('input', updateGmailLink);
+        followupDraftBody.addEventListener('input', updateGmailLink);
+
+        followupCopyBtn.addEventListener('click', function() {
+            var text = 'Subject: ' + followupDraftSubject.value + '\n\n' + followupDraftBody.value;
+            (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+                .then(function() { followupDraftStatus.textContent = 'Copied subject + body to clipboard.'; })
+                .catch(function() {
+                    followupDraftBody.select();
+                    document.execCommand('copy');
+                    followupDraftStatus.textContent = 'Copied (body only). Subject is above.';
+                });
+        });
+
+        followupMarkSentBtn.addEventListener('click', async function() {
+            if (!followupCurrentApp) return;
+            followupMarkSentBtn.disabled = true;
+            // Reschedule the follow-up reminder 14 days out, leave status as 'applied'
+            var next = new Date(); next.setDate(next.getDate() + 14);
+            var nextIso = isoDate(next.toISOString());
+            try {
+                await window.__sb.from('resumego_applications').update({
+                    follow_up_at: nextIso,
+                    notes: ((followupCurrentApp.notes || '') + '\n[' + new Date().toLocaleDateString() + '] Follow-up sent.').trim()
+                }).eq('id', followupCurrentApp.id).eq('user_id', user.id);
+                // Refresh local state
+                var idx = apps.findIndex(function(x) { return x.id === followupCurrentApp.id; });
+                if (idx >= 0) {
+                    apps[idx].follow_up_at = nextIso;
+                    apps[idx].notes = ((apps[idx].notes || '') + '\n[' + new Date().toLocaleDateString() + '] Follow-up sent.').trim();
+                }
+                renderApps();
+                followupDraftStatus.textContent = 'Marked sent. Next reminder in 14 days.';
+                setTimeout(closeFollowupDraft, 1200);
+            } catch (err) {
+                followupDraftStatus.textContent = 'Could not save: ' + (err.message || 'unknown error');
+            } finally {
+                followupMarkSentBtn.disabled = false;
+            }
+        });
+
         appsListEl.addEventListener('click', async function(e) {
             // Delete button: confirm + remove
             var delBtn = e.target.closest('[data-delete]');
@@ -2038,6 +2229,16 @@
                 var id = editBtn.dataset.edit;
                 var a = apps.find(function(x) { return x.id === id; });
                 if (a) openAppsModal(a);
+                return;
+            }
+            // Draft follow-up button: open follow-up draft modal
+            var fuBtn = e.target.closest('[data-followup]');
+            if (fuBtn) {
+                e.stopPropagation();
+                var fuId = fuBtn.dataset.followup;
+                var fuType = fuBtn.dataset.followupType || 'post_application';
+                var fuApp = apps.find(function(x) { return x.id === fuId; });
+                if (fuApp) openFollowupDraft(fuApp, fuType);
                 return;
             }
             // Row default: open insights

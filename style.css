@@ -5130,3 +5130,41 @@ textarea::placeholder {
 .maintenance-banner.show { transform: translateY(0); }
 .maintenance-banner strong { color: #ffb84a; }
 body.has-maintenance-banner { padding-top: 3rem; }
+
+/* ══════════════════════════════════════════════════════════════
+   Follow-up draft button on application rows
+   ══════════════════════════════════════════════════════════════ */
+.apps-row__followup {
+    background: rgba(197, 255, 74, 0.10);
+    border: 1px solid rgba(197, 255, 74, 0.45);
+    color: var(--accent);
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--f-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+    white-space: nowrap;
+}
+.apps-row__followup:hover {
+    background: rgba(197, 255, 74, 0.20);
+    border-color: var(--accent);
+}
+.apps-row__followup--alert {
+    background: rgba(255, 184, 74, 0.12);
+    border-color: rgba(255, 184, 74, 0.55);
+    color: #ffb84a;
+}
+.apps-row__followup--alert:hover {
+    background: rgba(255, 184, 74, 0.22);
+    border-color: #ffb84a;
+}
+.modal__sub {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    font-family: var(--f-mono);
+}
