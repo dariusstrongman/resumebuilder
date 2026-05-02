@@ -114,7 +114,7 @@
                 <a href="/" class="submit-btn submit-btn--inline">
                     <span class="submit-btn__label">Try again</span>
                 </a>
-                <a href="mailto:contact@stromation.com" class="submit-btn submit-btn--inline submit-btn--light">
+                <a href="mailto:contact@atshack.com" class="submit-btn submit-btn--inline submit-btn--light">
                     <span class="submit-btn__label">Email support</span>
                 </a>
             </div>
@@ -134,10 +134,8 @@
             <a href="/#pricing">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="/privacy.html">Privacy</a>
-            <a href="mailto:contact@stromation.com">contact@stromation.com</a>
-        </div>
-        <p class="footer-meta">A product by <a href="https://www.stromation.com">Stromation</a> &middot; Dallas, Texas</p>
-    </div>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>    </div>
 </footer>
 
 <script>
@@ -159,7 +157,7 @@
     if (isPack) {
         if (!sessionId) {
             clearInterval(stepTimer);
-            showError('Missing payment session. If you were charged, email contact@stromation.com with your receipt.');
+            showError('Missing payment session. If you were charged, email contact@atshack.com with your receipt.');
             return;
         }
         fetchBody = { mode: 'fulfill_pack', session_id: sessionId };
@@ -204,7 +202,7 @@
         clearInterval(stepTimer);
         if (isPack) {
             if (data && data.code) showPack(data);
-            else showError((data && data.error) || 'Failed to issue your pack code. Email contact@stromation.com with your receipt.');
+            else showError((data && data.error) || 'Failed to issue your pack code. Email contact@atshack.com with your receipt.');
             return;
         }
         // Edge case: Pro user routed to success.html based on a stale cached
@@ -224,11 +222,11 @@
             }
             showSuccess(data);
         }
-        else showError((data && data.error) || 'Failed to generate your resume. Email contact@stromation.com for help.');
+        else showError((data && data.error) || 'Failed to generate your resume. Email contact@atshack.com for help.');
     })
     .catch(function() {
         clearInterval(stepTimer);
-        showError('Connection error. Refresh the page to try again, or email contact@stromation.com.');
+        showError('Connection error. Refresh the page to try again, or email contact@atshack.com.');
     });
 
     function showSuccess(data) {
