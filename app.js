@@ -792,7 +792,52 @@ function resetBtn(btn) {
 // === PRICING CTAs (10-pack + Pro) ===
 // Both auto-use the logged-in user's email when available; fall back to the
 // inline email field on the page (or /login.html for Pro) when anonymous.
+// ========== BACKEND HEALTH CHECK ==========
+// Pings n8n on page load. If the webhook is unreachable (502, timeout,
+// network error), shows a maintenance banner and disables the Generate
+// button so users don't submit into a void during deploys / restarts.
+function showMaintenanceBanner() {
+    if (document.querySelector('.maintenance-banner')) return;
+    var b = document.createElement('div');
+    b.className = 'maintenance-banner';
+    b.innerHTML = '<strong>Maintenance in progress.</strong> Resume tailoring is paused for a few minutes while we update the system. Refresh in a bit.';
+    document.body.appendChild(b);
+    document.body.classList.add('has-maintenance-banner');
+    requestAnimationFrame(function() { b.classList.add('show'); });
+    // Disable any submit / generate buttons on the page
+    var ids = ['tailorSubmitBtn', 'generateBtn', 'submitBtn', 'buyPackBtn', 'goProBtn'];
+    ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.disabled = true; el.style.opacity = '0.55'; el.style.cursor = 'not-allowed'; }
+    });
+    // Generic catch: any button with type=submit inside a form
+    Array.prototype.forEach.call(document.querySelectorAll('form button[type="submit"], form button:not([type])'), function(el) {
+        el.disabled = true; el.style.opacity = '0.55'; el.style.cursor = 'not-allowed';
+    });
+}
+
+function checkBackendHealth() {
+    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 4500);
+    fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'health' }),
+        signal: ctrl ? ctrl.signal : undefined
+    }).then(function(r) {
+        clearTimeout(timer);
+        if (!r.ok && (r.status === 502 || r.status === 503 || r.status === 504)) {
+            showMaintenanceBanner();
+        }
+        // any 200 / 4xx response means n8n is reachable; ignore.
+    }).catch(function() {
+        clearTimeout(timer);
+        showMaintenanceBanner();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    checkBackendHealth();
     var packBtn = document.getElementById('buyPackBtn');
     var proBtn = document.getElementById('goProBtn');
 
