@@ -4662,6 +4662,13 @@ textarea::placeholder {
     font-family: var(--f-ui);
     font-size: 0.78rem;
 }
+.resume-list__retention {
+    margin: 0 0 1rem;
+    color: var(--ink-3);
+    font-family: var(--f-ui);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
 
 .plan-picker {
     display: grid;
