@@ -36,30 +36,14 @@ Reminder: PUT auto-deactivates the workflow. Always POST `/activate` after.
 ### Customer email simplified
 New body: dark hero ("We hacked the ATS with your resume.") + score block + changes block + share-with-friends ask + footer. Score-block headline reframed from "Your Match" → "Your shot at landing this", and the `% match` copy reworded to `% chance of landing`.
 
-### Layout validation (just shipped — see below)
-Added a render-then-retry node-equivalent inside the `Process Request` Code node. Functions inserted right after `jsonResumeToPdf`:
+### Layout validation — tried, removed
+Briefly installed a render-then-retry block (`pdfPageStats` + `checkLayout`) that would re-prompt GPT with "COMPRESS TO 1 PAGE" when a render came back as `pages > 1 && lastPageRows < 6`. A temporary `mode: '__probe'` test against the live container revealed the n8n container has `soffice` but **does NOT have `pdfinfo`/`pdftotext`** (poppler-utils). My try/catch swallowed the missing-binary error so it became a silent no-op (`pages=0, lastPageRows=0`, retry never fires).
 
-```js
-function pdfPageStats(pdfBytes) {
-    // writes pdf to tmp, runs `pdfinfo` for page count,
-    // runs `pdftotext -f N -l N` to count rows on last page,
-    // returns { pages, lastPageRows }. Errors swallowed.
-}
-function checkLayout(jsonData) {
-    // renders via jsonResumeToPdf, runs pdfPageStats,
-    // returns { needsCompress: pages > 1 && lastPageRows < 6, stats }
-}
-```
+Decision: removed the validation entirely. If we want to revisit, two paths:
+- Install poppler in the n8n container (`apt install poppler-utils`) and re-run `/tmp/add_validation.py`.
+- Switch to a PDF-bytes-only page count (no last-page-density signal) — coarser, but no dependencies.
 
-Both code paths get the same retry block:
-- **Inline path** (Pro/promo, after `pResume = jsonResumeToText(pData)`)
-- **Fulfill path** (post-Stripe payment, after `globalThis.__rData = rData`)
-
-When `needsCompress`, re-prompts GPT with: "COMPRESS TO 1 PAGE: cap the most-recent role at 3 bullets, tighten summary by 1 sentence if needed. Do NOT drop any job, do NOT invent." Cleanup vs tailor branches use the right input (resume only vs resume+job posting).
-
-Cost: ~$0.005 only when retry fires. Latency: +5–10s only when retry fires. Errors all swallowed so the main flow is unbreakable.
-
-Verified post-install: 1 `pdfPageStats` def, 1 `checkLayout` def, 3 call sites (1 def + 2 retries), 2 `.needsCompress` branches, workflow active.
+Workflow is back to its pre-validation state. `/tmp/add_validation.py` and `/tmp/remove_validation.py` are kept locally for reference.
 
 ## Dashboard: removed n8n round-trips
 
