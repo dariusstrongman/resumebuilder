@@ -1424,8 +1424,10 @@
         var data = resumeContentCache[meta.id];
         if (!data) {
             try {
-                var r = await sb.from('resumego_sessions')
-                    .select('id, resume_text, cover_letter_text')
+                // Saved resumes live in 'resumes', not 'resumego_sessions'.
+                // Column is tailored_resume_text — alias to resume_text for renderer.
+                var r = await sb.from('resumes')
+                    .select('id, resume_text:tailored_resume_text, cover_letter_text, resume_pdf_url, resume_docx_url, cover_pdf_url, cover_docx_url')
                     .eq('id', meta.id)
                     .eq('user_id', user.id)
                     .maybeSingle();
@@ -1440,23 +1442,25 @@
         // If user advanced before fetch finished, ignore.
         if (currentIndex !== index) return;
         renderResumeView(data);
-        // Background-fetch the rendered files so downloads are ready when the
-        // user reaches for them. Skip if cache already has them.
-        if (!data.resume_pdf_base64 && !data._filesPending) {
-            data._filesPending = true;
-            sb.from('resumego_sessions')
-                .select('resume_pdf_base64, resume_docx_base64, cover_pdf_base64, cover_docx_base64')
-                .eq('id', meta.id)
-                .eq('user_id', user.id)
-                .maybeSingle()
-                .then(function(res) {
-                    if (!res || res.error || !res.data) return;
-                    Object.assign(data, res.data);
-                    data._filesPending = false;
-                    if (currentResumeId === meta.id) applyDownloadFiles(data);
-                })
-                .catch(function() { data._filesPending = false; });
+        // The 'resumes' table stores file URLs (not base64). If they're populated,
+        // expose them as direct download links. Saved resumes from older sessions
+        // may have null URLs — in that case the downloads block stays empty.
+        applyDownloadFilesFromUrls(data);
+    }
+
+    function applyDownloadFilesFromUrls(d) {
+        var dlRow = modalBody.querySelector('.modal__downloads');
+        if (!dlRow) return;
+        function urlBtn(label, url) {
+            if (!url) return '';
+            return '<a href="' + esc(url) + '" class="modal__dl" target="_blank" rel="noopener" download>' + esc(label) + '</a>';
         }
+        var html = ''
+            + urlBtn('Resume PDF', d.resume_pdf_url)
+            + urlBtn('Resume DOCX', d.resume_docx_url)
+            + urlBtn('Cover PDF', d.cover_pdf_url)
+            + urlBtn('Cover DOCX', d.cover_docx_url);
+        dlRow.innerHTML = html || '<span class="modal__dl modal__dl--empty">Saved resumes from earlier sessions are text-only. Re-tailor to get PDF/DOCX files.</span>';
     }
 
     function applyDownloadFiles(d) {
@@ -1553,7 +1557,7 @@
             // local cache update
             var meta = allResumes.find(function(r) { return r.id === rid; });
             if (meta) meta.title = newTitle;
-            sb.from('resumego_sessions')
+            sb.from('resumes')
                 .update({ title: newTitle })
                 .eq('id', rid)
                 .eq('user_id', user.id)
@@ -1606,7 +1610,7 @@
                 b.disabled = true;
                 b.textContent = 'Deleting…';
                 try {
-                    var r = await sb.from('resumego_sessions')
+                    var r = await sb.from('resumes')
                         .delete()
                         .eq('id', rid)
                         .eq('user_id', user.id);
@@ -1666,7 +1670,7 @@
             var listRow = listEl.querySelector('[data-resume-id="' + meta.id + '"] .resume-row__title');
             if (listRow) listRow.textContent = newTitle;
             // persist
-            sb.from('resumego_sessions')
+            sb.from('resumes')
                 .update({ title: newTitle })
                 .eq('id', meta.id)
                 .eq('user_id', user.id)
@@ -1769,7 +1773,7 @@
             cancelBtn.disabled = true;
             confirmBtn.textContent = 'Deleting…';
             try {
-                var r = await sb.from('resumego_sessions')
+                var r = await sb.from('resumes')
                     .delete()
                     .eq('id', currentResumeId)
                     .eq('user_id', user.id);
