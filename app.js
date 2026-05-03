@@ -1,4 +1,5 @@
 var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
+var HEALTH_URL  = 'https://n8n.stromation.com/webhook/health';
 var MAX_RESUME_CHARS = 50000;
 var MAX_JOB_CHARS = 20000;
 var uploadedFile = null;
@@ -827,10 +828,10 @@ function checkBackendHealth() {
     } catch(_) {}
     var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 4500);
-    fetch(WEBHOOK_URL, {
+    fetch(HEALTH_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'health' }),
+        body: JSON.stringify({}),
         signal: ctrl ? ctrl.signal : undefined
     }).then(function(r) {
         clearTimeout(timer);
