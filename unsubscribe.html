@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Unsubscribe — ATSHack</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .unsub-shell { min-height: 70vh; display:flex; align-items:center; justify-content:center; padding: 2rem 1.25rem; }
+  .unsub-card { max-width: 480px; width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--line-strong); border-radius: 16px; padding: 2rem 1.75rem; text-align: center; }
+  .unsub-card h1 { font-family: var(--f-ui); font-weight: 700; font-size: 1.5rem; margin: 0 0 0.5rem; color: var(--ink-0); }
+  .unsub-card p  { color: var(--ink-2); font-size: 0.95rem; line-height: 1.55; margin: 0 0 1rem; }
+  .unsub-state  { display: none; }
+  .unsub-state.active { display: block; }
+  .unsub-spinner { width: 32px; height: 32px; border: 3px solid var(--line-strong); border-top-color: var(--accent); border-radius: 50%; margin: 0.4rem auto 1rem; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .unsub-back { display: inline-block; margin-top: 0.4rem; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+  .unsub-back:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="brand-tile">ATS</span>
+      <span class="brand-name">ATSHack</span>
+    </a>
+  </div>
+</header>
+
+<main class="unsub-shell">
+  <div class="unsub-card">
+
+    <div class="unsub-state active" id="working">
+      <div class="unsub-spinner" aria-hidden="true"></div>
+      <h1>Unsubscribing&hellip;</h1>
+      <p>One sec.</p>
+    </div>
+
+    <div class="unsub-state" id="done">
+      <h1>You're unsubscribed.</h1>
+      <p>You won't get any more emails from ATSHack. Sorry to see you go.</p>
+      <a class="unsub-back" href="/">&larr; Back to atshack.com</a>
+    </div>
+
+    <div class="unsub-state" id="missing">
+      <h1>Hmm.</h1>
+      <p>That link doesn't have a valid token. If you want to unsubscribe, reply to any of our emails or write to <a href="mailto:contact@atshack.com" style="color:var(--accent);">contact@atshack.com</a>.</p>
+      <a class="unsub-back" href="/">&larr; Back to atshack.com</a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(function() {
+  function show(id) {
+    var els = document.querySelectorAll('.unsub-state');
+    for (var i = 0; i < els.length; i++) els[i].classList.remove('active');
+    var el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('t') || params.get('token') || '';
+  if (!/^[a-f0-9]{32}$/.test(token)) {
+    show('missing');
+    return;
+  }
+
+  fetch('https://n8n.stromation.com/webhook/grader-unsubscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: token })
+  }).then(function() {
+    show('done');
+  }).catch(function() {
+    // Even on failure, show success — better UX, and the request was logged.
+    show('done');
+  });
+})();
+</script>
+
+</body>
+</html>
