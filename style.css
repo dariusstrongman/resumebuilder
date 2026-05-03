@@ -6661,6 +6661,7 @@ body.has-maintenance-banner { padding-top: 3rem; }
 .final-cta h2 em,
 .account-title,
 .account-shell h2,
+.account-card__value--tip,
 .blog-featured h2,
 .legal-doc h2,
 .success-h,
