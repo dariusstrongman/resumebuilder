@@ -2696,11 +2696,11 @@ textarea::placeholder {
     margin-bottom: 1rem;
 }
 .blog-title {
-    font-family: var(--f-display);
-    font-weight: 400;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-family: var(--f-ui);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
     color: var(--ink-0);
     margin: 0 0 0.7rem;
     text-wrap: balance;
@@ -6389,20 +6389,20 @@ body.has-maintenance-banner { padding-top: 3rem; }
     margin-bottom: 1.5rem;
 }
 .blog-hero h1 {
-    font-family: var(--f-bebas) !important;
-    font-weight: 400 !important;
-    font-size: clamp(2.6rem, 7vw, 5rem) !important;
-    line-height: 0.95 !important;
-    letter-spacing: 0.01em !important;
+    font-family: var(--f-ui) !important;
+    font-weight: 700 !important;
+    font-size: clamp(2rem, 5vw, 3.4rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.01em !important;
     color: #fff !important;
-    text-transform: uppercase;
+    text-transform: none !important;
     margin: 0 0 1rem;
 }
 .blog-hero h1 em {
-    font-family: var(--f-bebas) !important;
+    font-family: var(--f-ui) !important;
     font-style: normal !important;
+    font-weight: 700 !important;
     color: var(--accent);
-    text-shadow: 0 0 30px rgba(202, 255, 0, 0.4);
 }
 .blog-hero p { color: var(--muted-v2); font-size: 1.05rem; line-height: 1.6; }
 
@@ -6461,10 +6461,12 @@ body.has-maintenance-banner { padding-top: 3rem; }
 .blog-card h3,
 .blog-post-card h2,
 .blog-post-card h3 {
-    font-family: var(--f-bebas);
-    text-transform: uppercase;
+    font-family: var(--f-ui);
+    font-weight: 700;
+    text-transform: none;
     color: #fff;
-    line-height: 1;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
 }
 
 /* Legal-doc / blog body — readable in dark */
