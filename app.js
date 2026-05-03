@@ -1,5 +1,6 @@
-var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
-var HEALTH_URL  = 'https://n8n.stromation.com/webhook/health';
+var WEBHOOK_URL       = 'https://n8n.stromation.com/webhook/resume-tailor';
+var HEALTH_URL        = 'https://n8n.stromation.com/webhook/health';
+var GRADER_EMAIL_URL  = 'https://n8n.stromation.com/webhook/grader-email-report';
 var MAX_RESUME_CHARS = 50000;
 var MAX_JOB_CHARS = 20000;
 var uploadedFile = null;
@@ -549,6 +550,18 @@ function renderGraderResult(d) {
       + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
       + '</div>';
 
+    html += '<div class="grader-email-capture" id="graderEmailCapture">'
+      + '<h4>Want the in-depth report emailed?</h4>'
+      + '<p>We will send a full breakdown of every gap, with specific rewrite suggestions — free.</p>'
+      + '<form class="grader-email-form" onsubmit="sendGraderReport(event); return false;">'
+        + '<input type="email" id="graderEmailInput" placeholder="you@email.com" required autocomplete="email">'
+        + '<button type="submit" class="submit-btn submit-btn--inline" id="graderEmailBtn">'
+          + '<span class="submit-btn__label">Email my report</span>'
+        + '</button>'
+      + '</form>'
+      + '<p class="grader-email-note">One email with your report. No spam.</p>'
+    + '</div>';
+
     html += '</div></div>'
       + '<div class="grader-reset-wrap"><button class="grader-reset" onclick="resetGrader()">Grade another resume</button></div>';
 
@@ -556,11 +569,72 @@ function renderGraderResult(d) {
     resultEl.style.display = 'block';
     resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    // Stash for the email-report handler.
+    window._graderLastResult = d;
+
     // Animate the gauge fill in after mount
     setTimeout(function() {
         var fill = resultEl.querySelector('.gauge-fill');
         if (fill) fill.style.strokeDashoffset = finalOffset.toFixed(2);
     }, 120);
+}
+
+function sendGraderReport(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var capture = document.getElementById('graderEmailCapture');
+    var input = document.getElementById('graderEmailInput');
+    var btn = document.getElementById('graderEmailBtn');
+    if (!capture || !input || !btn) return;
+
+    var email = (input.value || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        toast('Enter a valid email.', 'error');
+        return;
+    }
+
+    var grade = window._graderLastResult || null;
+    var resumeText = window._graderResumeText || '';
+    if (!grade) {
+        toast('Grade result missing. Please grade your resume first.', 'error');
+        return;
+    }
+
+    btn.disabled = true;
+    var label = btn.querySelector('.submit-btn__label');
+    var prevLabel = label ? label.textContent : null;
+    if (label) label.textContent = 'Sending…';
+
+    track('grader_email_capture', { email_domain: email.split('@')[1] || '' });
+
+    fetch(GRADER_EMAIL_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            mode: 'grade-email',
+            email: email,
+            grade: grade,
+            resume: resumeText
+        })
+    })
+    .then(function(r) { return r.json().catch(function() { return {}; }); })
+    .then(function(data) {
+        if (data && data.error) {
+            btn.disabled = false;
+            if (label && prevLabel) label.textContent = prevLabel;
+            toast(data.error, 'error');
+            return;
+        }
+        capture.innerHTML = '<div class="grader-email-success">'
+            + '<h4>Sent. Check your inbox.</h4>'
+            + '<p>Your full report is on its way to <strong>' + escapeHtml(email) + '</strong>. '
+            + 'It can take a minute. Check spam if you don’t see it.</p>'
+            + '</div>';
+    })
+    .catch(function() {
+        btn.disabled = false;
+        if (label && prevLabel) label.textContent = prevLabel;
+        toast('Could not send. Please try again.', 'error');
+    });
 }
 
 function resetGrader() {

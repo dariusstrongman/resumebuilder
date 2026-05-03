@@ -2340,6 +2340,78 @@ textarea::placeholder {
     border-color: var(--ink-3);
 }
 
+/* Email-capture card under the upsell */
+.grader-email-capture {
+    margin-top: 1rem;
+    padding: 1.25rem 1.4rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+}
+.grader-email-capture h4 {
+    margin: 0 0 0.35rem;
+    font-family: var(--f-ui);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink-0);
+    line-height: 1.25;
+}
+.grader-email-capture > p {
+    margin: 0 0 0.85rem;
+    color: var(--ink-2);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+.grader-email-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.grader-email-form input[type="email"] {
+    flex: 1 1 220px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-0);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-family: var(--f-ui);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color .15s;
+}
+.grader-email-form input[type="email"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(202,255,0,0.15);
+}
+.grader-email-form .submit-btn {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.7rem 1.2rem;
+}
+.grader-email-note {
+    margin: 0.6rem 0 0;
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+}
+.grader-email-success {
+    text-align: left;
+}
+.grader-email-success h4 {
+    margin: 0 0 0.4rem;
+    font-family: var(--f-ui);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.05rem;
+}
+.grader-email-success p {
+    margin: 0;
+    color: var(--ink-1);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
 /* Nav chip for "Free" tag */
 .nav-chip {
     display: inline-block;
