@@ -35,6 +35,7 @@
         <nav class="nav-links">
             <a href="/#generate">Tailor a resume</a>
             <a href="/ats.html">What is ATS?</a>
+            <a href="#" id="logoutBtnNav">Sign out</a>
         </nav>
     </div>
 </header>
@@ -1277,6 +1278,8 @@
     document.getElementById('logoutBtn').addEventListener('click', doSignOut);
     var logoutBtnTop = document.getElementById('logoutBtnTop');
     if (logoutBtnTop) logoutBtnTop.addEventListener('click', doSignOut);
+    var logoutBtnNav = document.getElementById('logoutBtnNav');
+    if (logoutBtnNav) logoutBtnNav.addEventListener('click', doSignOut);
 
     document.getElementById('changePasswordBtn').addEventListener('click', async function() {
         var pw = prompt('Enter a new password (8+ characters):');
