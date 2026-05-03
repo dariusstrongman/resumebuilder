@@ -20,7 +20,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="style.css">
     <script type="application/ld+json">
     {
@@ -139,12 +139,34 @@
         <h1 class="resource-title">What is an applicant tracking system (and how to beat it).</h1>
         <p class="resource-lede">Roughly 75% of resumes get filtered out by software before a human ever sees them. Here's what that software actually does, what gets you auto-rejected, and the concrete rules for getting through.</p>
 
-        <p style="margin: 1.5rem 0 2.5rem;">
-            <a href="/#generate" class="submit-btn submit-btn--inline">
-                <span class="submit-btn__label">Tailor your resume now</span>
-                <span class="submit-btn__price">$1.00</span>
+        <!-- Manus-style stat row + dual CTAs -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0 1.5rem;">
+            <div class="feature-card-v2" style="text-align:center;padding:1.4rem 1rem;">
+                <div class="font-bebas" style="font-size:2.6rem;color:var(--accent);line-height:1;text-shadow:0 0 30px rgba(202,255,0,0.4);">75%</div>
+                <div style="color:var(--muted-v2);font-size:0.78rem;margin-top:0.4rem;line-height:1.4;">resumes filtered before a human reads</div>
+            </div>
+            <div class="feature-card-v2" style="text-align:center;padding:1.4rem 1rem;">
+                <div class="font-bebas" style="font-size:2.6rem;color:var(--accent);line-height:1;text-shadow:0 0 30px rgba(202,255,0,0.4);">6</div>
+                <div style="color:var(--muted-v2);font-size:0.78rem;margin-top:0.4rem;line-height:1.4;">major ATS systems we beat</div>
+            </div>
+            <div class="feature-card-v2" style="text-align:center;padding:1.4rem 1rem;">
+                <div class="font-bebas" style="font-size:2.6rem;color:var(--accent);line-height:1;text-shadow:0 0 30px rgba(202,255,0,0.4);">60s</div>
+                <div style="color:var(--muted-v2);font-size:0.78rem;margin-top:0.4rem;line-height:1.4;">tailoring delivery time</div>
+            </div>
+            <div class="feature-card-v2" style="text-align:center;padding:1.4rem 1rem;">
+                <div class="font-bebas" style="font-size:2.6rem;color:var(--accent);line-height:1;text-shadow:0 0 30px rgba(202,255,0,0.4);">$1</div>
+                <div style="color:var(--muted-v2);font-size:0.78rem;margin-top:0.4rem;line-height:1.4;">per tailored resume</div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin:0 0 3rem;">
+            <a href="/#generate" class="btn-lime">
+                Tailor My Resume &mdash; $1 &rarr;
             </a>
-        </p>
+            <a href="/#grader" class="btn-ghost">
+                Grade Free First
+            </a>
+        </div>
 
         <article class="legal-doc">
 

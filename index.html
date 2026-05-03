@@ -25,7 +25,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="canonical" href="https://www.atshack.com/">
     <link rel="stylesheet" href="style.css">
     <script type="application/ld+json">
@@ -189,36 +189,176 @@
 
 <main>
 
-<!-- ───────────────── HERO ───────────────── -->
-<section class="hero" id="generate">
-    <div class="hero-grid">
+<!-- ───────────────── HERO V2 (cinematic, image + floating cards, no form) ───────────────── -->
+<section class="hero-v2">
+    <img class="hero-v2__bg"
+        src="/assets/v2/bg-texture.webp"
+        alt="" loading="eager" aria-hidden="true">
+    <div class="hero-v2__overlay"></div>
+    <div class="hero-v2__overlay-blue"></div>
 
-        <div class="hero-copy">
-            <div class="hero-tag">
-                <span class="live-dot"></span>
-                <span>BEAT THE BOTS</span>
-                <span class="hero-tag__sep">/</span>
-                <span>$1 PER RESUME &middot; NO SUBSCRIPTION</span>
+    <div class="hero-v2__inner">
+
+        <div class="hero-v2__copy">
+            <div class="hero-v2__tag">
+                <span class="lime-badge">For Students &amp; Job Seekers</span>
+                <span class="font-mono-data hero-v2__version">v2.0</span>
             </div>
 
-            <h1 class="hero-title">
-                Stop sending <em>the same</em> resume.
-                <span class="hero-title-line">Get it tailored for <span class="dollar">$1</span>.</span>
+            <h1 class="hero-v2__title">
+                BEAT THE<br>
+                <em>BOTS.</em><br>
+                LAND THE<br>
+                JOB.
             </h1>
 
-            <p class="hero-lede">
-                Seventy-five percent of resumes get filtered before a human reads them. We rewrite yours to match any job posting in sixty seconds. Pay $1 with no account, or go Pro for fifty tailorings a month.
+            <p class="hero-v2__lede">
+                75% of resumes never reach a human. ATSHack rewrites yours to match any job posting in <strong>60 seconds</strong>. One dollar. No account. No BS.
             </p>
 
-            <ul class="hero-points">
-                <li>60-second turnaround</li>
-                <li>Passes every major ATS</li>
-                <li>$1 path needs no account</li>
-            </ul>
+            <div class="hero-v2__price">
+                <span class="hero-v2__price-num">$1</span>
+                <span class="hero-v2__price-cap">/ resume &middot; no subscription &middot; no account needed</span>
+            </div>
 
-            <p class="hero-grader-cta">
-                Not ready to pay? <a href="#grader">Grade your resume free first &rarr;</a>
-            </p>
+            <div class="hero-v2__ctas">
+                <a href="#generate" class="btn-lime hero-v2__btn">
+                    Tailor My Resume &mdash; $1 <span class="hero-v2__btn-arrow">&rarr;</span>
+                </a>
+                <a href="#grader" class="btn-ghost hero-v2__btn">
+                    Grade Free First
+                </a>
+            </div>
+
+            <div class="hero-v2__trust">
+                <span class="hero-v2__trust-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Never fabricates
+                </span>
+                <span class="hero-v2__trust-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    60-second delivery
+                </span>
+                <span class="hero-v2__trust-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Data discarded after delivery
+                </span>
+            </div>
+        </div>
+
+        <div class="hero-v2__media">
+            <img class="hero-v2__shot"
+                src="/assets/v2/hero.webp"
+                alt="Student using ATSHack to optimize resume"
+                loading="eager">
+
+            <!-- Floating: ATS Score Transformation card (bottom-left of image) -->
+            <div class="hero-v2__score-card">
+                <div class="hero-v2__score-cap">ATS Score Transformation</div>
+                <div class="hero-v2__score-rings">
+                    <div class="score-ring-wrap" style="width:72px;height:72px;">
+                        <svg class="score-ring-svg" width="72" height="72" viewBox="0 0 72 72">
+                            <circle class="score-ring-bg" cx="36" cy="36" r="28" stroke-width="6"/>
+                            <circle class="score-ring-fill score-ring-fill--red" cx="36" cy="36" r="28" stroke-width="6"
+                                stroke-dasharray="175.93" stroke-dashoffset="135.46"/>
+                        </svg>
+                        <div class="score-ring-label">
+                            <span class="score-ring-num" style="font-size:1.3rem;">23%</span>
+                            <span class="score-ring-cap" style="color:var(--coral);font-size:0.55rem;">BEFORE</span>
+                        </div>
+                    </div>
+                    <div class="hero-v2__score-arrow">
+                        <span>&rarr;</span>
+                        <span class="font-mono-data">60s</span>
+                    </div>
+                    <div class="score-ring-wrap" style="width:72px;height:72px;">
+                        <svg class="score-ring-svg" width="72" height="72" viewBox="0 0 72 72">
+                            <circle class="score-ring-bg" cx="36" cy="36" r="28" stroke-width="6"/>
+                            <circle class="score-ring-fill" cx="36" cy="36" r="28" stroke-width="6"
+                                stroke-dasharray="175.93" stroke-dashoffset="14.07"/>
+                        </svg>
+                        <div class="score-ring-label">
+                            <span class="score-ring-num" style="font-size:1.3rem;">92%</span>
+                            <span class="score-ring-cap" style="color:var(--accent);font-size:0.55rem;">AFTER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating: Beats Every ATS System badge (top-right of image) -->
+            <div class="hero-v2__beats-badge">
+                <div class="hero-v2__beats-badge__top">Beats Every</div>
+                <div class="hero-v2__beats-badge__bottom">ATS System</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hero-v2__bottom-fade" aria-hidden="true"></div>
+</section>
+
+<!-- ───────────────── GRADER (free tool) ───────────────── -->
+<section class="grader" id="grader">
+    <div class="grader-inner">
+        <header class="section-head grader-head">
+            <span class="section-eyebrow">Free tool</span>
+            <h2 class="section-title">Grade your resume. <em>Free.</em></h2>
+            <p class="section-dek">See your ATS score and top weaknesses in 10 seconds. No payment. No account.</p>
+        </header>
+
+        <div class="grader-shell">
+            <!-- Input -->
+            <div class="grader-input" id="graderInput">
+                <div class="grader-tabs">
+                    <button type="button" class="ri-tab active" data-tab="upload" onclick="switchGraderTab('upload')">Upload file</button>
+                    <button type="button" class="ri-tab" data-tab="paste" onclick="switchGraderTab('paste')">Paste text</button>
+                </div>
+                <div id="graderUploadTab">
+                    <div class="upload-zone" id="graderUploadZone">
+                        <input type="file" id="graderFileInput" accept=".pdf,.doc,.docx" hidden>
+                        <div class="upload-default" id="graderUploadDefault">
+                            <svg class="upload-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                            <p class="upload-text">Drop your resume or <span class="upload-link">browse</span></p>
+                            <p class="upload-hint">PDF or Word &middot; Not retained</p>
+                        </div>
+                        <div class="upload-done" id="graderUploadDone" style="display:none;">
+                            <span class="upload-check" aria-hidden="true">&check;</span>
+                            <span id="graderFileName"></span>
+                            <button type="button" class="upload-remove" id="graderRemoveFile">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="graderPasteTab" style="display:none;">
+                    <textarea id="graderResumeText" placeholder="Paste your full resume text here&hellip;" rows="6"></textarea>
+                </div>
+                <button class="submit-btn" id="graderBtn" onclick="gradeResume()">
+                    <span class="submit-btn__label">Grade my resume</span>
+                    <span class="submit-btn__price">FREE</span>
+                </button>
+                <p class="grader-note">Your resume is processed in memory and never stored.</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="grader-loading" id="graderLoading" style="display:none;">
+                <div class="spinner-large"></div>
+                <p class="grader-loading-title">Reading your resume&hellip;</p>
+                <p class="grader-loading-hint">Analyzing ATS compatibility and impact</p>
+            </div>
+
+            <!-- Result (populated by JS) -->
+            <div class="grader-result" id="graderResult" style="display:none;"></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ───────────────── GENERATE / TAILOR FORM (was inside hero in v1) ───────────────── -->
+<section class="generate-wrap" id="generate">
+    <div class="generate-wrap__inner">
+        <div class="generate-wrap__head">
+            <span class="lime-badge">Tailor Your Resume</span>
+            <h2 class="generate-wrap__title">START NOW. <em>ONE DOLLAR.</em></h2>
+            <p class="generate-wrap__dek">3 steps &middot; 60 seconds. Pay $1 with no account, or sign in if you have a Pro plan.</p>
         </div>
 
         <aside class="form-card">
@@ -370,6 +510,95 @@
     </div>
 </section>
 
+<!-- ───────────────── PROOF TICKER (lime banner) ───────────────── -->
+<section class="proof-ticker" aria-label="Compatibility">
+    <div class="proof-ticker__track">
+        <span class="proof-ticker__item">&check; Passes Workday <span>·</span></span>
+        <span class="proof-ticker__item">&check; Passes Greenhouse <span>·</span></span>
+        <span class="proof-ticker__item">&check; Passes Lever <span>·</span></span>
+        <span class="proof-ticker__item">&check; Passes iCIMS <span>·</span></span>
+        <span class="proof-ticker__item">&check; Passes Taleo <span>·</span></span>
+        <span class="proof-ticker__item">&check; Passes BambooHR <span>·</span></span>
+        <span class="proof-ticker__item">&#9889; 60-Second Delivery <span>·</span></span>
+        <span class="proof-ticker__item">$ $1 Per Resume <span>·</span></span>
+        <span class="proof-ticker__item">&#127891; Built for Students <span>·</span></span>
+        <span class="proof-ticker__item">&#128274; Never Fabricates <span>·</span></span>
+        <span class="proof-ticker__item">&check; STAR Interview Coach <span>·</span></span>
+        <span class="proof-ticker__item">&check; Application Tracker <span>·</span></span>
+        <!-- duplicate set for seamless loop -->
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes Workday <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes Greenhouse <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes Lever <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes iCIMS <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes Taleo <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Passes BambooHR <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&#9889; 60-Second Delivery <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">$ $1 Per Resume <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&#127891; Built for Students <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&#128274; Never Fabricates <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; STAR Interview Coach <span>·</span></span>
+        <span class="proof-ticker__item" aria-hidden="true">&check; Application Tracker <span>·</span></span>
+    </div>
+</section>
+
+<!-- ───────────────── STATS BAR ───────────────── -->
+<section class="stats-bar" aria-label="The numbers">
+    <div class="stats-bar__inner">
+        <div class="stats-bar__item">
+            <div class="stats-bar__num" data-counter="75" data-suffix="%">75%</div>
+            <div class="stats-bar__label">of resumes filtered before a human reads</div>
+        </div>
+        <div class="stats-bar__item">
+            <div class="stats-bar__num" data-counter="1" data-prefix="$">$1</div>
+            <div class="stats-bar__label">per tailored resume, no subscription</div>
+        </div>
+        <div class="stats-bar__item">
+            <div class="stats-bar__num" data-counter="60" data-suffix="s">60s</div>
+            <div class="stats-bar__label">average turnaround time</div>
+        </div>
+        <div class="stats-bar__item">
+            <div class="stats-bar__num" data-counter="6">6</div>
+            <div class="stats-bar__label">major ATS systems supported</div>
+        </div>
+    </div>
+</section>
+
+<!-- ───────────────── THE PROBLEM ───────────────── -->
+<section class="problem-section" aria-label="The brutal truth about ATS">
+    <div class="problem-inner reveal-up">
+        <span class="lime-badge">The Brutal Truth</span>
+        <h2 class="problem-headline">
+            THE BOTS DECIDE<br>
+            <em>BEFORE HUMANS DO.</em>
+        </h2>
+        <p class="problem-dek">
+            Applicant Tracking Systems scan your resume before any recruiter sees it. If your keywords don't match the job posting exactly, you're filtered out. Automatically. Silently. Without a second chance.
+        </p>
+        <div class="problem-flow">
+            <div class="problem-step">
+                <div class="problem-step__label">You Apply</div>
+                <div class="problem-step__sub">100 resumes sent</div>
+            </div>
+            <span class="problem-arrow">&rarr;</span>
+            <div class="problem-step problem-step--bad">
+                <div class="problem-step__label">ATS Filters</div>
+                <div class="problem-step__sub">75 rejected instantly</div>
+            </div>
+            <span class="problem-arrow">&rarr;</span>
+            <div class="problem-step">
+                <div class="problem-step__label">Human Reads</div>
+                <div class="problem-step__sub">25 make it through</div>
+            </div>
+            <span class="problem-arrow">&rarr;</span>
+            <div class="problem-step problem-step--good">
+                <div class="problem-step__label">Interviews</div>
+                <div class="problem-step__sub">5 get called</div>
+            </div>
+        </div>
+        <p class="problem-tagline">ATSHack puts you in the 25% that get through. Every time.</p>
+    </div>
+</section>
+
 <!-- ───────────────── TESTIMONIAL MARQUEE ───────────────── -->
 <section class="marquee" aria-label="What users are saying">
     <div class="marquee-track">
@@ -421,60 +650,6 @@
     </div>
 </section>
 
-<!-- ───────────────── GRADER (free tool) ───────────────── -->
-<section class="grader" id="grader">
-    <div class="grader-inner">
-        <header class="section-head grader-head">
-            <span class="section-eyebrow">Free tool</span>
-            <h2 class="section-title">Grade your resume. <em>Free.</em></h2>
-            <p class="section-dek">See your ATS score and top weaknesses in 10 seconds. No payment. No account.</p>
-        </header>
-
-        <div class="grader-shell">
-            <!-- Input -->
-            <div class="grader-input" id="graderInput">
-                <div class="grader-tabs">
-                    <button type="button" class="ri-tab active" data-tab="upload" onclick="switchGraderTab('upload')">Upload file</button>
-                    <button type="button" class="ri-tab" data-tab="paste" onclick="switchGraderTab('paste')">Paste text</button>
-                </div>
-                <div id="graderUploadTab">
-                    <div class="upload-zone" id="graderUploadZone">
-                        <input type="file" id="graderFileInput" accept=".pdf,.doc,.docx" hidden>
-                        <div class="upload-default" id="graderUploadDefault">
-                            <svg class="upload-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-                            <p class="upload-text">Drop your resume or <span class="upload-link">browse</span></p>
-                            <p class="upload-hint">PDF or Word &middot; Not retained</p>
-                        </div>
-                        <div class="upload-done" id="graderUploadDone" style="display:none;">
-                            <span class="upload-check" aria-hidden="true">&check;</span>
-                            <span id="graderFileName"></span>
-                            <button type="button" class="upload-remove" id="graderRemoveFile">Remove</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="graderPasteTab" style="display:none;">
-                    <textarea id="graderResumeText" placeholder="Paste your full resume text here&hellip;" rows="6"></textarea>
-                </div>
-                <button class="submit-btn" id="graderBtn" onclick="gradeResume()">
-                    <span class="submit-btn__label">Grade my resume</span>
-                    <span class="submit-btn__price">FREE</span>
-                </button>
-                <p class="grader-note">Your resume is processed in memory and never stored.</p>
-            </div>
-
-            <!-- Loading -->
-            <div class="grader-loading" id="graderLoading" style="display:none;">
-                <div class="spinner-large"></div>
-                <p class="grader-loading-title">Reading your resume&hellip;</p>
-                <p class="grader-loading-hint">Analyzing ATS compatibility and impact</p>
-            </div>
-
-            <!-- Result (populated by JS) -->
-            <div class="grader-result" id="graderResult" style="display:none;"></div>
-        </div>
-    </div>
-</section>
-
 <!-- ───────────────── ATS BAR ───────────────── -->
 <section class="ats-bar">
     <p class="ats-label">Works with every major applicant tracking system</p>
@@ -488,40 +663,239 @@
     </ul>
 </section>
 
-<!-- ───────────────── HOW IT WORKS ───────────────── -->
+<!-- ───────────────── HOW IT WORKS (Manus copy) ───────────────── -->
 <section class="section section--steps" id="how-it-works">
     <header class="section-head">
-        <span class="section-eyebrow">How it works</span>
-        <h2 class="section-title">Three steps. Sixty seconds.</h2>
-        <p class="section-dek">A dollar and a download. Or sign in for saved history and Pro.</p>
+        <span class="section-eyebrow">3 Steps &middot; 60 Seconds</span>
+        <h2 class="section-title">A DOLLAR AND A DOWNLOAD.</h2>
+        <p class="section-dek">No account needed for the $1 path. Sign up only if you want saved history and Pro features.</p>
     </header>
     <div class="steps">
         <article class="step">
+            <div class="step-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            </div>
             <span class="step-num">01</span>
-            <h3>Upload your resume</h3>
-            <p>PDF or Word. We extract the text exactly as written. Nothing invented, nothing removed.</p>
+            <h3>Upload Your Resume</h3>
+            <p>PDF or Word. We extract your text exactly as written &mdash; nothing invented, nothing removed. Your experience stays yours.</p>
         </article>
         <article class="step">
+            <div class="step-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
             <span class="step-num">02</span>
-            <h3>Paste the job posting</h3>
-            <p>From LinkedIn, Indeed, Glassdoor, or any career page. Any industry, any level.</p>
+            <h3>Paste the Job Posting</h3>
+            <p>From LinkedIn, Indeed, Glassdoor, or any career page. Any industry, any level &mdash; internship to executive.</p>
         </article>
         <article class="step">
+            <div class="step-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            </div>
             <span class="step-num">03</span>
-            <h3>Download your PDF</h3>
-            <p>Keywords matched, bullets tightened, formatting ATS-clean. Ready to submit.</p>
+            <h3>Download Your PDF</h3>
+            <p>Keywords matched, bullets tightened, formatting ATS-clean. Ready to submit in 60 seconds. Delivered to your inbox.</p>
         </article>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+        <a href="#generate" class="btn-lime" style="padding:1rem 2.5rem;">
+            Try It Now &mdash; $1 &rarr;
+        </a>
     </div>
 </section>
 
-<!-- ───────────────── EXAMPLES ───────────────── -->
-<section class="section section--examples" id="examples">
-    <header class="section-head">
-        <span class="section-eyebrow">Examples</span>
-        <h2 class="section-title">Same person. Same experience.</h2>
-        <p class="section-dek">The only difference is how it reads. Click either example to enlarge.</p>
-    </header>
-    <div class="doc-compare" id="docCompare"></div>
+<!-- ───────────────── BEFORE / AFTER w/ SCORE RINGS ───────────────── -->
+<section class="beforeafter-v2" id="examples">
+    <div class="beforeafter-v2__inner">
+        <div class="beforeafter-v2__head reveal-up">
+            <span class="lime-badge">Same Person. Same Experience.</span>
+            <h2 class="beforeafter-v2__title">
+                THE ONLY DIFFERENCE IS<br>
+                <span class="gradient-text-lime">HOW IT READS.</span>
+            </h2>
+            <p style="color:var(--muted-v2);font-size:1.05rem;line-height:1.6;max-width:600px;margin:0 auto;">
+                We don't invent anything. We rewrite what you already have so the bots &mdash; and the humans &mdash; actually see it.
+            </p>
+        </div>
+
+        <div class="beforeafter-v2__rings reveal-up">
+            <div class="beforeafter-v2__ring-col">
+                <div class="score-ring-wrap" style="width:160px;height:160px;">
+                    <svg class="score-ring-svg" width="160" height="160" viewBox="0 0 160 160">
+                        <circle class="score-ring-bg" cx="80" cy="80" r="60" stroke-width="10"/>
+                        <circle class="score-ring-fill score-ring-fill--red" cx="80" cy="80" r="60" stroke-width="10"
+                            stroke-dasharray="376.99" stroke-dashoffset="290.28"/>
+                    </svg>
+                    <div class="score-ring-label">
+                        <span class="score-ring-num" style="font-size:2.8rem;">23%</span>
+                        <span class="score-ring-cap" style="color:var(--coral);font-size:0.7rem;">BEFORE</span>
+                    </div>
+                </div>
+                <div class="beforeafter-v2__ring-cap" style="color:var(--coral);">Filtered Out</div>
+                <div class="beforeafter-v2__ring-sub">Never reaches a human</div>
+            </div>
+
+            <div style="text-align:center;">
+                <div class="beforeafter-v2__zap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div class="font-mono-data" style="color:var(--muted-v2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.18em;">60 seconds</div>
+                <div class="font-mono-data" style="color:var(--accent);font-size:0.7rem;margin-top:0.2rem;">$1.00</div>
+            </div>
+
+            <div class="beforeafter-v2__ring-col">
+                <div class="score-ring-wrap" style="width:160px;height:160px;">
+                    <svg class="score-ring-svg" width="160" height="160" viewBox="0 0 160 160">
+                        <circle class="score-ring-bg" cx="80" cy="80" r="60" stroke-width="10"/>
+                        <circle class="score-ring-fill" cx="80" cy="80" r="60" stroke-width="10"
+                            stroke-dasharray="376.99" stroke-dashoffset="30.16"/>
+                    </svg>
+                    <div class="score-ring-label">
+                        <span class="score-ring-num" style="font-size:2.8rem;">92%</span>
+                        <span class="score-ring-cap" style="color:var(--accent);font-size:0.7rem;">AFTER</span>
+                    </div>
+                </div>
+                <div class="beforeafter-v2__ring-cap" style="color:var(--accent);">Gets Through</div>
+                <div class="beforeafter-v2__ring-sub">Reaches a human's desk</div>
+            </div>
+        </div>
+
+        <div class="reveal-up" style="max-width:1000px;margin:0 auto 2.5rem;">
+            <img class="beforeafter-v2__shot"
+                src="/assets/v2/transform.webp"
+                alt="Resume before and after ATSHack transformation"
+                loading="lazy">
+        </div>
+
+        <div class="doc-compare" id="docCompare"></div>
+    </div>
+</section>
+
+<!-- ───────────────── FEATURES GRID ───────────────── -->
+<section class="features-v2" id="features">
+    <div class="features-v2__inner">
+        <div class="features-v2__head reveal-up">
+            <span class="lime-badge">What You Get</span>
+            <h2 class="features-v2__title">
+                NOT JUST A RESUME TOOL.<br>
+                <span class="gradient-text-lime">A JOB SEARCH WEAPON.</span>
+            </h2>
+        </div>
+        <div class="features-v2__grid">
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--core">Core</span>
+                </div>
+                <h3 class="feature-card-v2__title">Tailored to the Posting</h3>
+                <p class="feature-card-v2__desc">We analyze the exact job description and match your resume's keywords, phrasing, and structure to what the ATS is scanning for.</p>
+            </div>
+
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--trust">Trust</span>
+                </div>
+                <h3 class="feature-card-v2__title">Never Fabricates</h3>
+                <p class="feature-card-v2__desc">We only use what you upload. We rephrase, reorganize, and align &mdash; but we never invent experience, skills, certifications, or metrics.</p>
+            </div>
+
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--pro">Pro</span>
+                </div>
+                <h3 class="feature-card-v2__title">STAR Interview Coach</h3>
+                <p class="feature-card-v2__desc">5 AI-graded behavioral interview questions tailored to your target role. Know exactly what to say before you walk in.</p>
+            </div>
+
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--addon">Add-On</span>
+                </div>
+                <h3 class="feature-card-v2__title">Cover Letter +$0.50</h3>
+                <p class="feature-card-v2__desc">A matching cover letter for just $0.50 more. Same tone, addressed to the company, aligned with the job posting.</p>
+            </div>
+
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--pro">Pro</span>
+                </div>
+                <h3 class="feature-card-v2__title">ATS Gap Reports</h3>
+                <p class="feature-card-v2__desc">See exactly which keywords are missing and why your score isn't higher &mdash; so every application gets stronger.</p>
+            </div>
+
+            <div class="feature-card-v2 reveal-up">
+                <div class="feature-card-v2__head">
+                    <div class="feature-card-v2__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    </div>
+                    <span class="feature-card-v2__badge feature-card-v2__badge--pro">Pro</span>
+                </div>
+                <h3 class="feature-card-v2__title">Application Tracker</h3>
+                <p class="feature-card-v2__desc">Track every application, set follow-up reminders, and use the AI follow-up email generator. Your whole job search, one place.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ───────────────── STUDENT FOCUS ───────────────── -->
+<section class="studentfocus-v2" aria-label="Built for students">
+    <div class="studentfocus-v2__inner">
+        <div class="reveal-up">
+            <span class="lime-badge">Built For You</span>
+            <h2 class="studentfocus-v2__title">
+                WHETHER IT'S YOUR<br>
+                FIRST JOB OR<br>
+                <span class="gradient-text-lime">YOUR NEXT ONE.</span>
+            </h2>
+            <div class="studentfocus-v2__case">
+                <div class="studentfocus-v2__icon">&#127891;</div>
+                <div>
+                    <h3>First Job After Graduation</h3>
+                    <p>Your degree is real. Your experience is real. We just make sure the bots can see it. Tailored for entry-level roles across every industry.</p>
+                </div>
+            </div>
+            <div class="studentfocus-v2__case">
+                <div class="studentfocus-v2__icon">&#128203;</div>
+                <div>
+                    <h3>Internship Applications</h3>
+                    <p>Internship postings are just job postings. Paste the description, upload your resume, and we'll match you to what that company is actually looking for.</p>
+                </div>
+            </div>
+            <div class="studentfocus-v2__case">
+                <div class="studentfocus-v2__icon">&#128260;</div>
+                <div>
+                    <h3>Career Changers</h3>
+                    <p>Switching industries? We reframe your existing experience in the language of your new field &mdash; without making anything up.</p>
+                </div>
+            </div>
+            <div class="studentfocus-v2__case">
+                <div class="studentfocus-v2__icon">&#9889;</div>
+                <div>
+                    <h3>Mass Apply Season</h3>
+                    <p>Applying to 50 jobs? Grab the 10-pack at $0.50 per resume. Each one tailored to that specific posting. Never send the same resume twice.</p>
+                </div>
+            </div>
+        </div>
+        <div class="reveal-up">
+            <img class="studentfocus-v2__shot"
+                src="/assets/v2/success.webp"
+                alt="Job seeker celebrating getting hired"
+                loading="lazy">
+        </div>
+    </div>
 </section>
 
 <!-- ───────────────── COMPARE ───────────────── -->
@@ -722,6 +1096,46 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
 <script src="auth-nav.js"></script>
+
+<!-- v2 reveal animations + stat counters -->
+<script>
+(function(){
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    var revealIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                revealIO.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal-up').forEach(function(el){ revealIO.observe(el); });
+
+    function animateCounter(el){
+        var end = parseInt(el.getAttribute('data-counter'), 10);
+        var suffix = el.getAttribute('data-suffix') || '';
+        var prefix = el.getAttribute('data-prefix') || '';
+        if (isNaN(end)) return;
+        var dur = 1500, steps = 60, inc = end / steps, cur = 0;
+        var id = setInterval(function(){
+            cur += inc;
+            if (cur >= end) { el.textContent = prefix + end.toLocaleString() + suffix; clearInterval(id); }
+            else el.textContent = prefix + Math.floor(cur).toLocaleString() + suffix;
+        }, dur / steps);
+    }
+    var counterIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+            if (e.isIntersecting) {
+                animateCounter(e.target);
+                counterIO.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('[data-counter]').forEach(function(el){ counterIO.observe(el); });
+})();
+</script>
 
 </body>
 </html>
