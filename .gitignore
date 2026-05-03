@@ -20,3 +20,6 @@ long_test_resume.*
 sample_resumes/
 v2_init.sql
 .claude/
+
+# Local build folder for generating OG image / favicon assets
+_build/

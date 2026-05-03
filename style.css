@@ -164,13 +164,37 @@ img, svg { max-width: 100%; display: block; }
     height: 8px;
     background: var(--accent);
     border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(197, 255, 74, 0.18), 0 0 14px var(--accent-glow);
+    box-shadow: 0 0 0 3px rgba(202, 255, 0, 0.18), 0 0 14px var(--accent-glow);
     flex-shrink: 0;
     animation: brand-pulse 2.4s ease-in-out infinite;
 }
 @keyframes brand-pulse {
-    0%, 100% { box-shadow: 0 0 0 3px rgba(197, 255, 74, 0.18), 0 0 14px var(--accent-glow); }
-    50%      { box-shadow: 0 0 0 5px rgba(197, 255, 74, 0.08), 0 0 22px var(--accent-glow); }
+    0%, 100% { box-shadow: 0 0 0 3px rgba(202, 255, 0, 0.18), 0 0 14px var(--accent-glow); }
+    50%      { box-shadow: 0 0 0 5px rgba(202, 255, 0, 0.08), 0 0 22px var(--accent-glow); }
+}
+/* v2 brand mark — lime tile w/ "ATS" in Bebas, replaces the pulsing dot */
+.brand-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: #0A0A0F;
+    border-radius: 4px;
+    font-family: var(--f-bebas);
+    font-size: 0.82rem;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(202, 255, 0, 0.35);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.nav-brand:hover .brand-tile,
+.footer-brand:hover .brand-tile {
+    box-shadow: 0 0 18px rgba(202, 255, 0, 0.5);
+    transform: translateY(-1px);
 }
 .brand-name em {
     font-style: normal;
