@@ -817,6 +817,14 @@ function showMaintenanceBanner() {
 }
 
 function checkBackendHealth() {
+    // Throttle: if a recent ping confirmed n8n is up, skip. Cuts the homepage
+    // health-ping load on the tailor webhook ~80% (most visitors return inside 5min).
+    var TTL_MS = 5 * 60 * 1000;
+    try {
+        var raw = localStorage.getItem('atshack:health:ts');
+        var ts = raw ? parseInt(raw, 10) : 0;
+        if (ts && (Date.now() - ts) < TTL_MS) return;
+    } catch(_) {}
     var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 4500);
     fetch(WEBHOOK_URL, {
@@ -828,11 +836,15 @@ function checkBackendHealth() {
         clearTimeout(timer);
         if (!r.ok && (r.status === 502 || r.status === 503 || r.status === 504)) {
             showMaintenanceBanner();
+            try { localStorage.removeItem('atshack:health:ts'); } catch(_) {}
+        } else {
+            // any 200 / 4xx response means n8n is reachable; cache the OK.
+            try { localStorage.setItem('atshack:health:ts', String(Date.now())); } catch(_) {}
         }
-        // any 200 / 4xx response means n8n is reachable; ignore.
     }).catch(function() {
         clearTimeout(timer);
         showMaintenanceBanner();
+        try { localStorage.removeItem('atshack:health:ts'); } catch(_) {}
     });
 }
 
