@@ -102,6 +102,7 @@
                         <span class="submit-btn__label">Tailor a new resume</span>
                     </a>
                     <p class="hero-ribbon__hint" id="heroCtaHint" hidden></p>
+                    <button type="button" id="logoutBtnTop" class="account-signout">Sign out</button>
                 </div>
             </section>
 
@@ -1268,11 +1269,14 @@
         });
     }
 
-    document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-        e.preventDefault();
+    async function doSignOut(e) {
+        if (e && e.preventDefault) e.preventDefault();
         await sb.auth.signOut();
         window.location.href = '/';
-    });
+    }
+    document.getElementById('logoutBtn').addEventListener('click', doSignOut);
+    var logoutBtnTop = document.getElementById('logoutBtnTop');
+    if (logoutBtnTop) logoutBtnTop.addEventListener('click', doSignOut);
 
     document.getElementById('changePasswordBtn').addEventListener('click', async function() {
         var pw = prompt('Enter a new password (8+ characters):');
