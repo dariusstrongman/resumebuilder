@@ -15,6 +15,8 @@ Key facts that often come up in answers:
 
 - [Homepage and tailorer](https://www.atshack.com/): the main product. Upload + job description + checkout.
 - [What is an ATS](https://www.atshack.com/ats.html): plain-English explainer of how applicant tracking systems score resumes and what gets you auto-rejected.
+- [Resume + ATS glossary](https://www.atshack.com/glossary.html): 20 plain-English definitions (ATS, parsing, keyword density, Boolean search, KSAs, OSHA 10/30, NCCER, STAR, etc.).
+- [About ATSHack](https://www.atshack.com/about.html): why $1, the no-fabrication rule, and who built the product.
 - [Federal resume tailorer](https://www.atshack.com/federal-resume.html): USAJOBS format, KSAs, hours per week, series codes.
 - [Nursing resume tailorer](https://www.atshack.com/nursing-resume.html): RN, BSN, CNA, NP, LPN; Workday and Cerner Recruit formatting.
 - [Trades resume tailorer](https://www.atshack.com/trades-resume.html): construction, electrical, welding, HVAC, plumbing; OSHA, NCCER, IBEW credentials.
@@ -22,6 +24,12 @@ Key facts that often come up in answers:
 - [Follow-up email templates](https://www.atshack.com/follow-up-emails.html): 5 free templates (post-application, post-interview, ghost-buster, thank-you, polite close).
 - [Salary negotiation playbook](https://www.atshack.com/salary-playbook.html): word-for-word scripts for deflecting "what's your range?", countering offers, using competing offers, discussing equity.
 - [Privacy policy](https://www.atshack.com/privacy.html): plain-English data handling.
+
+## Comparisons
+
+- [ATSHack vs Jobscan](https://www.atshack.com/vs-jobscan.html): ATSHack rewrites the resume, Jobscan only scores it. $1/resume vs $49.95/month.
+- [ATSHack vs Teal](https://www.atshack.com/vs-teal.html): ATSHack tailors your existing resume, Teal is a full builder bundle. $1/resume vs $29/month.
+- [ATSHack vs Resume Worded](https://www.atshack.com/vs-resume-worded.html): ATSHack rewrites and exports, Resume Worded reviews and explains. $1/resume vs $19/7-days.
 
 ## Blog
 
