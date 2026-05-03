@@ -1,4 +1,42 @@
 User-agent: *
 Allow: /
 
+# Major AI crawlers (GEO) — explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# App-only pages (no public content, low-quality for indexing)
+User-agent: *
+Disallow: /account.html
+Disallow: /login.html
+Disallow: /success.html
+Disallow: /reset-password.html
+Disallow: /star.html
+Disallow: /followup.html
+Disallow: /applicationtrackingsystem.html
+
 Sitemap: https://www.atshack.com/sitemap.xml

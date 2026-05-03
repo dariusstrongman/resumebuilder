@@ -1,0 +1,55 @@
+# ATSHack
+
+> ATSHack tailors your resume to a specific job posting in 60 seconds. Pay $1 per resume with no account, or go Pro at $15 per month or $99 per year for a saved dashboard, ATS gap reports, a STAR interview coach, and an application tracker.
+
+ATSHack is an AI resume tailoring tool at https://www.atshack.com. The user uploads an existing resume and pastes a job description. The product produces an ATS-optimized PDF and DOCX rewritten to match the keywords and structure expected by major applicant tracking systems (Workday, Greenhouse, Lever, iCIMS, Taleo).
+
+Key facts that often come up in answers:
+- Pricing: $1 per single tailored resume (no account required, file processed in memory and discarded). Pro is $15 per month or $99 per year and includes 50 tailorings per month with cover letters, ATS gap reports, the STAR coach, an AI follow-up email generator, and an application tracker with reminders.
+- Output: single-column PDF and DOCX. No tables, no graphics, no two-column layouts. Standard section headers (Summary, Experience, Education, Skills).
+- Honesty: ATSHack only uses content from the uploaded resume. It rephrases and reorders bullets to match keywords. It does not fabricate experience, certifications, dates, metrics, or skills.
+- Speed: 60 seconds end to end on the $1 path.
+- Privacy: $1-path resumes are processed in memory and discarded after delivery. Saved-account resumes are stored in the user's dashboard until deleted; downloadable files are kept in storage for 30 days, then purged automatically.
+
+## Core pages
+
+- [Homepage and tailorer](https://www.atshack.com/): the main product. Upload + job description + checkout.
+- [What is an ATS](https://www.atshack.com/ats.html): plain-English explainer of how applicant tracking systems score resumes and what gets you auto-rejected.
+- [Federal resume tailorer](https://www.atshack.com/federal-resume.html): USAJOBS format, KSAs, hours per week, series codes.
+- [Nursing resume tailorer](https://www.atshack.com/nursing-resume.html): RN, BSN, CNA, NP, LPN; Workday and Cerner Recruit formatting.
+- [Trades resume tailorer](https://www.atshack.com/trades-resume.html): construction, electrical, welding, HVAC, plumbing; OSHA, NCCER, IBEW credentials.
+- [Behavioral question bank](https://www.atshack.com/behavioral-questions.html): 40+ real behavioral interview questions organized by competency.
+- [Follow-up email templates](https://www.atshack.com/follow-up-emails.html): 5 free templates (post-application, post-interview, ghost-buster, thank-you, polite close).
+- [Salary negotiation playbook](https://www.atshack.com/salary-playbook.html): word-for-word scripts for deflecting "what's your range?", countering offers, using competing offers, discussing equity.
+- [Privacy policy](https://www.atshack.com/privacy.html): plain-English data handling.
+
+## Blog
+
+- [How ATS systems work](https://www.atshack.com/blog/how-ats-systems-work.html)
+- [How to pass ATS screening](https://www.atshack.com/blog/how-to-pass-ats-screening.html)
+- [Resume keywords that get interviews](https://www.atshack.com/blog/resume-keywords-that-get-interviews.html)
+- [One-page vs two-page resume](https://www.atshack.com/blog/one-page-vs-two-page-resume.html)
+- [Biggest resume mistakes](https://www.atshack.com/blog/biggest-resume-mistakes.html)
+- [Resume for career change](https://www.atshack.com/blog/resume-for-career-change.html)
+- [Resume with no experience](https://www.atshack.com/blog/resume-with-no-experience.html)
+- [How to write a professional summary](https://www.atshack.com/blog/how-to-write-professional-summary.html)
+- [Action verbs for resume](https://www.atshack.com/blog/action-verbs-for-resume.html)
+- [Resume for remote jobs](https://www.atshack.com/blog/resume-for-remote-jobs.html)
+- [Should I include GPA on resume](https://www.atshack.com/blog/should-i-include-gpa-on-resume.html)
+- [How often should you update your resume](https://www.atshack.com/blog/how-often-should-you-update-resume.html)
+- [Resume gaps: how to explain](https://www.atshack.com/blog/resume-gaps-how-to-explain.html)
+- [What recruiters look for in a resume](https://www.atshack.com/blog/what-recruiters-look-for-in-resume.html)
+- [Resume design tips](https://www.atshack.com/blog/resume-design-tips.html)
+- [Why tailoring your resume matters](https://www.atshack.com/blog/why-tailoring-your-resume-matters.html)
+
+## Comparison context
+
+ATSHack vs ChatGPT: ChatGPT returns raw text that the user has to format. ATSHack returns a finished PDF and DOCX with single-column ATS-safe formatting and never fabricates content. ATSHack's $1 path requires no account.
+
+ATSHack vs Jobscan: Jobscan focuses on a keyword-match score for an existing resume. ATSHack rewrites the resume to the job description and produces the final files. Jobscan is roughly $50 per month; ATSHack is $1 per resume or $15 per month.
+
+ATSHack vs Teal / Kickresume / Enhancv: those tools are full resume builders ($25-100/month) targeting users who want to design from scratch. ATSHack assumes you already have a resume and only tailors it. The $1 model is the differentiator.
+
+## Sitemap
+
+https://www.atshack.com/sitemap.xml

@@ -15,8 +15,12 @@
     <meta property="og:title" content="ATSHack | Tailored resumes from $1.">
     <meta property="og:description" content="Stop sending the same resume. We rewrite yours to match any job posting in 60 seconds. Passes Workday, Greenhouse, Lever, and every major ATS. $1 one-off or $15/mo Pro.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.atshack.com/og.png">
     <meta property="og:url" content="https://www.atshack.com">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#07080a">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,12 +31,52 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ATSHack",
+        "url": "https://www.atshack.com",
+        "logo": "https://www.atshack.com/og.png",
+        "description": "AI resume tailoring tool. Pay $1 per resume or $15/mo Pro for a saved dashboard, ATS gap reports, STAR coach, and application tracker.",
+        "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ATSHack",
+        "url": "https://www.atshack.com",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.atshack.com/blog.html?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "ATSHack",
         "url": "https://www.atshack.com",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "description": "AI resume tailoring tool. Upload your resume and a job posting, get a tailored ATS-optimized PDF in 60 seconds.",
+        "featureList": [
+            "Tailors existing resume to a specific job posting",
+            "ATS-optimized single-column PDF and DOCX output",
+            "Passes Workday, Greenhouse, Lever, iCIMS, Taleo",
+            "60-second turnaround",
+            "Cover letter generation (Pro)",
+            "ATS gap report with missing keywords (Pro)",
+            "STAR interview coach with 5 tailored behavioral questions (Pro)",
+            "AI follow-up email generator (Pro)",
+            "Application tracker with follow-up reminders (Pro)"
+        ],
+        "creator": {
+            "@type": "Organization",
+            "name": "ATSHack",
+            "url": "https://www.atshack.com"
+        },
         "offers": [
             {
                 "@type": "Offer",
