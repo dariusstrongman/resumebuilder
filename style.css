@@ -6638,4 +6638,72 @@ body.has-maintenance-banner { padding-top: 3rem; }
 /* Hero fade override — ensure new hero-v2 doesn't get squeezed by old .hero rules */
 .hero-v2 .hero-grid { all: unset; }
 
+/* ────────────────────────────────────────────────────────────
+   Readable-titles override (kills Bebas Neue across headlines)
+   ─────────────────────────────────────────────────────────── */
+.section-title,
+.section-title em,
+.resource-title,
+.resource-section h2,
+.resource-cta h3,
+.auth-h,
+.hero-title-bebas,
+.hero-title-bebas em,
+.hero-v2__title,
+.hero-v2__title em,
+.hero-v2__beats-badge__bottom,
+.problem-headline,
+.beforeafter-v2__title,
+.features-v2__title,
+.studentfocus-v2__title,
+.generate-wrap__title,
+.final-cta h2,
+.final-cta h2 em,
+.account-title,
+.account-shell h2,
+.blog-featured h2,
+.legal-doc h2,
+.success-h,
+.hero-title,
+.hero-title em {
+    font-family: var(--f-ui) !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.01em !important;
+    font-style: normal !important;
+}
+
+/* Restore the lime accent for emphasized fragments inside titles */
+.section-title em,
+.hero-v2__title em,
+.final-cta h2 em,
+.hero-title em,
+.hero-title-bebas em {
+    color: var(--accent) !important;
+    font-style: normal !important;
+}
+
+/* Account dashboard sign-out — visible action button, not a buried link */
+.account-signout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: var(--muted-v2);
+    border: 1px solid var(--border-v2);
+    border-radius: 100px;
+    padding: 0.55rem 1.1rem;
+    font-family: var(--f-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+    text-decoration: none;
+}
+.account-signout:hover {
+    border-color: rgba(255,107,107,0.5);
+    color: #ff6b6b;
+    background: rgba(255,107,107,0.06);
+}
 
