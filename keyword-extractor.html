@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Job Description Keyword Extractor | ATSHack</title>
+    <meta name="description" content="Paste any job description and extract the top ATS keywords in 2 seconds. Free, no account, runs client-side. Built by ATSHack.">
+    <meta property="og:title" content="Free Job Description Keyword Extractor | ATSHack">
+    <meta property="og:description" content="Paste any job description, get the top ATS keywords. Free, no account, no signup.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.atshack.com/og.png">
+    <meta property="og:site_name" content="ATSHack">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://www.atshack.com/keyword-extractor.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ATSHack Keyword Extractor",
+        "url": "https://www.atshack.com/keyword-extractor.html",
+        "description": "Free client-side tool that extracts the top ATS keywords from any job description.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "isAccessibleForFree": true,
+        "featureList": ["Skill keyword detection", "Stopword filtering", "Frequency ranking", "Client-side processing (no upload)"]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Keyword Extractor", "item": "https://www.atshack.com/keyword-extractor.html"}
+        ]
+    }
+    </script>
+    <style>
+        .kx-shell { max-width: 880px; margin: 0 auto; padding: 1rem; }
+        .kx-input {
+            width: 100%;
+            min-height: 220px;
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            color: var(--ink-0, #fff);
+            font-family: var(--f-ui), system-ui, sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 1rem;
+            margin: 1rem 0;
+            resize: vertical;
+        }
+        .kx-input:focus { border-color: var(--accent); outline: none; }
+        .kx-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin: 0 0 1.2rem; }
+        .kx-results { display: none; margin-top: 2rem; }
+        .kx-results.visible { display: block; }
+        .kx-group { margin-bottom: 2rem; }
+        .kx-group h3 {
+            font-family: var(--f-mono);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            margin: 0 0 0.7rem;
+        }
+        .kx-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .kx-pill {
+            background: rgba(202,255,0,0.08);
+            color: var(--accent);
+            border: 1px solid rgba(202,255,0,0.25);
+            border-radius: 16px;
+            padding: 0.32rem 0.8rem;
+            font-size: 0.86rem;
+            font-family: var(--f-mono);
+        }
+        .kx-pill.muted {
+            background: var(--surface-1, #13131A);
+            color: var(--ink-1, #ccc);
+            border-color: var(--border-v2, #1E1E2E);
+        }
+        .kx-pill .freq { opacity: 0.65; margin-left: 0.3rem; font-size: 0.78rem; }
+        .kx-empty {
+            padding: 2rem;
+            background: var(--surface-1, #13131A);
+            border: 1px dashed var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            text-align: center;
+            color: var(--muted-v2, #888);
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="resource-shell">
+        <p class="resource-eyebrow">Free Tool · Updated May 2026</p>
+        <h1 class="resource-title">Job description keyword extractor.</h1>
+        <p class="resource-lede">Paste any job description below. The extractor returns the top ATS keywords — known skills first, frequent role-specific terms second — in 2 seconds. Runs entirely in your browser. Nothing is uploaded.</p>
+
+        <div class="kx-shell">
+            <textarea id="kxInput" class="kx-input" placeholder="Paste the full job description here. Anything LinkedIn, Indeed, Greenhouse, Workday, Lever, or a company careers page works."></textarea>
+            <div class="kx-actions">
+                <button id="kxRun" class="btn-lime">Extract keywords &rarr;</button>
+                <button id="kxClear" class="btn-ghost" type="button">Clear</button>
+                <span id="kxStatus" style="font-size:0.85rem;color:var(--muted-v2);margin-left:auto;"></span>
+            </div>
+
+            <div id="kxResults" class="kx-results">
+                <div class="kx-group" id="kxSkillsGroup">
+                    <h3>Recognized skills (lift these into your Skills section)</h3>
+                    <div class="kx-pills" id="kxSkills"></div>
+                </div>
+                <div class="kx-group" id="kxFreqGroup">
+                    <h3>Other frequent terms (likely role-specific)</h3>
+                    <div class="kx-pills" id="kxFreq"></div>
+                </div>
+                <div style="background:rgba(202,255,0,0.06);border:1px solid rgba(202,255,0,0.25);border-radius:12px;padding:1.2rem 1.4rem;margin-top:1.5rem;">
+                    <p style="margin:0 0 0.7rem;color:var(--ink-0);font-weight:600;">Want the full tailored resume, not just keywords?</p>
+                    <p style="margin:0 0 1rem;color:var(--muted-v2);font-size:0.92rem;">ATSHack rewrites your existing resume to mirror this posting and delivers a PDF + DOCX in 60 seconds. $1, no account.</p>
+                    <a href="/#generate" class="btn-lime">Tailor My Resume &mdash; $1 &rarr;</a>
+                </div>
+            </div>
+
+            <div id="kxEmpty" class="kx-empty">Paste a job description above and click <strong>Extract keywords</strong>.</div>
+        </div>
+
+        <article class="legal-doc" style="margin-top:3rem;">
+
+            <h2>How the extractor works</h2>
+            <p>The tool tokenizes the job description, removes English stopwords (the, of, with, etc.), filters out filler verbs (work, help, support), and ranks the remaining tokens by frequency. Words that match a curated dictionary of recognized skills (programming languages, ATS-tracked tools, certifications, methodologies) get a boost so they surface first.</p>
+            <p>It does not call any backend. The job description never leaves your browser. There is no upload, no log, no cookie record of the text you paste.</p>
+
+            <h2>What to do with the keywords</h2>
+            <p>For each recognized skill in the result: check whether your resume already contains that exact string in the Skills section or a recent role bullet. If it's missing and you've actually used the skill, add it. If you haven't used it, leave it off — fabricated skills cost you offers when they get verified.</p>
+            <p>For the frequent role-specific terms: these are usually the verbs and nouns that describe the work. Make sure your bullets use the same language. \"Built and shipped\" beats \"helped develop\" if the posting says \"build and ship.\"</p>
+
+            <h2>Limits of keyword extraction</h2>
+            <p>A keyword extractor is a starting point, not a finishing line. It can't tell you which keywords are mandatory vs nice-to-have. It can't read between the lines (\"strong communicator\" implies things the literal string doesn't capture). And it can't tell you the structure your resume should be in to actually score well — that's what a full ATS-tailoring tool does.</p>
+            <p>Use this to find the gaps. Use <a href="/#generate">ATSHack's $1 tailor</a> to fix them.</p>
+
+            <h2>Related</h2>
+            <p><a href="/ats.html">What is an ATS?</a> &middot; <a href="/glossary.html">Glossary</a> &middot; <a href="/blog/resume-keywords-that-get-interviews.html">Keywords that get interviews</a> &middot; <a href="/blog/how-to-pass-ats-screening.html">How to pass ATS screening</a></p>
+
+        </article>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/glossary.html">Glossary</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>    </div>
+</footer>
+
+<script>
+(function() {
+    var STOPWORDS = new Set("a about above after again against all am an and any are aren as at be because been before being below between both but by can cant cannot could couldnt did didnt do does doesnt doing dont down during each few for from further had hadnt has hasnt have havent having he her here hers herself him himself his how i if in into is isnt it its itself ive just like me more most must my myself no nor not now of off on once only or other ought our ours ourselves out over own same she should shouldnt so some such than that the their theirs them themselves then there these they this those through to too under until up very was wasnt we were werent what when where which while who whom why will with would wouldnt you your yours yourself yourselves you'll you've you're you'd a/b is/are role roles position job role's they'll they're we'll we've we're they've".split(" "));
+
+    var FILLER = new Set(["work","working","worked","working","help","helping","helps","helped","support","supports","supporting","supported","including","includes","provide","provides","providing","provided","ensure","ensures","ensuring","ensured","make","makes","making","made","take","takes","taking","took","taken","etc","across","within","using","strong","ability","skills","experience","experiences","year","years","plus","required","preferred","candidate","candidates","applicant","applicants","applicants","team","teams","build","building","built","builds","environment","environments","based","new","best","relevant","previous","including","include","equivalent","example","examples","various","multiple","look","looking","looks","looked","want","wants","wanting","wanted"]);
+
+    var SKILL_DICT_RAW = ["python","sql","javascript","typescript","java","kotlin","golang","go","rust","ruby","php","swift","scala","clojure","c++","csharp","r","react","next.js","nextjs","vue","angular","svelte","django","flask","fastapi","node.js","nodejs","express","spring","spring boot","laravel","ruby on rails","ror",".net","aspnet","aws","gcp","azure","ec2","s3","lambda","rds","dynamodb","ecs","eks","kubernetes","docker","terraform","cloudformation","pulumi","jenkins","circleci","github actions","gitlab","ci/cd","postgres","postgresql","mysql","mongodb","redis","elasticsearch","snowflake","bigquery","redshift","databricks","tableau","power bi","looker","metabase","mode","hex","airflow","dbt","kafka","spark","hadoop","tensorflow","pytorch","scikit-learn","pandas","numpy","keras","jupyter","figma","sketch","adobe xd","photoshop","illustrator","indesign","invision","framer","jira","confluence","trello","asana","monday.com","notion","slack","salesforce","hubspot","marketo","pardot","mailchimp","sendgrid","intercom","zendesk","freshdesk","servicenow","sap","oracle","netsuite","quickbooks","xero","sage","workday","greenhouse","lever","icims","taleo","bamboohr","adp","paylocity","gusto","rippling","paychex","ukg","stripe","shopify","wordpress","webflow","contentful","drupal","ghost","seo","sem","ppc","google ads","meta ads","facebook ads","linkedin ads","tiktok ads","google analytics","ga4","mixpanel","amplitude","heap","pendo","hotjar","semrush","ahrefs","moz","screaming frog","agile","scrum","kanban","safe","waterfall","prince2","itil","six sigma","lean","kaizen","5s","pmp","pmi-acp","csm","cspo","cissp","cisa","cism","ceh","comptia","aws certified","azure certified","gcp certified","cpa","cma","cfa","frm","cfp","mba","phd","bachelors","masters","gaap","ifrs","sox","hipaa","gdpr","ccpa","fcpa","aml","kyc","ferpa","glba","pci","fmla","ada","flsa","title vii","eeo","afha","cscp","cpim","cpsm","aae","cph","mph","rn","bsn","cna","np","lpn","md","do","pa","pt","ot","slp","cprcpr","bls","acls","pals","nrp","ccrn","crna","cpn","ocn","epic","cerner","meditech","allscripts","mychart","ehr","emr","osha","nccer","msha","epa","epa 608","ibew","iuoe","fall protection","forklift","crane","welder","wac","cdl","class a","class b","class c","p&l","kpi","okr","cac","ltv","arr","mrr","ltv:cac","cltv","tam","sam","som","mql","sql","sdr","bdr","ae","cs","csm","ucm","tc","tco","roi","ebitda","ebit","irr","cogs","gross margin","net margin","cohort","retention","churn","arpu","mau","wau","dau","jwt","oauth","saml","sso","ldap","ad","active directory","rest","graphql","grpc","websocket","mqtt","tcp","udp","http","https","ssl","tls","jwt","etl","elt","cdc","cqrs","ddd","tdd","bdd","unit testing","integration testing","e2e","playwright","cypress","selenium","junit","pytest","vitest","jest","mocha","chai","gson","jackson","kafka","rabbitmq","sqs","pubsub","redis streams","apache kafka","apache spark","apache flink","apache airflow","apache hadoop","openshift","ansible","puppet","chef","datadog","newrelic","new relic","sentry","grafana","prometheus","splunk","kibana","logstash","cloudwatch","stackdriver","azure monitor","oncall","sre","devops","sre","platform engineering","mlops","data engineering","analytics engineering","ml","ai","nlp","cv","computer vision","reinforcement learning","supervised learning","deep learning","llm","gpt","openai","anthropic","claude","gemini","llama","stable diffusion","diffusion","embedding","vector database","pinecone","weaviate","qdrant","milvus","chromadb","langchain","llamaindex","langgraph","prompt engineering","agentic","autogen","crewai","semantic kernel","copilot","lifecycle marketing","content marketing","brand marketing","performance marketing","growth marketing","demand gen","abm","field marketing","partner marketing","email marketing","social media","influencer marketing","affiliate marketing","seo","sem","cro","funnel","activation","onboarding","engagement","retention","reactivation","ltv","subscription","churn","saas","b2b","b2c","b2b2c","enterprise","mid-market","smb","consumer","prosumer"];
+    var SKILLS = new Set();
+    for (var i = 0; i < SKILL_DICT_RAW.length; i++) SKILLS.add(SKILL_DICT_RAW[i].toLowerCase());
+
+    function tokenize(text) {
+        // Lowercase, split on punctuation/whitespace; preserve a few common compound forms.
+        var lower = text.toLowerCase();
+        // Pre-pull multi-word skills from text first (longest-first matching).
+        var found = [];
+        var multi = SKILL_DICT_RAW.filter(function(s) { return s.indexOf(" ") !== -1; })
+            .sort(function(a,b) { return b.length - a.length; });
+        var stripped = lower;
+        multi.forEach(function(m) {
+            var re = new RegExp("\\b" + m.replace(/[.+*?(){}[\]\\^$|]/g, "\\$&") + "\\b", "g");
+            var match;
+            while ((match = re.exec(stripped)) !== null) {
+                found.push(m);
+            }
+            stripped = stripped.replace(re, " ");
+        });
+        // Now tokenize remaining single words.
+        var rawTokens = stripped.split(/[^a-z0-9+#./-]+/);
+        for (var i = 0; i < rawTokens.length; i++) {
+            var t = rawTokens[i].replace(/^[-./]+|[-./]+$/g, "").trim();
+            if (!t || t.length < 2) continue;
+            if (/^\d+$/.test(t)) continue;
+            if (STOPWORDS.has(t)) continue;
+            if (FILLER.has(t)) continue;
+            found.push(t);
+        }
+        return found;
+    }
+
+    function extract(text) {
+        var tokens = tokenize(text);
+        var counts = {};
+        for (var i = 0; i < tokens.length; i++) {
+            var t = tokens[i];
+            counts[t] = (counts[t] || 0) + 1;
+        }
+        var skills = [], freq = [];
+        Object.keys(counts).forEach(function(k) {
+            var entry = { word: k, count: counts[k] };
+            if (SKILLS.has(k)) skills.push(entry);
+            else freq.push(entry);
+        });
+        skills.sort(function(a,b) { return b.count - a.count || a.word.localeCompare(b.word); });
+        freq.sort(function(a,b) { return b.count - a.count || a.word.localeCompare(b.word); });
+        return { skills: skills.slice(0, 25), freq: freq.slice(0, 15) };
+    }
+
+    function render(result) {
+        var skillsEl = document.getElementById("kxSkills");
+        var freqEl = document.getElementById("kxFreq");
+        skillsEl.innerHTML = "";
+        freqEl.innerHTML = "";
+        result.skills.forEach(function(e) {
+            var span = document.createElement("span");
+            span.className = "kx-pill";
+            span.innerHTML = e.word + (e.count > 1 ? '<span class="freq">' + e.count + '×</span>' : '');
+            skillsEl.appendChild(span);
+        });
+        result.freq.forEach(function(e) {
+            var span = document.createElement("span");
+            span.className = "kx-pill muted";
+            span.innerHTML = e.word + (e.count > 1 ? '<span class="freq">' + e.count + '×</span>' : '');
+            freqEl.appendChild(span);
+        });
+
+        var skillsGroup = document.getElementById("kxSkillsGroup");
+        var freqGroup = document.getElementById("kxFreqGroup");
+        skillsGroup.style.display = result.skills.length ? "" : "none";
+        freqGroup.style.display = result.freq.length ? "" : "none";
+
+        document.getElementById("kxResults").classList.add("visible");
+        document.getElementById("kxEmpty").style.display = "none";
+
+        var status = document.getElementById("kxStatus");
+        status.textContent = result.skills.length + " skills + " + result.freq.length + " other terms";
+    }
+
+    document.getElementById("kxRun").addEventListener("click", function() {
+        var text = document.getElementById("kxInput").value.trim();
+        if (text.length < 100) {
+            document.getElementById("kxStatus").textContent = "Paste at least a paragraph (100+ chars).";
+            return;
+        }
+        var result = extract(text);
+        render(result);
+        if (window.gtag) gtag("event", "keyword_extractor_run", { length: text.length, skills: result.skills.length });
+    });
+
+    document.getElementById("kxClear").addEventListener("click", function() {
+        document.getElementById("kxInput").value = "";
+        document.getElementById("kxResults").classList.remove("visible");
+        document.getElementById("kxEmpty").style.display = "";
+        document.getElementById("kxStatus").textContent = "";
+        document.getElementById("kxInput").focus();
+    });
+})();
+</script>
+
+</body>
+</html>
