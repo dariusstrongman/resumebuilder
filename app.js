@@ -515,52 +515,25 @@ function renderGraderResult(d) {
           + (gradeLetter ? '<div class="gauge-grade-badge">' + escapeHtml(gradeLetter) + '</div>' : '')
           + (summary ? '<p class="gauge-summary">' + escapeHtml(summary) + '</p>' : '')
         + '</div>'
-        + '<div class="grader-details-col">'
-          + '<div class="grader-ats">'
-            + '<span class="grader-ats-label">ATS SCORE</span>'
-            + '<span class="grader-ats-score">' + (ats.score || 0) + '%</span>'
-            + (ats.notes ? '<p>' + escapeHtml(ats.notes) + '</p>' : '')
-          + '</div>';
-
-    if (strengths.length) {
-        html += '<h3>What is working</h3><div class="grader-strengths"><ul>'
-          + strengths.map(function(s) { return '<li>' + escapeHtml(s) + '</li>'; }).join('')
-          + '</ul></div>';
-    }
-
-    if (issues.length) {
-        html += '<h3>What to fix</h3><div class="grader-issues">'
-          + issues.map(function(i) {
-              var sev = (i.severity || 'low').toLowerCase();
-              if (sev !== 'high' && sev !== 'medium' && sev !== 'low') sev = 'low';
-              return '<div class="grader-issue grader-issue--' + sev + '">'
-                + '<div class="grader-issue-head">'
-                  + '<span class="issue-severity">' + sev + '</span>'
-                  + '<h4>' + escapeHtml(i.title || '') + '</h4>'
-                + '</div>'
-                + '<p>' + escapeHtml(i.description || '') + '</p>'
-              + '</div>';
-          }).join('')
-          + '</div>';
-    }
-
-    html += '<div class="grader-upsell">'
-      + '<h3>Fix all of this <em>automatically</em> for $1</h3>'
-      + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses above. ATS-optimized PDF in 60 seconds.</p>'
-      + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
-      + '</div>';
+        + '<div class="grader-details-col">';
 
     html += '<div class="grader-email-capture" id="graderEmailCapture">'
-      + '<h4>Want the in-depth report emailed?</h4>'
-      + '<p>We will send a full breakdown of every gap, with specific rewrite suggestions — free.</p>'
+      + '<h4>See the full breakdown — free</h4>'
+      + '<p>Drop your email and we will send the in-depth report: ATS compatibility score, every strength worth keeping, and every gap with how to fix it.</p>'
       + '<form class="grader-email-form" onsubmit="sendGraderReport(event); return false;">'
         + '<input type="email" id="graderEmailInput" placeholder="you@email.com" required autocomplete="email">'
         + '<button type="submit" class="submit-btn submit-btn--inline" id="graderEmailBtn">'
-          + '<span class="submit-btn__label">Email my report</span>'
+          + '<span class="submit-btn__label">Email my full report</span>'
         + '</button>'
       + '</form>'
-      + '<p class="grader-email-note">One email with your report. No spam.</p>'
+      + '<p class="grader-email-note">One email. No spam. Unsubscribe with a click.</p>'
     + '</div>';
+
+    html += '<div class="grader-upsell">'
+      + '<h3>Or fix all of it <em>automatically</em> for $1</h3>'
+      + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses for you. ATS-optimized PDF in 60 seconds.</p>'
+      + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
+      + '</div>';
 
     html += '</div></div>'
       + '<div class="grader-reset-wrap"><button class="grader-reset" onclick="resetGrader()">Grade another resume</button></div>';
