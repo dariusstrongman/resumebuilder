@@ -517,6 +517,20 @@ function renderGraderResult(d) {
         + '</div>'
         + '<div class="grader-details-col">';
 
+    // High-score reframe: a 90+ generic score can still get filtered out by
+    // a specific job's ATS. The pitch is "your resume is great, but ATS
+    // doesn't grade you generically — it grades you against the posting."
+    if (score >= 90) {
+        html += '<div class="grader-highscore-callout">'
+          + '<h4>Great resume <em>in general</em>. But ATS does not grade you in general.</h4>'
+          + '<p>This score is against generic patterns. A real ATS scores you against the <strong>specific job posting</strong> — its keywords, its phrasing, its required skills. A 90 here can become a 70 against an actual job if the resume is not tailored.</p>'
+          + '<button class="submit-btn submit-btn--inline" onclick="upsellFromGrader()">'
+            + '<span class="submit-btn__label">Tailor it to a specific job</span>'
+            + '<span class="submit-btn__price">$1.00</span>'
+          + '</button>'
+        + '</div>';
+    }
+
     html += '<div class="grader-email-capture" id="graderEmailCapture">'
       + '<h4>See the full breakdown — free</h4>'
       + '<p>Drop your email and we will send the in-depth report: ATS compatibility score, every strength worth keeping, and every gap with how to fix it.</p>'
@@ -529,11 +543,15 @@ function renderGraderResult(d) {
       + '<p class="grader-email-note">One email. No spam. Unsubscribe with a click.</p>'
     + '</div>';
 
-    html += '<div class="grader-upsell">'
-      + '<h3>Or fix all of it <em>automatically</em> for $1</h3>'
-      + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses for you. ATS-optimized PDF in 60 seconds.</p>'
-      + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
-      + '</div>';
+    // For 90+ scorers the high-score callout already carries the $1 CTA,
+    // so we skip the duplicate upsell card here.
+    if (score < 90) {
+        html += '<div class="grader-upsell">'
+          + '<h3>Or fix all of it <em>automatically</em> for $1</h3>'
+          + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses for you. ATS-optimized PDF in 60 seconds.</p>'
+          + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
+          + '</div>';
+    }
 
     html += '</div></div>'
       + '<div class="grader-reset-wrap"><button class="grader-reset" onclick="resetGrader()">Grade another resume</button></div>';
