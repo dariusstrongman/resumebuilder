@@ -501,40 +501,19 @@
         }
 
         var c = d.current;
-        var aiTag = (c.ai_risk || '').replace(/[^a-z-]/gi, '');
         var html = '';
 
-        // Current role panel
+        // Teaser only: detected role + pay band, three adjacent role titles + fit %.
+        // The depth (AI risk note, market note, recommendation, skill gaps, certs,
+        // cover-letter angle, pay deltas) is reserved for the emailed report.
         html += '<div class="cd-current">';
         html += '<p class="role-meta">Your detected role &middot; ' + esc(c.level || 'mid') + ' &middot; ' + (c.years || '?') + ' years</p>';
         html += '<h2>' + esc(c.title) + '</h2>';
-        html += '<div class="cd-stats">';
-        html += '<div class="cd-stat">'
-              + '<p class="cd-stat-label">Median pay (US)</p>'
-              + '<div class="cd-stat-val">' + formatPay(c.pay_low, c.pay_high) + '</div>'
-              + '<p class="cd-stat-source">Source: ' + esc(c.pay_source) + '</p>'
-              + '</div>';
-        html += '<div class="cd-stat">'
-              + '<p class="cd-stat-label">AI displacement risk</p>'
-              + '<div class="cd-stat-val tag-' + aiTag + '">' + esc((c.ai_risk || '').replace(/-/g, ' ')) + '</div>'
-              + '<p class="cd-stat-note">' + esc(c.ai_risk_note || '') + '</p>'
-              + '</div>';
-        html += '<div class="cd-stat">'
-              + '<p class="cd-stat-label">Market trend</p>'
-              + '<div class="cd-stat-val">' + esc(c.market_trend || '--') + '</div>'
-              + '<p class="cd-stat-note">' + esc(c.market_note || '') + '</p>'
-              + '</div>';
-        html += '</div>';
+        html += '<p style="color:var(--muted-v2);margin:0.4rem 0 0;font-size:0.95rem;">Median pay band: <strong style="color:var(--ink-0);">' + formatPay(c.pay_low, c.pay_high) + '</strong></p>';
         html += '</div>';
 
-        // Recommendation
-        if (d.recommendation) {
-            html += '<div class="cd-recommendation"><strong>Recommendation:</strong> ' + esc(d.recommendation) + '</div>';
-        }
-
-        // Adjacent roles
         if (d.adjacent && d.adjacent.length) {
-            html += '<h3 class="cd-section-h">Adjacent roles you could move into</h3>';
+            html += '<h3 class="cd-section-h">Three adjacent roles you likely qualify for</h3>';
             html += '<div class="cd-adjacent-grid">';
             d.adjacent.forEach(function(a) {
                 html += '<div class="cd-adj">';
@@ -542,31 +521,16 @@
                       + '<div><h4 class="cd-adj-title">' + esc(a.title) + '</h4></div>'
                       + '<div style="text-align:right;"><div class="cd-adj-fit ' + fitClass(a.fit_pct) + '">' + a.fit_pct + '%</div><div class="cd-adj-fit-cap">fit</div></div>'
                       + '</div>';
-                if (a.pay_low && a.pay_high) {
-                    var deltaTxt = '';
-                    if (a.pay_delta_pct != null && a.pay_delta_pct !== 0) {
-                        var sign = a.pay_delta_pct > 0 ? '+' : '';
-                        var deltaColor = a.pay_delta_pct > 0 ? '#7fffa6' : '#ff9b8a';
-                        deltaTxt = ' <span style="color:' + deltaColor + ';font-weight:600;">(' + sign + a.pay_delta_pct + '% vs your current role)</span>';
-                    }
-                    html += '<p class="cd-adj-pay" style="font-size:0.92rem;margin:0.25rem 0 0.6rem;color:rgba(255,255,255,0.78);">Avg pay: ' + formatPay(a.pay_low, a.pay_high) + deltaTxt + '</p>';
-                }
-                html += '<p class="cd-adj-why">' + esc(a.why) + '</p>';
-                if ((a.matched_skills && a.matched_skills.length) || (a.missing_skills && a.missing_skills.length)) {
-                    html += '<div class="cd-adj-skills">';
-                    (a.matched_skills || []).forEach(function(s){ html += '<span class="cd-pill matched">' + esc(s) + '</span>'; });
-                    (a.missing_skills || []).slice(0, 4).forEach(function(s){ html += '<span class="cd-pill missing">+ ' + esc(s) + '</span>'; });
-                    html += '</div>';
-                }
+                html += '<p class="cd-adj-why" style="color:var(--muted-v2);font-size:0.88rem;margin:0.5rem 0 0;font-style:italic;">Pay range, skill gap, certs to chase, and a tailored cover-letter angle in the email below.</p>';
                 html += '</div>';
             });
             html += '</div>';
         }
 
-        // Email capture
-        html += '<div class="cd-email-card" id="cdEmailCard">'
-              + '<h4>Email me the full report</h4>'
-              + '<p>The full version goes deeper: skill gap analysis, the specific certifications worth chasing for each adjacent role, and a one-paragraph cover-letter angle for whichever role you target. One email. No spam. Unsubscribe with a click.</p>'
+        // Email capture (the main CTA now).
+        html += '<div class="cd-email-card" id="cdEmailCard" style="border:1px solid rgba(202,255,0,0.45);background:rgba(202,255,0,0.06);">'
+              + '<h4 style="font-size:1.2rem;">For a full in-depth analysis, please provide your email</h4>'
+              + '<p>The emailed report includes: AI displacement risk with sourced 2026 research, full pay range with delta vs your current role for each adjacent path, the specific skill gap holding you back, 2-3 certifications worth chasing per role, and a one-paragraph cover-letter angle for whichever role you target. One email. No spam. Unsubscribe with a click.</p>'
               + '<form class="cd-email-form" onsubmit="cdSendReport(event); return false;">'
                 + '<input type="email" id="cdEmailInput" placeholder="you@email.com" required autocomplete="email">'
                 + '<button type="submit" class="btn-lime" id="cdEmailBtn">Email my full report</button>'
