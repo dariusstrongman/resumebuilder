@@ -29,7 +29,7 @@
         "@type": "WebApplication",
         "name": "ATSHack Career Direction Report",
         "url": "https://www.atshack.com/career-direction.html",
-        "description": "Free tool that analyzes a resume and returns pay ranges, AI displacement risk, and adjacent roles the candidate likely qualifies for. Pay data from BLS May 2024 release. AI risk anchored on Goldman Sachs 2025 labor market analysis.",
+        "description": "Free tool that analyzes a resume and returns pay ranges, AI displacement risk, and adjacent roles the candidate likely qualifies for. Pay data from BLS May 2024 release. AI risk anchored on Goldman Sachs 2026 labor market analysis.",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
@@ -55,7 +55,7 @@
             {"@type": "Question", "name": "Where does the pay data come from?",
              "acceptedAnswer": {"@type": "Answer", "text": "Pay ranges are US national medians from the Bureau of Labor Statistics Occupational Employment and Wage Statistics, May 2024 release (published April 2025). The May 2025 release lands later this month and we will refresh as soon as it does."}},
             {"@type": "Question", "name": "How do you calculate AI displacement risk?",
-             "acceptedAnswer": {"@type": "Answer", "text": "AI risk levels are anchored on Goldman Sachs Research's 2025 labor market analysis, which estimates AI is currently displacing roughly 16,000 US jobs per month and tracking which occupations are losing share. The framing is corroborated by OECD AI exposure index publications. Low = under 25% of tasks AI-exposed. Medium = 25-50%. High = over 50%."}},
+             "acceptedAnswer": {"@type": "Answer", "text": "AI risk levels are anchored on Goldman Sachs Research's April 2026 labor market analysis, which finds AI is currently displacing roughly 16,000 US jobs per month on net (25,000 lost to substitution, 9,000 added back through augmentation), with Gen Z and entry-level white-collar workers absorbing the most pain. Goldman's base case projects 6-7% of US workers displaced over a roughly 10-year AI adoption window. Corroborated by OECD AI exposure index publications. Low = under 25% of tasks AI-exposed. Medium = 25-50%. High = over 50%."}},
             {"@type": "Question", "name": "How is the adjacent role fit percentage calculated?",
              "acceptedAnswer": {"@type": "Answer", "text": "We extract skill keywords from your resume and compute the overlap with the typical skill profile for each adjacent role. The fit percentage is the percentage of those skill signals present in your resume. 60% or above means you likely meet most posting requirements."}},
             {"@type": "Question", "name": "Is my resume stored anywhere?",
@@ -272,7 +272,7 @@
             <p>The career direction report combines three honest data signals into one read-out.</p>
             <ul>
                 <li><strong>Pay range for your current role.</strong> US national medians from the Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics, May 2024 release (published April 2025; the May 2025 release is scheduled for May 15, 2026 and we will refresh then). Specific OES occupation cited per role. Pay varies by region; multiply by 1.15-1.4 for high-cost-of-living US metros.</li>
-                <li><strong>AI displacement risk.</strong> Low, low-medium, medium, medium-high, or high. Anchored on Goldman Sachs Research's 2025 labor market analysis (which finds AI is currently displacing roughly 16,000 US jobs per month and lifting unemployment by about 0.1 percentage points) and OECD AI exposure index research. Low = under 25% of tasks AI-exposed. High = over 50%.</li>
+                <li><strong>AI displacement risk.</strong> Low, low-medium, medium, medium-high, or high. Anchored on Goldman Sachs Research's April 2026 labor market analysis. Goldman finds AI is currently displacing roughly 16,000 US jobs per month on net (25,000 lost to substitution offset by 9,000 added through augmentation), with Gen Z and entry-level white-collar workers taking the brunt. Goldman's base case projects 6-7% of US workers displaced over a roughly 10-year adoption window, lifting unemployment by about 0.6 percentage points. Corroborated by OECD AI exposure index research. Low = under 25% of tasks AI-exposed. High = over 50%.</li>
                 <li><strong>Three adjacent roles you likely qualify for.</strong> The career ladder in the tool maps each role to its most natural adjacent roles (one rung up, one column over). The fit percentage is the percentage of typical skill signals for the adjacent role that appear in your resume.</li>
             </ul>
 
@@ -287,7 +287,7 @@
 
             <h2>Sources</h2>
             <p>Pay data: <a href="https://www.bls.gov/oes/" rel="nofollow">Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS)</a>, May 2024 release (published April 2025). The May 2025 release is scheduled for May 15, 2026.</p>
-            <p>AI exposure framing: Goldman Sachs Research, 2025 labor market analysis (the firm's economists estimate AI is currently reducing monthly US payroll growth by roughly 16,000 jobs and raising unemployment by about 0.1 percentage points). Earlier baseline framing from Goldman Sachs (Briggs and Kodnani, 2023) and OECD AI exposure index publications.</p>
+            <p>AI exposure framing: Goldman Sachs Research, April 2026 labor market analysis. Goldman's economists report AI is currently reducing monthly US payroll growth by roughly 16,000 jobs on net and project 6-7% of workers displaced over a roughly 10-year AI adoption window. Earlier baseline framing from Goldman Sachs (Briggs and Kodnani, 2023) and OECD AI exposure index publications.</p>
 
             <h2>Related</h2>
             <p><a href="/#grader">Free ATS resume grader</a> &middot; <a href="/keyword-extractor.html">JD keyword extractor</a> &middot; <a href="/readability-checker.html">Readability checker</a> &middot; <a href="/ats.html">What is an ATS?</a> &middot; <a href="/glossary.html">Glossary</a></p>
