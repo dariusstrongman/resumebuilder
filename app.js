@@ -736,6 +736,52 @@ if (form) {
     });
 }
 
+// Detects PDFs whose text was extracted as positioned single letters
+// ("B P - C E O" style). These come from graphic-tool exports (Canva,
+// InDesign, etc.) and from kerned/letter-spaced layouts. The text looks
+// long enough to pass a length check but is unusable downstream.
+function looksLikeBrokenExtraction(text) {
+    if (!text) return true;
+    // Strongest signal: PDFs with letter-positioned text leak null bytes
+    // and other control chars into the extraction. Real text never has these.
+    var ctrlMatches = text.match(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g);
+    if (ctrlMatches && ctrlMatches.length >= 5) return true;
+    function score(t) {
+        var words = t.split(/\s+/).filter(function(w) { return w.length > 0; });
+        if (words.length < 8) return null;
+        var single = 0, totalLen = 0, maxRun = 0, currentRun = 0;
+        for (var i = 0; i < words.length; i++) {
+            var w = words[i];
+            if (w.length === 1 && /[A-Za-z]/.test(w)) {
+                single++;
+                currentRun++;
+                if (currentRun > maxRun) maxRun = currentRun;
+            } else {
+                currentRun = 0;
+            }
+            totalLen += w.length;
+        }
+        return { ratio: single / words.length, avg: totalLen / words.length, maxRun: maxRun, words: words.length };
+    }
+    // Check the whole document — catches PDFs that are broken throughout
+    var whole = score(text);
+    if (whole && whole.words >= 20) {
+        if (whole.ratio > 0.25 || whole.avg < 2.8 || whole.maxRun >= 5) return true;
+    }
+    // Check just the first 400 chars — catches PDFs where the header/name
+    // is letter-positioned (Canva/InDesign style) even if the body parses fine.
+    // A real resume header has a name + contact line in continuous text.
+    var head = score(text.substring(0, 400));
+    if (head && (head.ratio > 0.30 || head.maxRun >= 4)) return true;
+    // Final signal: count runs of 5+ consecutive whitespace chars in first
+    // 600 chars. Real text never has these. Letter-positioned PDFs have
+    // them everywhere because each letter sits at its own x-coordinate.
+    var headRaw = text.substring(0, 600);
+    var bigGaps = (headRaw.match(/\s{5,}/g) || []).length;
+    if (bigGaps >= 3) return true;
+    return false;
+}
+
 function extractTextFromFile(file) {
     return new Promise(function(resolve, reject) {
         var reader = new FileReader();
@@ -761,8 +807,13 @@ function extractTextFromFile(file) {
                                             done++;
                                             if (done === total) {
                                                 var result = pages.join('\n\n').trim();
-                                                if (result.length > 50) resolve(result);
-                                                else reject(new Error('PDF appears to be scanned/image-based. Please use Paste Text tab.'));
+                                                if (result.length <= 50) {
+                                                    reject(new Error('PDF appears to be scanned or image-based. Please use the Paste Text tab.'));
+                                                } else if (looksLikeBrokenExtraction(result)) {
+                                                    reject(new Error("We couldn't read this PDF cleanly (looks like it was designed in Canva or a similar tool that positions every letter). Please paste the text in the Paste Text tab, or re-export your resume from Word as PDF and try again."));
+                                                } else {
+                                                    resolve(result);
+                                                }
                                             }
                                         }).catch(function() { done++; pages[pageNum-1] = ''; if (done === total) resolve(pages.join('\n\n').trim()); });
                                     }).catch(function() { done++; pages[pageNum-1] = ''; if (done === total) resolve(pages.join('\n\n').trim()); });
@@ -777,8 +828,13 @@ function extractTextFromFile(file) {
                 if (window.mammoth) {
                     mammoth.extractRawText({ arrayBuffer: arrayBuffer }).then(function(result) {
                         var text = (result.value || '').trim();
-                        if (text.length > 50) resolve(text);
-                        else reject(new Error('Could not extract text from Word document'));
+                        if (text.length <= 50) {
+                            reject(new Error('Could not extract text from Word document'));
+                        } else if (looksLikeBrokenExtraction(text)) {
+                            reject(new Error("We couldn't read this Word file cleanly. Please paste the text in the Paste Text tab instead."));
+                        } else {
+                            resolve(text);
+                        }
                     }).catch(function(e) { reject(new Error('Word parser error: ' + (e.message || e))); });
                 } else {
                     reject(new Error('Word reader not loaded. Try refreshing the page, or use the Paste Text tab.'));
