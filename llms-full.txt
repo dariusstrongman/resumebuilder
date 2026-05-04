@@ -24,7 +24,7 @@ Last updated: 2026-05-04
 
 ATSHack is a $1 AI resume tailor that rewrites your existing resume to match a specific job posting in 60 seconds. You upload your resume, paste the posting, pay $1, and download an ATS-optimized PDF plus an editable DOCX. No account is required for the $1 path.
 
-The site also runs a free Resume Grader: upload your resume, paste a posting, and get a 0–100 match score with high-level matches and gaps. The grader is free, no account, designed to tell you whether tailoring is worth $1.
+The site also runs a free Resume Grader (0–100 ATS match score) and a free Career Direction Report (detected role, BLS pay band sized to your level, AI displacement risk from Goldman Sachs 2026, three adjacent roles you qualify for, and an explicit STAY / BRIDGE / PIVOT verdict). Both are no-account, designed to tell you whether tailoring is worth $1 and where to take your career next.
 
 Three steps:
 1. Upload your resume (PDF, DOCX, or paste text).
@@ -119,6 +119,31 @@ Trade code references kept verbatim: NEC 250, IBC, AWS D1.1, ASME B31.
 
 ---
 
+## Page: Career Direction Report (https://www.atshack.com/career-direction.html)
+
+Free flagship tool. Replaces the "hireability percentage" trope with measurable, sourced data. Workflow: paste or upload your resume; tool classifies your role into a 46-role career ladder, computes adjacent-role fit by skill keyword overlap, looks up real BLS May 2024 pay percentiles for your detected level, scores AI displacement risk from Goldman Sachs Research's April 2026 labor market analysis, and returns an explicit STAY / BRIDGE / PIVOT verdict.
+
+What the report contains:
+- Detected role with seniority level (junior, mid, senior, lead) and years of experience.
+- Pay band specific to your level (BLS percentile-derived: 10-25 for junior, 25-75 for mid, 50-90 for senior, 75-90+25% for lead) plus the role's national median.
+- AI displacement risk (low / low-medium / medium / medium-high / high) with the Goldman Sachs 2026 task-exposure percentage that drove the rating.
+- Market trend (growing / stable / softening / softening fast) with a one-line note on what's driving it.
+- Three adjacent roles with: title, fit percentage, pay band at your level, pay delta vs your current band, and matched/missing skills.
+- Explicit verdict — STAY (durable role, market in your favor, no compelling pivot), BRIDGE (stay employed, build gap-filling skills, pivot in 6-12 months), or PIVOT (AI/market/pay all stack against staying — move now). Driven by a 4-factor scoring rule that combines AI risk, market trend, top-adjacent pay delta, and candidate level.
+
+Sources:
+- Pay data: BLS Occupational Employment and Wage Statistics, May 2024 release (published April 2025). Each role is mapped to a specific SOC code; the report displays the actual code in the "pay_source" line. Will refresh when the May 2025 OEWS lands May 15, 2026.
+- AI risk: Goldman Sachs Research's April 2026 labor market analysis. Goldman finds AI is currently displacing roughly 16,000 US jobs per month on net (25,000 lost to substitution, 9,000 added through augmentation) with Gen Z and entry-level white-collar workers absorbing most of the displacement. Goldman's base case projects 6-7% of US workers displaced over a roughly 10-year AI adoption window. Corroborated by OECD AI exposure index research.
+- Skill matching: client-side keyword extraction from the resume, intersected with each adjacent role's typical skill profile.
+
+The report on the page is intentionally a teaser — verdict label, role detection, top-line pay band, adjacent role titles + fit %. The full depth (verdict reasoning bullets, skill-gap paragraph, certification recommendations per adjacent role, and a tailored cover-letter angle) is delivered to the user's email after they enter it. Email upgrade is optional, free, one-touch unsubscribe.
+
+Career ladder coverage: 46 roles. Software (software_engineer, frontend, backend, fullstack, mobile, ml_engineer, data_engineer, devops, cloud, security, database_admin, network_admin), data (data_scientist, data_analyst), infrastructure (it_support, data_center_tech, data_center_ops_manager, engineering_manager), product/business (product_manager, project_manager, business_analyst, ux_designer, graphic_designer, content_writer), marketing/sales (marketing_manager, sales_rep, customer_success_mgr), finance (accountant, financial_analyst), HR/ops (hr_specialist, hr_manager, logistics_specialist, operations_manager), healthcare (registered_nurse, nurse_practitioner, pharmacist, physician_assistant, physical_therapist), engineering (mechanical_engineer, civil_engineer, electrical_engineer), trades (electrician_trades, hvac_tech, plumber), legal (paralegal, lawyer).
+
+What it will not do: invent skills not on the resume, return a fake "hireability percentage", give advice that ignores level (a 24-year senior gets different guidance than a 3-year junior), or hide the source of the numbers.
+
+---
+
 ## Page: ATSHack vs Jobscan (https://www.atshack.com/vs-jobscan.html)
 
 ATSHack rewrites the resume; Jobscan only tells you what's wrong with yours. Pricing: ATSHack $1 per tailored resume vs Jobscan $49.95/month. Output: ATSHack delivers a finished PDF + DOCX; Jobscan delivers a match score + keyword diff + bullet suggestions you apply yourself. Both refuse to fabricate.
@@ -169,6 +194,9 @@ Posts:
 
 ## Free adjacent tools
 
+- Career direction report (https://www.atshack.com/career-direction.html): the flagship free tool. Paste or upload a resume, get back a level-aware analysis with the detected role, BLS May 2024 pay band sized to detected level (junior/mid/senior/lead), AI displacement risk grounded in Goldman Sachs Research's April 2026 labor market analysis, three adjacent roles you likely qualify for (with fit %, pay delta vs current band, and skill gap), and an explicit STAY / BRIDGE / PIVOT verdict driven by a 4-factor scoring rule (AI risk + market trend + pay delta + level). The emailed report adds an enrichment pass with the single biggest skill gap, 2-3 certifications worth chasing per adjacent role, a one-paragraph cover-letter angle for the top target, and 30-day next steps. Career ladder covers 46 roles across software, data, infrastructure, product, design, marketing, sales, healthcare, engineering, trades, finance, HR, ops, and legal. No account, no fake hireability percentage.
+- Resume grader (https://www.atshack.com/#grader): paste resume + posting, get a 0-100 ATS match score with strengths and gaps. No account.
+- Keyword extractor (https://www.atshack.com/keyword-extractor.html): client-side tool that pulls top ATS keywords from any job posting.
 - Behavioral question bank (https://www.atshack.com/behavioral-questions.html): 40+ real behavioral interview questions organized by competency.
 - Follow-up email templates (https://www.atshack.com/follow-up-emails.html): 5 free templates — post-application, post-interview, ghost-buster, thank-you, polite close.
 - Salary negotiation playbook (https://www.atshack.com/salary-playbook.html): word-for-word scripts for deflecting "what's your range?", countering offers, using competing offers, discussing equity.
