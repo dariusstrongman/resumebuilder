@@ -1,4 +1,18 @@
 var WEBHOOK_URL       = 'https://n8n.stromation.com/webhook/resume-tailor';
+// Re-grade lift: if user lands here from a tailor result email
+// (?regrade=1&prev=NN#grader), stash the prev score so renderGraderResult
+// can show the lift badge once they grade the new resume.
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('regrade') === '1') {
+      var prev = parseInt(p.get('prev'), 10);
+      if (isFinite(prev) && prev >= 0 && prev <= 100) {
+        window._regradePrev = prev;
+      }
+    }
+  } catch(e) {}
+})();
 var HEALTH_URL        = 'https://n8n.stromation.com/webhook/health';
 var GRADER_EMAIL_URL  = 'https://n8n.stromation.com/webhook/grader-email-report';
 var MAX_RESUME_CHARS = 50000;
@@ -503,7 +517,23 @@ function renderGraderResult(d) {
     var CIRC = 2 * Math.PI * 52; // 326.726
     var finalOffset = CIRC * (1 - Math.min(100, Math.max(0, score)) / 100);
 
-    var html = '<div class="grader-result-grid">'
+    var liftHtml = '';
+    if (typeof window._regradePrev === 'number' && score > 0) {
+        var delta = score - window._regradePrev;
+        var deltaSign = delta > 0 ? '+' : '';
+        var deltaColor = delta > 0 ? '#059669' : (delta < 0 ? '#dc2626' : '#6b7280');
+        liftHtml = '<div class="grader-lift-badge" style="background:#0b1320;color:#e2e8f0;border-radius:12px;padding:18px 22px;margin:0 0 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;">'
+            + '<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#c5ff4a;text-transform:uppercase;">Lift since last grade</div>'
+            + '<div style="display:flex;align-items:center;gap:14px;font-family:ui-monospace,Menlo,monospace;">'
+              + '<span style="font-size:20px;color:#94a3b8;text-decoration:line-through;">' + window._regradePrev + '</span>'
+              + '<span style="color:#64748b;">&rarr;</span>'
+              + '<span style="font-size:26px;font-weight:800;color:#fff;">' + score + '</span>'
+              + '<span style="font-size:14px;font-weight:700;color:' + deltaColor + ';">' + deltaSign + delta + ' pts</span>'
+            + '</div>'
+        + '</div>';
+    }
+
+    var html = liftHtml + '<div class="grader-result-grid">'
         + '<div class="grader-gauge-col">'
           + '<div class="gauge">'
             + '<svg viewBox="0 0 120 120" class="gauge-svg">'
@@ -619,6 +649,10 @@ function sendGraderReport(e) {
             + '<h4>Sent. Check your inbox.</h4>'
             + '<p>Your full report is on its way to <strong>' + escapeHtml(email) + '</strong>. '
             + 'It can take a minute. Check spam if you don’t see it.</p>'
+            + '<button class="submit-btn submit-btn--inline" onclick="upsellFromGrader()" style="margin-top:14px;">'
+              + '<span class="submit-btn__label">Fix all of this for $1</span>'
+              + '<span class="submit-btn__price">$1.00</span>'
+            + '</button>'
             + '</div>';
     })
     .catch(function() {
