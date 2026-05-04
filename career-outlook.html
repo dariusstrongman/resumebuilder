@@ -295,7 +295,7 @@
 
     function checkPro() {
         var sess = getSession();
-        if (!sess || !sess.user || !sess.user.email) {
+        if (!sess || !sess.user || !sess.user.id) {
             document.getElementById('proGate').style.display = 'block';
             document.getElementById('proGate').querySelector('h3').textContent = 'Sign in to use Career Outlook.';
             document.getElementById('proGate').querySelector('p').textContent = 'Career Outlook is a Pro feature. Sign in to your account, then start your outlook.';
@@ -307,7 +307,7 @@
         fetch(WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mode: 'pro_status', email: sess.user.email })
+            body: JSON.stringify({ mode: 'pro_status', user_id: sess.user.id })
         })
         .then(function(r) { return r.json().catch(function(){return{};}); })
         .then(function(data) {
