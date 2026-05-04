@@ -88,6 +88,31 @@
         .co-howto-foot { margin: 1.2rem 0 0; padding-top: 1rem; border-top: 1px solid rgba(132,225,106,0.18); color: var(--muted-v2, #a5a8af); font-size: 0.82rem; line-height: 1.55; }
         .co-howto-foot strong { color: #fff; }
         @media (max-width: 720px) { .co-howto-grid { grid-template-columns: 1fr; gap: 1.2rem; } }
+        /* Verdict banner */
+        .co-verdict { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 14px; padding: 1.5rem 1.6rem; margin: 1.6rem 0 1.2rem; }
+        .co-verdict--stay { border-color: rgba(132,225,106,0.45); background: rgba(132,225,106,0.05); }
+        .co-verdict--advance { border-color: rgba(202,255,0,0.5); background: rgba(202,255,0,0.05); }
+        .co-verdict--specialize { border-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.05); }
+        .co-verdict--pivot { border-color: rgba(255,155,138,0.5); background: rgba(255,155,138,0.05); }
+        .co-verdict-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted-v2, #a5a8af); margin: 0; }
+        .co-verdict-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.6rem; line-height: 1; letter-spacing: -0.02em; margin: 0.3rem 0 0.5rem; font-weight: 800; }
+        .co-verdict--stay .co-verdict-title { color: #84e16a; }
+        .co-verdict--advance .co-verdict-title { color: #c5ff4a; }
+        .co-verdict--specialize .co-verdict-title { color: #fbbf24; }
+        .co-verdict--pivot .co-verdict-title { color: #ff9b8a; }
+        .co-verdict-tag { color: #fff; font-size: 1.05rem; font-weight: 600; margin: 0 0 0.9rem; line-height: 1.4; }
+        .co-verdict-reasons { color: #cfd2d6; font-size: 0.92rem; line-height: 1.6; margin: 0 0 1rem; padding-left: 1.2rem; }
+        .co-verdict-reasons li { margin-bottom: 0.25rem; }
+        .co-score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; padding-top: 0.9rem; border-top: 1px solid #1a1d24; }
+        .co-score-row { background: #11141a; border: 1px solid #1f242c; border-radius: 8px; padding: 0.55rem 0.7rem; display: flex; flex-direction: column; gap: 0.15rem; }
+        .co-score-row--win { border-color: var(--accent, #c5ff4a); background: rgba(202,255,0,0.06); }
+        .co-score-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.14em; color: var(--muted-v2, #a5a8af); }
+        .co-score-row--win .co-score-label { color: var(--accent, #c5ff4a); }
+        .co-score-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; }
+        @media (max-width: 600px) { .co-score-grid { grid-template-columns: repeat(2, 1fr); } .co-verdict-title { font-size: 2.1rem; } }
+        /* Scenario advance + verdict-win highlight */
+        .co-scenario.advance .co-scenario-tag { background: rgba(202,255,0,0.12); color: #c5ff4a; border: 1px solid rgba(202,255,0,0.4); }
+        .co-scenario--win { box-shadow: 0 0 0 1.5px var(--accent, #c5ff4a) inset; }
         .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
         .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
         .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
@@ -158,8 +183,8 @@
 <main class="resource-main">
     <div class="co-shell">
         <p class="co-eyebrow">Pro · Career Outlook + 90-Day Plan</p>
-        <h1 class="co-title">Stay where you are, or pivot to something new?</h1>
-        <p class="co-lede">An AI career advisor that runs the math on your resume and tells you, with real numbers, whether to stay put, pivot to a higher-paying role, or specialize where you are. Takes about 3 minutes.</p>
+        <h1 class="co-title">Stay, advance, specialize, or pivot?</h1>
+        <p class="co-lede">A diagnostic that takes your resume + 7 quick situational questions and tells you which of four moves you should make next. Backed by Mobley's turnover model, BLS pay data, and real cert/promotion numbers. Not a preference quiz. We tell you what we think you should do.</p>
 
         <!-- How this works (always shown above form) -->
         <div class="co-howto">
@@ -168,21 +193,21 @@
                     <h3>What you do</h3>
                     <ol>
                         <li>Paste or upload your resume.</li>
-                        <li>Answer 4 quick questions: current pay, hours/week you can study, hands-on or managing, and when you want to move.</li>
-                        <li>Hit submit. We crunch the numbers in about 30 seconds.</li>
+                        <li>Answer 7 questions about your current situation (no preferences, just facts about how things actually feel right now).</li>
+                        <li>Hit submit. We score 4 paths in 30 seconds.</li>
                     </ol>
                 </div>
                 <div class="co-howto-col">
-                    <h3>What you get back</h3>
+                    <h3>The 4 paths we score</h3>
                     <ul>
-                        <li><strong>Stay path:</strong> your pay 6 years out if you change nothing (BLS historical growth).</li>
-                        <li><strong>Pivot path:</strong> the best higher-paying role you half-qualify for, exact missing skills, real cert cost, weeks of study at <em>your</em> pace.</li>
-                        <li><strong>Specialize path:</strong> a sourced premium for a specialization in your current role.</li>
-                        <li><strong>90-day plan</strong> with checkable tasks on your account dashboard, plus optional email check-ins at day 30, 60, 90.</li>
+                        <li><strong>STAY</strong> — keep your job, project pay 6 yrs out (BLS).</li>
+                        <li><strong>ADVANCE</strong> — push for promotion / market-rate raise where you are. Sourced 7-12% typical bump (22% major), 12-24 month cycle.</li>
+                        <li><strong>SPECIALIZE</strong> — go deep on a high-premium niche in your current role (Levels.fyi, IBEW, AACN, PMI sourced).</li>
+                        <li><strong>PIVOT</strong> — jump to a higher-paying adjacent role you half-qualify for, with exact cert cost + weeks of study at your pace.</li>
                     </ul>
                 </div>
             </div>
-            <p class="co-howto-foot"><strong>What we won't do:</strong> make up numbers, recommend a job you can't realistically reach, or fabricate experience you don't have. Sources: BLS OEWS (May 2024), Levels.fyi 2025, published cert pricing, IBEW/AACN/PMI specialty data.</p>
+            <p class="co-howto-foot"><strong>What we won't do:</strong> make up numbers, recommend a job you can't realistically reach, or fabricate experience. <strong>Sources:</strong> Mobley turnover model (1977, validated through 2026), BLS OEWS (May 2024), Ravio 2026 promotion data, Levels.fyi 2025, IBEW/AACN/PMI specialty surveys, published cert pricing.</p>
         </div>
 
         <!-- Pro gate (shown when not Pro) -->
@@ -219,53 +244,82 @@
                 </div>
             </div>
 
-            <p class="co-step-divider">Step 2 — 4 quick questions</p>
+            <p class="co-step-divider">Step 2 — 7 situational questions</p>
 
             <div class="co-q">
-                <span class="co-q-num">01 / 04</span>
+                <span class="co-q-num">01 / 07</span>
                 <label class="co-q-label">What's your current annual pay (USD)?</label>
                 <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 85000" min="0" max="5000000" step="1000">
-                <p class="co-q-hint">Base + on-target bonus. <strong>&rarr; This drives:</strong> the underpaid/overpaid check vs BLS median, and the pay-delta number on the Pivot scenario.</p>
+                <p class="co-q-hint">Base + on-target bonus. We compare to the BLS median for your role/level.</p>
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">02 / 04</span>
-                <label class="co-q-label">How many hours a week can you actually study or build?</label>
+                <span class="co-q-num">02 / 07</span>
+                <label class="co-q-label">How long since your last raise or promotion?</label>
+                <div class="co-radio-grid" data-field="last_raise">
+                    <button type="button" class="co-radio" data-value="lt12">Within 12 months</button>
+                    <button type="button" class="co-radio" data-value="12_24">1 to 2 years</button>
+                    <button type="button" class="co-radio" data-value="24_48">2 to 4 years</button>
+                    <button type="button" class="co-radio" data-value="48p">4+ years, or never</button>
+                </div>
+                <p class="co-q-hint">Per Ravio 2026 data, 2-3 years is the typical wait for a promotion. Past that, the math changes.</p>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">03 / 07</span>
+                <label class="co-q-label">Are you growing in this role?</label>
+                <div class="co-radio-grid" data-field="growth">
+                    <button type="button" class="co-radio" data-value="fast">Constantly — the role keeps evolving</button>
+                    <button type="button" class="co-radio" data-value="some">Some growth, but it's slowing</button>
+                    <button type="button" class="co-radio" data-value="plateau">Plateaued — doing the same things</button>
+                    <button type="button" class="co-radio" data-value="backsliding">Backsliding — my skills are getting stale</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">04 / 07</span>
+                <label class="co-q-label">Most weeks, how do you feel about the job?</label>
+                <div class="co-radio-grid" data-field="energy">
+                    <button type="button" class="co-radio" data-value="energized">Energized — doing my best work</button>
+                    <button type="button" class="co-radio" data-value="fine">Fine — neutral, it's a job</button>
+                    <button type="button" class="co-radio" data-value="drained">Drained, but it's a paycheck</button>
+                    <button type="button" class="co-radio" data-value="dreading">Burned out, dreading Mondays</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">05 / 07</span>
+                <label class="co-q-label">At your current company, the next title is...</label>
+                <div class="co-radio-grid" data-field="promo_path">
+                    <button type="button" class="co-radio" data-value="clear">Clear and in reach (1-2 years)</button>
+                    <button type="button" class="co-radio" data-value="unclear">Possible but slow or unclear</button>
+                    <button type="button" class="co-radio" data-value="capped">Not happening — my role is capped here</button>
+                    <button type="button" class="co-radio" data-value="unknown">Honestly, I don't know</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">06 / 07</span>
+                <label class="co-q-label">Hours per week you can realistically spend learning or building?</label>
                 <div class="co-radio-grid" data-field="hours">
                     <button type="button" class="co-radio" data-value="1">Under 2</button>
                     <button type="button" class="co-radio" data-value="3">2 to 5</button>
                     <button type="button" class="co-radio" data-value="7">5 to 10</button>
                     <button type="button" class="co-radio" data-value="12">10 or more</button>
                 </div>
-                <p class="co-q-hint"><strong>&rarr; This drives:</strong> "weeks to close the gap" on the Pivot scenario. 5 hrs/wk vs 12 hrs/wk is the difference between 6 months and 10 weeks.</p>
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">03 / 04</span>
-                <label class="co-q-label">For your <em>next</em> role, do you want to be hands-on or manage a team?</label>
-                <p class="co-q-hint" style="margin: 0 0 0.55rem;">We already know what you do today from your resume. This is about where you want to go.</p>
-                <div class="co-radio-grid" data-field="track">
-                    <button type="button" class="co-radio" data-value="ic">Stay hands-on (write/build/operate)</button>
-                    <button type="button" class="co-radio" data-value="management">Manage a team</button>
-                    <button type="button" class="co-radio" data-value="either">Open to either</button>
+                <span class="co-q-num">07 / 07</span>
+                <label class="co-q-label">If you needed to switch roles, financially you could...</label>
+                <div class="co-radio-grid" data-field="runway">
+                    <button type="button" class="co-radio" data-value="gap_ok">Take a 3-month income gap</button>
+                    <button type="button" class="co-radio" data-value="cut_ok">Take a temporary pay cut</button>
+                    <button type="button" class="co-radio" data-value="continuous">Need continuous income, no gap</button>
                 </div>
-                <p class="co-q-hint"><strong>&rarr; This drives:</strong> which adjacent role we recommend on the Pivot scenario. Pick "manage" and we suggest manager-track moves; pick "hands-on" and we suggest higher-paying technical roles.</p>
             </div>
 
-            <div class="co-q">
-                <span class="co-q-num">04 / 04</span>
-                <label class="co-q-label">When do you want to make a move?</label>
-                <div class="co-radio-grid" data-field="timeline">
-                    <button type="button" class="co-radio" data-value="now">Now</button>
-                    <button type="button" class="co-radio" data-value="3mo">Within 3 months</button>
-                    <button type="button" class="co-radio" data-value="6mo">Within 6 months</button>
-                    <button type="button" class="co-radio" data-value="12mo">Within 12 months</button>
-                    <button type="button" class="co-radio" data-value="passive">Not actively, just open</button>
-                </div>
-                <p class="co-q-hint"><strong>&rarr; This drives:</strong> the urgency of your 90-day plan. "Now" gets aggressive month-1 tasks. "Just open" gets exploration tasks first.</p>
-            </div>
-
-            <button type="submit" class="co-submit" id="coSubmitBtn">Generate my outlook</button>
+            <button type="submit" class="co-submit" id="coSubmitBtn">Score my situation</button>
             <p id="coStatus" class="co-status"></p>
         </form>
 
@@ -393,6 +447,17 @@
                 + '</div></div>';
         }
 
+        var verdict = (d.verdict || '').toLowerCase();
+        var scores = d.scores || {};
+        var reasons = d.verdict_reasons || [];
+        var verdictLabels = { stay: 'STAY', advance: 'ADVANCE', specialize: 'SPECIALIZE', pivot: 'PIVOT' };
+        var verdictTaglines = {
+            stay: 'Keep your current job. The pattern says you\'re in a good spot.',
+            advance: 'Push for promotion or a market-rate raise where you are.',
+            specialize: 'Go deep on a high-premium niche inside your current role.',
+            pivot: 'Time to jump to a new role. Your current path is capped.'
+        };
+
         var html = '';
         html += '<div class="co-active-hero">'
               + '<div class="co-active-meta">'
@@ -407,21 +472,55 @@
               + '</div>'
               + '<div class="co-progress"><div class="co-progress-fill" style="width:' + pctDone + '%;"></div></div>';
 
+        // Verdict banner
+        if (verdict) {
+            html += '<div class="co-verdict co-verdict--' + esc(verdict) + '">'
+                  + '<p class="co-verdict-eyebrow">Our verdict</p>'
+                  + '<h2 class="co-verdict-title">' + esc(verdictLabels[verdict] || verdict) + '</h2>'
+                  + '<p class="co-verdict-tag">' + esc(verdictTaglines[verdict] || '') + '</p>';
+            if (reasons.length) {
+                html += '<ul class="co-verdict-reasons">';
+                reasons.forEach(function(r) { html += '<li>' + esc(r) + '</li>'; });
+                html += '</ul>';
+            }
+            // Score bars
+            html += '<div class="co-score-grid">';
+            ['stay','advance','specialize','pivot'].forEach(function(k) {
+                var v = (scores[k] != null) ? scores[k] : 0;
+                html += '<div class="co-score-row' + (k===verdict ? ' co-score-row--win' : '') + '">'
+                      + '<span class="co-score-label">' + esc(verdictLabels[k]) + '</span>'
+                      + '<span class="co-score-val">' + esc(String(v)) + '</span>'
+                      + '</div>';
+            });
+            html += '</div></div>';
+        }
+
         // Pay context summary
         if (pc && pc.current_pay) {
             var underBy = pc.is_underpaid ? Math.round((pc.median_for_level - pc.current_pay)/1000) : 0;
             var msg = pc.is_underpaid
                 ? 'Underpaid by ~$' + underBy + 'k vs BLS median for your level. Asking for a market-rate raise has the highest near-term ROI.'
                 : pc.is_overpaid
-                    ? 'You\'re paid above the BLS median. Typical when comp includes equity or bonus.'
-                    : 'You\'re at the BLS median for your level.';
+                    ? 'You are paid above the BLS median. Typical when comp includes equity or bonus.'
+                    : 'You are at the BLS median for your level.';
             html += '<div class="co-pay-context"><h3 style="margin:0 0 0.3rem;font-size:1rem;color:var(--ink-0);">Pay context</h3><p style="margin:0;font-size:0.92rem;line-height:1.55;">' + esc(msg) + '</p></div>';
         }
 
-        // Verdict scenarios (compact)
-        if (s.stay)       html += '<div class="co-scenario stay"><span class="co-scenario-tag">Stay</span><div class="co-headline">' + esc(s.stay.headline || '') + '</div><p>' + esc(s.stay.narrative || '') + '</p></div>';
-        if (s.pivot)      html += '<div class="co-scenario pivot"><span class="co-scenario-tag">Pivot</span><div class="co-headline">' + esc(s.pivot.headline || '') + '</div><p>' + esc(s.pivot.narrative || '') + '</p></div>';
-        if (s.specialize) html += '<div class="co-scenario specialize"><span class="co-scenario-tag">Specialize</span><div class="co-headline">' + esc(s.specialize.headline || '') + '</div><p>' + esc(s.specialize.narrative || '') + '</p></div>';
+        // Scenario cards (4 paths). Verdict-matched gets a highlight.
+        function scenCard(key, scenario, label, tagline) {
+            if (!scenario) return '';
+            var win = key === verdict ? ' co-scenario--win' : '';
+            return '<div class="co-scenario ' + key + win + '">'
+                + '<span class="co-scenario-tag">' + label + (key===verdict ? ' &middot; OUR PICK' : '') + '</span>'
+                + '<div class="co-headline">' + esc(scenario.headline || '') + '</div>'
+                + '<p>' + esc(scenario.narrative || '') + '</p>'
+                + (scenario.source ? '<p class="co-source">Source: ' + esc(scenario.source) + '</p>' : '')
+                + '</div>';
+        }
+        html += scenCard('stay', s.stay, 'Stay', '');
+        html += scenCard('advance', s.advance, 'Advance', '');
+        html += scenCard('specialize', s.specialize, 'Specialize', '');
+        html += scenCard('pivot', s.pivot, 'Pivot', '');
 
         // Plan with check-offs
         html += '<h3 style="font-family:Space Grotesk,sans-serif;font-size:1.4rem;margin:2rem 0 0.8rem;color:var(--ink-0);font-weight:700;">90-Day Action Plan</h3>';
@@ -577,8 +676,8 @@
         intake.currentPay = parseInt(document.querySelector('input[name=currentPay]').value || '0', 10) || null;
 
         // Validate
-        var missing = ['timeline','track','hours'].filter(function(k) { return !intake[k]; });
-        if (missing.length) { status.textContent = 'Please answer: ' + missing.join(', '); return; }
+        var missing = ['last_raise','growth','energy','promo_path','hours','runway'].filter(function(k) { return !intake[k]; });
+        if (missing.length) { status.textContent = 'Please answer all 7 questions.'; return; }
         if (!intake.currentPay || intake.currentPay < 1000) { status.textContent = 'Enter your current annual pay.'; return; }
 
         // Resume

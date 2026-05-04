@@ -2450,6 +2450,14 @@
         var pctDone = Math.min(100, Math.round((daysIn / 90) * 100));
         var nextCheck = d.next_checkin_at ? new Date(d.next_checkin_at) : null;
         var nextCheckStr = nextCheck ? nextCheck.toLocaleDateString(undefined, { month:'short', day:'numeric' }) : '--';
+        var verdict = (d.verdict || '').toLowerCase();
+        var verdictLabels = { stay: 'STAY', advance: 'ADVANCE', specialize: 'SPECIALIZE', pivot: 'PIVOT' };
+        var verdictTags = {
+            stay: 'Keep your job. The pattern says you are in a good spot.',
+            advance: 'Push for promotion or a market-rate raise where you are.',
+            specialize: 'Go deep on a high-premium niche in your role.',
+            pivot: 'Time to jump. Your current path is capped.'
+        };
 
         outlookDayPill.hidden = false;
         outlookDayPill.textContent = 'Day ' + daysIn + ' of 90';
@@ -2477,6 +2485,14 @@
         });
         if (!tasksHtml) tasksHtml = '<p class="account-card__detail">No tasks for this month.</p>';
 
+        var verdictBlock = verdict
+            ? '<div class="outlook-verdict outlook-verdict--' + escOut(verdict) + '">'
+            +   '<span class="outlook-verdict__eyebrow">Our pick</span>'
+            +   '<span class="outlook-verdict__title">' + escOut(verdictLabels[verdict] || verdict) + '</span>'
+            +   '<span class="outlook-verdict__tag">' + escOut(verdictTags[verdict] || '') + '</span>'
+            + '</div>'
+            : '';
+
         outlookActive.innerHTML = ''
             + '<div class="account-card outlook-card">'
             +   '<div class="outlook-head">'
@@ -2486,6 +2502,7 @@
             +       '<p class="account-card__detail">Next check-in ' + escOut(nextCheckStr) + ' &middot; <a href="/career-outlook.html" class="account-section-link">Full report &rarr;</a></p>'
             +     '</div>'
             +   '</div>'
+            +   verdictBlock
             +   '<div class="outlook-progress"><div class="outlook-progress-fill" style="width:' + pctDone + '%;"></div></div>'
             +   '<div class="outlook-tasks">' + tasksHtml + '</div>'
             + '</div>';
