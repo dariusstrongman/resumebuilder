@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Outlook + 90-Day Action Plan (Pro) | ATSHack</title>
+    <meta name="description" content="Pro-only. Project your pay 5 years out from BLS data, cost the pivot in real time and money, get a 90-day action plan, and monthly accountability check-ins.">
+    <meta property="og:title" content="Career Outlook + 90-Day Action Plan | ATSHack">
+    <meta property="og:description" content="Project your pay from BLS data. Cost the pivot in time and money. 90-day plan with monthly check-ins.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://www.atshack.com/career-outlook.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';}</script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <style>
+        .co-shell { max-width: 920px; margin: 0 auto; padding: 0 1rem; }
+        .co-eyebrow { color: #c5ff4a; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; margin: 1rem 0 0.5rem; }
+        .co-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; margin: 0.4rem 0 0.6rem; }
+        .co-lede { color: var(--muted-v2, #a5a8af); font-size: 1.03rem; line-height: 1.6; max-width: 60ch; }
+        .co-pro-gate { background: rgba(202,255,0,0.06); border: 1px solid rgba(202,255,0,0.4); border-radius: 12px; padding: 1.4rem 1.5rem; margin: 1.5rem 0; }
+        .co-pro-gate h3 { margin: 0 0 0.4rem; color: var(--ink-0, #fff); font-size: 1.05rem; font-weight: 700; }
+        .co-pro-gate p { margin: 0 0 0.85rem; color: var(--muted-v2); font-size: 0.92rem; }
+        .co-form-card { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 14px; padding: 1.6rem 1.6rem 1.4rem; margin: 1.5rem 0; }
+        .co-q { margin-bottom: 1.3rem; }
+        .co-q-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.16em; color: #6b7280; text-transform: uppercase; }
+        .co-q-label { display: block; color: var(--ink-0); font-weight: 600; font-size: 1rem; margin: 0.3rem 0 0.6rem; }
+        .co-radio-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .co-radio { background: #11141a; border: 1px solid #1f242c; color: #cfd2d6; padding: 0.55rem 0.85rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.15s; }
+        .co-radio:hover { border-color: #c5ff4a; }
+        .co-radio.active { background: rgba(202,255,0,0.12); border-color: #c5ff4a; color: #fff; font-weight: 600; }
+        .co-pay-input { background: #11141a; border: 1px solid #1f242c; color: #fff; padding: 0.7rem 0.9rem; border-radius: 8px; font-size: 1rem; width: 220px; font-family: 'JetBrains Mono', monospace; }
+        .co-resume-tabs { display: flex; gap: 0.5rem; margin: 0.6rem 0 0.8rem; }
+        .co-tab { background: #11141a; border: 1px solid #1f242c; color: #cfd2d6; padding: 0.5rem 0.95rem; border-radius: 7px; cursor: pointer; font-size: 0.88rem; }
+        .co-tab.active { background: rgba(202,255,0,0.10); border-color: #c5ff4a; color: #fff; }
+        .co-textarea { width: 100%; min-height: 180px; background: #11141a; border: 1px solid #1f242c; color: #fff; padding: 0.85rem 1rem; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.55; resize: vertical; }
+        .co-drop { border: 1.5px dashed #2b313b; border-radius: 10px; padding: 1.5rem; text-align: center; color: var(--muted-v2); cursor: pointer; transition: all 0.15s; }
+        .co-drop:hover, .co-drop.dragover { border-color: #c5ff4a; background: rgba(202,255,0,0.04); color: #fff; }
+        .co-submit { display: inline-block; background: #c5ff4a; color: #000; font-weight: 700; padding: 0.85rem 1.6rem; border-radius: 10px; border: none; cursor: pointer; font-size: 1rem; font-family: 'Space Grotesk', sans-serif; transition: transform 0.1s; }
+        .co-submit:hover { transform: translateY(-1px); }
+        .co-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .co-status { color: #fbbf24; font-size: 0.88rem; margin-top: 0.6rem; }
+        .co-results { display: none; }
+        .co-results.visible { display: block; }
+        .co-pay-context { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.2rem 0; }
+        .co-underpay-warn { color: #ff9b8a; font-weight: 600; }
+        .co-overpay-good { color: #84e16a; font-weight: 600; }
+        .co-scenario { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 12px; padding: 1.4rem 1.5rem; margin: 1rem 0; }
+        .co-scenario-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 4px; margin-bottom: 0.6rem; }
+        .co-scenario.stay .co-scenario-tag { background: rgba(132,225,106,0.10); color: #84e16a; border: 1px solid rgba(132,225,106,0.35); }
+        .co-scenario.pivot .co-scenario-tag { background: rgba(255,155,138,0.10); color: #ff9b8a; border: 1px solid rgba(255,155,138,0.35); }
+        .co-scenario.specialize .co-scenario-tag { background: rgba(251,191,36,0.10); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
+        .co-scenario h3 { font-size: 1.25rem; margin: 0 0 0.4rem; color: var(--ink-0); font-weight: 700; }
+        .co-scenario .co-headline { font-family: 'Space Grotesk', sans-serif; font-size: 1.45rem; color: #fff; font-weight: 700; margin: 0.4rem 0 0.6rem; letter-spacing: -0.01em; }
+        .co-scenario p { color: #cfd2d6; font-size: 0.95rem; line-height: 1.65; margin: 0.4rem 0; }
+        .co-scenario .co-source { color: #6b7280; font-size: 0.78rem; font-style: italic; margin-top: 0.6rem; }
+        .co-cost-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d24; font-size: 0.9rem; }
+        .co-cost-row:last-child { border-bottom: none; }
+        .co-cost-skill { color: #fff; font-weight: 600; }
+        .co-cost-detail { color: var(--muted-v2); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; }
+        .co-plan-month { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 12px; padding: 1.3rem 1.4rem; margin-bottom: 0.8rem; }
+        .co-plan-month-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
+        .co-plan-month-h h4 { margin: 0; color: var(--ink-0); font-size: 1.05rem; font-weight: 700; }
+        .co-plan-month-h .due { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #6b7280; letter-spacing: 0.08em; }
+        .co-task { display: flex; gap: 0.7rem; padding: 0.6rem 0; border-bottom: 1px solid #1a1d24; }
+        .co-task:last-child { border-bottom: none; }
+        .co-task-bullet { width: 7px; height: 7px; border-radius: 50%; background: #c5ff4a; margin-top: 0.55rem; flex-shrink: 0; }
+        .co-task-body p { margin: 0; }
+        .co-task-title { color: #fff; font-weight: 600; font-size: 0.95rem; }
+        .co-task-meta { color: var(--muted-v2); font-size: 0.82rem; margin-top: 0.2rem; }
+        .co-cadence-card { background: rgba(132,225,106,0.06); border: 1px solid rgba(132,225,106,0.35); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.5rem 0; }
+        .co-empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-v2); }
+        @media (max-width: 720px) { .co-pay-input { width: 100%; } }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ATSHack Career Outlook + 90-Day Action Plan",
+      "url": "https://www.atshack.com/career-outlook.html",
+      "applicationCategory": "BusinessApplication",
+      "description": "Pro-only career outlook tool. Projects pay growth from BLS 2019-2024 historical data, costs the pivot to adjacent roles in time and money, and produces a 90-day action plan with monthly accountability check-ins.",
+      "offers": {"@type": "Offer", "price": "15", "priceCurrency": "USD", "description": "Included in ATSHack Pro at $15/month or $99/year."}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Career Outlook (Pro)", "item": "https://www.atshack.com/career-outlook.html"}
+      ]
+    }
+    </script>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/career-direction.html">Career Report</a>
+            <a href="/career-outlook.html">Outlook <span class="nav-chip">Pro</span></a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="co-shell">
+        <p class="co-eyebrow">Pro · Career Outlook + 90-Day Plan</p>
+        <h1 class="co-title">Project your pay. Cost the pivot. Stay accountable.</h1>
+        <p class="co-lede">Free Career Report tells you what to do. Pro tells you what happens if you do nothing, what the pivot actually costs, and pings you at day 30, 60, and 90 to keep you honest. Every number is sourced. We refuse to fake the future.</p>
+
+        <!-- Pro gate (shown when not Pro) -->
+        <div class="co-pro-gate" id="proGate" style="display:none;">
+            <h3>This tool is Pro-only.</h3>
+            <p>Pro is $15/month or $99/year and includes 50 tailorings, ATS gap reports, the STAR interview coach, follow-up email templates, the application tracker, and this Career Outlook tool.</p>
+            <a href="/#pricing" class="btn-lime">Go Pro &rarr;</a>
+        </div>
+
+        <!-- Form (shown when Pro) -->
+        <form id="coForm" class="co-form-card" style="display:none;" onsubmit="coSubmit(event); return false;">
+
+            <div class="co-q">
+                <span class="co-q-num">01 / 08</span>
+                <label class="co-q-label">When are you actually looking?</label>
+                <div class="co-radio-grid" data-field="timeline">
+                    <button type="button" class="co-radio" data-value="now">Looking now</button>
+                    <button type="button" class="co-radio" data-value="3mo">Within 3 months</button>
+                    <button type="button" class="co-radio" data-value="6mo">Within 6 months</button>
+                    <button type="button" class="co-radio" data-value="12mo">Within 12 months</button>
+                    <button type="button" class="co-radio" data-value="passive">Not actively, just open</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">02 / 08</span>
+                <label class="co-q-label">Track preference?</label>
+                <div class="co-radio-grid" data-field="track">
+                    <button type="button" class="co-radio" data-value="ic">Stay IC (individual contributor)</button>
+                    <button type="button" class="co-radio" data-value="management">Move into management</button>
+                    <button type="button" class="co-radio" data-value="either">Open to either</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">03 / 08</span>
+                <label class="co-q-label">Location flexibility?</label>
+                <div class="co-radio-grid" data-field="geo">
+                    <button type="button" class="co-radio" data-value="remote">Remote-only</button>
+                    <button type="button" class="co-radio" data-value="relocate">Open to relocating</button>
+                    <button type="button" class="co-radio" data-value="local">Locked to current zip</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">04 / 08</span>
+                <label class="co-q-label">Financial runway?</label>
+                <div class="co-radio-grid" data-field="runway">
+                    <button type="button" class="co-radio" data-value="gap-ok">Could take a 3-month gap</button>
+                    <button type="button" class="co-radio" data-value="continuous">Need continuous income</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">05 / 08</span>
+                <label class="co-q-label">Realistically, how many hours/week can you spend on skill-building?</label>
+                <div class="co-radio-grid" data-field="hours">
+                    <button type="button" class="co-radio" data-value="1">Under 2</button>
+                    <button type="button" class="co-radio" data-value="3">2 to 5</button>
+                    <button type="button" class="co-radio" data-value="7">5 to 10</button>
+                    <button type="button" class="co-radio" data-value="12">10 or more</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">06 / 08</span>
+                <label class="co-q-label">What matters most for the next role?</label>
+                <div class="co-radio-grid" data-field="priority">
+                    <button type="button" class="co-radio" data-value="pay">Maximize pay</button>
+                    <button type="button" class="co-radio" data-value="flexibility">Maximize flexibility</button>
+                    <button type="button" class="co-radio" data-value="stability">Maximize stability</button>
+                    <button type="button" class="co-radio" data-value="growth">Maximize growth (skills, scope)</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">07 / 08</span>
+                <label class="co-q-label">Current annual pay (USD, base + on-target bonus)?</label>
+                <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 145000" min="0" max="5000000" step="1000">
+                <p class="co-task-meta" style="margin-top:0.4rem;">We use this to detect if you're underpaid for your level. We don't store this beyond your Pro account.</p>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">08 / 08</span>
+                <label class="co-q-label">How do you feel in your current role?</label>
+                <div class="co-radio-grid" data-field="energy">
+                    <button type="button" class="co-radio" data-value="motivated">Motivated, doing well</button>
+                    <button type="button" class="co-radio" data-value="coasting">Coasting, fine but not growing</button>
+                    <button type="button" class="co-radio" data-value="dreading">Actively dreading it</button>
+                </div>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">RESUME</span>
+                <label class="co-q-label">Paste or upload your resume</label>
+                <div class="co-resume-tabs">
+                    <button type="button" class="co-tab active" data-tab="paste" onclick="coTab('paste')">Paste</button>
+                    <button type="button" class="co-tab" data-tab="upload" onclick="coTab('upload')">Upload (.pdf, .docx)</button>
+                </div>
+                <div id="coTabPaste">
+                    <textarea class="co-textarea" id="coResume" placeholder="Paste your resume text here..."></textarea>
+                </div>
+                <div id="coTabUpload" style="display:none;">
+                    <div class="co-drop" id="coDrop" onclick="document.getElementById('coFile').click()">
+                        <p style="margin:0;font-weight:600;">Click or drop a file here</p>
+                        <p style="margin:0.4rem 0 0;font-size:0.82rem;">PDF or DOCX, up to 5 MB</p>
+                    </div>
+                    <input type="file" id="coFile" accept=".pdf,.docx" style="display:none;">
+                    <p id="coFileLabel" class="co-task-meta" style="margin-top:0.5rem;"></p>
+                </div>
+            </div>
+
+            <button type="submit" class="co-submit" id="coSubmitBtn">Generate my outlook</button>
+            <p id="coStatus" class="co-status"></p>
+        </form>
+
+        <div id="coLoading" style="display:none;text-align:center;padding:2rem 1rem;color:var(--muted-v2);">
+            <p style="font-size:1rem;color:var(--ink-0);font-weight:600;">Building your outlook</p>
+            <p style="font-size:0.88rem;margin-top:0.4rem;">Classifying role, pulling BLS data, computing scenarios, building the 90-day plan. ~30 seconds.</p>
+        </div>
+
+        <!-- Results -->
+        <div id="coResults" class="co-results"></div>
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/career-direction.html">Career Report</a>
+            <a href="/career-outlook.html">Outlook</a>
+            <a href="/blog/">Blog</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var SUPA_URL = 'https://jjiizicwjldusuteffnb.supabase.co';
+    var SUPA_AUTH_KEY = 'sb-jjiizicwjldusuteffnb-auth-token';
+
+    function getSession() {
+        try {
+            var raw = localStorage.getItem(SUPA_AUTH_KEY);
+            if (!raw) return null;
+            var parsed = JSON.parse(raw);
+            return parsed.access_token ? parsed : (parsed.currentSession || null);
+        } catch (e) { return null; }
+    }
+
+    function checkPro() {
+        var sess = getSession();
+        if (!sess || !sess.user || !sess.user.email) {
+            document.getElementById('proGate').style.display = 'block';
+            document.getElementById('proGate').querySelector('h3').textContent = 'Sign in to use Career Outlook.';
+            document.getElementById('proGate').querySelector('p').textContent = 'Career Outlook is a Pro feature. Sign in to your account, then start your outlook.';
+            document.getElementById('proGate').querySelector('a').textContent = 'Sign in or sign up';
+            document.getElementById('proGate').querySelector('a').href = '/login.html';
+            return;
+        }
+        // Server-checked Pro status via webhook
+        fetch(WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'pro_status', email: sess.user.email })
+        })
+        .then(function(r) { return r.json().catch(function(){return{};}); })
+        .then(function(data) {
+            if (data && data.is_pro) {
+                document.getElementById('coForm').style.display = 'block';
+            } else {
+                document.getElementById('proGate').style.display = 'block';
+            }
+        })
+        .catch(function() {
+            document.getElementById('proGate').style.display = 'block';
+        });
+    }
+
+    // Radio button selection
+    document.querySelectorAll('.co-radio-grid').forEach(function(grid) {
+        grid.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'BUTTON') return;
+            grid.querySelectorAll('.co-radio').forEach(function(b) { b.classList.remove('active'); });
+            e.target.classList.add('active');
+            grid.dataset.selected = e.target.dataset.value;
+        });
+    });
+
+    // Resume tab switching
+    window.coTab = function(which) {
+        document.querySelectorAll('.co-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === which); });
+        document.getElementById('coTabPaste').style.display = which === 'paste' ? 'block' : 'none';
+        document.getElementById('coTabUpload').style.display = which === 'upload' ? 'block' : 'none';
+    };
+
+    // File handling (PDF + DOCX)
+    var uploadedText = '';
+    var fileInput = document.getElementById('coFile');
+    var drop = document.getElementById('coDrop');
+    var fileLabel = document.getElementById('coFileLabel');
+
+    function readFile(file) {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) { fileLabel.textContent = 'File too large (5 MB max).'; return; }
+        fileLabel.textContent = 'Reading ' + file.name + '…';
+        var reader = new FileReader();
+        if (file.name.toLowerCase().endsWith('.pdf')) {
+            reader.onload = function(e) {
+                pdfjsLib.getDocument({ data: e.target.result }).promise.then(function(pdf) {
+                    var pages = []; for (var i = 1; i <= pdf.numPages; i++) pages.push(pdf.getPage(i));
+                    return Promise.all(pages).then(function(ps) {
+                        return Promise.all(ps.map(function(p) { return p.getTextContent().then(function(tc){ return tc.items.map(function(it){return it.str;}).join(' '); }); }));
+                    });
+                }).then(function(texts) {
+                    uploadedText = texts.join('\n');
+                    fileLabel.textContent = 'Loaded ' + file.name + ' (' + uploadedText.length + ' chars).';
+                }).catch(function() { fileLabel.textContent = 'Could not parse PDF.'; });
+            };
+            reader.readAsArrayBuffer(file);
+        } else if (file.name.toLowerCase().endsWith('.docx')) {
+            reader.onload = function(e) {
+                mammoth.extractRawText({ arrayBuffer: e.target.result }).then(function(res) {
+                    uploadedText = res.value || '';
+                    fileLabel.textContent = 'Loaded ' + file.name + ' (' + uploadedText.length + ' chars).';
+                }).catch(function() { fileLabel.textContent = 'Could not parse DOCX.'; });
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            fileLabel.textContent = 'Unsupported format (.pdf or .docx only).';
+        }
+    }
+    fileInput.addEventListener('change', function(e) { readFile(e.target.files[0]); });
+    drop.addEventListener('dragover', function(e) { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', function() { drop.classList.remove('dragover'); });
+    drop.addEventListener('drop', function(e) { e.preventDefault(); drop.classList.remove('dragover'); readFile(e.dataTransfer.files[0]); });
+
+    // Submit
+    window.coSubmit = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var status = document.getElementById('coStatus');
+        var btn = document.getElementById('coSubmitBtn');
+
+        // Collect intake
+        var intake = {};
+        document.querySelectorAll('.co-radio-grid').forEach(function(g) {
+            intake[g.dataset.field] = g.dataset.selected || null;
+        });
+        intake.currentPay = parseInt(document.querySelector('input[name=currentPay]').value || '0', 10) || null;
+
+        // Validate
+        var missing = ['timeline','track','geo','runway','hours','priority','energy'].filter(function(k) { return !intake[k]; });
+        if (missing.length) { status.textContent = 'Please answer: ' + missing.join(', '); return; }
+        if (!intake.currentPay || intake.currentPay < 1000) { status.textContent = 'Enter your current annual pay.'; return; }
+
+        // Resume
+        var pasted = document.getElementById('coResume').value.trim();
+        var resume = pasted || uploadedText;
+        if (!resume || resume.length < 100) { status.textContent = 'Please paste or upload your resume (at least a paragraph).'; return; }
+
+        var sess = getSession();
+        if (!sess || !sess.user) { status.textContent = 'Please sign in.'; return; }
+
+        status.textContent = '';
+        document.getElementById('coForm').style.display = 'none';
+        document.getElementById('coLoading').style.display = 'block';
+        if (window.gtag) gtag('event', 'career_outlook_submit', {});
+
+        fetch(WEBHOOK, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess.access_token },
+            body: JSON.stringify({
+                mode: 'career_outlook',
+                email: sess.user.email,
+                user_id: sess.user.id,
+                resume: resume,
+                intake: intake
+            })
+        })
+        .then(function(r) { return r.json().catch(function(){return{};}); })
+        .then(function(data) {
+            document.getElementById('coLoading').style.display = 'none';
+            if (data.error) {
+                document.getElementById('coForm').style.display = 'block';
+                status.textContent = data.error;
+                return;
+            }
+            renderResults(data);
+        })
+        .catch(function(err) {
+            document.getElementById('coLoading').style.display = 'none';
+            document.getElementById('coForm').style.display = 'block';
+            status.textContent = 'Could not generate outlook. Please try again.';
+        });
+    };
+
+    function fmtPay(n) {
+        if (!n && n !== 0) return '--';
+        if (n >= 1000) return '$' + Math.round(n / 1000) + 'k';
+        return '$' + n;
+    }
+    function fmtRange(low, high) {
+        if (!low || !high) return '--';
+        return fmtPay(low) + ' - ' + fmtPay(high);
+    }
+    function esc(s) {
+        return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderResults(d) {
+        var wrap = document.getElementById('coResults');
+        var html = '';
+
+        // Pay context
+        if (d.pay_context) {
+            var pc = d.pay_context;
+            var cls = pc.is_underpaid ? 'co-underpay-warn' : (pc.is_overpaid ? 'co-overpay-good' : '');
+            var msg = pc.is_underpaid
+                ? 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are underpaid by ' + fmtPay(pc.median_for_level - pc.current_pay) + '/yr (' + Math.round((pc.median_for_level - pc.current_pay) / pc.median_for_level * 100) + '%). Asking for a market-rate raise has higher near-term ROI than pivoting.'
+                : pc.is_overpaid
+                    ? 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are paid above market — typical when comp includes equity or bonus the BLS data does not capture.'
+                    : 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are at market rate.';
+            html += '<div class="co-pay-context"><h3 style="margin:0 0 0.4rem;font-size:1.05rem;color:var(--ink-0);">Pay context</h3><p class="' + cls + '" style="margin:0;font-size:0.95rem;line-height:1.55;">' + esc(msg) + '</p></div>';
+        }
+
+        // Three scenarios
+        var s = d.scenarios || {};
+        if (s.stay) {
+            html += '<div class="co-scenario stay">'
+                  + '<span class="co-scenario-tag">Scenario A · Stay</span>'
+                  + '<h3>' + esc(s.stay.title) + '</h3>'
+                  + '<div class="co-headline">' + esc(s.stay.headline) + '</div>'
+                  + '<p>' + esc(s.stay.narrative) + '</p>'
+                  + '<p class="co-source">Source: ' + esc(s.stay.source) + '</p>'
+                  + '</div>';
+        }
+        if (s.pivot) {
+            html += '<div class="co-scenario pivot">'
+                  + '<span class="co-scenario-tag">Scenario B · Pivot</span>'
+                  + '<h3>' + esc(s.pivot.title) + '</h3>'
+                  + '<div class="co-headline">' + esc(s.pivot.headline) + '</div>'
+                  + '<p>' + esc(s.pivot.narrative) + '</p>';
+            if (s.pivot.skill_costs && s.pivot.skill_costs.length) {
+                html += '<div style="margin-top:0.8rem;">';
+                s.pivot.skill_costs.forEach(function(c) {
+                    html += '<div class="co-cost-row"><span class="co-cost-skill">' + esc(c.skill) + '</span><span class="co-cost-detail">' + esc(c.cost) + '</span></div>';
+                });
+                html += '</div>';
+            }
+            html += '<p class="co-source">Source: ' + esc(s.pivot.source) + '</p>'
+                  + '</div>';
+        }
+        if (s.specialize) {
+            html += '<div class="co-scenario specialize">'
+                  + '<span class="co-scenario-tag">Scenario C · Specialize</span>'
+                  + '<h3>' + esc(s.specialize.title) + '</h3>'
+                  + '<div class="co-headline">' + esc(s.specialize.headline) + '</div>'
+                  + '<p>' + esc(s.specialize.narrative) + '</p>'
+                  + '<p class="co-source">Source: ' + esc(s.specialize.source) + '</p>'
+                  + '</div>';
+        }
+
+        // 90-day plan
+        if (d.plan_90day) {
+            html += '<h3 style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;margin:2.5rem 0 1rem;color:var(--ink-0);font-weight:700;">Your 90-Day Action Plan</h3>';
+            ['month_1','month_2','month_3'].forEach(function(mk, idx) {
+                var m = d.plan_90day[mk];
+                if (!m) return;
+                html += '<div class="co-plan-month">'
+                      + '<div class="co-plan-month-h"><h4>' + esc(m.title || ('Month ' + (idx+1))) + '</h4><span class="due">' + esc(m.window || '') + '</span></div>';
+                (m.tasks || []).forEach(function(t) {
+                    html += '<div class="co-task"><div class="co-task-bullet"></div>'
+                          + '<div class="co-task-body">'
+                          + '<p class="co-task-title">' + esc(t.title) + '</p>'
+                          + '<p class="co-task-meta">' + esc(t.meta || '') + (t.metric ? ' · Metric: ' + esc(t.metric) : '') + '</p>'
+                          + '</div></div>';
+                });
+                html += '</div>';
+            });
+        }
+
+        // First action
+        if (d.first_action) {
+            html += '<div class="co-cadence-card"><h4 style="margin:0 0 0.4rem;color:#84e16a;font-size:0.95rem;font-weight:700;">Start here, this week</h4><p style="margin:0;color:#fff;font-size:1rem;line-height:1.55;">' + esc(d.first_action) + '</p></div>';
+        }
+
+        // Cadence selector
+        html += '<div class="co-cadence-card">'
+              + '<h4 style="margin:0 0 0.5rem;color:var(--ink-0);font-size:1rem;font-weight:700;">Accountability check-ins</h4>'
+              + '<p style="margin:0 0 0.7rem;color:var(--muted-v2);font-size:0.9rem;">We email you at day 30, 60, and 90. One-click "did it / didn\'t / still working" responses. Cancel anytime.</p>'
+              + '<div class="co-radio-grid" id="coCadence">'
+                + '<button type="button" class="co-radio active" data-cadence="monthly">Monthly (default)</button>'
+                + '<button type="button" class="co-radio" data-cadence="weekly">Weekly nudges</button>'
+                + '<button type="button" class="co-radio" data-cadence="off">No emails</button>'
+              + '</div>'
+              + '</div>';
+
+        wrap.innerHTML = html;
+        wrap.classList.add('visible');
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Cadence handler
+        document.querySelectorAll('#coCadence .co-radio').forEach(function(b) {
+            b.addEventListener('click', function() {
+                document.querySelectorAll('#coCadence .co-radio').forEach(function(x){ x.classList.remove('active'); });
+                b.classList.add('active');
+                var cadence = b.dataset.cadence;
+                var sess = getSession();
+                fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (sess && sess.access_token || '') },
+                    body: JSON.stringify({ mode: 'outlook_cadence', outlook_id: d.outlook_id, cadence: cadence })
+                });
+                if (window.gtag) gtag('event', 'career_outlook_cadence', { cadence: cadence });
+            });
+        });
+    }
+
+    // Init
+    checkPro();
+})();
+</script>
+
+</body>
+</html>

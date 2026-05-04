@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status updated · ATSHack Career Outlook</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .os-shell { max-width: 580px; margin: 4rem auto; padding: 2rem; background: #0c0e12; border: 1px solid #1a1d24; border-radius: 14px; text-align: center; }
+        .os-shell h1 { font-family: 'Space Grotesk', sans-serif; color: #fff; font-size: 1.6rem; margin: 0 0 0.7rem; }
+        .os-shell p { color: #cfd2d6; line-height: 1.6; }
+        .os-shell .os-badge { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1rem; }
+        .os-shell .os-did { background: rgba(132,225,106,0.10); color: #84e16a; border: 1px solid rgba(132,225,106,0.4); }
+        .os-shell .os-skipped { background: rgba(255,155,138,0.10); color: #ff9b8a; border: 1px solid rgba(255,155,138,0.4); }
+        .os-shell .os-wip { background: rgba(251,191,36,0.10); color: #fbbf24; border: 1px solid rgba(251,191,36,0.4); }
+        .os-shell .os-cancel { background: rgba(255,155,138,0.10); color: #ff9b8a; border: 1px solid rgba(255,155,138,0.4); }
+    </style>
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+    </div>
+</header>
+
+<main>
+<div class="os-shell" id="osShell">
+    <p class="os-badge os-wip" id="osBadge">Saving…</p>
+    <h1 id="osHeadline">One sec.</h1>
+    <p id="osBody">Recording your response.</p>
+    <p style="margin-top:1.5rem;"><a href="/account.html" class="btn-lime">Back to account &rarr;</a></p>
+</div>
+</main>
+
+<script>
+(function() {
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var qs = new URLSearchParams(window.location.search);
+    var token = qs.get('t') || '';
+    var taskId = qs.get('task') || '';
+    var status = qs.get('s') || '';
+    var month = qs.get('m') || '';
+
+    if (!token || !status) {
+        document.getElementById('osHeadline').textContent = 'Bad link';
+        document.getElementById('osBody').textContent = 'This link is missing required information. Open your latest check-in email and try again.';
+        document.getElementById('osBadge').className = 'os-badge os-skipped';
+        document.getElementById('osBadge').textContent = 'Error';
+        return;
+    }
+
+    fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'outlook_status', token: token, task_id: taskId, status: status, month: month })
+    })
+    .then(function(r) { return r.json().catch(function(){return{};}); })
+    .then(function(data) {
+        var badge = document.getElementById('osBadge');
+        var head = document.getElementById('osHeadline');
+        var body = document.getElementById('osBody');
+        if (data.error) {
+            badge.className = 'os-badge os-skipped'; badge.textContent = 'Error';
+            head.textContent = 'Could not record';
+            body.textContent = data.error;
+            return;
+        }
+        if (status === 'cancel') {
+            badge.className = 'os-badge os-cancel'; badge.textContent = 'Cancelled';
+            head.textContent = 'Check-ins stopped.';
+            body.textContent = 'You will not receive further check-in emails for this outlook. You can re-run the outlook anytime to start fresh.';
+        } else if (status === 'did') {
+            badge.className = 'os-badge os-did'; badge.textContent = 'Did it';
+            head.textContent = "Nice. Logged.";
+            body.textContent = "We will remember this on the next check-in. Keep going.";
+        } else if (status === 'skipped') {
+            badge.className = 'os-badge os-skipped'; badge.textContent = "Didn't";
+            head.textContent = "Logged. No judgment.";
+            body.textContent = "Skipping a task is a real signal. If a few stack up, that means the plan does not match your reality and the next check-in will recalibrate.";
+        } else if (status === 'wip') {
+            badge.className = 'os-badge os-wip'; badge.textContent = "In progress";
+            head.textContent = "Logged. Keep at it.";
+            body.textContent = "We will check in again on schedule.";
+        } else {
+            badge.className = 'os-badge os-wip'; badge.textContent = 'Saved';
+            head.textContent = 'Saved.';
+            body.textContent = '';
+        }
+    })
+    .catch(function() {
+        document.getElementById('osHeadline').textContent = 'Network error';
+        document.getElementById('osBody').textContent = 'Try the link again from your email.';
+        document.getElementById('osBadge').className = 'os-badge os-skipped';
+        document.getElementById('osBadge').textContent = 'Error';
+    });
+})();
+</script>
+</body>
+</html>

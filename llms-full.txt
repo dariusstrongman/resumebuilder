@@ -144,6 +144,40 @@ What it will not do: invent skills not on the resume, return a fake "hireability
 
 ---
 
+## Page: Career Outlook + 90-Day Action Plan (Pro) (https://www.atshack.com/career-outlook.html)
+
+Pro-only follow-up to the free Career Direction report. The free report tells you what to do; this Pro tool tells you what happens if you do nothing, what the pivot actually costs in time and money, and pings you at day 30, 60, 90 to keep you accountable.
+
+Workflow:
+- Sign in. Server-side check of active Pro subscription (subscriptions table; pro_monthly or pro_yearly).
+- Answer 8 short questions: timeline, IC vs management track, location flexibility, financial runway, hours/week available for skill-building, priority (max pay/flexibility/stability/growth), current annual pay (so we can detect underpay), energy level in current role.
+- Paste or upload your resume.
+- Receive three sourced scenarios and a 90-day plan within 30 seconds.
+
+Three scenarios, all sourced:
+- STAY. Pay-growth projection 6 years out using BLS 2019-2024 CAGR for your role bucket (tech: 5.5%, healthcare: 5.2%, trades: 5.0%, knowledge/admin: 3.5%, management: 4.8%, other: 4.4%). Includes AI displacement caveat from Goldman Sachs April 2026 labor market analysis. Flags underpay if your reported pay is materially below the BLS median for your level — typically a market-rate raise has higher near-term ROI than pivoting.
+- PIVOT. Cost of pivoting to your top adjacent role from the Career Direction ladder. Skill gap converted to study hours from a public-cert/course benchmark table. Recommended cert with dollar cost and hour cost. Weeks-to-close-gap computed from your reported hours/week. Expected pay outcome at the adjacent role's pay band for your level (BLS May 2024).
+- SPECIALIZE. Specialization premium from Levels.fyi 2025, PMI 2024 Earnings Power Report, AACN 2024 specialty pay survey, IBEW/ABC trade wage surveys, depending on role. Lower risk than a full pivot.
+
+90-Day Plan: structured tasks per month with title, meta description, success metric. Generated from the specific skill gap and current-pay context, not generic. Month 1 builds foundation (cert prep + initial applications + raise conversation if underpaid). Month 2 builds and applies (portfolio project + apply rate + cert booking). Month 3 measures (pass cert, response rate, decide).
+
+Accountability: emails at day 30, 60, 90 with one-click "did it / didn't / still working" buttons per task. Cancel anytime. Adaptive cadence (weekly nudges or monthly check-ins). Status responses are stored on the outlook row so the next check-in adapts to what actually happened.
+
+Honesty guardrails:
+- Every number cites a source on screen.
+- We refuse to predict whether the candidate will be hired. We compute what historical data and market signals project and label everything as projection, not prediction.
+- The GPT prose pass receives only the structured numbers and is constrained to use only those numbers — no invented stats.
+- We never quote a "career success score" or "hireability percentage."
+
+What it costs the user: included in ATSHack Pro at $15/month or $99/year. Pro also includes 50 tailorings/month, ATS gap reports, the STAR interview coach, AI follow-up email generator, and the Pro applications tracker.
+
+What it does not do:
+- Predict success for a specific candidate.
+- Account for employer-specific equity, signing bonuses, or geographic premiums beyond BLS national.
+- Replace human career coaching for nuanced personal decisions.
+
+---
+
 ## Page: ATSHack vs Jobscan (https://www.atshack.com/vs-jobscan.html)
 
 ATSHack rewrites the resume; Jobscan only tells you what's wrong with yours. Pricing: ATSHack $1 per tailored resume vs Jobscan $49.95/month. Output: ATSHack delivers a finished PDF + DOCX; Jobscan delivers a match score + keyword diff + bullet suggestions you apply yourself. Both refuse to fabricate.
