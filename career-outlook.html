@@ -79,11 +79,15 @@
         .co-task-meta { color: var(--muted-v2); font-size: 0.82rem; margin-top: 0.2rem; }
         .co-cadence-card { background: rgba(132,225,106,0.06); border: 1px solid rgba(132,225,106,0.35); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.5rem 0; }
         .co-empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-v2); }
-        .co-howto { background: rgba(132,225,106,0.04); border: 1px solid rgba(132,225,106,0.25); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.2rem 0 1.5rem; }
-        .co-howto h3 { margin: 0 0 0.6rem; color: #84e16a; font-size: 0.92rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-        .co-howto ol { margin: 0; padding-left: 1.2rem; color: #cfd2d6; line-height: 1.65; font-size: 0.95rem; }
-        .co-howto ol li { margin-bottom: 0.45rem; }
-        .co-howto strong { color: #fff; }
+        .co-howto { background: rgba(132,225,106,0.04); border: 1px solid rgba(132,225,106,0.25); border-radius: 12px; padding: 1.4rem 1.5rem; margin: 1.2rem 0 1.5rem; }
+        .co-howto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
+        .co-howto-col h3 { margin: 0 0 0.7rem; color: #84e16a; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+        .co-howto-col ol, .co-howto-col ul { margin: 0; padding-left: 1.2rem; color: #cfd2d6; line-height: 1.6; font-size: 0.93rem; }
+        .co-howto-col ol li, .co-howto-col ul li { margin-bottom: 0.5rem; }
+        .co-howto-col strong { color: #fff; }
+        .co-howto-foot { margin: 1.2rem 0 0; padding-top: 1rem; border-top: 1px solid rgba(132,225,106,0.18); color: var(--muted-v2, #a5a8af); font-size: 0.82rem; line-height: 1.55; }
+        .co-howto-foot strong { color: #fff; }
+        @media (max-width: 720px) { .co-howto-grid { grid-template-columns: 1fr; gap: 1.2rem; } }
         .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
         .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
         .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
@@ -155,17 +159,30 @@
     <div class="co-shell">
         <p class="co-eyebrow">Pro · Career Outlook + 90-Day Plan</p>
         <h1 class="co-title">Stay where you are, or pivot to something new?</h1>
-        <p class="co-lede">We compare three paths side by side with real numbers, not vibes. Stay in your current role. Pivot to a higher-paying adjacent role. Or specialize inside the role you already have. Then we hand you a 90-day plan to act on whichever one fits.</p>
+        <p class="co-lede">An AI career advisor that runs the math on your resume and tells you, with real numbers, whether to stay put, pivot to a higher-paying role, or specialize where you are. Takes about 3 minutes.</p>
 
         <!-- How this works (always shown above form) -->
         <div class="co-howto">
-            <h3>How we decide</h3>
-            <ol>
-                <li><strong>Stay.</strong> Your pay 6 years from now if you do nothing, from BLS 2019-2024 historical growth for your role.</li>
-                <li><strong>Pivot.</strong> The best higher-paying adjacent role you already half-qualify for. Exact missing skills, real cert dollars, weeks of study at your pace.</li>
-                <li><strong>Specialize.</strong> A specialization inside your current role with a sourced pay premium (Levels.fyi 2025, IBEW, AACN, PMI, etc.).</li>
-                <li><strong>90-day plan.</strong> Concrete tasks for month 1, 2, 3 &mdash; checkable from your account. We email you at day 30, 60, 90 to keep score.</li>
-            </ol>
+            <div class="co-howto-grid">
+                <div class="co-howto-col">
+                    <h3>What you do</h3>
+                    <ol>
+                        <li>Paste or upload your resume.</li>
+                        <li>Answer 4 quick questions: current pay, hours/week you can study, hands-on or managing, and when you want to move.</li>
+                        <li>Hit submit. We crunch the numbers in about 30 seconds.</li>
+                    </ol>
+                </div>
+                <div class="co-howto-col">
+                    <h3>What you get back</h3>
+                    <ul>
+                        <li><strong>Stay path:</strong> your pay 6 years out if you change nothing (BLS historical growth).</li>
+                        <li><strong>Pivot path:</strong> the best higher-paying role you half-qualify for, exact missing skills, real cert cost, weeks of study at <em>your</em> pace.</li>
+                        <li><strong>Specialize path:</strong> a sourced premium for a specialization in your current role.</li>
+                        <li><strong>90-day plan</strong> with checkable tasks on your account dashboard, plus optional email check-ins at day 30, 60, 90.</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="co-howto-foot"><strong>What we won't do:</strong> make up numbers, recommend a job you can't realistically reach, or fabricate experience you don't have. Sources: BLS OEWS (May 2024), Levels.fyi 2025, published cert pricing, IBEW/AACN/PMI specialty data.</p>
         </div>
 
         <!-- Pro gate (shown when not Pro) -->
