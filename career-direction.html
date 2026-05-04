@@ -697,8 +697,11 @@
                 document.getElementById('cdStatus').textContent = data.error;
                 return;
             }
-            card.innerHTML = '<h4>Sent. Check your inbox.</h4>'
-                + '<p>Your full career direction report is on its way to <strong>' + esc(email) + '</strong>. It can take a minute. Check spam if you don\'t see it.</p>';
+            card.style.background = 'rgba(132, 225, 106, 0.12)';
+            card.style.border = '1px solid rgba(132, 225, 106, 0.55)';
+            card.style.boxShadow = '0 0 0 3px rgba(132, 225, 106, 0.08)';
+            card.innerHTML = '<h4 style="color:#84e16a;margin:0 0 0.5rem;font-size:1.15rem;">&#10003; Sent. Check your inbox.</h4>'
+                + '<p style="color:#e8f5e1;margin:0;">Your full career direction report is on its way to <strong style="color:#84e16a;">' + esc(email) + '</strong>. It can take a minute. Check spam if you don\'t see it.</p>';
         })
         .catch(function() {
             btn.disabled = false; btn.textContent = prev;
