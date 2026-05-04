@@ -79,6 +79,14 @@
         .co-task-meta { color: var(--muted-v2); font-size: 0.82rem; margin-top: 0.2rem; }
         .co-cadence-card { background: rgba(132,225,106,0.06); border: 1px solid rgba(132,225,106,0.35); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.5rem 0; }
         .co-empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-v2); }
+        .co-howto { background: rgba(132,225,106,0.04); border: 1px solid rgba(132,225,106,0.25); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.2rem 0 1.5rem; }
+        .co-howto h3 { margin: 0 0 0.6rem; color: #84e16a; font-size: 0.92rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+        .co-howto ol { margin: 0; padding-left: 1.2rem; color: #cfd2d6; line-height: 1.65; font-size: 0.95rem; }
+        .co-howto ol li { margin-bottom: 0.45rem; }
+        .co-howto strong { color: #fff; }
+        .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
+        .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
+        .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
         .co-active-hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin: 1.4rem 0 0.6rem; flex-wrap: wrap; }
         .co-active-actions { display: flex; gap: 0.5rem; }
         .co-pill { background: #11141a; border: 1px solid #1f242c; color: #cfd2d6; padding: 0.45rem 0.85rem; border-radius: 999px; cursor: pointer; font-size: 0.82rem; font-family: 'Space Grotesk', sans-serif; }
@@ -149,6 +157,17 @@
         <h1 class="co-title">Project your pay. Cost the pivot. Stay accountable.</h1>
         <p class="co-lede">Free Career Report tells you what to do. Pro tells you what happens if you do nothing, what the pivot actually costs, and pings you at day 30, 60, and 90 to keep you honest. Every number is sourced. We refuse to fake the future.</p>
 
+        <!-- How this works (always shown above form) -->
+        <div class="co-howto">
+            <h3>What you'll get</h3>
+            <ol>
+                <li><strong>Stay path.</strong> Your pay 6 years from now if you do nothing, projected from BLS 2019-2024 historical growth for your role.</li>
+                <li><strong>Pivot path.</strong> One adjacent role you already half-qualify for, the exact missing skills, real cert dollars, and weeks of study at your pace.</li>
+                <li><strong>Specialize path.</strong> A specialization in your existing role with a documented pay premium (Levels.fyi 2025, IBEW, AACN, etc.).</li>
+                <li><strong>90-day plan.</strong> Concrete tasks for month 1, 2, 3 — checkable from your account. We email you at day 30, 60, 90 to keep score.</li>
+            </ol>
+        </div>
+
         <!-- Pro gate (shown when not Pro) -->
         <div class="co-pro-gate" id="proGate" style="display:none;">
             <h3>This tool is Pro-only.</h3>
@@ -163,60 +182,9 @@
         <form id="coForm" class="co-form-card" style="display:none;" onsubmit="coSubmit(event); return false;">
 
             <div class="co-q">
-                <span class="co-q-num">01 / 05</span>
-                <label class="co-q-label">When are you actually looking?</label>
-                <div class="co-radio-grid" data-field="timeline">
-                    <button type="button" class="co-radio" data-value="now">Looking now</button>
-                    <button type="button" class="co-radio" data-value="3mo">Within 3 months</button>
-                    <button type="button" class="co-radio" data-value="6mo">Within 6 months</button>
-                    <button type="button" class="co-radio" data-value="12mo">Within 12 months</button>
-                    <button type="button" class="co-radio" data-value="passive">Not actively, just open</button>
-                </div>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">02 / 05</span>
-                <label class="co-q-label">Stay IC or move into management?</label>
-                <div class="co-radio-grid" data-field="track">
-                    <button type="button" class="co-radio" data-value="ic">Stay individual contributor</button>
-                    <button type="button" class="co-radio" data-value="management">Move into management</button>
-                    <button type="button" class="co-radio" data-value="either">Open to either</button>
-                </div>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">03 / 05</span>
-                <label class="co-q-label">Current annual pay (USD, base + on-target bonus)</label>
-                <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 85000" min="0" max="5000000" step="1000">
-                <p class="co-task-meta" style="margin-top:0.4rem;">Used to detect under/overpay vs BLS median for your level.</p>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">04 / 05</span>
-                <label class="co-q-label">Hours per week you can realistically spend on skill-building</label>
-                <div class="co-radio-grid" data-field="hours">
-                    <button type="button" class="co-radio" data-value="1">Under 2</button>
-                    <button type="button" class="co-radio" data-value="3">2 to 5</button>
-                    <button type="button" class="co-radio" data-value="7">5 to 10</button>
-                    <button type="button" class="co-radio" data-value="12">10 or more</button>
-                </div>
-                <p class="co-task-meta" style="margin-top:0.4rem;">Drives how many weeks the pivot actually takes.</p>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">05 / 05</span>
-                <label class="co-q-label">What matters most for your next move?</label>
-                <div class="co-radio-grid" data-field="priority">
-                    <button type="button" class="co-radio" data-value="pay">Pay — biggest jump possible</button>
-                    <button type="button" class="co-radio" data-value="flexibility">Flexibility — remote/hours</button>
-                    <button type="button" class="co-radio" data-value="stability">Stability — low-risk move</button>
-                    <button type="button" class="co-radio" data-value="growth">Growth — skills and scope</button>
-                </div>
-            </div>
-
-            <div class="co-q">
                 <span class="co-q-num">RESUME</span>
-                <label class="co-q-label">Paste or upload your resume</label>
+                <label class="co-q-label">Step 1 — Paste or upload your resume</label>
+                <p class="co-q-hint">This is what we read to detect your role, level, years, and skills. Everything else hangs off this.</p>
                 <div class="co-resume-tabs">
                     <button type="button" class="co-tab active" data-tab="paste" onclick="coTab('paste')">Paste</button>
                     <button type="button" class="co-tab" data-tab="upload" onclick="coTab('upload')">Upload (.pdf, .docx)</button>
@@ -232,6 +200,51 @@
                     <input type="file" id="coFile" accept=".pdf,.docx" style="display:none;">
                     <p id="coFileLabel" class="co-task-meta" style="margin-top:0.5rem;"></p>
                 </div>
+            </div>
+
+            <p class="co-step-divider">Step 2 — 4 quick questions</p>
+
+            <div class="co-q">
+                <span class="co-q-num">01 / 04</span>
+                <label class="co-q-label">What's your current annual pay (USD)?</label>
+                <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 85000" min="0" max="5000000" step="1000">
+                <p class="co-q-hint">Base + on-target bonus. <strong>&rarr; This drives:</strong> the underpaid/overpaid check vs BLS median, and the pay-delta number on the Pivot scenario.</p>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">02 / 04</span>
+                <label class="co-q-label">How many hours a week can you actually study or build?</label>
+                <div class="co-radio-grid" data-field="hours">
+                    <button type="button" class="co-radio" data-value="1">Under 2</button>
+                    <button type="button" class="co-radio" data-value="3">2 to 5</button>
+                    <button type="button" class="co-radio" data-value="7">5 to 10</button>
+                    <button type="button" class="co-radio" data-value="12">10 or more</button>
+                </div>
+                <p class="co-q-hint"><strong>&rarr; This drives:</strong> "weeks to close the gap" on the Pivot scenario. 5 hrs/wk vs 12 hrs/wk is the difference between 6 months and 10 weeks.</p>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">03 / 04</span>
+                <label class="co-q-label">Hands-on work or managing people?</label>
+                <div class="co-radio-grid" data-field="track">
+                    <button type="button" class="co-radio" data-value="ic">Hands-on (write/build/operate)</button>
+                    <button type="button" class="co-radio" data-value="management">Managing a team</button>
+                    <button type="button" class="co-radio" data-value="either">Open to either</button>
+                </div>
+                <p class="co-q-hint"><strong>&rarr; This drives:</strong> which adjacent role we recommend on the Pivot scenario. Managers get manager-track suggestions; ICs get higher-paying IC roles.</p>
+            </div>
+
+            <div class="co-q">
+                <span class="co-q-num">04 / 04</span>
+                <label class="co-q-label">When do you want to make a move?</label>
+                <div class="co-radio-grid" data-field="timeline">
+                    <button type="button" class="co-radio" data-value="now">Now</button>
+                    <button type="button" class="co-radio" data-value="3mo">Within 3 months</button>
+                    <button type="button" class="co-radio" data-value="6mo">Within 6 months</button>
+                    <button type="button" class="co-radio" data-value="12mo">Within 12 months</button>
+                    <button type="button" class="co-radio" data-value="passive">Not actively, just open</button>
+                </div>
+                <p class="co-q-hint"><strong>&rarr; This drives:</strong> the urgency of your 90-day plan. "Now" gets aggressive month-1 tasks. "Just open" gets exploration tasks first.</p>
             </div>
 
             <button type="submit" class="co-submit" id="coSubmitBtn">Generate my outlook</button>
@@ -546,7 +559,7 @@
         intake.currentPay = parseInt(document.querySelector('input[name=currentPay]').value || '0', 10) || null;
 
         // Validate
-        var missing = ['timeline','track','hours','priority'].filter(function(k) { return !intake[k]; });
+        var missing = ['timeline','track','hours'].filter(function(k) { return !intake[k]; });
         if (missing.length) { status.textContent = 'Please answer: ' + missing.join(', '); return; }
         if (!intake.currentPay || intake.currentPay < 1000) { status.textContent = 'Enter your current annual pay.'; return; }
 
