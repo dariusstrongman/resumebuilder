@@ -356,6 +356,7 @@
 <script>
 (function() {
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var OUTLOOK_WEBHOOK = 'https://n8n.stromation.com/webhook/career-outlook';
     var SUPA_URL = 'https://jjiizicwjldusuteffnb.supabase.co';
     var SUPA_AUTH_KEY = 'sb-jjiizicwjldusuteffnb-auth-token';
 
@@ -391,7 +392,7 @@
                 return;
             }
             // Pro confirmed. Now check if there's already an active outlook.
-            return fetch(WEBHOOK, {
+            return fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: 'outlook_get', user_id: sess.user.id })
@@ -551,7 +552,7 @@
             row.querySelectorAll('.co-task-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     var st = btn.dataset.status;
-                    fetch(WEBHOOK, {
+                    fetch(OUTLOOK_WEBHOOK, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ mode: 'outlook_status', token: token, task_id: taskId, status: st })
@@ -570,7 +571,7 @@
             b.addEventListener('click', function() {
                 box.querySelectorAll('#coCadence .co-radio').forEach(function(x){x.classList.remove('active');});
                 b.classList.add('active');
-                fetch(WEBHOOK, {
+                fetch(OUTLOOK_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mode: 'outlook_cadence', outlook_id: d.outlook_id, cadence: b.dataset.cadence })
@@ -581,7 +582,7 @@
         // Restart -> cancel current then show form
         document.getElementById('coBtnRestart').addEventListener('click', function() {
             if (!confirm('Cancel this outlook and start a new one? Your current plan will be archived.')) return;
-            fetch(WEBHOOK, {
+            fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: 'outlook_status', token: token, status: 'cancel' })
@@ -594,7 +595,7 @@
         // Cancel -> archive, show empty state
         document.getElementById('coBtnCancel').addEventListener('click', function() {
             if (!confirm('Cancel this outlook? You can start a new one any time.')) return;
-            fetch(WEBHOOK, {
+            fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: 'outlook_status', token: token, status: 'cancel' })
@@ -693,7 +694,7 @@
         document.getElementById('coLoading').style.display = 'block';
         if (window.gtag) gtag('event', 'career_outlook_submit', {});
 
-        fetch(WEBHOOK, {
+        fetch(OUTLOOK_WEBHOOK, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess.access_token },
             body: JSON.stringify({
@@ -714,7 +715,7 @@
             }
             // After submit, refetch to get the stable shape (status_token, plan_status, etc.)
             // and render the active-outlook view with check-off + cadence + cancel.
-            fetch(WEBHOOK, {
+            fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: 'outlook_get', user_id: sess.user.id })
@@ -849,7 +850,7 @@
                 b.classList.add('active');
                 var cadence = b.dataset.cadence;
                 var sess = getSession();
-                fetch(WEBHOOK, {
+                fetch(OUTLOOK_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (sess && sess.access_token || '') },
                     body: JSON.stringify({ mode: 'outlook_cadence', outlook_id: d.outlook_id, cadence: cadence })

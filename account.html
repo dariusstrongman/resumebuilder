@@ -1067,6 +1067,7 @@
     }
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var OUTLOOK_WEBHOOK = 'https://n8n.stromation.com/webhook/career-outlook';
 
     // Refetch stat-strip counts on tab return so a tailoring done in another
     // tab (or after navigating back from /success) shows up without a
@@ -2513,7 +2514,7 @@
             row.querySelectorAll('.outlook-task-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     var st = btn.dataset.status;
-                    fetch(WEBHOOK, {
+                    fetch(OUTLOOK_WEBHOOK, {
                         method: 'POST',
                         headers: { 'Content-Type':'application/json' },
                         body: JSON.stringify({ mode:'outlook_status', token:token, task_id:taskId, status:st })
@@ -2537,7 +2538,7 @@
         outlookSection.hidden = false;
         (async function() {
             try {
-                var r = await fetch(WEBHOOK, {
+                var r = await fetch(OUTLOOK_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ mode: 'outlook_get', user_id: user.id })
