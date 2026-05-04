@@ -67,6 +67,41 @@
     </script>
     <style>
         .cd-shell { max-width: 980px; margin: 0 auto; padding: 1rem; }
+        .cd-tabs { display: flex; gap: 0.4rem; margin: 1rem 0 0.5rem; }
+        .cd-tab {
+            flex: 0 0 auto; padding: 0.55rem 1rem;
+            background: rgba(255,255,255,0.025); color: var(--muted-v2, #888);
+            border: 1px solid var(--border-v2, #1E1E2E); border-radius: 8px 8px 0 0;
+            font-family: inherit; font-size: 0.85rem; cursor: pointer;
+        }
+        .cd-tab.active { background: var(--surface-1, #13131A); color: var(--ink-0, #fff); border-bottom-color: var(--surface-1, #13131A); }
+        .cd-drop {
+            border: 2px dashed var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            padding: 2.4rem 1.4rem;
+            text-align: center;
+            color: var(--muted-v2, #888);
+            background: var(--surface-1, #13131A);
+            transition: border-color .15s, background .15s;
+            cursor: pointer;
+            margin: 0.5rem 0;
+        }
+        .cd-drop.dragover { border-color: var(--accent, #CAFF00); background: rgba(202,255,0,0.04); color: var(--ink-0, #fff); }
+        .cd-drop p { margin: 0.4rem 0; }
+        .cd-drop .cd-link { color: var(--accent, #CAFF00); text-decoration: underline; }
+        .cd-file {
+            display: none; align-items: center; gap: 0.7rem; padding: 0.9rem 1.1rem;
+            background: rgba(202,255,0,0.05); border: 1px solid rgba(202,255,0,0.25);
+            border-radius: 10px; margin: 0.5rem 0; color: var(--ink-0, #fff);
+        }
+        .cd-file.visible { display: flex; }
+        .cd-file .cd-file-name { flex: 1; font-family: var(--f-mono); font-size: 0.88rem; word-break: break-all; }
+        .cd-file-remove {
+            background: transparent; border: 1px solid var(--border-v2, #1E1E2E);
+            color: var(--muted-v2, #888); border-radius: 6px;
+            padding: 0.3rem 0.7rem; cursor: pointer; font-family: inherit; font-size: 0.8rem;
+        }
+        .cd-file-remove:hover { color: var(--ink-0, #fff); }
         .cd-input {
             width: 100%; min-height: 240px;
             background: var(--surface-1, #13131A);
@@ -250,7 +285,25 @@
         <p class="resource-lede">Paste your resume. In 30 seconds, see your role's pay range, AI displacement risk, the three adjacent roles you likely qualify for with fit percentage, and a stay-or-move recommendation. Pay data from the BLS. AI exposure anchored on Goldman Sachs research. Honest numbers, no fake hireability percentage.</p>
 
         <div class="cd-shell">
-            <textarea id="cdInput" class="cd-input" placeholder="Paste your full resume text here. Plain text is fine. We don't store it."></textarea>
+            <div class="cd-tabs" role="tablist">
+                <button type="button" class="cd-tab active" data-tab="upload" id="cdTabUpload">Upload file</button>
+                <button type="button" class="cd-tab" data-tab="paste" id="cdTabPaste">Paste text</button>
+            </div>
+            <div id="cdUploadTab">
+                <input type="file" id="cdFileInput" accept=".pdf,.docx,.txt" hidden>
+                <div class="cd-drop" id="cdDrop">
+                    <p style="font-size:1rem;color:var(--ink-0,#fff);">Drop your resume here, or <span class="cd-link">browse</span></p>
+                    <p style="font-size:0.82rem;">PDF or Word (.docx) &middot; 5MB max &middot; processed in your browser</p>
+                </div>
+                <div class="cd-file" id="cdFile">
+                    <span aria-hidden="true">&check;</span>
+                    <span class="cd-file-name" id="cdFileName"></span>
+                    <button type="button" class="cd-file-remove" id="cdFileRemove">Remove</button>
+                </div>
+            </div>
+            <div id="cdPasteTab" style="display:none;">
+                <textarea id="cdInput" class="cd-input" placeholder="Paste your full resume text here. Plain text is fine. We don't store it."></textarea>
+            </div>
             <div class="cd-actions">
                 <button id="cdRun" class="btn-lime">Get my career report &rarr;</button>
                 <button id="cdClear" class="btn-ghost" type="button">Clear</button>
@@ -314,10 +367,110 @@
     </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>if(window.pdfjsLib)pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+<script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <script>
 (function() {
     var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
     var GRADER_EMAIL_URL = 'https://n8n.stromation.com/webhook/grader-email-report';
+    var MAX_FILE_BYTES = 5 * 1024 * 1024;
+    var inputMode = 'upload';
+    var pickedFile = null;
+
+    function setMode(m) {
+        inputMode = m;
+        var u = document.getElementById('cdUploadTab');
+        var p = document.getElementById('cdPasteTab');
+        var tu = document.getElementById('cdTabUpload');
+        var tp = document.getElementById('cdTabPaste');
+        if (m === 'upload') {
+            u.style.display = ''; p.style.display = 'none';
+            tu.classList.add('active'); tp.classList.remove('active');
+        } else {
+            u.style.display = 'none'; p.style.display = '';
+            tp.classList.add('active'); tu.classList.remove('active');
+        }
+    }
+    document.getElementById('cdTabUpload').addEventListener('click', function(){ setMode('upload'); });
+    document.getElementById('cdTabPaste').addEventListener('click', function(){ setMode('paste'); });
+
+    function onFile(f) {
+        if (!f) return;
+        if (f.size > MAX_FILE_BYTES) {
+            document.getElementById('cdStatus').textContent = 'File too large (5MB max).';
+            return;
+        }
+        if (!/\.(pdf|docx|txt)$/i.test(f.name)) {
+            document.getElementById('cdStatus').textContent = 'Use PDF, .docx, or .txt';
+            return;
+        }
+        pickedFile = f;
+        document.getElementById('cdFileName').textContent = f.name;
+        document.getElementById('cdFile').classList.add('visible');
+        document.getElementById('cdDrop').style.display = 'none';
+        document.getElementById('cdStatus').textContent = '';
+    }
+
+    var drop = document.getElementById('cdDrop');
+    var fileInput = document.getElementById('cdFileInput');
+    drop.addEventListener('click', function(){ fileInput.click(); });
+    fileInput.addEventListener('change', function(e){ onFile(e.target.files && e.target.files[0]); });
+    drop.addEventListener('dragover', function(e){ e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', function(){ drop.classList.remove('dragover'); });
+    drop.addEventListener('drop', function(e){
+        e.preventDefault(); drop.classList.remove('dragover');
+        onFile(e.dataTransfer.files && e.dataTransfer.files[0]);
+    });
+    document.getElementById('cdFileRemove').addEventListener('click', function(){
+        pickedFile = null;
+        fileInput.value = '';
+        document.getElementById('cdFile').classList.remove('visible');
+        document.getElementById('cdDrop').style.display = '';
+    });
+
+    function extractFromFile(f) {
+        return new Promise(function(resolve, reject) {
+            var reader = new FileReader();
+            reader.onerror = function(){ reject(new Error('Could not read file')); };
+            reader.onload = function() {
+                var buf = reader.result;
+                if (/\.pdf$/i.test(f.name)) {
+                    if (!window.pdfjsLib) return reject(new Error('PDF reader not loaded. Refresh and try again, or use Paste text.'));
+                    pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise.then(function(pdf) {
+                        var pages = []; var done = 0; var total = pdf.numPages;
+                        if (!total) return reject(new Error('PDF has no pages'));
+                        for (var i = 1; i <= total; i++) (function(n) {
+                            pdf.getPage(n).then(function(page){ return page.getTextContent(); })
+                                .then(function(content){
+                                    pages[n-1] = content.items.map(function(it){return it.str;}).join(' ');
+                                    if (++done === total) {
+                                        var t = pages.join('\n\n').trim();
+                                        if (t.length <= 50) reject(new Error('PDF appears scanned or image-based. Use Paste text.'));
+                                        else resolve(t);
+                                    }
+                                }).catch(function(){ pages[n-1]=''; if (++done === total) resolve(pages.join('\n\n').trim()); });
+                        })(i);
+                    }).catch(function(e){ reject(new Error('Could not parse PDF: ' + (e.message || e))); });
+                } else if (/\.docx$/i.test(f.name)) {
+                    if (!window.mammoth) return reject(new Error('Word reader not loaded. Refresh and try again, or use Paste text.'));
+                    mammoth.extractRawText({ arrayBuffer: buf }).then(function(r){
+                        var t = (r.value || '').trim();
+                        if (t.length <= 50) reject(new Error('Could not extract text from this Word file.'));
+                        else resolve(t);
+                    }).catch(function(e){ reject(new Error('Word parser error: ' + (e.message || e))); });
+                } else {
+                    resolve(new TextDecoder().decode(new Uint8Array(buf)).trim());
+                }
+            };
+            reader.readAsArrayBuffer(f);
+        });
+    }
+    window._cdGetText = function() {
+        if (inputMode === 'paste') return Promise.resolve(document.getElementById('cdInput').value.trim());
+        if (!pickedFile) return Promise.reject(new Error('Choose a file or switch to Paste text.'));
+        return extractFromFile(pickedFile);
+    };
 
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];}); }
 
@@ -430,19 +583,28 @@
     }
 
     document.getElementById('cdRun').addEventListener('click', function() {
-        var text = document.getElementById('cdInput').value.trim();
-        if (text.length < 100) {
-            document.getElementById('cdStatus').textContent = 'Paste at least a paragraph (100+ chars).';
-            return;
-        }
-        document.getElementById('cdStatus').textContent = '';
-        document.getElementById('cdEmpty').style.display = 'none';
-        document.getElementById('cdResults').classList.remove('visible');
-        document.getElementById('cdResults').innerHTML = '';
-        document.getElementById('cdLoading').classList.add('visible');
+        document.getElementById('cdStatus').textContent = 'Reading resume…';
+        window._cdGetText().then(function(text) {
+            text = (text || '').trim();
+            if (text.length < 100) {
+                document.getElementById('cdStatus').textContent = 'Need at least a paragraph (100+ chars).';
+                return;
+            }
+            document.getElementById('cdStatus').textContent = '';
+            document.getElementById('cdEmpty').style.display = 'none';
+            document.getElementById('cdResults').classList.remove('visible');
+            document.getElementById('cdResults').innerHTML = '';
+            document.getElementById('cdLoading').classList.add('visible');
 
-        if (window.gtag) gtag('event', 'career_direction_run', { length: text.length });
+            if (window.gtag) gtag('event', 'career_direction_run', { length: text.length, mode: inputMode });
 
+            runFetch(text);
+        }).catch(function(e) {
+            document.getElementById('cdStatus').textContent = (e && e.message) || 'Could not read resume. Try Paste text.';
+        });
+    });
+
+    function runFetch(text) {
         fetch(WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -466,15 +628,18 @@
             document.getElementById('cdEmpty').style.display = '';
             document.getElementById('cdStatus').textContent = 'Connection error. Please try again.';
         });
-    });
+    }
 
     document.getElementById('cdClear').addEventListener('click', function() {
         document.getElementById('cdInput').value = '';
+        pickedFile = null;
+        fileInput.value = '';
+        document.getElementById('cdFile').classList.remove('visible');
+        document.getElementById('cdDrop').style.display = '';
         document.getElementById('cdResults').classList.remove('visible');
         document.getElementById('cdResults').innerHTML = '';
         document.getElementById('cdEmpty').style.display = '';
         document.getElementById('cdStatus').textContent = '';
-        document.getElementById('cdInput').focus();
     });
 
     window.cdSendReport = function(e) {
