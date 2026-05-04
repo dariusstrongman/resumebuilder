@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Resume Readability Checker | ATSHack</title>
+    <meta name="description" content="Paste your resume, get a readability score in seconds. Action verb ratio, passive voice, sentence length, quantifier density. Free, no account, runs client-side.">
+    <meta property="og:title" content="Free Resume Readability Checker | ATSHack">
+    <meta property="og:description" content="Get a readability score for your resume. Action verbs, passive voice, sentence length, quantifier density. Free.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.atshack.com/og.png">
+    <meta property="og:site_name" content="ATSHack">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://www.atshack.com/readability-checker.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ATSHack Resume Readability Checker",
+        "url": "https://www.atshack.com/readability-checker.html",
+        "description": "Free client-side tool that scores resume readability on action verbs, passive voice, sentence length, and quantifier density.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "isAccessibleForFree": true,
+        "featureList": ["Action verb detection", "Passive voice flagging", "Sentence length analysis", "Quantifier density", "Client-side processing"]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Resume Readability Checker", "item": "https://www.atshack.com/readability-checker.html"}
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": "What does readability mean for a resume?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Readability is how fast a recruiter can extract the signal. Short sentences, strong verbs, specific numbers. Recruiters spend 6-8 seconds on a first pass. A readable resume gets the recruiter to the next page; a dense one gets skipped."}},
+            {"@type": "Question", "name": "Is action verb ratio actually important?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Yes. Bullets that lead with strong verbs (Built, Shipped, Led, Reduced) outperform bullets that lead with phrases like 'Responsible for' or 'Worked on'. The score weights this heavily."}},
+            {"@type": "Question", "name": "Does the readability score match the ATS score?",
+             "acceptedAnswer": {"@type": "Answer", "text": "No. Readability is human-recruiter focused. ATS score is parser focused. A resume can be highly readable and still fail an ATS scan if the format breaks parsing or the keywords don't match the posting. Use both signals."}},
+            {"@type": "Question", "name": "Is the resume uploaded anywhere?",
+             "acceptedAnswer": {"@type": "Answer", "text": "No. The readability checker runs entirely in your browser. Nothing is uploaded. If you submit your email for the report, only your email and the resulting score are stored, not the resume text."}}
+        ]
+    }
+    </script>
+    <style>
+        .rc-shell { max-width: 880px; margin: 0 auto; padding: 1rem; }
+        .rc-input {
+            width: 100%; min-height: 220px;
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            color: var(--ink-0, #fff);
+            font-family: var(--f-ui), system-ui, sans-serif;
+            font-size: 0.95rem; line-height: 1.6;
+            padding: 1rem; margin: 1rem 0; resize: vertical;
+        }
+        .rc-input:focus { border-color: var(--accent); outline: none; }
+        .rc-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin: 0 0 1.2rem; }
+        .rc-results { display: none; margin-top: 2rem; }
+        .rc-results.visible { display: block; }
+        .rc-score-card {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 14px;
+            padding: 1.6rem 1.8rem;
+            display: flex; gap: 1.5rem; align-items: center;
+            margin-bottom: 1.5rem; flex-wrap: wrap;
+        }
+        .rc-score-num {
+            font-family: var(--f-display, 'Bebas Neue'), sans-serif;
+            font-size: 4.5rem; line-height: 1;
+            color: var(--accent, #CAFF00);
+        }
+        .rc-score-num.mid { color: #fbbf24; }
+        .rc-score-num.low { color: #ef4444; }
+        .rc-score-meta { flex: 1; min-width: 220px; }
+        .rc-score-grade {
+            font-family: var(--f-mono);
+            font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.18em;
+            color: var(--accent, #CAFF00); margin: 0 0 0.4rem;
+        }
+        .rc-score-summary {
+            color: var(--ink-1, #ddd); font-size: 1.02rem; line-height: 1.5; margin: 0;
+        }
+        .rc-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; margin-bottom: 1.5rem; }
+        .rc-metric {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            padding: 1rem 1.1rem;
+        }
+        .rc-metric-label { font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted-v2, #888); margin: 0 0 0.4rem; }
+        .rc-metric-val { font-size: 1.4rem; color: var(--ink-0, #fff); font-weight: 600; }
+        .rc-metric-note { font-size: 0.82rem; color: var(--muted-v2, #888); margin: 0.3rem 0 0; line-height: 1.4; }
+        .rc-metric-val.good { color: #84e16a; }
+        .rc-metric-val.warn { color: #fbbf24; }
+        .rc-metric-val.bad { color: #ef4444; }
+        .rc-callout {
+            background: rgba(202,255,0,0.06);
+            border: 1px solid rgba(202,255,0,0.25);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem; margin-top: 1.5rem;
+        }
+        .rc-callout p { margin: 0 0 0.7rem; }
+        .rc-email-card {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 12px;
+            padding: 1.4rem 1.5rem; margin-top: 1.2rem;
+        }
+        .rc-email-card h4 { margin: 0 0 0.3rem; color: var(--ink-0, #fff); font-size: 1.05rem; }
+        .rc-email-card p { margin: 0 0 0.9rem; color: var(--muted-v2, #888); font-size: 0.92rem; }
+        .rc-email-form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .rc-email-form input[type=email] {
+            flex: 1; min-width: 220px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 8px;
+            padding: 0.7rem 0.9rem;
+            color: var(--ink-0, #fff);
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .rc-email-form input[type=email]:focus { border-color: var(--accent); outline: none; }
+        .rc-empty {
+            padding: 2rem;
+            background: var(--surface-1, #13131A);
+            border: 1px dashed var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            text-align: center;
+            color: var(--muted-v2, #888);
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="resource-shell">
+        <p class="resource-eyebrow">Free Tool · Updated May 2026</p>
+        <h1 class="resource-title">Resume readability checker.</h1>
+        <p class="resource-lede">Paste your resume below. The checker scores readability from 0 to 100 based on action verb ratio, passive voice, sentence length, and quantifier density. Runs entirely in your browser. Nothing is uploaded.</p>
+
+        <div class="rc-shell">
+            <textarea id="rcInput" class="rc-input" placeholder="Paste your full resume text here. Plain text is fine. Nothing leaves your browser."></textarea>
+            <div class="rc-actions">
+                <button id="rcRun" class="btn-lime">Check readability &rarr;</button>
+                <button id="rcClear" class="btn-ghost" type="button">Clear</button>
+                <span id="rcStatus" style="font-size:0.85rem;color:var(--muted-v2);margin-left:auto;"></span>
+            </div>
+
+            <div id="rcResults" class="rc-results">
+                <div class="rc-score-card">
+                    <div id="rcScoreNum" class="rc-score-num">--</div>
+                    <div class="rc-score-meta">
+                        <p class="rc-score-grade" id="rcScoreGrade">Readability score</p>
+                        <p class="rc-score-summary" id="rcScoreSummary">--</p>
+                    </div>
+                </div>
+
+                <div class="rc-metrics" id="rcMetrics"></div>
+
+                <div class="rc-email-card" id="rcEmailCard">
+                    <h4>Email me the full breakdown</h4>
+                    <p>Get a detailed readability report by email. Specific lines we'd rewrite, action verbs to swap in, weak phrases to cut. One email. No spam. Unsubscribe with a click.</p>
+                    <form class="rc-email-form" onsubmit="rcSendReport(event); return false;">
+                        <input type="email" id="rcEmailInput" placeholder="you@email.com" required autocomplete="email">
+                        <button type="submit" class="btn-lime" id="rcEmailBtn">Email my full report</button>
+                    </form>
+                </div>
+
+                <div class="rc-callout">
+                    <p style="color:var(--ink-0);font-weight:600;">Want the rewrite, not just the score?</p>
+                    <p style="color:var(--muted-v2);font-size:0.92rem;">ATSHack rewrites your resume against a specific posting and delivers a PDF + DOCX in 60 seconds. $1, no account.</p>
+                    <a href="/#generate" class="btn-lime">Tailor My Resume &mdash; $1 &rarr;</a>
+                </div>
+            </div>
+
+            <div id="rcEmpty" class="rc-empty">Paste your resume above and click <strong>Check readability</strong>.</div>
+        </div>
+
+        <article class="legal-doc" style="margin-top:3rem;">
+            <h2>How the score works</h2>
+            <p>The checker computes four signals and weights them into one 0-100 score.</p>
+            <ul>
+                <li><strong>Action verb ratio.</strong> Bullets that start with strong verbs (Built, Led, Shipped, Reduced, Scaled) outperform bullets that start with "Responsible for" or "Worked on". A high ratio means the resume reads as ownership and outcomes, not job description copy.</li>
+                <li><strong>Passive voice.</strong> "The system was redesigned by me" is weaker than "I redesigned the system". Recruiters read passive voice as evasion. Lower is better.</li>
+                <li><strong>Sentence length.</strong> The optimal range for resume bullets is roughly 12-18 words. Longer than 25 reads as run-on; shorter than 8 reads as filler.</li>
+                <li><strong>Quantifier density.</strong> Numbers, percentages, dollar amounts, time savings. The single biggest separator between resumes that get interviews and ones that don't. The score rewards specific quantification.</li>
+            </ul>
+
+            <h2>What to do with the score</h2>
+            <p>Scores in the 80s and 90s are publication-ready: every bullet starts with a verb, most have a number attached, sentences are tight. Scores in the 60-79 range usually need 5-10 specific rewrites: passive lines flipped to active, vague ones quantified. Below 60, the bullets need a structural pass: most are reading as job-description filler, not accomplishment.</p>
+            <p>Pair this with our <a href="/#grader">free ATS grader</a> for the parser-side view. Readability is the recruiter's first impression. ATS-friendliness is whether the recruiter ever sees it.</p>
+
+            <h2>Limits of readability scoring</h2>
+            <p>The score doesn't know your industry. A federal resume legitimately uses longer sentences. A creative-director resume uses voice. A technical resume uses terminology that hurts readability indices but is correct for the audience. Use the score as a directional check, not gospel.</p>
+            <p>The score also can't tell you whether your bullets are interesting. "Built dashboard for 200 users" is readable but boring. "Cut weekly reporting time from 3 hours to 9 minutes for 200 analysts" is readable AND compelling. That second bullet only happens by remembering specifics.</p>
+
+            <h2>Related</h2>
+            <p><a href="/keyword-extractor.html">Keyword extractor</a> &middot; <a href="/#grader">Free ATS grader</a> &middot; <a href="/blog/action-verbs-for-resume.html">Action verbs for resume</a> &middot; <a href="/blog/biggest-resume-mistakes.html">Biggest resume mistakes</a></p>
+        </article>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/glossary.html">Glossary</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var GRADER_EMAIL_URL = 'https://n8n.stromation.com/webhook/grader-email-report';
+
+    // Strong verbs commonly used in well-written resume bullets.
+    var STRONG_VERBS = new Set(("built shipped led launched delivered drove reduced increased scaled grew "
+      + "created designed developed engineered architected automated streamlined accelerated cut saved "
+      + "negotiated closed sold owned managed coached mentored hired retained promoted "
+      + "analyzed researched modeled forecasted optimized refactored migrated rewrote integrated "
+      + "trained taught published presented founded launched spearheaded resolved fixed debugged shipped "
+      + "implemented executed planned organized coordinated facilitated led ran chaired authored "
+      + "improved doubled tripled halved exceeded surpassed quadrupled boosted "
+      + "tested validated audited certified secured deployed configured maintained "
+      + "wrote drafted edited reviewed approved authorized translated localized "
+      + "introduced rolled-out piloted prototyped iterated experimented benchmarked "
+      + "captured generated identified discovered uncovered diagnosed mitigated eliminated "
+      + "synthesized aggregated visualized reported automated orchestrated provisioned "
+      + "supervised directed governed instituted established standardized "
+      + "championed advocated influenced advised consulted recommended").split(/\s+/));
+
+    // Phrases that drag readability — weak openers and filler verbs.
+    var WEAK_OPENERS = [
+        /^responsible for\b/i, /^helped\b/i, /^worked on\b/i, /^worked with\b/i,
+        /^assisted (with|in)\b/i, /^involved in\b/i, /^participated in\b/i,
+        /^tasked with\b/i, /^duties included\b/i, /^familiar with\b/i,
+        /^in charge of\b/i, /^part of\b/i
+    ];
+
+    // Passive voice heuristic: "was/were/been/being + past participle".
+    var PASSIVE_RE = /\b(was|were|been|being|is|are|am|be)\s+(\w+ed|written|done|made|taken|given|seen|found|brought|sent|shown|run|built|chosen|drawn|driven|forgotten|grown|known|spoken|spent|stolen|told|won|worn)\b/gi;
+
+    function tokenizeLines(text) {
+        return text.split(/\r?\n/).map(function(l){return l.replace(/^[•\-\*·]\s*/, '').trim();}).filter(function(l){return l.length > 0;});
+    }
+
+    function tokenizeWords(line) {
+        return line.toLowerCase().match(/[a-z]+(?:[-'][a-z]+)?/g) || [];
+    }
+
+    function looksLikeBullet(line) {
+        // Reasonable resume bullet: 4+ words, ends with letter or period (not just a header).
+        var words = tokenizeWords(line);
+        if (words.length < 4) return false;
+        if (line === line.toUpperCase() && line.length < 40) return false; // section header
+        if (/^(experience|education|skills|summary|certifications|projects|awards)\b/i.test(line) && line.length < 40) return false;
+        return true;
+    }
+
+    function firstWord(line) {
+        var m = line.match(/^([A-Za-z][A-Za-z'-]*)/);
+        return m ? m[1].toLowerCase() : '';
+    }
+
+    function score(text) {
+        var lines = tokenizeLines(text);
+        var bullets = lines.filter(looksLikeBullet);
+        if (bullets.length === 0) {
+            return { error: 'no_bullets' };
+        }
+
+        // Action verb ratio: bullets whose first word is a strong verb.
+        var strongStarts = 0, weakStarts = 0;
+        bullets.forEach(function(l) {
+            var fw = firstWord(l);
+            if (STRONG_VERBS.has(fw)) strongStarts++;
+            for (var j = 0; j < WEAK_OPENERS.length; j++) {
+                if (WEAK_OPENERS[j].test(l)) { weakStarts++; break; }
+            }
+        });
+        var verbRatio = strongStarts / bullets.length; // 0..1
+        var weakRatio = weakStarts / bullets.length;   // 0..1
+
+        // Sentence length: words per bullet.
+        var totalWords = 0, longBullets = 0, shortBullets = 0;
+        bullets.forEach(function(l) {
+            var w = tokenizeWords(l).length;
+            totalWords += w;
+            if (w > 25) longBullets++;
+            if (w < 8) shortBullets++;
+        });
+        var avgWords = totalWords / bullets.length;
+
+        // Passive voice count across whole text.
+        var passiveMatches = (text.match(PASSIVE_RE) || []).length;
+        var passivePerBullet = passiveMatches / Math.max(1, bullets.length);
+
+        // Quantifier density: counts of digits-with-context across bullets.
+        var quantBullets = 0;
+        bullets.forEach(function(l) {
+            if (/\b\d[\d,.]*(\s*%|\s*x|\s*million|\s*billion|\s*k\b|\$|\s*hours?|\s*days?|\s*weeks?|\s*months?|\s*years?|\s*ms|\s*s)?/i.test(l)) {
+                quantBullets++;
+            }
+        });
+        var quantRatio = quantBullets / bullets.length;
+
+        // Score: 0..100. Weighted blend.
+        var verbPts  = Math.round(Math.min(1, verbRatio / 0.7) * 30);    // 30% weight, target 70%+ strong starts
+        var weakPts  = Math.round((1 - Math.min(1, weakRatio / 0.3)) * 15); // 15%, penalize weak openers
+        var lenPts   = Math.round((1 - Math.min(1, (longBullets + shortBullets) / Math.max(1, bullets.length) / 0.5)) * 15); // 15%
+        var passPts  = Math.round((1 - Math.min(1, passivePerBullet / 0.3)) * 15); // 15%
+        var quantPts = Math.round(Math.min(1, quantRatio / 0.5) * 25);   // 25%
+
+        var total = Math.max(0, Math.min(100, verbPts + weakPts + lenPts + passPts + quantPts));
+
+        return {
+            score: total,
+            bullets: bullets.length,
+            verbRatio: verbRatio,
+            weakRatio: weakRatio,
+            avgWords: avgWords,
+            longBullets: longBullets,
+            shortBullets: shortBullets,
+            passiveCount: passiveMatches,
+            quantRatio: quantRatio
+        };
+    }
+
+    function renderMetric(label, val, note, tone) {
+        var t = tone || 'good';
+        return '<div class="rc-metric">'
+            + '<p class="rc-metric-label">' + label + '</p>'
+            + '<div class="rc-metric-val ' + t + '">' + val + '</div>'
+            + (note ? '<p class="rc-metric-note">' + note + '</p>' : '')
+            + '</div>';
+    }
+
+    function tone(value, goodIf, warnIf) {
+        if (goodIf(value)) return 'good';
+        if (warnIf(value)) return 'warn';
+        return 'bad';
+    }
+
+    function render(r) {
+        var num = document.getElementById('rcScoreNum');
+        var summary = document.getElementById('rcScoreSummary');
+        var grade = document.getElementById('rcScoreGrade');
+        var metrics = document.getElementById('rcMetrics');
+
+        num.textContent = r.score;
+        num.classList.remove('mid','low');
+        if (r.score < 60) num.classList.add('low');
+        else if (r.score < 80) num.classList.add('mid');
+
+        if (r.score >= 85) summary.textContent = 'Strong. The resume reads as ownership and outcomes. Tighten the few weak bullets and submit.';
+        else if (r.score >= 70) summary.textContent = 'Solid base, but some bullets dilute the signal. Rewrite the weak openers and quantify two or three more bullets.';
+        else if (r.score >= 50) summary.textContent = 'Mixed. A recruiter scanning this in 8 seconds will catch some accomplishments and miss others. Most bullets need a stronger verb or a number.';
+        else summary.textContent = 'Most bullets read as job-description filler, not accomplishment. The fix is structural: lead with a verb, end with a measurable result.';
+
+        grade.textContent = 'Readability score · ' + r.bullets + ' bullets analyzed';
+
+        var html = '';
+        html += renderMetric('Strong-verb starts', Math.round(r.verbRatio * 100) + '%',
+            r.verbRatio >= 0.7 ? 'Most bullets start with a strong verb.' : 'Aim for 70%+ strong-verb starts.',
+            tone(r.verbRatio, function(v){return v>=0.7;}, function(v){return v>=0.4;}));
+
+        html += renderMetric('Weak openers', Math.round(r.weakRatio * 100) + '%',
+            r.weakRatio === 0 ? 'No "responsible for", no "helped", no "worked on".' : 'Replace with action verbs.',
+            tone(r.weakRatio, function(v){return v<0.05;}, function(v){return v<0.2;}));
+
+        html += renderMetric('Avg bullet length', r.avgWords.toFixed(1) + ' words',
+            r.avgWords >= 12 && r.avgWords <= 18 ? 'In the recruiter sweet spot.' : 'Aim for 12-18 words per bullet.',
+            tone(r.avgWords, function(v){return v>=12&&v<=18;}, function(v){return v>=8&&v<=22;}));
+
+        html += renderMetric('Quantified bullets', Math.round(r.quantRatio * 100) + '%',
+            r.quantRatio >= 0.5 ? 'Half or more carry a number. Recruiters read these first.' : 'Add specific numbers, dollars, percentages.',
+            tone(r.quantRatio, function(v){return v>=0.5;}, function(v){return v>=0.25;}));
+
+        html += renderMetric('Passive voice', r.passiveCount + ' instance' + (r.passiveCount===1?'':'s'),
+            r.passiveCount === 0 ? 'No passive constructions detected.' : 'Flip to active voice (you did it, not it was done).',
+            tone(r.passiveCount, function(v){return v===0;}, function(v){return v<=2;}));
+
+        metrics.innerHTML = html;
+
+        document.getElementById('rcResults').classList.add('visible');
+        document.getElementById('rcEmpty').style.display = 'none';
+
+        var status = document.getElementById('rcStatus');
+        status.textContent = r.bullets + ' bullets analyzed';
+
+        // Stash for the email-report handler.
+        window._rcLastResult = r;
+        window._rcLastResume = document.getElementById('rcInput').value;
+
+        if (window.gtag) gtag('event', 'readability_check_run', { score: r.score, bullets: r.bullets });
+    }
+
+    document.getElementById('rcRun').addEventListener('click', function() {
+        var text = document.getElementById('rcInput').value.trim();
+        if (text.length < 100) {
+            document.getElementById('rcStatus').textContent = 'Paste at least a paragraph (100+ chars).';
+            return;
+        }
+        var r = score(text);
+        if (r.error === 'no_bullets') {
+            document.getElementById('rcStatus').textContent = 'Could not detect bullets. Make sure each item is on its own line.';
+            return;
+        }
+        render(r);
+    });
+
+    document.getElementById('rcClear').addEventListener('click', function() {
+        document.getElementById('rcInput').value = '';
+        document.getElementById('rcResults').classList.remove('visible');
+        document.getElementById('rcEmpty').style.display = '';
+        document.getElementById('rcStatus').textContent = '';
+        document.getElementById('rcInput').focus();
+    });
+
+    window.rcSendReport = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var card = document.getElementById('rcEmailCard');
+        var input = document.getElementById('rcEmailInput');
+        var btn = document.getElementById('rcEmailBtn');
+        var r = window._rcLastResult;
+        var resumeText = window._rcLastResume || '';
+        if (!r) return;
+
+        var email = (input.value || '').trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('rcStatus').textContent = 'Enter a valid email.';
+            return;
+        }
+
+        btn.disabled = true;
+        var prev = btn.textContent;
+        btn.textContent = 'Sending…';
+
+        if (window.gtag) gtag('event', 'readability_email_capture', { email_domain: email.split('@')[1] || '' });
+
+        fetch(GRADER_EMAIL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                mode: 'grade-email',
+                email: email,
+                lead_source: 'readability',
+                resume: resumeText,
+                grade: {
+                    score: r.score,
+                    summary: 'Resume readability score: ' + r.score + '/100',
+                    metrics: {
+                        verb_ratio: r.verbRatio,
+                        weak_ratio: r.weakRatio,
+                        avg_words: r.avgWords,
+                        passive_count: r.passiveCount,
+                        quant_ratio: r.quantRatio,
+                        bullets: r.bullets
+                    }
+                }
+            })
+        })
+        .then(function(res) { return res.json().catch(function(){return {};}); })
+        .then(function(data) {
+            if (data && data.error) {
+                btn.disabled = false; btn.textContent = prev;
+                document.getElementById('rcStatus').textContent = data.error;
+                return;
+            }
+            card.innerHTML = '<h4>Sent. Check your inbox.</h4>'
+                + '<p>Your full readability report is on its way to <strong>' + email.replace(/[<>&]/g, '') + '</strong>. It can take a minute. Check spam if you don\'t see it.</p>'
+                + '<a href="/#generate" class="btn-lime" style="margin-top:0.6rem;display:inline-block;">Fix all of this for $1 &rarr;</a>';
+        })
+        .catch(function() {
+            btn.disabled = false; btn.textContent = prev;
+            document.getElementById('rcStatus').textContent = 'Could not send. Please try again.';
+        });
+    };
+})();
+</script>
+</body>
+</html>
