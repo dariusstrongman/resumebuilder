@@ -184,6 +184,12 @@
                         <p>Generate a recruiter-tested follow-up email tailored to your scenario: post-interview, ghosted, after a rejection. Edit and send.</p>
                         <span class="toolkit-card__more">Open generator &rarr;</span>
                     </a>
+                    <a href="/career-outlook.html" class="toolkit-card" id="toolkitOutlook">
+                        <span class="toolkit-card__pill" id="toolkitOutlookPill">Pro</span>
+                        <h3>Career outlook + 90-day plan</h3>
+                        <p>Three sourced scenarios (stay, pivot, specialize) with BLS pay projections and real cert costs. 90-day action plan with monthly accountability check-ins.</p>
+                        <span class="toolkit-card__more">Build your outlook &rarr;</span>
+                    </a>
                     <a href="/behavioral-questions.html" class="toolkit-card">
                         <span class="toolkit-card__pill toolkit-card__pill--free">Free</span>
                         <h3>Behavioral question bank</h3>
@@ -977,6 +983,8 @@
     var toolkitStar = document.getElementById('toolkitStar');
     var toolkitFollowup = document.getElementById('toolkitFollowup');
     var toolkitFollowupPill = document.getElementById('toolkitFollowupPill');
+    var toolkitOutlook = document.getElementById('toolkitOutlook');
+    var toolkitOutlookPill = document.getElementById('toolkitOutlookPill');
     var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
     if (isPro) {
         var label = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
@@ -994,6 +1002,10 @@
         if (toolkitFollowupPill) {
             toolkitFollowupPill.textContent = 'Active';
             toolkitFollowupPill.classList.add('toolkit-card__pill--free');
+        }
+        if (toolkitOutlookPill) {
+            toolkitOutlookPill.textContent = 'Active';
+            toolkitOutlookPill.classList.add('toolkit-card__pill--free');
         }
 
         // Pro cap is over the BILLING period, not calendar month. Count
@@ -1032,6 +1044,7 @@
         planCta.dataset.action = 'upgrade';
         toolkitStar.dataset.locked = '1';
         if (toolkitFollowup) toolkitFollowup.dataset.locked = '1';
+        if (toolkitOutlook) toolkitOutlook.dataset.locked = '1';
     }
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
@@ -1150,6 +1163,14 @@
     if (toolkitFollowup) {
         toolkitFollowup.addEventListener('click', function(e) {
             if (toolkitFollowup.dataset.locked) {
+                e.preventDefault();
+                planCta.click();
+            }
+        });
+    }
+    if (toolkitOutlook) {
+        toolkitOutlook.addEventListener('click', function(e) {
+            if (toolkitOutlook.dataset.locked) {
                 e.preventDefault();
                 planCta.click();
             }
