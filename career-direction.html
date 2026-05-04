@@ -514,6 +514,21 @@
               + '</p>';
         html += '</div>';
 
+        // Verdict badge (teaser).
+        if (d.verdict) {
+            var vColor = d.verdict === 'PIVOT' ? '#ff9b8a' : (d.verdict === 'STAY' ? '#84e16a' : '#fbbf24');
+            var vBg    = d.verdict === 'PIVOT' ? 'rgba(255,155,138,0.10)' : (d.verdict === 'STAY' ? 'rgba(132,225,106,0.10)' : 'rgba(251,191,36,0.10)');
+            var vLabel = d.verdict === 'PIVOT' ? 'Pivot now' : (d.verdict === 'STAY' ? 'Stay' : 'Build a bridge');
+            var vTease = d.verdict === 'PIVOT' ? 'AI risk, market, and pay all point to pivoting.' : (d.verdict === 'STAY' ? 'Your role is durable. Harvest specialization.' : 'Stay employed, build the gap-filling skills, then move.');
+            html += '<div style="margin:1.5rem 0;padding:1rem 1.25rem;border-radius:10px;border:1px solid ' + vColor + ';background:' + vBg + ';">'
+                  + '<div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">'
+                    + '<span style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-v2);">Verdict</span>'
+                    + '<span style="font-size:1.4rem;font-weight:700;color:' + vColor + ';letter-spacing:-0.01em;">' + vLabel + '</span>'
+                  + '</div>'
+                  + '<p style="margin:0.4rem 0 0;color:var(--ink-0);font-size:0.95rem;">' + esc(vTease) + ' <span style="color:var(--muted-v2);">The full reasoning (AI risk %, market data, pay delta, skill gap) is in the emailed report below.</span></p>'
+                  + '</div>';
+        }
+
         if (d.adjacent && d.adjacent.length) {
             html += '<h3 class="cd-section-h">Three adjacent roles you likely qualify for</h3>';
             html += '<div class="cd-adjacent-grid">';
