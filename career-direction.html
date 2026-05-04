@@ -542,6 +542,15 @@
                       + '<div><h4 class="cd-adj-title">' + esc(a.title) + '</h4></div>'
                       + '<div style="text-align:right;"><div class="cd-adj-fit ' + fitClass(a.fit_pct) + '">' + a.fit_pct + '%</div><div class="cd-adj-fit-cap">fit</div></div>'
                       + '</div>';
+                if (a.pay_low && a.pay_high) {
+                    var deltaTxt = '';
+                    if (a.pay_delta_pct != null && a.pay_delta_pct !== 0) {
+                        var sign = a.pay_delta_pct > 0 ? '+' : '';
+                        var deltaColor = a.pay_delta_pct > 0 ? '#7fffa6' : '#ff9b8a';
+                        deltaTxt = ' <span style="color:' + deltaColor + ';font-weight:600;">(' + sign + a.pay_delta_pct + '% vs your current role)</span>';
+                    }
+                    html += '<p class="cd-adj-pay" style="font-size:0.92rem;margin:0.25rem 0 0.6rem;color:rgba(255,255,255,0.78);">Avg pay: ' + formatPay(a.pay_low, a.pay_high) + deltaTxt + '</p>';
+                }
                 html += '<p class="cd-adj-why">' + esc(a.why) + '</p>';
                 if ((a.matched_skills && a.matched_skills.length) || (a.missing_skills && a.missing_skills.length)) {
                     html += '<div class="cd-adj-skills">';
