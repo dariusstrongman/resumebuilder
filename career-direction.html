@@ -61,7 +61,7 @@
             {"@type": "Question", "name": "Is my resume stored anywhere?",
              "acceptedAnswer": {"@type": "Answer", "text": "No. The resume is sent to our analysis endpoint, processed in memory, and discarded. If you submit your email for the full report, we store your email address and the resulting score, not the resume text."}},
             {"@type": "Question", "name": "Why doesn't my role appear in the recommendation?",
-             "acceptedAnswer": {"@type": "Answer", "text": "Our career ladder currently covers about 17 common roles across tech, business, healthcare, and trades. If your role isn't in the ladder, the report falls back to general guidance. We're expanding the ladder over time."}}
+             "acceptedAnswer": {"@type": "Answer", "text": "Our career ladder currently covers 46 common roles across tech, business, healthcare, and trades. If your role isn't in the ladder, the report falls back to general guidance. We're expanding the ladder over time."}}
         ]
     }
     </script>
@@ -336,7 +336,7 @@
             <h2>What this report cannot tell you</h2>
             <p>It cannot tell you the chance of being hired. Hiring decisions involve interview chemistry, internal politics, hiring freezes, and dozens of factors not on your resume. Any tool that claims a "hireability percentage" is making up the number. We deliberately don't.</p>
             <p>It cannot tell you whether you should leave a stable role with great coworkers and good benefits to chase higher pay. That's a life decision, not a data decision.</p>
-            <p>It cannot give role-specific guidance for every occupation. Our career ladder currently covers about 17 common roles across tech, business, healthcare, and trades. We expand it over time.</p>
+            <p>It cannot give role-specific guidance for every occupation. Our career ladder currently covers 46 common roles across tech, business, healthcare, and trades. We expand it over time.</p>
 
             <h2>Sources</h2>
             <p>Pay data: <a href="https://www.bls.gov/oes/" rel="nofollow">Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS)</a>, May 2024 release (published April 2025). The May 2025 release is scheduled for May 15, 2026.</p>
@@ -509,7 +509,9 @@
         html += '<div class="cd-current">';
         html += '<p class="role-meta">Your detected role &middot; ' + esc(c.level || 'mid') + ' &middot; ' + (c.years || '?') + ' years</p>';
         html += '<h2>' + esc(c.title) + '</h2>';
-        html += '<p style="color:var(--muted-v2);margin:0.4rem 0 0;font-size:0.95rem;">Median pay band: <strong style="color:var(--ink-0);">' + formatPay(c.pay_low, c.pay_high) + '</strong></p>';
+        html += '<p style="color:var(--muted-v2);margin:0.4rem 0 0;font-size:0.95rem;">Pay band for your level: <strong style="color:var(--ink-0);">' + formatPay(c.pay_low, c.pay_high) + '</strong>'
+              + (c.pay_median ? ' <span style="color:var(--muted-v2);font-size:0.85rem;">(role median $' + Math.round(c.pay_median/1000) + 'k)</span>' : '')
+              + '</p>';
         html += '</div>';
 
         if (d.adjacent && d.adjacent.length) {
