@@ -224,6 +224,25 @@
                 <button type="button" class="resume-list__more" id="viewAllResumesBtn" hidden></button>
             </section>
 
+            <!-- CAREER OUTLOOK (Pro) -->
+            <section class="account-section" id="outlookSection" hidden>
+                <header class="account-section-head">
+                    <h2>Career Outlook</h2>
+                    <span class="account-pill" id="outlookDayPill" hidden></span>
+                </header>
+                <div id="outlookActive" hidden></div>
+                <div id="outlookEmpty" hidden>
+                    <div class="account-card">
+                        <p class="account-card__label">Pro feature</p>
+                        <h3 class="account-card__value">Project your pay. Cost the pivot.</h3>
+                        <p class="account-card__detail">3 sourced scenarios with BLS pay projections, real cert costs, and a 90-day plan with monthly check-ins. Pick up where you left off any time.</p>
+                        <a href="/career-outlook.html" class="submit-btn submit-btn--inline" style="margin-top:0.7rem;display:inline-flex;">
+                            <span class="submit-btn__label">Build your outlook &rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             <!-- APPLICATIONS (Pro tracker) -->
             <section class="account-section" id="applicationsSection">
                 <header class="account-section-head">
@@ -2397,6 +2416,120 @@
                 } else {
                     appsErrorEl.textContent = 'Could not load applications: ' + (err && err.message ? err.message : 'unknown error');
                 }
+            }
+        })();
+    }
+
+    // ── CAREER OUTLOOK (Pro feature) ──────────────────────────────────────
+    var outlookSection = document.getElementById('outlookSection');
+    var outlookActive = document.getElementById('outlookActive');
+    var outlookEmpty = document.getElementById('outlookEmpty');
+    var outlookDayPill = document.getElementById('outlookDayPill');
+
+    function escOut(s) {
+        return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function pickCurrentMonthKey(createdIso) {
+        if (!createdIso) return 'month_1';
+        var days = Math.floor((Date.now() - new Date(createdIso).getTime()) / 86400000);
+        if (days < 30) return 'month_1';
+        if (days < 60) return 'month_2';
+        return 'month_3';
+    }
+
+    function renderOutlookActive(d) {
+        outlookActive.hidden = false;
+        outlookEmpty.hidden = true;
+        var cur = d.current || {};
+        var plan = d.plan_90day || {};
+        var ps = d.plan_status || {};
+        var token = d.status_token;
+        var startedAt = d.created_at ? new Date(d.created_at) : null;
+        var daysIn = startedAt ? Math.max(0, Math.floor((Date.now() - startedAt.getTime()) / 86400000)) : 0;
+        var pctDone = Math.min(100, Math.round((daysIn / 90) * 100));
+        var nextCheck = d.next_checkin_at ? new Date(d.next_checkin_at) : null;
+        var nextCheckStr = nextCheck ? nextCheck.toLocaleDateString(undefined, { month:'short', day:'numeric' }) : '--';
+
+        outlookDayPill.hidden = false;
+        outlookDayPill.textContent = 'Day ' + daysIn + ' of 90';
+
+        var currentKey = pickCurrentMonthKey(d.created_at);
+        var month = plan[currentKey] || plan.month_1 || { tasks: [] };
+
+        function taskState(id) { var v = ps[id]; return (v && v.status) || 'open'; }
+
+        var tasksHtml = '';
+        (month.tasks || []).forEach(function(t) {
+            var st = taskState(t.id);
+            var icon = st==='did' ? '&#10003;' : (st==='skipped' ? '&times;' : (st==='wip' ? '&hellip;' : ''));
+            tasksHtml += '<div class="outlook-task" data-task="' + escOut(t.id) + '">'
+                + '<div class="outlook-check outlook-check--' + escOut(st) + '">' + icon + '</div>'
+                + '<div class="outlook-task-body">'
+                +   '<p class="outlook-task-title">' + escOut(t.title) + '</p>'
+                +   '<p class="outlook-task-meta">' + escOut(t.meta || '') + (t.metric ? ' &middot; <em>Metric: ' + escOut(t.metric) + '</em>' : '') + '</p>'
+                +   '<div class="outlook-task-actions">'
+                +     '<button type="button" class="outlook-task-btn" data-status="did">Did it</button>'
+                +     '<button type="button" class="outlook-task-btn" data-status="wip">In progress</button>'
+                +     '<button type="button" class="outlook-task-btn" data-status="skipped">Skip</button>'
+                +   '</div>'
+                + '</div></div>';
+        });
+        if (!tasksHtml) tasksHtml = '<p class="account-card__detail">No tasks for this month.</p>';
+
+        outlookActive.innerHTML = ''
+            + '<div class="account-card outlook-card">'
+            +   '<div class="outlook-head">'
+            +     '<div>'
+            +       '<p class="account-card__label">' + escOut(cur.title || 'Career Outlook') + (cur.level ? ' &middot; ' + escOut(cur.level) : '') + '</p>'
+            +       '<h3 class="account-card__value">' + escOut(month.title || 'This month') + '</h3>'
+            +       '<p class="account-card__detail">Next check-in ' + escOut(nextCheckStr) + ' &middot; <a href="/career-outlook.html" class="account-section-link">Full report &rarr;</a></p>'
+            +     '</div>'
+            +   '</div>'
+            +   '<div class="outlook-progress"><div class="outlook-progress-fill" style="width:' + pctDone + '%;"></div></div>'
+            +   '<div class="outlook-tasks">' + tasksHtml + '</div>'
+            + '</div>';
+
+        // Wire task buttons
+        outlookActive.querySelectorAll('.outlook-task').forEach(function(row) {
+            var taskId = row.dataset.task;
+            row.querySelectorAll('.outlook-task-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var st = btn.dataset.status;
+                    fetch(WEBHOOK, {
+                        method: 'POST',
+                        headers: { 'Content-Type':'application/json' },
+                        body: JSON.stringify({ mode:'outlook_status', token:token, task_id:taskId, status:st })
+                    }).then(function() {
+                        var check = row.querySelector('.outlook-check');
+                        check.className = 'outlook-check outlook-check--' + st;
+                        check.innerHTML = st==='did'?'&#10003;':(st==='skipped'?'&times;':(st==='wip'?'&hellip;':''));
+                    });
+                });
+            });
+        });
+    }
+
+    function renderOutlookEmpty() {
+        outlookActive.hidden = true;
+        outlookEmpty.hidden = false;
+        outlookDayPill.hidden = true;
+    }
+
+    if (isPro) {
+        outlookSection.hidden = false;
+        (async function() {
+            try {
+                var r = await fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'outlook_get', user_id: user.id })
+                });
+                var d = await r.json().catch(function(){return{};});
+                if (d && d.active) renderOutlookActive(d);
+                else renderOutlookEmpty();
+            } catch (err) {
+                renderOutlookEmpty();
             }
         })();
     }

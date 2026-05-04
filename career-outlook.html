@@ -79,7 +79,22 @@
         .co-task-meta { color: var(--muted-v2); font-size: 0.82rem; margin-top: 0.2rem; }
         .co-cadence-card { background: rgba(132,225,106,0.06); border: 1px solid rgba(132,225,106,0.35); border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.5rem 0; }
         .co-empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted-v2); }
-        @media (max-width: 720px) { .co-pay-input { width: 100%; } }
+        .co-active-hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin: 1.4rem 0 0.6rem; flex-wrap: wrap; }
+        .co-active-actions { display: flex; gap: 0.5rem; }
+        .co-pill { background: #11141a; border: 1px solid #1f242c; color: #cfd2d6; padding: 0.45rem 0.85rem; border-radius: 999px; cursor: pointer; font-size: 0.82rem; font-family: 'Space Grotesk', sans-serif; }
+        .co-pill:hover { border-color: #c5ff4a; color: #fff; }
+        .co-pill--danger:hover { border-color: #ff9b8a; color: #ff9b8a; }
+        .co-progress { width: 100%; height: 6px; background: #1a1d24; border-radius: 999px; overflow: hidden; margin: 0.2rem 0 1.4rem; }
+        .co-progress-fill { height: 100%; background: linear-gradient(90deg, #c5ff4a, #84e16a); transition: width 0.3s ease; }
+        .co-task--row { align-items: flex-start; }
+        .co-check { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid #2b313b; background: transparent; margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #cfd2d6; }
+        .co-check--did { background: rgba(132,225,106,0.15); border-color: #84e16a; color: #84e16a; }
+        .co-check--skipped { background: rgba(255,155,138,0.10); border-color: #ff9b8a; color: #ff9b8a; }
+        .co-check--wip { background: rgba(251,191,36,0.10); border-color: #fbbf24; color: #fbbf24; }
+        .co-task-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap; }
+        .co-task-btn { background: #11141a; border: 1px solid #1f242c; color: #cfd2d6; padding: 0.32rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+        .co-task-btn:hover { border-color: #c5ff4a; color: #fff; }
+        @media (max-width: 720px) { .co-pay-input { width: 100%; } .co-active-hero { flex-direction: column; } }
     </style>
     <script type="application/ld+json">
     {
@@ -141,11 +156,14 @@
             <a href="/#pricing" class="btn-lime">Go Pro &rarr;</a>
         </div>
 
-        <!-- Form (shown when Pro) -->
+        <!-- Active outlook (shown when user already has one) -->
+        <div id="coActive" style="display:none;"></div>
+
+        <!-- Form (shown when Pro and no active outlook) -->
         <form id="coForm" class="co-form-card" style="display:none;" onsubmit="coSubmit(event); return false;">
 
             <div class="co-q">
-                <span class="co-q-num">01 / 08</span>
+                <span class="co-q-num">01 / 05</span>
                 <label class="co-q-label">When are you actually looking?</label>
                 <div class="co-radio-grid" data-field="timeline">
                     <button type="button" class="co-radio" data-value="now">Looking now</button>
@@ -157,70 +175,42 @@
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">02 / 08</span>
-                <label class="co-q-label">Track preference?</label>
+                <span class="co-q-num">02 / 05</span>
+                <label class="co-q-label">Stay IC or move into management?</label>
                 <div class="co-radio-grid" data-field="track">
-                    <button type="button" class="co-radio" data-value="ic">Stay IC (individual contributor)</button>
+                    <button type="button" class="co-radio" data-value="ic">Stay individual contributor</button>
                     <button type="button" class="co-radio" data-value="management">Move into management</button>
                     <button type="button" class="co-radio" data-value="either">Open to either</button>
                 </div>
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">03 / 08</span>
-                <label class="co-q-label">Location flexibility?</label>
-                <div class="co-radio-grid" data-field="geo">
-                    <button type="button" class="co-radio" data-value="remote">Remote-only</button>
-                    <button type="button" class="co-radio" data-value="relocate">Open to relocating</button>
-                    <button type="button" class="co-radio" data-value="local">Locked to current zip</button>
-                </div>
+                <span class="co-q-num">03 / 05</span>
+                <label class="co-q-label">Current annual pay (USD, base + on-target bonus)</label>
+                <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 85000" min="0" max="5000000" step="1000">
+                <p class="co-task-meta" style="margin-top:0.4rem;">Used to detect under/overpay vs BLS median for your level.</p>
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">04 / 08</span>
-                <label class="co-q-label">Financial runway?</label>
-                <div class="co-radio-grid" data-field="runway">
-                    <button type="button" class="co-radio" data-value="gap-ok">Could take a 3-month gap</button>
-                    <button type="button" class="co-radio" data-value="continuous">Need continuous income</button>
-                </div>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">05 / 08</span>
-                <label class="co-q-label">Realistically, how many hours/week can you spend on skill-building?</label>
+                <span class="co-q-num">04 / 05</span>
+                <label class="co-q-label">Hours per week you can realistically spend on skill-building</label>
                 <div class="co-radio-grid" data-field="hours">
                     <button type="button" class="co-radio" data-value="1">Under 2</button>
                     <button type="button" class="co-radio" data-value="3">2 to 5</button>
                     <button type="button" class="co-radio" data-value="7">5 to 10</button>
                     <button type="button" class="co-radio" data-value="12">10 or more</button>
                 </div>
+                <p class="co-task-meta" style="margin-top:0.4rem;">Drives how many weeks the pivot actually takes.</p>
             </div>
 
             <div class="co-q">
-                <span class="co-q-num">06 / 08</span>
-                <label class="co-q-label">What matters most for the next role?</label>
+                <span class="co-q-num">05 / 05</span>
+                <label class="co-q-label">What matters most for your next move?</label>
                 <div class="co-radio-grid" data-field="priority">
-                    <button type="button" class="co-radio" data-value="pay">Maximize pay</button>
-                    <button type="button" class="co-radio" data-value="flexibility">Maximize flexibility</button>
-                    <button type="button" class="co-radio" data-value="stability">Maximize stability</button>
-                    <button type="button" class="co-radio" data-value="growth">Maximize growth (skills, scope)</button>
-                </div>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">07 / 08</span>
-                <label class="co-q-label">Current annual pay (USD, base + on-target bonus)?</label>
-                <input type="number" class="co-pay-input" name="currentPay" placeholder="e.g. 145000" min="0" max="5000000" step="1000">
-                <p class="co-task-meta" style="margin-top:0.4rem;">We use this to detect if you're underpaid for your level. We don't store this beyond your Pro account.</p>
-            </div>
-
-            <div class="co-q">
-                <span class="co-q-num">08 / 08</span>
-                <label class="co-q-label">How do you feel in your current role?</label>
-                <div class="co-radio-grid" data-field="energy">
-                    <button type="button" class="co-radio" data-value="motivated">Motivated, doing well</button>
-                    <button type="button" class="co-radio" data-value="coasting">Coasting, fine but not growing</button>
-                    <button type="button" class="co-radio" data-value="dreading">Actively dreading it</button>
+                    <button type="button" class="co-radio" data-value="pay">Pay — biggest jump possible</button>
+                    <button type="button" class="co-radio" data-value="flexibility">Flexibility — remote/hours</button>
+                    <button type="button" class="co-radio" data-value="stability">Stability — low-risk move</button>
+                    <button type="button" class="co-radio" data-value="growth">Growth — skills and scope</button>
                 </div>
             </div>
 
@@ -311,14 +301,176 @@
         })
         .then(function(r) { return r.json().catch(function(){return{};}); })
         .then(function(data) {
-            if (data && data.is_pro) {
-                document.getElementById('coForm').style.display = 'block';
-            } else {
+            if (!(data && data.is_pro)) {
                 document.getElementById('proGate').style.display = 'block';
+                return;
             }
+            // Pro confirmed. Now check if there's already an active outlook.
+            return fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'outlook_get', user_id: sess.user.id })
+            })
+            .then(function(r) { return r.json().catch(function(){return{};}); })
+            .then(function(og) {
+                if (og && og.active) {
+                    renderActive(og);
+                } else {
+                    document.getElementById('coForm').style.display = 'block';
+                }
+            });
         })
         .catch(function() {
             document.getElementById('proGate').style.display = 'block';
+        });
+    }
+
+    // Renders an existing active outlook with check-off, cadence, cancel/restart.
+    function renderActive(d) {
+        var box = document.getElementById('coActive');
+        var pc = d.pay_context || {};
+        var cur = d.current || {};
+        var top = d.top_adjacent || {};
+        var s = d.scenarios || {};
+        var plan = d.plan_90day || {};
+        var ps = d.plan_status || {};
+        var token = d.status_token;
+        var startedAt = d.created_at ? new Date(d.created_at) : null;
+        var daysIn = startedAt ? Math.max(0, Math.floor((Date.now() - startedAt.getTime()) / 86400000)) : 0;
+        var pctDone = Math.min(100, Math.round((daysIn / 90) * 100));
+        var nextCheck = d.next_checkin_at ? new Date(d.next_checkin_at) : null;
+        var nextCheckStr = nextCheck ? nextCheck.toLocaleDateString(undefined, { month:'short', day:'numeric' }) : '--';
+        var cadence = d.checkin_cadence || 'monthly';
+
+        function taskState(id) {
+            var v = ps[id];
+            return (v && v.status) || 'open';
+        }
+        function taskRow(t, monthIdx) {
+            var st = taskState(t.id);
+            var stCls = st === 'did' ? 'did' : (st === 'skipped' ? 'skipped' : (st === 'wip' ? 'wip' : 'open'));
+            return '<div class="co-task co-task--row" data-task="' + esc(t.id) + '">'
+                + '<div class="co-check co-check--' + stCls + '" data-st="' + stCls + '">' + (st==='did'?'&#10003;':(st==='skipped'?'&times;':(st==='wip'?'&hellip;':''))) + '</div>'
+                + '<div class="co-task-body">'
+                + '<p class="co-task-title">' + esc(t.title) + '</p>'
+                + '<p class="co-task-meta">' + esc(t.meta || '') + (t.metric ? ' &middot; <em>Metric: ' + esc(t.metric) + '</em>' : '') + '</p>'
+                + '<div class="co-task-actions">'
+                +   '<button type="button" class="co-task-btn" data-status="did">Did it</button>'
+                +   '<button type="button" class="co-task-btn" data-status="wip">In progress</button>'
+                +   '<button type="button" class="co-task-btn" data-status="skipped">Skip</button>'
+                + '</div>'
+                + '</div></div>';
+        }
+
+        var html = '';
+        html += '<div class="co-active-hero">'
+              + '<div class="co-active-meta">'
+                + '<p class="co-eyebrow" style="margin:0;">Your active outlook</p>'
+                + '<h2 style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;margin:0.3rem 0 0.4rem;color:#fff;font-weight:700;">' + esc(cur.title || 'Career Outlook') + ' &middot; ' + esc(cur.level || '') + '</h2>'
+                + '<p style="margin:0;color:#cfd2d6;font-size:0.95rem;">Day ' + daysIn + ' of 90 &middot; next check-in ' + esc(nextCheckStr) + ' (' + esc(cadence) + ')</p>'
+              + '</div>'
+              + '<div class="co-active-actions">'
+                + '<button type="button" class="co-pill" id="coBtnRestart">Restart</button>'
+                + '<button type="button" class="co-pill co-pill--danger" id="coBtnCancel">Cancel</button>'
+              + '</div>'
+              + '</div>'
+              + '<div class="co-progress"><div class="co-progress-fill" style="width:' + pctDone + '%;"></div></div>';
+
+        // Pay context summary
+        if (pc && pc.current_pay) {
+            var underBy = pc.is_underpaid ? Math.round((pc.median_for_level - pc.current_pay)/1000) : 0;
+            var msg = pc.is_underpaid
+                ? 'Underpaid by ~$' + underBy + 'k vs BLS median for your level. Asking for a market-rate raise has the highest near-term ROI.'
+                : pc.is_overpaid
+                    ? 'You\'re paid above the BLS median. Typical when comp includes equity or bonus.'
+                    : 'You\'re at the BLS median for your level.';
+            html += '<div class="co-pay-context"><h3 style="margin:0 0 0.3rem;font-size:1rem;color:var(--ink-0);">Pay context</h3><p style="margin:0;font-size:0.92rem;line-height:1.55;">' + esc(msg) + '</p></div>';
+        }
+
+        // Verdict scenarios (compact)
+        if (s.stay)       html += '<div class="co-scenario stay"><span class="co-scenario-tag">Stay</span><div class="co-headline">' + esc(s.stay.headline || '') + '</div><p>' + esc(s.stay.narrative || '') + '</p></div>';
+        if (s.pivot)      html += '<div class="co-scenario pivot"><span class="co-scenario-tag">Pivot</span><div class="co-headline">' + esc(s.pivot.headline || '') + '</div><p>' + esc(s.pivot.narrative || '') + '</p></div>';
+        if (s.specialize) html += '<div class="co-scenario specialize"><span class="co-scenario-tag">Specialize</span><div class="co-headline">' + esc(s.specialize.headline || '') + '</div><p>' + esc(s.specialize.narrative || '') + '</p></div>';
+
+        // Plan with check-offs
+        html += '<h3 style="font-family:Space Grotesk,sans-serif;font-size:1.4rem;margin:2rem 0 0.8rem;color:var(--ink-0);font-weight:700;">90-Day Action Plan</h3>';
+        ['month_1','month_2','month_3'].forEach(function(mk, idx) {
+            var m = plan[mk]; if (!m) return;
+            html += '<div class="co-plan-month"><div class="co-plan-month-h"><h4>' + esc(m.title || ('Month ' + (idx+1))) + '</h4><span class="due">' + esc(m.window || '') + '</span></div>';
+            (m.tasks || []).forEach(function(t) { html += taskRow(t, idx); });
+            html += '</div>';
+        });
+
+        // Cadence selector
+        html += '<div class="co-cadence-card">'
+              + '<h4 style="margin:0 0 0.5rem;color:var(--ink-0);font-size:1rem;font-weight:700;">Check-in emails</h4>'
+              + '<p style="margin:0 0 0.7rem;color:var(--muted-v2);font-size:0.9rem;">Cancel anytime. We send a one-click "did/didn\'t/in progress" prompt.</p>'
+              + '<div class="co-radio-grid" id="coCadence">'
+                + '<button type="button" class="co-radio ' + (cadence==='monthly'?'active':'') + '" data-cadence="monthly">Monthly</button>'
+                + '<button type="button" class="co-radio ' + (cadence==='weekly'?'active':'') + '" data-cadence="weekly">Weekly</button>'
+                + '<button type="button" class="co-radio ' + (cadence==='off'?'active':'') + '" data-cadence="off">No emails</button>'
+              + '</div>'
+              + '</div>';
+
+        box.innerHTML = html;
+        box.style.display = 'block';
+
+        // Wire task buttons
+        box.querySelectorAll('.co-task--row').forEach(function(row) {
+            var taskId = row.dataset.task;
+            row.querySelectorAll('.co-task-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var st = btn.dataset.status;
+                    fetch(WEBHOOK, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ mode: 'outlook_status', token: token, task_id: taskId, status: st })
+                    }).then(function() {
+                        var check = row.querySelector('.co-check');
+                        check.dataset.st = st;
+                        check.className = 'co-check co-check--' + st;
+                        check.innerHTML = st==='did'?'&#10003;':(st==='skipped'?'&times;':(st==='wip'?'&hellip;':''));
+                    });
+                });
+            });
+        });
+
+        // Wire cadence buttons
+        box.querySelectorAll('#coCadence .co-radio').forEach(function(b) {
+            b.addEventListener('click', function() {
+                box.querySelectorAll('#coCadence .co-radio').forEach(function(x){x.classList.remove('active');});
+                b.classList.add('active');
+                fetch(WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'outlook_cadence', outlook_id: d.outlook_id, cadence: b.dataset.cadence })
+                });
+            });
+        });
+
+        // Restart -> cancel current then show form
+        document.getElementById('coBtnRestart').addEventListener('click', function() {
+            if (!confirm('Cancel this outlook and start a new one? Your current plan will be archived.')) return;
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'outlook_status', token: token, status: 'cancel' })
+            }).then(function() {
+                box.style.display = 'none';
+                document.getElementById('coForm').style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        // Cancel -> archive, show empty state
+        document.getElementById('coBtnCancel').addEventListener('click', function() {
+            if (!confirm('Cancel this outlook? You can start a new one any time.')) return;
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'outlook_status', token: token, status: 'cancel' })
+            }).then(function() {
+                box.innerHTML = '<div class="co-empty-state"><p>Outlook cancelled. <a href="/career-outlook.html" class="btn-lime" style="margin-top:0.8rem;">Start a new one</a></p></div>';
+            });
         });
     }
 
@@ -394,7 +546,7 @@
         intake.currentPay = parseInt(document.querySelector('input[name=currentPay]').value || '0', 10) || null;
 
         // Validate
-        var missing = ['timeline','track','geo','runway','hours','priority','energy'].filter(function(k) { return !intake[k]; });
+        var missing = ['timeline','track','hours','priority'].filter(function(k) { return !intake[k]; });
         if (missing.length) { status.textContent = 'Please answer: ' + missing.join(', '); return; }
         if (!intake.currentPay || intake.currentPay < 1000) { status.textContent = 'Enter your current annual pay.'; return; }
 
@@ -430,7 +582,22 @@
                 status.textContent = data.error;
                 return;
             }
-            renderResults(data);
+            // After submit, refetch to get the stable shape (status_token, plan_status, etc.)
+            // and render the active-outlook view with check-off + cadence + cancel.
+            fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode: 'outlook_get', user_id: sess.user.id })
+            })
+            .then(function(r) { return r.json().catch(function(){return{};}); })
+            .then(function(og) {
+                if (og && og.active) {
+                    renderActive(og);
+                    document.getElementById('coActive').scrollIntoView({ behavior:'smooth', block:'start' });
+                } else {
+                    renderResults(data);
+                }
+            });
         })
         .catch(function(err) {
             document.getElementById('coLoading').style.display = 'none';

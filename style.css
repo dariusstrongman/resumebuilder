@@ -533,6 +533,25 @@ img, svg { max-width: 100%; display: block; }
 }
 .apps-paywall__btn { margin-top: 0.8rem; }
 
+/* Career Outlook (Pro) on account dashboard */
+.outlook-card { padding: 1.4rem 1.5rem; }
+.outlook-head { margin-bottom: 0.6rem; }
+.outlook-progress { width: 100%; height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; margin: 0.4rem 0 1.1rem; }
+.outlook-progress-fill { height: 100%; background: linear-gradient(90deg, #c5ff4a, #84e16a); transition: width 0.3s ease; }
+.outlook-tasks { display: flex; flex-direction: column; gap: 0.6rem; }
+.outlook-task { display: flex; gap: 0.7rem; padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
+.outlook-task:first-child { border-top: none; padding-top: 0.2rem; }
+.outlook-check { width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.12); background: transparent; margin-top: 0.2rem; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; color: var(--muted-v2, #a5a8af); }
+.outlook-check--did { background: rgba(132,225,106,0.15); border-color: #84e16a; color: #84e16a; }
+.outlook-check--skipped { background: rgba(255,155,138,0.10); border-color: #ff9b8a; color: #ff9b8a; }
+.outlook-check--wip { background: rgba(251,191,36,0.10); border-color: #fbbf24; color: #fbbf24; }
+.outlook-task-body { flex: 1; min-width: 0; }
+.outlook-task-title { color: var(--ink-0, #fff); font-weight: 600; font-size: 0.96rem; margin: 0; }
+.outlook-task-meta { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; margin: 0.2rem 0 0; line-height: 1.5; }
+.outlook-task-actions { display: flex; gap: 0.4rem; margin-top: 0.55rem; flex-wrap: wrap; }
+.outlook-task-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); color: var(--muted-v2, #cfd2d6); padding: 0.32rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-family: var(--f-mono, 'JetBrains Mono', monospace); }
+.outlook-task-btn:hover { border-color: var(--accent, #c5ff4a); color: var(--ink-0, #fff); }
+
 .apps-toolbar {
     display: flex;
     justify-content: flex-end;
