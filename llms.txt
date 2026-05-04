@@ -16,6 +16,7 @@ Key facts that often come up in answers:
 - [Homepage and tailorer](https://www.atshack.com/): the main product. Upload + job description + checkout.
 - [What is an ATS](https://www.atshack.com/ats.html): plain-English explainer of how applicant tracking systems score resumes and what gets you auto-rejected.
 - [Resume + ATS glossary](https://www.atshack.com/glossary.html): 20 plain-English definitions (ATS, parsing, keyword density, Boolean search, KSAs, OSHA 10/30, NCCER, STAR, etc.).
+- [Career direction report](https://www.atshack.com/career-direction.html): free flagship tool. Paste a resume, get back: detected current role, US median pay range (BLS-cited), AI displacement risk (Goldman Sachs 2023 framing), market trend, and three adjacent roles you likely qualify for with fit percentage and skill gap. Replaces the "hireability percentage" trope with measurable, sourced data. No account.
 - [Resume readability checker](https://www.atshack.com/readability-checker.html): free client-side tool that scores resume readability 0-100 on action verb ratio, weak openers, sentence length, quantifier density, and passive voice. No upload, no account.
 - [Job description keyword extractor](https://www.atshack.com/keyword-extractor.html): free client-side tool that pulls the top ATS keywords from any job posting. Skill detection plus frequency ranking.
 

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Career Direction Report: AI Risk + Pay + Next Role | ATSHack</title>
+    <meta name="description" content="Paste your resume. Get a career direction report: pay range for your role, AI displacement risk, and three adjacent roles you likely qualify for, with fit percentage. Free, no account, runs in 30 seconds.">
+    <meta property="og:title" content="Free Career Direction Report | ATSHack">
+    <meta property="og:description" content="Pay range, AI displacement risk, and adjacent roles you qualify for. Based on your resume. 30 seconds. Free.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.atshack.com/og.png">
+    <meta property="og:site_name" content="ATSHack">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://www.atshack.com/career-direction.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ATSHack Career Direction Report",
+        "url": "https://www.atshack.com/career-direction.html",
+        "description": "Free tool that analyzes a resume and returns pay ranges, AI displacement risk, and adjacent roles the candidate likely qualifies for. Pay data from BLS. AI risk anchored on Goldman Sachs 2023 occupational study.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "isAccessibleForFree": true,
+        "featureList": ["Role classification", "BLS-anchored pay range", "AI displacement risk", "Adjacent role fit scoring", "Skill gap detection", "Career pivot recommendation"]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Career Direction Report", "item": "https://www.atshack.com/career-direction.html"}
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": "Where does the pay data come from?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Pay ranges are US national medians from the Bureau of Labor Statistics Occupational Employment Statistics (May 2023, published 2024). Specific OES occupation code is cited per role in the report."}},
+            {"@type": "Question", "name": "How do you calculate AI displacement risk?",
+             "acceptedAnswer": {"@type": "Answer", "text": "AI risk levels are anchored on the Goldman Sachs 2023 occupational AI exposure study (Briggs and Kodnani) and corroborated by OECD AI exposure research. Low = under 25% of tasks AI-exposed. Medium = 25-50%. High = over 50%."}},
+            {"@type": "Question", "name": "How is the adjacent role fit percentage calculated?",
+             "acceptedAnswer": {"@type": "Answer", "text": "We extract skill keywords from your resume and compute the overlap with the typical skill profile for each adjacent role. The fit percentage is the percentage of those skill signals present in your resume. 60% or above means you likely meet most posting requirements."}},
+            {"@type": "Question", "name": "Is my resume stored anywhere?",
+             "acceptedAnswer": {"@type": "Answer", "text": "No. The resume is sent to our analysis endpoint, processed in memory, and discarded. If you submit your email for the full report, we store your email address and the resulting score, not the resume text."}},
+            {"@type": "Question", "name": "Why doesn't my role appear in the recommendation?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Our career ladder currently covers about 17 common roles across tech, business, healthcare, and trades. If your role isn't in the ladder, the report falls back to general guidance. We're expanding the ladder over time."}}
+        ]
+    }
+    </script>
+    <style>
+        .cd-shell { max-width: 980px; margin: 0 auto; padding: 1rem; }
+        .cd-input {
+            width: 100%; min-height: 240px;
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            color: var(--ink-0, #fff);
+            font-family: var(--f-ui), system-ui, sans-serif;
+            font-size: 0.95rem; line-height: 1.6;
+            padding: 1rem; margin: 1rem 0; resize: vertical;
+        }
+        .cd-input:focus { border-color: var(--accent); outline: none; }
+        .cd-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin: 0 0 1.2rem; }
+        .cd-loading { display: none; padding: 2rem; text-align: center; color: var(--muted-v2, #888); }
+        .cd-loading.visible { display: block; }
+        .cd-results { display: none; margin-top: 1.5rem; }
+        .cd-results.visible { display: block; }
+        .cd-current {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 14px;
+            padding: 1.6rem 1.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .cd-current h2 {
+            margin: 0 0 0.3rem; color: var(--ink-0, #fff);
+            font-family: var(--f-display, 'Bebas Neue'), sans-serif;
+            font-size: 2.2rem; line-height: 1.05; letter-spacing: 0.01em;
+        }
+        .cd-current .role-meta {
+            font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--accent, #CAFF00); margin: 0 0 0.8rem;
+        }
+        .cd-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem; margin: 1.2rem 0 0.6rem;
+        }
+        .cd-stat {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+        }
+        .cd-stat-label {
+            font-family: var(--f-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
+            color: var(--muted-v2, #888); margin: 0 0 0.4rem;
+        }
+        .cd-stat-val { font-size: 1.2rem; color: var(--ink-0, #fff); font-weight: 600; line-height: 1.2; }
+        .cd-stat-val.tag-low { color: #84e16a; }
+        .cd-stat-val.tag-medium { color: #fbbf24; }
+        .cd-stat-val.tag-high { color: #ef4444; }
+        .cd-stat-val.tag-medium-high { color: #f59e0b; }
+        .cd-stat-val.tag-low-medium { color: #a3e635; }
+        .cd-stat-note { font-size: 0.78rem; color: var(--muted-v2, #888); margin: 0.4rem 0 0; line-height: 1.45; }
+        .cd-stat-source { font-size: 0.7rem; color: #6b7280; margin: 0.5rem 0 0; font-style: italic; }
+        .cd-recommendation {
+            background: rgba(202,255,0,0.05);
+            border: 1px solid rgba(202,255,0,0.25);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            margin: 1rem 0;
+            color: var(--ink-0, #fff);
+            font-size: 1rem; line-height: 1.55;
+        }
+        .cd-recommendation strong { color: var(--accent, #CAFF00); }
+        .cd-section-h {
+            margin: 1.6rem 0 0.8rem; color: var(--ink-0, #fff);
+            font-family: var(--f-display, 'Bebas Neue'), sans-serif; font-size: 1.6rem; letter-spacing: 0.02em;
+        }
+        .cd-adjacent-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.9rem; margin-bottom: 1rem;
+        }
+        .cd-adj {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 12px;
+            padding: 1.2rem 1.3rem;
+            display: flex; flex-direction: column; gap: 0.7rem;
+        }
+        .cd-adj-head {
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+        }
+        .cd-adj-title {
+            margin: 0; color: var(--ink-0, #fff); font-size: 1.05rem; font-weight: 600;
+        }
+        .cd-adj-fit {
+            font-family: var(--f-mono); font-size: 1.6rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em;
+        }
+        .cd-adj-fit.fit-strong { color: #84e16a; }
+        .cd-adj-fit.fit-mid { color: #fbbf24; }
+        .cd-adj-fit.fit-weak { color: #888; }
+        .cd-adj-fit-cap {
+            font-family: var(--f-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em;
+            color: var(--muted-v2, #888); margin-top: 2px;
+        }
+        .cd-adj-why { color: #cfd2d6; font-size: 0.92rem; line-height: 1.5; margin: 0; }
+        .cd-adj-skills { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+        .cd-pill {
+            font-family: var(--f-mono); font-size: 0.7rem;
+            padding: 0.18rem 0.5rem; border-radius: 4px; border: 1px solid;
+            white-space: nowrap;
+        }
+        .cd-pill.matched { background: rgba(132,225,106,0.08); border-color: rgba(132,225,106,0.3); color: #84e16a; }
+        .cd-pill.missing { background: rgba(255,255,255,0.025); border-color: var(--border-v2, #1E1E2E); color: var(--muted-v2, #888); }
+        .cd-cta {
+            background: rgba(202,255,0,0.06);
+            border: 1px solid rgba(202,255,0,0.25);
+            border-radius: 12px;
+            padding: 1.4rem 1.6rem;
+            margin: 1.5rem 0;
+        }
+        .cd-cta p { margin: 0 0 0.6rem; }
+        .cd-email-card {
+            background: var(--surface-1, #13131A);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 12px;
+            padding: 1.4rem 1.5rem; margin-top: 1.2rem;
+        }
+        .cd-email-card h4 { margin: 0 0 0.3rem; color: var(--ink-0, #fff); font-size: 1.05rem; }
+        .cd-email-card p { margin: 0 0 0.9rem; color: var(--muted-v2, #888); font-size: 0.92rem; line-height: 1.5; }
+        .cd-email-form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .cd-email-form input[type=email] {
+            flex: 1; min-width: 220px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-v2, #1E1E2E);
+            border-radius: 8px;
+            padding: 0.7rem 0.9rem;
+            color: var(--ink-0, #fff);
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .cd-email-form input[type=email]:focus { border-color: var(--accent); outline: none; }
+        .cd-empty {
+            padding: 2rem;
+            background: var(--surface-1, #13131A);
+            border: 1px dashed var(--border-v2, #1E1E2E);
+            border-radius: 10px;
+            text-align: center;
+            color: var(--muted-v2, #888);
+        }
+        .cd-spinner-dots::after {
+            content: '...'; display: inline-block; min-width: 1.4em; text-align: left;
+            animation: cdDots 1.2s steps(4, end) infinite;
+        }
+        @keyframes cdDots {
+            0%, 25% { content: ''; }
+            50% { content: '.'; }
+            75% { content: '..'; }
+            100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/career-direction.html">Career Report <span class="nav-chip">New</span></a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="resource-shell">
+        <p class="resource-eyebrow">Free Tool &middot; New &middot; May 2026</p>
+        <h1 class="resource-title">Career direction report.</h1>
+        <p class="resource-lede">Paste your resume. In 30 seconds, see your role's pay range, AI displacement risk, the three adjacent roles you likely qualify for with fit percentage, and a stay-or-move recommendation. Pay data from the BLS. AI exposure anchored on Goldman Sachs research. Honest numbers, no fake hireability percentage.</p>
+
+        <div class="cd-shell">
+            <textarea id="cdInput" class="cd-input" placeholder="Paste your full resume text here. Plain text is fine. We don't store it."></textarea>
+            <div class="cd-actions">
+                <button id="cdRun" class="btn-lime">Get my career report &rarr;</button>
+                <button id="cdClear" class="btn-ghost" type="button">Clear</button>
+                <span id="cdStatus" style="font-size:0.85rem;color:var(--muted-v2);margin-left:auto;"></span>
+            </div>
+
+            <div id="cdLoading" class="cd-loading">
+                <p>Analyzing your resume<span class="cd-spinner-dots"></span></p>
+                <p style="font-size:0.85rem;margin-top:0.4rem;">Classifying role, matching skills, computing adjacent fit. ~20 seconds.</p>
+            </div>
+
+            <div id="cdResults" class="cd-results"></div>
+
+            <div id="cdEmpty" class="cd-empty">Paste your resume above and click <strong>Get my career report</strong>.</div>
+        </div>
+
+        <article class="legal-doc" style="margin-top:3rem;">
+            <h2>What this report tells you</h2>
+            <p>The career direction report combines three honest data signals into one read-out.</p>
+            <ul>
+                <li><strong>Pay range for your current role.</strong> US national medians from the Bureau of Labor Statistics (BLS) Occupational Employment Statistics, May 2023. Specific OES occupation cited per role. Pay varies by region; multiply by 1.15-1.4 for high-cost-of-living US metros.</li>
+                <li><strong>AI displacement risk.</strong> Low, low-medium, medium, medium-high, or high. Anchored on Goldman Sachs 2023 (Briggs and Kodnani) occupational AI exposure analysis and OECD AI exposure research. Low = under 25% of tasks AI-exposed. High = over 50%.</li>
+                <li><strong>Three adjacent roles you likely qualify for.</strong> The career ladder in the tool maps each role to its most natural adjacent roles (one rung up, one column over). The fit percentage is the percentage of typical skill signals for the adjacent role that appear in your resume.</li>
+            </ul>
+
+            <h2>How to read the recommendation</h2>
+            <p>The report ends with a stay-or-move recommendation based on your role's AI risk, market trend, and fit percentage to adjacent roles. It is direction, not gospel. Your individual circumstances (financial obligations, geography, life stage, risk tolerance) decide what to actually do.</p>
+            <p>If your top adjacent fit is 60% or above, you usually meet the keyword threshold for postings in that adjacent role. Tailor your resume to a specific posting and apply. If the fit is 30-60%, you have most of the foundation but need to add 2-4 specific skills or certifications first. If it's under 30%, the role is a stretch and probably not the right next step from where you are today.</p>
+
+            <h2>What this report cannot tell you</h2>
+            <p>It cannot tell you the chance of being hired. Hiring decisions involve interview chemistry, internal politics, hiring freezes, and dozens of factors not on your resume. Any tool that claims a "hireability percentage" is making up the number. We deliberately don't.</p>
+            <p>It cannot tell you whether you should leave a stable role with great coworkers and good benefits to chase higher pay. That's a life decision, not a data decision.</p>
+            <p>It cannot give role-specific guidance for every occupation. Our career ladder currently covers about 17 common roles across tech, business, healthcare, and trades. We expand it over time.</p>
+
+            <h2>Sources</h2>
+            <p>Pay data: <a href="https://www.bls.gov/oes/" rel="nofollow">Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OES)</a>, May 2023 release.</p>
+            <p>AI exposure framing: Briggs J., Kodnani D., "The Potentially Large Effects of Artificial Intelligence on Economic Growth", Goldman Sachs Economic Research, March 2023. Corroborated by OECD AI exposure index analyses.</p>
+
+            <h2>Related</h2>
+            <p><a href="/#grader">Free ATS resume grader</a> &middot; <a href="/keyword-extractor.html">JD keyword extractor</a> &middot; <a href="/readability-checker.html">Readability checker</a> &middot; <a href="/ats.html">What is an ATS?</a> &middot; <a href="/glossary.html">Glossary</a></p>
+        </article>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/#pricing">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/glossary.html">Glossary</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
+    var GRADER_EMAIL_URL = 'https://n8n.stromation.com/webhook/grader-email-report';
+
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];}); }
+
+    function formatPay(low, high) {
+        function k(n) { return '$' + Math.round(n / 1000) + 'k'; }
+        if (!low || !high) return '--';
+        return k(low) + ' - ' + k(high);
+    }
+
+    function fitClass(p) {
+        if (p >= 60) return 'fit-strong';
+        if (p >= 35) return 'fit-mid';
+        return 'fit-weak';
+    }
+
+    function renderReport(d) {
+        if (d.generic_fallback) {
+            return '<div class="cd-current">'
+                + '<p class="role-meta">Detected role</p>'
+                + '<h2>' + esc(d.current.title) + '</h2>'
+                + '<div class="cd-recommendation"><strong>' + esc(d.recommendation) + '</strong></div>'
+                + '</div>'
+                + '<div class="cd-cta">'
+                  + '<p style="color:var(--ink-0);font-weight:600;">Run your resume against a specific posting</p>'
+                  + '<p style="color:var(--muted-v2);font-size:0.92rem;">The tailor adapts to any role, even ones outside our career ladder. $1, no account.</p>'
+                  + '<a href="/#generate" class="btn-lime">Tailor My Resume &mdash; $1 &rarr;</a>'
+                + '</div>';
+        }
+
+        var c = d.current;
+        var aiTag = (c.ai_risk || '').replace(/[^a-z-]/gi, '');
+        var html = '';
+
+        // Current role panel
+        html += '<div class="cd-current">';
+        html += '<p class="role-meta">Your detected role &middot; ' + esc(c.level || 'mid') + ' &middot; ' + (c.years || '?') + ' years</p>';
+        html += '<h2>' + esc(c.title) + '</h2>';
+        html += '<div class="cd-stats">';
+        html += '<div class="cd-stat">'
+              + '<p class="cd-stat-label">Median pay (US)</p>'
+              + '<div class="cd-stat-val">' + formatPay(c.pay_low, c.pay_high) + '</div>'
+              + '<p class="cd-stat-source">Source: ' + esc(c.pay_source) + '</p>'
+              + '</div>';
+        html += '<div class="cd-stat">'
+              + '<p class="cd-stat-label">AI displacement risk</p>'
+              + '<div class="cd-stat-val tag-' + aiTag + '">' + esc((c.ai_risk || '').replace(/-/g, ' ')) + '</div>'
+              + '<p class="cd-stat-note">' + esc(c.ai_risk_note || '') + '</p>'
+              + '</div>';
+        html += '<div class="cd-stat">'
+              + '<p class="cd-stat-label">Market trend</p>'
+              + '<div class="cd-stat-val">' + esc(c.market_trend || '--') + '</div>'
+              + '<p class="cd-stat-note">' + esc(c.market_note || '') + '</p>'
+              + '</div>';
+        html += '</div>';
+        html += '</div>';
+
+        // Recommendation
+        if (d.recommendation) {
+            html += '<div class="cd-recommendation"><strong>Recommendation:</strong> ' + esc(d.recommendation) + '</div>';
+        }
+
+        // Adjacent roles
+        if (d.adjacent && d.adjacent.length) {
+            html += '<h3 class="cd-section-h">Adjacent roles you could move into</h3>';
+            html += '<div class="cd-adjacent-grid">';
+            d.adjacent.forEach(function(a) {
+                html += '<div class="cd-adj">';
+                html += '<div class="cd-adj-head">'
+                      + '<div><h4 class="cd-adj-title">' + esc(a.title) + '</h4></div>'
+                      + '<div style="text-align:right;"><div class="cd-adj-fit ' + fitClass(a.fit_pct) + '">' + a.fit_pct + '%</div><div class="cd-adj-fit-cap">fit</div></div>'
+                      + '</div>';
+                html += '<p class="cd-adj-why">' + esc(a.why) + '</p>';
+                if ((a.matched_skills && a.matched_skills.length) || (a.missing_skills && a.missing_skills.length)) {
+                    html += '<div class="cd-adj-skills">';
+                    (a.matched_skills || []).forEach(function(s){ html += '<span class="cd-pill matched">' + esc(s) + '</span>'; });
+                    (a.missing_skills || []).slice(0, 4).forEach(function(s){ html += '<span class="cd-pill missing">+ ' + esc(s) + '</span>'; });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+
+        // Email capture
+        html += '<div class="cd-email-card" id="cdEmailCard">'
+              + '<h4>Email me the full report</h4>'
+              + '<p>The full version goes deeper: skill gap analysis, the specific certifications worth chasing for each adjacent role, and a one-paragraph cover-letter angle for whichever role you target. One email. No spam. Unsubscribe with a click.</p>'
+              + '<form class="cd-email-form" onsubmit="cdSendReport(event); return false;">'
+                + '<input type="email" id="cdEmailInput" placeholder="you@email.com" required autocomplete="email">'
+                + '<button type="submit" class="btn-lime" id="cdEmailBtn">Email my full report</button>'
+              + '</form>'
+              + '</div>';
+
+        // Tailor CTA
+        var topAdj = (d.adjacent && d.adjacent[0]) ? d.adjacent[0] : null;
+        var ctaTitle = topAdj && topAdj.fit_pct >= 50
+            ? 'Tailor your resume for a ' + topAdj.title + ' role'
+            : 'Tailor your resume to a specific posting';
+        var ctaSub = topAdj && topAdj.fit_pct >= 50
+            ? 'You meet most requirements. Run it through the tailor and apply this week. $1, no account.'
+            : 'Match your resume to the actual job posting. Most candidates lift their score 20+ points after tailoring. $1, no account.';
+
+        html += '<div class="cd-cta">'
+              + '<p style="color:var(--ink-0);font-weight:600;font-size:1.05rem;">' + esc(ctaTitle) + '</p>'
+              + '<p style="color:var(--muted-v2);font-size:0.92rem;line-height:1.55;">' + esc(ctaSub) + '</p>'
+              + '<a href="/#generate" class="btn-lime">Tailor My Resume &mdash; $1 &rarr;</a>'
+              + '</div>';
+
+        return html;
+    }
+
+    document.getElementById('cdRun').addEventListener('click', function() {
+        var text = document.getElementById('cdInput').value.trim();
+        if (text.length < 100) {
+            document.getElementById('cdStatus').textContent = 'Paste at least a paragraph (100+ chars).';
+            return;
+        }
+        document.getElementById('cdStatus').textContent = '';
+        document.getElementById('cdEmpty').style.display = 'none';
+        document.getElementById('cdResults').classList.remove('visible');
+        document.getElementById('cdResults').innerHTML = '';
+        document.getElementById('cdLoading').classList.add('visible');
+
+        if (window.gtag) gtag('event', 'career_direction_run', { length: text.length });
+
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: 'career_direction', resume: text })
+        })
+        .then(function(r) { return r.json().catch(function(){return {};}); })
+        .then(function(data) {
+            document.getElementById('cdLoading').classList.remove('visible');
+            if (data && data.error) {
+                document.getElementById('cdEmpty').style.display = '';
+                document.getElementById('cdStatus').textContent = data.error;
+                return;
+            }
+            window._cdLastReport = data;
+            window._cdLastResume = text;
+            document.getElementById('cdResults').innerHTML = renderReport(data);
+            document.getElementById('cdResults').classList.add('visible');
+        })
+        .catch(function() {
+            document.getElementById('cdLoading').classList.remove('visible');
+            document.getElementById('cdEmpty').style.display = '';
+            document.getElementById('cdStatus').textContent = 'Connection error. Please try again.';
+        });
+    });
+
+    document.getElementById('cdClear').addEventListener('click', function() {
+        document.getElementById('cdInput').value = '';
+        document.getElementById('cdResults').classList.remove('visible');
+        document.getElementById('cdResults').innerHTML = '';
+        document.getElementById('cdEmpty').style.display = '';
+        document.getElementById('cdStatus').textContent = '';
+        document.getElementById('cdInput').focus();
+    });
+
+    window.cdSendReport = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var card = document.getElementById('cdEmailCard');
+        var input = document.getElementById('cdEmailInput');
+        var btn = document.getElementById('cdEmailBtn');
+        var report = window._cdLastReport;
+        var resumeText = window._cdLastResume || '';
+        if (!report) return;
+
+        var email = (input.value || '').trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            document.getElementById('cdStatus').textContent = 'Enter a valid email.';
+            return;
+        }
+
+        btn.disabled = true;
+        var prev = btn.textContent;
+        btn.textContent = 'Sending…';
+
+        if (window.gtag) gtag('event', 'career_direction_email_capture', { email_domain: email.split('@')[1] || '' });
+
+        // Score for grader_leads is the top-adjacent fit (not a fake hireability score).
+        var topFit = (report.adjacent && report.adjacent[0]) ? report.adjacent[0].fit_pct : 0;
+
+        fetch(GRADER_EMAIL_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                mode: 'grade-email',
+                email: email,
+                lead_source: 'career_direction',
+                resume: resumeText,
+                grade: {
+                    score: topFit,
+                    summary: 'Career direction report for ' + (report.current && report.current.title || 'your role'),
+                    career_report: report
+                }
+            })
+        })
+        .then(function(res) { return res.json().catch(function(){return {};}); })
+        .then(function(data) {
+            if (data && data.error) {
+                btn.disabled = false; btn.textContent = prev;
+                document.getElementById('cdStatus').textContent = data.error;
+                return;
+            }
+            card.innerHTML = '<h4>Sent. Check your inbox.</h4>'
+                + '<p>Your full career direction report is on its way to <strong>' + esc(email) + '</strong>. It can take a minute. Check spam if you don\'t see it.</p>';
+        })
+        .catch(function() {
+            btn.disabled = false; btn.textContent = prev;
+            document.getElementById('cdStatus').textContent = 'Could not send. Please try again.';
+        });
+    };
+})();
+</script>
+</body>
+</html>
