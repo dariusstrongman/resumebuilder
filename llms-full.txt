@@ -144,7 +144,7 @@ What it will not do: invent skills not on the resume, return a fake "hireability
 
 ---
 
-## Page: Career Outlook + 90-Day Action Plan (Pro) (https://www.atshack.com/career-outlook.html)
+## Page: Career Roadmap + 90-Day Action Plan (Pro) (https://www.atshack.com/career-outlook.html)
 
 Pro-only follow-up to the free Career Direction report. The free report tells you what to do; this Pro tool tells you what happens if you do nothing, what the pivot actually costs in time and money, and pings you at day 30, 60, 90 to keep you accountable.
 

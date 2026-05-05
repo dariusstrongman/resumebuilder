@@ -5,9 +5,9 @@
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stay or Pivot? Career Outlook + 90-Day Plan (Pro) | ATSHack</title>
+    <title>Stay or Pivot? Career Roadmap + 90-Day Plan (Pro) | ATSHack</title>
     <meta name="description" content="Stay where you are, or pivot to something new? Decide with real numbers, not vibes. BLS pay projections, real cert costs, weeks of study at your pace, and a 90-day plan with check-in emails.">
-    <meta property="og:title" content="Stay or Pivot? Career Outlook + 90-Day Plan | ATSHack">
+    <meta property="og:title" content="Stay or Pivot? Career Roadmap + 90-Day Plan | ATSHack">
     <meta property="og:description" content="Stay where you are or pivot to something new? Real BLS numbers, real cert costs, real weeks. Plus a 90-day plan.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://www.atshack.com/og.png">
@@ -182,7 +182,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "ATSHack Career Outlook + 90-Day Action Plan",
+      "name": "ATSHack Career Roadmap + 90-Day Action Plan",
       "url": "https://www.atshack.com/career-outlook.html",
       "applicationCategory": "BusinessApplication",
       "description": "Pro-only tool that helps you decide whether to stay in your current career or pivot to a new one. Compares three paths side by side with real numbers (BLS pay projections, real cert costs, weeks of study at your pace) and hands you a 90-day plan with monthly accountability check-ins.",
@@ -195,7 +195,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
-        {"@type": "ListItem", "position": 2, "name": "Career Outlook (Pro)", "item": "https://www.atshack.com/career-outlook.html"}
+        {"@type": "ListItem", "position": 2, "name": "Career Roadmap (Pro)", "item": "https://www.atshack.com/career-outlook.html"}
       ]
     }
     </script>
@@ -230,7 +230,7 @@
 
 <main class="resource-main">
     <div class="co-shell">
-        <p class="co-eyebrow">Pro · Career Outlook + 90-Day Plan</p>
+        <p class="co-eyebrow">Pro · Career Roadmap + 90-Day Plan</p>
         <h1 class="co-title">Stay, advance, specialize, or pivot?</h1>
         <p class="co-lede">A diagnostic that takes your resume + 7 quick situational questions and tells you which of four moves you should make next. Backed by Mobley's turnover model, BLS pay data, and real cert/promotion numbers. Not a preference quiz. We tell you what we think you should do.</p>
 
@@ -261,7 +261,7 @@
         <!-- Pro gate (shown when not Pro) -->
         <div class="co-pro-gate" id="proGate" style="display:none;">
             <h3>This tool is Pro-only.</h3>
-            <p>Pro is $15/month or $99/year and includes 50 tailorings, ATS gap reports, the STAR interview coach, follow-up email templates, the application tracker, and this Career Outlook tool.</p>
+            <p>Pro is $15/month or $99/year and includes 50 tailorings, ATS gap reports, the STAR interview coach, follow-up email templates, the application tracker, and this Career Roadmap tool.</p>
             <a href="/#pricing" class="btn-lime">Go Pro &rarr;</a>
         </div>
 
@@ -372,7 +372,7 @@
         </form>
 
         <div id="coLoading" style="display:none;text-align:center;padding:2rem 1rem;color:var(--muted-v2);">
-            <p style="font-size:1rem;color:var(--ink-0);font-weight:600;">Building your outlook</p>
+            <p style="font-size:1rem;color:var(--ink-0);font-weight:600;">Building your roadmap</p>
             <p style="font-size:0.88rem;margin-top:0.4rem;">Classifying role, pulling BLS data, computing scenarios, building the 90-day plan. ~30 seconds.</p>
         </div>
 
@@ -392,7 +392,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/career-direction.html">Career Report</a>
-            <a href="/career-outlook.html">Outlook</a>
+            <a href="/career-outlook.html">Roadmap</a>
             <a href="/blog/">Blog</a>
             <a href="/about.html">About</a>
             <a href="/privacy.html">Privacy</a>
@@ -421,8 +421,8 @@
         var sess = getSession();
         if (!sess || !sess.user || !sess.user.id) {
             document.getElementById('proGate').style.display = 'block';
-            document.getElementById('proGate').querySelector('h3').textContent = 'Sign in to use Career Outlook.';
-            document.getElementById('proGate').querySelector('p').textContent = 'Career Outlook is a Pro feature. Sign in to your account, then start your outlook.';
+            document.getElementById('proGate').querySelector('h3').textContent = 'Sign in to use Career Roadmap.';
+            document.getElementById('proGate').querySelector('p').textContent = 'Career Roadmap is a Pro feature. Sign in to your account, then start your roadmap.';
             document.getElementById('proGate').querySelector('a').textContent = 'Sign in or sign up';
             document.getElementById('proGate').querySelector('a').href = '/login.html';
             return;
@@ -510,8 +510,8 @@
         var html = '';
         html += '<div class="co-active-hero">'
               + '<div class="co-active-meta">'
-                + '<p class="co-eyebrow" style="margin:0;">Your active outlook</p>'
-                + '<h2 style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;margin:0.3rem 0 0.4rem;color:#fff;font-weight:700;">' + esc(cur.title || 'Career Outlook') + ' &middot; ' + esc(cur.level || '') + '</h2>'
+                + '<p class="co-eyebrow" style="margin:0;">Your active roadmap</p>'
+                + '<h2 style="font-family:Space Grotesk,sans-serif;font-size:1.6rem;margin:0.3rem 0 0.4rem;color:#fff;font-weight:700;">' + esc(cur.title || 'Career Roadmap') + ' &middot; ' + esc(cur.level || '') + '</h2>'
                 + '<p style="margin:0;color:#cfd2d6;font-size:0.95rem;">Day ' + daysIn + ' of 90 &middot; next check-in ' + esc(nextCheckStr) + ' (' + esc(cadence) + ')</p>'
               + '</div>'
               + '<div class="co-active-actions">'
@@ -660,7 +660,7 @@
 
         // Restart -> cancel current then show form
         document.getElementById('coBtnRestart').addEventListener('click', function() {
-            if (!confirm('Cancel this outlook and start a new one? Your current plan will be archived.')) return;
+            if (!confirm('Cancel this roadmap and start a new one? Your current plan will be archived.')) return;
             fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -673,13 +673,13 @@
         });
         // Cancel -> archive, show empty state
         document.getElementById('coBtnCancel').addEventListener('click', function() {
-            if (!confirm('Cancel this outlook? You can start a new one any time.')) return;
+            if (!confirm('Cancel this roadmap? You can start a new one any time.')) return;
             fetch(OUTLOOK_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: 'outlook_status', token: token, status: 'cancel' })
             }).then(function() {
-                box.innerHTML = '<div class="co-empty-state"><p>Outlook cancelled. <a href="/career-outlook.html" class="btn-lime" style="margin-top:0.8rem;">Start a new one</a></p></div>';
+                box.innerHTML = '<div class="co-empty-state"><p>Roadmap cancelled. <a href="/career-outlook.html" class="btn-lime" style="margin-top:0.8rem;">Start a new one</a></p></div>';
             });
         });
     }
@@ -812,7 +812,7 @@
         .catch(function(err) {
             document.getElementById('coLoading').style.display = 'none';
             document.getElementById('coForm').style.display = 'block';
-            status.textContent = 'Could not generate outlook. Please try again.';
+            status.textContent = 'Could not generate roadmap. Please try again.';
         });
     };
 
@@ -933,7 +933,7 @@
         // Detailed roadmap phases (verdict-specific, rolls up to the milestones)
         html += renderPhasesBlock(d.roadmap_phases, {
             title: 'Your detailed roadmap',
-            sub: 'Week-by-week phases for the path your outlook recommends. Each phase shows what to do, when it is done, and what to do if it stalls.'
+            sub: 'Week-by-week phases for the path your roadmap recommends. Each phase shows what to do, when it is done, and what to do if it stalls.'
         });
 
         // 90-day plan
