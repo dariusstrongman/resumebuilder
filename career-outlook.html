@@ -113,6 +113,21 @@
         /* Scenario advance + verdict-win highlight */
         .co-scenario.advance .co-scenario-tag { background: rgba(202,255,0,0.12); color: #c5ff4a; border: 1px solid rgba(202,255,0,0.4); }
         .co-scenario--win { box-shadow: 0 0 0 1.5px var(--accent, #c5ff4a) inset; }
+        /* Roadmap timeline */
+        .co-roadmap-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.45rem; margin: 2.4rem 0 1rem; color: var(--ink-0, #fff); font-weight: 700; letter-spacing: -0.01em; }
+        .co-roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; position: relative; padding-top: 1.4rem; }
+        .co-roadmap::before { content: ''; position: absolute; top: 1.6rem; left: 1.5%; right: 1.5%; height: 2px; background: linear-gradient(90deg, rgba(132,225,106,0.35), rgba(202,255,0,0.5), rgba(251,191,36,0.4)); border-radius: 999px; z-index: 0; }
+        .co-milestone { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 12px; padding: 1.4rem 1.2rem 1.1rem; position: relative; z-index: 1; }
+        .co-milestone-marker { width: 14px; height: 14px; border-radius: 50%; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); border: 2px solid #0c0e12; }
+        .co-milestone--now .co-milestone-marker { background: #84e16a; }
+        .co-milestone--mid .co-milestone-marker { background: #c5ff4a; }
+        .co-milestone--far .co-milestone-marker { background: #fbbf24; }
+        .co-milestone-horizon { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted-v2, #a5a8af); margin: 0; }
+        .co-milestone-pay { font-family: 'Space Grotesk', sans-serif; font-size: 1.55rem; font-weight: 700; color: #fff; margin: 0.4rem 0 0.5rem; line-height: 1.1; letter-spacing: -0.01em; }
+        .co-milestone-delta { font-size: 0.85rem; color: #84e16a; font-weight: 600; vertical-align: middle; margin-left: 0.3rem; }
+        .co-milestone-event { color: #cfd2d6; font-size: 0.88rem; line-height: 1.5; margin: 0 0 0.7rem; }
+        .co-milestone-source { color: #6b7280; font-size: 0.75rem; line-height: 1.45; font-style: italic; margin: 0; }
+        @media (max-width: 720px) { .co-roadmap { grid-template-columns: 1fr; } .co-roadmap::before { display: none; } }
         .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
         .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
         .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
@@ -522,6 +537,24 @@
         html += scenCard('advance', s.advance, 'Advance', '');
         html += scenCard('specialize', s.specialize, 'Specialize', '');
         html += scenCard('pivot', s.pivot, 'Pivot', '');
+
+        // Roadmap (3 milestones: 6mo / 1yr / 3yr)
+        var roadmap = d.roadmap || [];
+        if (roadmap.length) {
+            html += '<h3 class="co-roadmap-title">If you take this path, here\'s where you land</h3>';
+            html += '<div class="co-roadmap">';
+            roadmap.forEach(function(m, i) {
+                var deltaTxt = (m.delta_pct && m.delta_pct !== 0) ? '+' + m.delta_pct + '%' : '';
+                html += '<div class="co-milestone co-milestone--' + (i === 0 ? 'now' : (i === 1 ? 'mid' : 'far')) + '">'
+                    + '<div class="co-milestone-marker"></div>'
+                    + '<p class="co-milestone-horizon">' + esc(m.horizon || '') + '</p>'
+                    + '<p class="co-milestone-pay">' + esc(m.pay_label || '') + (deltaTxt ? ' <span class="co-milestone-delta">' + deltaTxt + '</span>' : '') + '</p>'
+                    + '<p class="co-milestone-event">' + esc(m.event || '') + '</p>'
+                    + '<p class="co-milestone-source">' + esc(m.source || '') + '</p>'
+                    + '</div>';
+            });
+            html += '</div>';
+        }
 
         // Plan with check-offs
         html += '<h3 style="font-family:Space Grotesk,sans-serif;font-size:1.4rem;margin:2rem 0 0.8rem;color:var(--ink-0);font-weight:700;">90-Day Action Plan</h3>';
