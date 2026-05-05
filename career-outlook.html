@@ -129,6 +129,35 @@
         .co-milestone-event { color: #cfd2d6; font-size: 0.88rem; line-height: 1.5; margin: 0 0 0.7rem; }
         .co-milestone-source { color: #6b7280; font-size: 0.75rem; line-height: 1.45; font-style: italic; margin: 0; }
         @media (max-width: 720px) { .co-roadmap { grid-template-columns: 1fr; } .co-roadmap::before { display: none; } }
+        /* Detailed phases: collapsible per-window action cards under the milestone strip */
+        .co-phases-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.45rem; margin: 2.4rem 0 0.4rem; color: var(--ink-0, #fff); font-weight: 700; letter-spacing: -0.01em; }
+        .co-phases-sub { color: var(--muted-v2, #a5a8af); font-size: 0.92rem; line-height: 1.55; margin: 0 0 1.1rem; }
+        .co-phases { display: flex; flex-direction: column; gap: 0.6rem; }
+        .co-phase { background: #0c0e12; border: 1px solid #1a1d24; border-radius: 12px; padding: 0; overflow: hidden; transition: border-color 0.2s ease; }
+        .co-phase[open] { border-color: rgba(202,255,0,0.35); }
+        .co-phase summary { list-style: none; cursor: pointer; padding: 1rem 1.15rem; display: flex; align-items: center; gap: 0.9rem; user-select: none; }
+        .co-phase summary::-webkit-details-marker { display: none; }
+        .co-phase-num { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; color: #c5ff4a; background: rgba(202,255,0,0.1); border: 1px solid rgba(202,255,0,0.3); border-radius: 999px; padding: 0.22rem 0.55rem; flex-shrink: 0; }
+        .co-phase-title { color: #fff; font-size: 1.02rem; font-weight: 600; flex: 1; min-width: 0; }
+        .co-phase-window { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; letter-spacing: 0.1em; color: var(--muted-v2, #a5a8af); text-transform: uppercase; flex-shrink: 0; }
+        .co-phase-caret { color: #6b7280; transition: transform 0.2s ease; flex-shrink: 0; }
+        .co-phase[open] .co-phase-caret { transform: rotate(90deg); color: #c5ff4a; }
+        .co-phase-body { padding: 0 1.15rem 1.15rem; border-top: 1px solid #14171d; }
+        .co-phase-body-inner { padding-top: 0.85rem; }
+        .co-phase-actions { margin: 0 0 0.9rem; padding-left: 1.1rem; color: #cfd2d6; font-size: 0.92rem; line-height: 1.6; }
+        .co-phase-actions li { margin-bottom: 0.4rem; }
+        .co-phase-actions li::marker { color: #c5ff4a; }
+        .co-phase-meta { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px dashed #1a1d24; }
+        .co-phase-meta-row { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.86rem; line-height: 1.5; }
+        .co-phase-meta-label { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 4px; flex-shrink: 0; margin-top: 0.05rem; }
+        .co-phase-meta-label--metric { background: rgba(132,225,106,0.12); color: #84e16a; border: 1px solid rgba(132,225,106,0.3); }
+        .co-phase-meta-label--fail { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+        .co-phase-meta-text { color: #cfd2d6; }
+        .co-phase-source { color: #6b7280; font-size: 0.74rem; font-style: italic; line-height: 1.45; margin: 0.7rem 0 0; }
+        @media (max-width: 540px) {
+            .co-phase summary { flex-wrap: wrap; }
+            .co-phase-window { width: 100%; padding-left: calc(0.55rem + 1.7em); }
+        }
         .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
         .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
         .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
@@ -564,6 +593,12 @@
             html += '</div>';
         }
 
+        // Detailed phases (rolls up to the 3 milestones above)
+        html += renderPhasesBlock(d.roadmap_phases, {
+            title: 'Detailed roadmap',
+            sub: 'Week-by-week breakdown of how the milestones above actually get hit. Each phase shows what to do, the success metric, and what to do if it stalls.'
+        });
+
         // Plan with check-offs
         html += '<h3 style="font-family:Space Grotesk,sans-serif;font-size:1.4rem;margin:2rem 0 0.8rem;color:var(--ink-0);font-weight:700;">90-Day Action Plan</h3>';
         ['month_1','month_2','month_3'].forEach(function(mk, idx) {
@@ -792,6 +827,52 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    // Renders the detailed phase cards (collapsible). Returns HTML string.
+    // First phase opens by default so the user sees actionable detail without clicking.
+    function renderPhasesBlock(phases, opts) {
+        if (!Array.isArray(phases) || !phases.length) return '';
+        opts = opts || {};
+        var titleText = opts.title || 'Detailed roadmap';
+        var subText = opts.sub || 'Each phase shows what to do, when it is done, and what to do if it goes sideways.';
+        var html = '<h3 class="co-phases-title">' + esc(titleText) + '</h3>';
+        html += '<p class="co-phases-sub">' + esc(subText) + '</p>';
+        html += '<div class="co-phases">';
+        phases.forEach(function(p, i) {
+            var openAttr = (i === 0) ? ' open' : '';
+            html += '<details class="co-phase"' + openAttr + '>'
+                  + '<summary>'
+                    + '<span class="co-phase-num">Phase ' + (i + 1) + '</span>'
+                    + '<span class="co-phase-title">' + esc(p.title || '') + '</span>'
+                    + '<span class="co-phase-window">' + esc(p.window || '') + '</span>'
+                    + '<span class="co-phase-caret">&#9656;</span>'
+                  + '</summary>'
+                  + '<div class="co-phase-body"><div class="co-phase-body-inner">';
+            if (Array.isArray(p.actions) && p.actions.length) {
+                html += '<ul class="co-phase-actions">';
+                p.actions.forEach(function(a) { html += '<li>' + esc(a) + '</li>'; });
+                html += '</ul>';
+            }
+            html += '<div class="co-phase-meta">';
+            if (p.metric) {
+                html += '<div class="co-phase-meta-row">'
+                      + '<span class="co-phase-meta-label co-phase-meta-label--metric">Done when</span>'
+                      + '<span class="co-phase-meta-text">' + esc(p.metric) + '</span>'
+                      + '</div>';
+            }
+            if (p.failure_mode) {
+                html += '<div class="co-phase-meta-row">'
+                      + '<span class="co-phase-meta-label co-phase-meta-label--fail">If stuck</span>'
+                      + '<span class="co-phase-meta-text">' + esc(p.failure_mode) + '</span>'
+                      + '</div>';
+            }
+            html += '</div>';
+            if (p.source) html += '<p class="co-phase-source">Source: ' + esc(p.source) + '</p>';
+            html += '</div></div></details>';
+        });
+        html += '</div>';
+        return html;
+    }
+
     function renderResults(d) {
         var wrap = document.getElementById('coResults');
         var html = '';
@@ -845,6 +926,12 @@
                   + (s.specialize.is_generic ? '<p class="co-source-caveat">No sourced premium for your exact role yet, so this uses a generic ~12% niche estimate. Real specialty pay is often higher once we have role-specific data.</p>' : '')
                   + '</div>';
         }
+
+        // Detailed roadmap phases (verdict-specific, rolls up to the milestones)
+        html += renderPhasesBlock(d.roadmap_phases, {
+            title: 'Your detailed roadmap',
+            sub: 'Week-by-week phases for the path your outlook recommends. Each phase shows what to do, when it is done, and what to do if it stalls.'
+        });
 
         // 90-day plan
         if (d.plan_90day) {
