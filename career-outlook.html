@@ -63,6 +63,7 @@
         .co-scenario .co-headline { font-family: 'Space Grotesk', sans-serif; font-size: 1.45rem; color: #fff; font-weight: 700; margin: 0.4rem 0 0.6rem; letter-spacing: -0.01em; }
         .co-scenario p { color: #cfd2d6; font-size: 0.95rem; line-height: 1.65; margin: 0.4rem 0; }
         .co-scenario .co-source { color: #6b7280; font-size: 0.78rem; font-style: italic; margin-top: 0.6rem; }
+        .co-scenario .co-source-caveat { color: #d6a851; font-size: 0.78rem; margin-top: 0.45rem; padding: 0.5rem 0.7rem; background: rgba(251,191,36,0.06); border-left: 2px solid rgba(251,191,36,0.4); border-radius: 4px; line-height: 1.4; }
         .co-cost-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d24; font-size: 0.9rem; }
         .co-cost-row:last-child { border-bottom: none; }
         .co-cost-skill { color: #fff; font-weight: 600; }
@@ -526,11 +527,18 @@
         function scenCard(key, scenario, label, tagline) {
             if (!scenario) return '';
             var win = key === verdict ? ' co-scenario--win' : '';
+            // SPECIALIZE may fall back to a generic 12% niche estimate when
+            // we don't yet have a role-specific sourced premium. Surface that
+            // caveat so the user knows the number is conservative.
+            var caveat = (key === 'specialize' && scenario.is_generic)
+                ? '<p class="co-source-caveat">No sourced premium for your exact role yet, so this uses a generic ~12% niche estimate. Real specialty pay is often higher once we have role-specific data.</p>'
+                : '';
             return '<div class="co-scenario ' + key + win + '">'
                 + '<span class="co-scenario-tag">' + label + (key===verdict ? ' &middot; OUR PICK' : '') + '</span>'
                 + '<div class="co-headline">' + esc(scenario.headline || '') + '</div>'
                 + '<p>' + esc(scenario.narrative || '') + '</p>'
                 + (scenario.source ? '<p class="co-source">Source: ' + esc(scenario.source) + '</p>' : '')
+                + caveat
                 + '</div>';
         }
         html += scenCard('stay', s.stay, 'Stay', '');
@@ -834,6 +842,7 @@
                   + '<div class="co-headline">' + esc(s.specialize.headline) + '</div>'
                   + '<p>' + esc(s.specialize.narrative) + '</p>'
                   + '<p class="co-source">Source: ' + esc(s.specialize.source) + '</p>'
+                  + (s.specialize.is_generic ? '<p class="co-source-caveat">No sourced premium for your exact role yet, so this uses a generic ~12% niche estimate. Real specialty pay is often higher once we have role-specific data.</p>' : '')
                   + '</div>';
         }
 
