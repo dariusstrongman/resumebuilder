@@ -1047,14 +1047,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (packBtn) {
         packBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            var email = readEmail();
-            if (!email) {
-                toast('Enter your email above first. That\'s where we\'ll send the pack code.', 'error');
-                var input = document.getElementById('userEmail');
-                if (input) { input.focus(); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-                return;
-            }
-            startCheckout(packBtn, { mode: 'buy_pack', user_email: email });
+            // Stripe Checkout collects the email itself. No upfront prompt needed.
+            startCheckout(packBtn, { mode: 'buy_pack' });
         });
     }
 

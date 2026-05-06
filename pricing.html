@@ -320,18 +320,8 @@
 
     if (packBtn) {
         packBtn.addEventListener('click', function() {
-            var auth = readAuth();
-            var email = auth && auth.email ? auth.email : '';
-            if (!email) {
-                email = window.prompt("What email should we send the 10-pack code to?");
-                if (!email) return;
-                email = email.trim();
-                if (email.indexOf('@') < 1) {
-                    alert('Please enter a valid email address.');
-                    return;
-                }
-            }
-            startCheckout(packBtn, { mode: 'buy_pack', user_email: email });
+            // Stripe Checkout collects the email itself. No upfront prompt needed.
+            startCheckout(packBtn, { mode: 'buy_pack' });
         });
     }
 })();
