@@ -727,6 +727,17 @@ if (form) {
         var wantCover = !cleanupOnly && document.getElementById('coverLetter').checked;
         var btn = document.getElementById('submitBtn');
 
+        if (!document.querySelector('input[name="page_pref"]:checked')) {
+            toast('Pick a resume length: 1 page or 2 pages.', 'error');
+            var picker = document.querySelector('.mode-picker[role="radiogroup"]');
+            if (picker) {
+                picker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                picker.classList.add('field-error');
+                setTimeout(function() { picker.classList.remove('field-error'); }, 2000);
+            }
+            return;
+        }
+
         if (resumeMode === 'paste') {
             var resumeTextVal = document.getElementById('resumeText').value.trim();
             if (!resumeTextVal || resumeTextVal.length < 100) {
@@ -888,6 +899,7 @@ function sendPayload(data, btn) {
     data.amount = data.include_cover_letter ? 150 : 100;
     var pageRadio = document.querySelector('input[name="page_pref"]:checked');
     data.page_pref = (pageRadio && pageRadio.value === '2') ? '2' : '1';
+    if (!pageRadio) { return; }
     var email = document.getElementById('userEmail').value.trim();
     if (!email || email.indexOf('@') < 1) {
         toast('Please enter a valid email address.', 'error');
