@@ -113,10 +113,10 @@
                     <div class="pricing-copy">
                         <p>Active job hunt? Grab a pack. We email you a code with 10 uses. Redeem one at a time. Code never expires. Share with a friend if you don&rsquo;t use them all.</p>
                         <p class="pricing-addon"><strong>Just $0.50 per resume.</strong> Each redemption gets the same tailored quality and optional matching cover letter.</p>
-                        <a href="/#pricing" class="submit-btn submit-btn--inline">
+                        <button type="button" id="buyPackBtn" class="submit-btn submit-btn--inline">
                             <span class="submit-btn__label">Buy 10-pack</span>
                             <span class="submit-btn__price">$5.00</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
                 <div class="pricing-card">
@@ -131,10 +131,10 @@
                     <div class="pricing-copy">
                         <p><strong>Pro.</strong> A real job-search workspace. Career Roadmap (4-path diagnostic + 90-day plan), STAR interview coach, AI follow-up email generator, application tracker. Plus 50 tailored resumes a month with cover letters and ATS gap reports.</p>
                         <p class="pricing-addon" id="pricingAddon">Saved resume history in one dashboard. 10-day money-back guarantee. Cancel anytime.</p>
-                        <a href="/login.html?next=%2Faccount.html&amp;intent=pro_monthly" id="goProLink" class="submit-btn submit-btn--inline">
+                        <button type="button" id="goProBtn" data-plan="pro_monthly" class="submit-btn submit-btn--inline">
                             <span class="submit-btn__label">Go Pro</span>
                             <span class="submit-btn__price" id="goProPrice">$15/mo</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -160,13 +160,13 @@
                 <tr><td>Matching cover letter</td><td class="center">+$0.50</td><td class="center">+$0.50</td><td class="center yes">included</td></tr>
                 <tr><td>ATS gap report on every tailoring</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center yes">✓</td></tr>
                 <tr><td>Resumes per month</td><td class="center">1</td><td class="center">10 (no expiry)</td><td class="center yes">50</td></tr>
-                <tr><td>Saved resume history dashboard</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
-                <tr><td>Career Roadmap (4-path diagnostic + 90-day plan)</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
-                <tr><td>STAR interview coach</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
-                <tr><td>AI follow-up email generator</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
-                <tr><td>Application tracker with reminders</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
+                <tr><td>Saved resume history dashboard</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">✓</td></tr>
+                <tr><td>Career Roadmap (4-path diagnostic + 90-day plan)</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">✓</td></tr>
+                <tr><td>STAR interview coach</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">✓</td></tr>
+                <tr><td>AI follow-up email generator</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">✓</td></tr>
+                <tr><td>Application tracker with reminders</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">✓</td></tr>
                 <tr><td>Account required</td><td class="center no">no</td><td class="center">email only</td><td class="center yes">yes</td></tr>
-                <tr><td>10-day money-back guarantee</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">annual</td></tr>
+                <tr><td>10-day money-back guarantee</td><td class="center no">-</td><td class="center no">-</td><td class="center yes">annual</td></tr>
             </tbody>
         </table>
 
@@ -198,7 +198,7 @@
             </details>
             <details>
                 <summary>Can I see a sample before paying?</summary>
-                <p>Yes &mdash; try the free <a href="/#grader">Resume Grader</a> first. It scores your existing resume against a posting and gives you a snapshot of what the paid Tailor would change. If you want a full sample tailored output, email us at <a href="mailto:contact@atshack.com">contact@atshack.com</a>.</p>
+                <p>Yes. Try the free <a href="/#grader">Resume Grader</a> first. It scores your existing resume against a posting and gives you a snapshot of what the paid Tailor would change. If you want a full sample tailored output, email us at <a href="mailto:contact@atshack.com">contact@atshack.com</a>.</p>
             </details>
         </section>
 
@@ -230,32 +230,110 @@
 <script>
 (function() {
     var toggle = document.getElementById('pricingToggle');
-    if (!toggle) return;
     var amount = document.getElementById('pricingAmount');
     var per = document.getElementById('pricingPer');
     var addon = document.getElementById('pricingAddon');
-    var link = document.getElementById('goProLink');
+    var proBtn = document.getElementById('goProBtn');
     var price = document.getElementById('goProPrice');
+    var packBtn = document.getElementById('buyPackBtn');
+    var WEBHOOK_URL = 'https://n8n.stromation.com/webhook/resume-tailor';
+
     var COPY = {
         pro_monthly: { amount: '15', per: 'per month', price: '$15/mo',
-            href: '/login.html?next=%2Faccount.html&intent=pro_monthly',
             addon: 'Saved resume history in one dashboard. 10-day money-back guarantee. Cancel anytime.' },
         pro_yearly:  { amount: '99', per: 'per year', price: '$99/yr',
-            href: '/login.html?next=%2Faccount.html&intent=pro_yearly',
             addon: 'Works out to $8.25/mo, two months free vs. monthly. 10-day money-back guarantee. Cancel anytime.' }
     };
-    toggle.addEventListener('click', function(e) {
-        var b = e.target.closest('[data-plan]');
-        if (!b) return;
-        toggle.querySelectorAll('.pricing-toggle__btn').forEach(function(x) { x.classList.remove('pricing-toggle__btn--active'); });
-        b.classList.add('pricing-toggle__btn--active');
-        var c = COPY[b.dataset.plan];
-        amount.textContent = c.amount;
-        per.textContent = c.per;
-        addon.textContent = c.addon;
-        price.textContent = c.price;
-        link.href = c.href;
-    });
+
+    if (toggle) {
+        toggle.addEventListener('click', function(e) {
+            var b = e.target.closest('[data-plan]');
+            if (!b) return;
+            toggle.querySelectorAll('.pricing-toggle__btn').forEach(function(x) { x.classList.remove('pricing-toggle__btn--active'); });
+            b.classList.add('pricing-toggle__btn--active');
+            var plan = b.dataset.plan;
+            var c = COPY[plan];
+            amount.textContent = c.amount;
+            per.textContent = c.per;
+            addon.textContent = c.addon;
+            price.textContent = c.price;
+            if (proBtn) proBtn.dataset.plan = plan;
+        });
+    }
+
+    function readAuth() {
+        try {
+            var raw = localStorage.getItem('sb-jjiizicwjldusuteffnb-auth-token');
+            if (!raw) return null;
+            var p = JSON.parse(raw);
+            var sess = p && (p.currentSession || p);
+            var u = sess && sess.user;
+            if (u && u.id) return { id: u.id, email: u.email || '' };
+        } catch(e) {}
+        return null;
+    }
+
+    function startCheckout(btn, body) {
+        var origHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="submit-btn__label">Redirecting…</span>';
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(resp) {
+            if (resp.payment_url) {
+                window.location.href = resp.payment_url;
+            } else {
+                alert(resp.error || 'Could not start checkout.');
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+            }
+        })
+        .catch(function() {
+            alert('Could not start checkout. Please try again.');
+            btn.disabled = false;
+            btn.innerHTML = origHTML;
+        });
+    }
+
+    if (proBtn) {
+        proBtn.addEventListener('click', function() {
+            var auth = readAuth();
+            if (!auth) {
+                var plan = proBtn.dataset.plan || 'pro_monthly';
+                window.location.href = '/login.html?next=%2Faccount.html&intent=' + encodeURIComponent(plan);
+                return;
+            }
+            var plan = proBtn.dataset.plan || 'pro_monthly';
+            startCheckout(proBtn, {
+                mode: 'create_subscription',
+                plan: plan,
+                user_id: auth.id,
+                user_email: auth.email,
+                site_url: window.location.origin
+            });
+        });
+    }
+
+    if (packBtn) {
+        packBtn.addEventListener('click', function() {
+            var auth = readAuth();
+            var email = auth && auth.email ? auth.email : '';
+            if (!email) {
+                email = window.prompt("What email should we send the 10-pack code to?");
+                if (!email) return;
+                email = email.trim();
+                if (email.indexOf('@') < 1) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+            }
+            startCheckout(packBtn, { mode: 'buy_pack', user_email: email });
+        });
+    }
 })();
 </script>
 

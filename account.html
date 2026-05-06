@@ -172,23 +172,35 @@
                     <span class="account-pill account-pill--quiet">Free for members</span>
                 </header>
                 <p class="account-soon">Resources to take you from "applied" to "offer accepted." Built for the rest of the job hunt, not just the resume.</p>
+                <div id="toolkitProBand" class="toolkit-pro-band" hidden>
+                    <div class="toolkit-pro-band__copy">
+                        <strong>Get all 4 Pro tools</strong>
+                        <span>STAR coach, AI follow-up emails, Career Roadmap, and application tracker. $15/mo, cancel anytime.</span>
+                    </div>
+                    <a href="/login.html?next=%2Faccount.html&amp;intent=pro_monthly" class="submit-btn submit-btn--inline">
+                        <span class="submit-btn__label">Go Pro &middot; $15/mo</span>
+                    </a>
+                </div>
                 <div class="toolkit-grid">
                     <a href="/star.html" class="toolkit-card" id="toolkitStar">
                         <span class="toolkit-card__pill" id="toolkitStarPill">Pro</span>
                         <h3>STAR interview coach</h3>
                         <p>Five behavioral questions tailored to a target role. AI feedback per answer, scored on STAR structure.</p>
+                        <span class="toolkit-card__lock-hint">Pro only · $15/mo</span>
                         <span class="toolkit-card__more">Open coach &rarr;</span>
                     </a>
                     <a href="/followup.html" class="toolkit-card" id="toolkitFollowup">
                         <span class="toolkit-card__pill" id="toolkitFollowupPill">Pro</span>
                         <h3>AI follow-up email</h3>
                         <p>Generate a recruiter-tested follow-up email tailored to your scenario: post-interview, ghosted, after a rejection. Edit and send.</p>
+                        <span class="toolkit-card__lock-hint">Pro only · $15/mo</span>
                         <span class="toolkit-card__more">Open generator &rarr;</span>
                     </a>
                     <a href="/career-outlook.html" class="toolkit-card" id="toolkitOutlook">
                         <span class="toolkit-card__pill" id="toolkitOutlookPill">Pro</span>
                         <h3>Career roadmap + 90-day plan</h3>
-                        <p>Three sourced scenarios (stay, pivot, specialize) with BLS pay projections and real cert costs. 90-day action plan with monthly accountability check-ins.</p>
+                        <p>Four sourced scenarios (stay, advance, specialize, pivot) with BLS pay projections and real cert costs. 90-day action plan with monthly accountability check-ins.</p>
+                        <span class="toolkit-card__lock-hint">Pro only · $15/mo</span>
                         <span class="toolkit-card__more">Build your roadmap &rarr;</span>
                     </a>
                     <a href="/behavioral-questions.html" class="toolkit-card">
@@ -236,7 +248,7 @@
                     <div class="account-card">
                         <p class="account-card__label">Pro feature</p>
                         <h3 class="account-card__value">Should you stay or pivot?</h3>
-                        <p class="account-card__detail">Compare three paths with real numbers: stay in your career, pivot to a higher-paying adjacent role, or specialize. Plus a 90-day plan you can check off here.</p>
+                        <p class="account-card__detail">Compare four paths with real numbers: stay, advance, specialize, or pivot. Each with BLS pay projections and real cert costs. Plus a 90-day plan you can check off here.</p>
                         <a href="/career-outlook.html" class="submit-btn submit-btn--inline" style="margin-top:0.7rem;display:inline-flex;">
                             <span class="submit-btn__label">Decide my next move &rarr;</span>
                         </a>
@@ -534,7 +546,7 @@
         </div>
         <div class="footer-links">
             <a href="/#how-it-works">How it works</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing.html">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="/ats.html">What is ATS?</a>
             <a href="/glossary.html">Glossary</a><a href="/about.html">About</a>
@@ -1065,6 +1077,8 @@
         toolkitStar.dataset.locked = '1';
         if (toolkitFollowup) toolkitFollowup.dataset.locked = '1';
         if (toolkitOutlook) toolkitOutlook.dataset.locked = '1';
+        var toolkitProBand = document.getElementById('toolkitProBand');
+        if (toolkitProBand) toolkitProBand.hidden = false;
     }
 
     var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
@@ -1504,12 +1518,12 @@
         if (currentIndex !== index) return;
         renderResumeView(data);
 
-        // Path A: URLs present on the row (new saves) — show instant download links.
+        // Path A: URLs present on the row (new saves). Show instant download links.
         if (data.resume_pdf_url || data.resume_docx_url || data.cover_pdf_url || data.cover_docx_url) {
             applyDownloadFilesFromUrls(data, meta.created_at);
             return;
         }
-        // Path B: legacy save with no URLs — re-render via n8n in the background.
+        // Path B: legacy save with no URLs. Re-render via n8n in the background.
         if (!data.resume_pdf_base64 && !data._filesPending) {
             data._filesPending = true;
             fetch(WEBHOOK, {

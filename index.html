@@ -183,7 +183,7 @@
           "@type": "HowToStep",
           "position": 1,
           "name": "Upload your resume",
-          "text": "Upload your existing resume as a PDF, DOCX, or paste it as text. ATSHack reads the content as-is — never adds experience you don't have."
+          "text": "Upload your existing resume as a PDF, DOCX, or paste it as text. ATSHack reads the content as-is and never adds experience you don't have."
         },
         {
           "@type": "HowToStep",
@@ -401,7 +401,7 @@
         <div class="generate-wrap__head">
             <span class="lime-badge">Tailor Your Resume</span>
             <h2 class="generate-wrap__title">START NOW. <em>ONE DOLLAR.</em></h2>
-            <p class="generate-wrap__dek">3 steps &middot; 60 seconds. Pay $1 with no account, or sign in if you have a Pro plan.</p>
+            <p class="generate-wrap__dek">3 steps &middot; 60 seconds. Pay $1 per resume, or 50 a month with Pro at $15/mo.</p>
         </div>
 
         <aside class="form-card">
@@ -669,7 +669,7 @@
             </span>
             <div class="trust-text">
                 <strong>Pay $1 or go Pro</strong>
-                <em>One-off charge with no account, or $15/mo for 50 tailorings. Cancel anytime.</em>
+                <em>One-off with no account, or $15/mo for 50 tailorings plus the Career Roadmap, STAR coach, and application tracker. Cancel anytime.</em>
             </div>
         </div>
         <div class="trust-item">
@@ -1010,6 +1010,64 @@
     </div>
 </section>
 
+<!-- ───────────────── PRO ANCHOR ───────────────── -->
+<section class="pro-anchor" aria-label="Pro workspace">
+    <div class="pro-anchor__inner">
+        <header class="pro-anchor__head">
+            <span class="lime-badge">For active job seekers</span>
+            <h2 class="pro-anchor__title">If you're job-hunting for more <em>than a week.</em></h2>
+            <p class="pro-anchor__dek">One subscription, four tools that work together. Tailor a resume, prep the interview, send the follow-up, track the offer. All in one dashboard.</p>
+        </header>
+
+        <div class="pro-anchor__grid">
+            <div class="pro-anchor__card">
+                <div class="pro-anchor__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3>Career Roadmap</h3>
+                <p>4-path diagnostic plus a 90-day plan, so you know which roles to chase before you start applying.</p>
+            </div>
+            <div class="pro-anchor__card">
+                <div class="pro-anchor__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3>STAR Coach</h3>
+                <p>Five behavioral questions tailored to the role. You answer in your words, AI grades structure, you walk in ready.</p>
+            </div>
+            <div class="pro-anchor__card">
+                <div class="pro-anchor__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <h3>Follow-up Email Coach</h3>
+                <p>Generate a polished follow-up after the interview or after silence. Right tone, right length, ready to send.</p>
+            </div>
+            <div class="pro-anchor__card">
+                <div class="pro-anchor__icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                </div>
+                <h3>Application Tracker</h3>
+                <p>Every application in one view with follow-up reminders, so nothing slips while you're applying to fifty roles.</p>
+            </div>
+        </div>
+
+        <div class="pro-anchor__benefits">
+            <span class="pro-anchor__benefit">50 tailorings a month</span>
+            <span class="pro-anchor__dot" aria-hidden="true">&middot;</span>
+            <span class="pro-anchor__benefit">ATS gap reports on every one</span>
+            <span class="pro-anchor__dot" aria-hidden="true">&middot;</span>
+            <span class="pro-anchor__benefit">Saved resume history</span>
+        </div>
+
+        <div class="pro-anchor__foot">
+            <div class="pro-anchor__price">
+                <span class="pro-anchor__price-num">$15</span>
+                <span class="pro-anchor__price-cap">/mo &middot; cancel anytime &middot; 10-day money-back</span>
+            </div>
+            <a href="/pricing.html" class="btn-lime pro-anchor__cta">See Pro plans &rarr;</a>
+        </div>
+    </div>
+</section>
+
 <!-- ───────────────── PRICING ───────────────── -->
 <section class="section section--pricing" id="pricing">
     <header class="section-head">
@@ -1031,8 +1089,7 @@
                 </a>
             </div>
         </div>
-        <div class="pricing-card pricing-card--featured">
-            <div class="pricing-card__badge">Best value: 50% off</div>
+        <div class="pricing-card">
             <div class="pricing-figure">
                 <span class="pricing-currency">$</span><span class="pricing-amount">5</span>
                 <span class="pricing-per">for 10 resumes</span>
@@ -1046,7 +1103,8 @@
                 </button>
             </div>
         </div>
-        <div class="pricing-card">
+        <div class="pricing-card pricing-card--featured">
+            <div class="pricing-card__badge">Most chosen during job search</div>
             <div class="pricing-toggle" id="pricingToggle" role="tablist">
                 <button type="button" class="pricing-toggle__btn pricing-toggle__btn--active" data-plan="pro_monthly" role="tab">Monthly</button>
                 <button type="button" class="pricing-toggle__btn" data-plan="pro_yearly" role="tab">Annual <span class="pricing-toggle__save">save 45%</span></button>

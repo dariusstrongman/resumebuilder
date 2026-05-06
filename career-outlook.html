@@ -220,7 +220,7 @@
             <a href="/career-direction.html">Career Report <span class="nav-chip">Free</span></a>
             <a href="/ats.html">What is ATS?</a>
             <a href="/#how-it-works">How it works</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing.html">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
             <a href="/#generate" class="nav-cta">Tailor for $1</a>
@@ -251,21 +251,70 @@
                 <div class="co-howto-col">
                     <h3>The 4 paths we score</h3>
                     <ul>
-                        <li><strong>STAY</strong> — keep your job, project pay 6 yrs out (BLS).</li>
-                        <li><strong>ADVANCE</strong> — push for promotion / market-rate raise where you are. Sourced 7-12% typical bump (22% major), 12-24 month cycle.</li>
-                        <li><strong>SPECIALIZE</strong> — go deep on a high-premium niche in your current role (Levels.fyi, IBEW, AACN, PMI sourced).</li>
-                        <li><strong>PIVOT</strong> — jump to a higher-paying adjacent role you half-qualify for, with exact cert cost + weeks of study at your pace.</li>
+                        <li><strong>STAY</strong>. Keep your job, project pay 6 yrs out (BLS).</li>
+                        <li><strong>ADVANCE</strong>. Push for promotion or a market-rate raise where you are. Sourced 7-12% typical bump (22% major), 12-24 month cycle.</li>
+                        <li><strong>SPECIALIZE</strong>. Go deep on a high-premium niche in your current role (Levels.fyi, IBEW, AACN, PMI sourced).</li>
+                        <li><strong>PIVOT</strong>. Jump to a higher-paying adjacent role you half-qualify for, with exact cert cost + weeks of study at your pace.</li>
                     </ul>
                 </div>
             </div>
             <p class="co-howto-foot"><strong>What we won't do:</strong> make up numbers, recommend a job you can't realistically reach, or fabricate experience. <strong>Sources:</strong> Mobley turnover model (1977, validated through 2026), BLS OEWS (May 2024), Ravio 2026 promotion data, Levels.fyi 2025, IBEW/AACN/PMI specialty surveys, published cert pricing.</p>
         </div>
 
+        <!-- Sample output (always visible, shows logged-out visitors what they're paying for) -->
+        <section class="co-sample" aria-label="Example output">
+            <p class="co-eyebrow" style="color:#fbbf24;">Example output. This is what your report will look like.</p>
+            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;margin:0.3rem 0 1rem;color:#fff;font-weight:700;letter-spacing:-0.01em;">Sample: Senior Project Manager, 7 yrs, $112k</h2>
+
+            <div class="co-verdict co-verdict--specialize">
+                <p class="co-verdict-eyebrow">Our verdict (sample)</p>
+                <h2 class="co-verdict-title">SPECIALIZE</h2>
+                <p class="co-verdict-tag">Go deep on a high-premium niche inside your current role. PMP plus a healthcare or construction specialty pays the best 3-year ROI here.</p>
+                <ul class="co-verdict-reasons">
+                    <li>You're at the BLS median for your level. Pivoting eats 9-14 months of ramp before you catch up on pay.</li>
+                    <li>Promotion path at your company is unclear (Q5), so ADVANCE has weak odds inside 24 months.</li>
+                    <li>Healthcare PM specialty premium runs 18-24% over generalist PM (PMI 2025 salary survey, AACN healthcare-leader data).</li>
+                </ul>
+                <div class="co-score-grid">
+                    <div class="co-score-row"><span class="co-score-label">STAY</span><span class="co-score-val">42</span></div>
+                    <div class="co-score-row"><span class="co-score-label">ADVANCE</span><span class="co-score-val">51</span></div>
+                    <div class="co-score-row co-score-row--win"><span class="co-score-label">SPECIALIZE</span><span class="co-score-val">78</span></div>
+                    <div class="co-score-row"><span class="co-score-label">PIVOT</span><span class="co-score-val">39</span></div>
+                </div>
+            </div>
+
+            <h3 class="co-roadmap-title" style="margin-top:1.6rem;">If you take this path, here's where you land (sample)</h3>
+            <div class="co-roadmap">
+                <div class="co-milestone co-milestone--now">
+                    <div class="co-milestone-marker"></div>
+                    <p class="co-milestone-horizon">6 months</p>
+                    <p class="co-milestone-pay">$118k <span class="co-milestone-delta">+5%</span></p>
+                    <p class="co-milestone-event">PMP cert finished. First healthcare-PM role on resume. Light raise on annual cycle.</p>
+                    <p class="co-milestone-source">Source: PMI 2025, your stated 5-10 hrs/week study budget.</p>
+                </div>
+                <div class="co-milestone co-milestone--mid">
+                    <div class="co-milestone-marker"></div>
+                    <p class="co-milestone-horizon">1 year</p>
+                    <p class="co-milestone-pay">$132k <span class="co-milestone-delta">+18%</span></p>
+                    <p class="co-milestone-event">Move to a healthcare-PM seat (internal transfer or new employer). Specialty premium kicks in.</p>
+                    <p class="co-milestone-source">Source: PMI healthcare PM median, BLS OEWS May 2024.</p>
+                </div>
+                <div class="co-milestone co-milestone--far">
+                    <div class="co-milestone-marker"></div>
+                    <p class="co-milestone-horizon">3 years</p>
+                    <p class="co-milestone-pay">$156k <span class="co-milestone-delta">+39%</span></p>
+                    <p class="co-milestone-event">Senior healthcare PM. Two cycles of specialty raises plus one title bump. AI risk on the role: low.</p>
+                    <p class="co-milestone-source">Source: PMI 2025, AACN, Goldman Sachs April 2026 AI labor analysis.</p>
+                </div>
+            </div>
+            <p style="margin:1rem 0 1.8rem;font-size:0.85rem;color:var(--muted-v2,#a5a8af);line-height:1.55;">Numbers above are illustrative for this sample resume. Your real report uses your actual role, level, and answers to score all 4 paths and project your numbers.</p>
+        </section>
+
         <!-- Pro gate (shown when not Pro) -->
         <div class="co-pro-gate" id="proGate" style="display:none;">
             <h3>This tool is Pro-only.</h3>
             <p>Pro is $15/month or $99/year and includes 50 tailorings, ATS gap reports, the STAR interview coach, follow-up email templates, the application tracker, and this Career Roadmap tool.</p>
-            <a href="/#pricing" class="btn-lime">Go Pro &rarr;</a>
+            <a href="/pricing.html" class="btn-lime">Go Pro &rarr;</a>
         </div>
 
         <!-- Active outlook (shown when user already has one) -->
@@ -276,7 +325,7 @@
 
             <div class="co-q">
                 <span class="co-q-num">RESUME</span>
-                <label class="co-q-label">Step 1 — Paste or upload your resume</label>
+                <label class="co-q-label">Step 1. Paste or upload your resume</label>
                 <p class="co-q-hint">This is what we read to detect your role, level, years, and skills. Everything else hangs off this.</p>
                 <div class="co-resume-tabs">
                     <button type="button" class="co-tab active" data-tab="paste" onclick="coTab('paste')">Paste</button>
@@ -295,7 +344,7 @@
                 </div>
             </div>
 
-            <p class="co-step-divider">Step 2 — 7 situational questions</p>
+            <p class="co-step-divider">Step 2. 7 situational questions</p>
 
             <div class="co-q">
                 <span class="co-q-num">01 / 07</span>
@@ -320,10 +369,10 @@
                 <span class="co-q-num">03 / 07</span>
                 <label class="co-q-label">Are you growing in this role?</label>
                 <div class="co-radio-grid" data-field="growth">
-                    <button type="button" class="co-radio" data-value="fast">Constantly — the role keeps evolving</button>
+                    <button type="button" class="co-radio" data-value="fast">Constantly. The role keeps evolving</button>
                     <button type="button" class="co-radio" data-value="some">Some growth, but it's slowing</button>
-                    <button type="button" class="co-radio" data-value="plateau">Plateaued — doing the same things</button>
-                    <button type="button" class="co-radio" data-value="backsliding">Backsliding — my skills are getting stale</button>
+                    <button type="button" class="co-radio" data-value="plateau">Plateaued. Doing the same things</button>
+                    <button type="button" class="co-radio" data-value="backsliding">Backsliding. My skills are getting stale</button>
                 </div>
             </div>
 
@@ -331,8 +380,8 @@
                 <span class="co-q-num">04 / 07</span>
                 <label class="co-q-label">Most weeks, how do you feel about the job?</label>
                 <div class="co-radio-grid" data-field="energy">
-                    <button type="button" class="co-radio" data-value="energized">Energized — doing my best work</button>
-                    <button type="button" class="co-radio" data-value="fine">Fine — neutral, it's a job</button>
+                    <button type="button" class="co-radio" data-value="energized">Energized. Doing my best work</button>
+                    <button type="button" class="co-radio" data-value="fine">Fine. Neutral, it's a job</button>
                     <button type="button" class="co-radio" data-value="drained">Drained, but it's a paycheck</button>
                     <button type="button" class="co-radio" data-value="dreading">Burned out, dreading Mondays</button>
                 </div>
@@ -344,7 +393,7 @@
                 <div class="co-radio-grid" data-field="promo_path">
                     <button type="button" class="co-radio" data-value="clear">Clear and in reach (1-2 years)</button>
                     <button type="button" class="co-radio" data-value="unclear">Possible but slow or unclear</button>
-                    <button type="button" class="co-radio" data-value="capped">Not happening — my role is capped here</button>
+                    <button type="button" class="co-radio" data-value="capped">Not happening. My role is capped here</button>
                     <button type="button" class="co-radio" data-value="unknown">Honestly, I don't know</button>
                 </div>
             </div>
@@ -393,7 +442,7 @@
         </div>
         <div class="footer-links">
             <a href="/#how-it-works">How it works</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing.html">Pricing</a>
             <a href="/career-direction.html">Career Report</a>
             <a href="/career-outlook.html">Roadmap (Pro)</a>
             <a href="/blog/">Blog</a>
@@ -930,7 +979,7 @@
             var msg = pc.is_underpaid
                 ? 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are underpaid by ' + fmtPay(pc.median_for_level - pc.current_pay) + '/yr (' + Math.round((pc.median_for_level - pc.current_pay) / pc.median_for_level * 100) + '%). Asking for a market-rate raise has higher near-term ROI than pivoting.'
                 : pc.is_overpaid
-                    ? 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are paid above market — typical when comp includes equity or bonus the BLS data does not capture.'
+                    ? 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are paid above market (typical when comp includes equity or bonus the BLS data does not capture).'
                     : 'You report ' + fmtPay(pc.current_pay) + '. Median for your level is ' + fmtPay(pc.median_for_level) + '. You are at market rate.';
             html += '<div class="co-pay-context"><h3 style="margin:0 0 0.4rem;font-size:1.05rem;color:var(--ink-0);">Pay context</h3><p class="' + cls + '" style="margin:0;font-size:0.95rem;line-height:1.55;">' + esc(msg) + '</p></div>';
         }

@@ -271,7 +271,7 @@
             <a href="/career-direction.html">Career Report <span class="nav-chip">Free</span></a>
             <a href="/ats.html">What is ATS?</a>
             <a href="/#how-it-works">How it works</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing.html">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
             <a href="/#generate" class="nav-cta">Tailor for $1</a>
@@ -360,7 +360,7 @@
         </div>
         <div class="footer-links">
             <a href="/#how-it-works">How it works</a>
-            <a href="/#pricing">Pricing</a>
+            <a href="/pricing.html">Pricing</a>
             <a href="/blog/">Blog</a>
             <a href="/ats.html">What is ATS?</a>
             <a href="/glossary.html">Glossary</a>
@@ -560,11 +560,17 @@
               + '</div>';
 
         // Pro upsell (Career Roadmap + 90-Day Plan)
-        html += '<div style="margin:1.2rem 0 0;padding:1.1rem 1.3rem;border-radius:12px;border:1px solid #1a1d24;background:#0c0e12;">'
-              + '<p style="margin:0 0 0.3rem;font-family:JetBrains Mono,monospace;font-size:0.7rem;letter-spacing:0.14em;color:var(--muted-v2);text-transform:uppercase;">Pro · Optional</p>'
-              + '<p style="margin:0 0 0.5rem;color:var(--ink-0);font-weight:600;font-size:1rem;">Want a 6-year pay projection and a 90-day plan with check-ins?</p>'
-              + '<p style="margin:0 0 0.7rem;color:var(--muted-v2);font-size:0.9rem;line-height:1.55;">Pro Career Roadmap adds three sourced scenarios (stay / pivot / specialize), costs the pivot in real time and money, generates a 90-day plan, and emails you at day 30, 60, 90 to keep you accountable. $15/mo, included with Pro.</p>'
-              + '<a href="/career-outlook.html" style="color:#c5ff4a;font-weight:600;font-size:0.92rem;text-decoration:none;">See Career Roadmap (Pro) &rarr;</a>'
+        html += '<div style="margin:1.8rem 0 0;padding:1.6rem 1.7rem;border-radius:14px;border:1.5px solid rgba(202,255,0,0.45);background:linear-gradient(180deg, rgba(202,255,0,0.08), rgba(202,255,0,0.03));box-shadow:0 0 0 3px rgba(202,255,0,0.04);">'
+              + '<p style="margin:0 0 0.5rem;font-family:JetBrains Mono,monospace;font-size:0.72rem;letter-spacing:0.16em;color:#c5ff4a;text-transform:uppercase;font-weight:600;">Pro upgrade · Career Roadmap</p>'
+              + '<h4 style="margin:0 0 0.6rem;color:var(--ink-0);font-weight:700;font-size:1.25rem;line-height:1.25;letter-spacing:-0.01em;">Stay, advance, specialize, or pivot? Get the 4-path verdict + 90-day plan.</h4>'
+              + '<p style="margin:0 0 1rem;color:#cfd2d6;font-size:0.95rem;line-height:1.6;">The Career Roadmap scores all 4 paths against your situation, costs each move in real time and money, projects your pay 6 years out (BLS), and ships a 90-day plan with monthly check-in emails. The free report you just got is the snapshot. Roadmap is the plan.</p>'
+              + '<ul style="margin:0 0 1.1rem;padding-left:1.1rem;color:#cfd2d6;font-size:0.9rem;line-height:1.6;">'
+                + '<li>STAY / ADVANCE / SPECIALIZE / PIVOT scored side by side, with our pick.</li>'
+                + '<li>Real cert costs and weeks of study at your stated pace.</li>'
+                + '<li>90-day action plan with check-off and accountability emails at day 30, 60, 90.</li>'
+              + '</ul>'
+              + '<a href="/career-outlook.html" class="btn-lime" style="display:inline-block;padding:0.7rem 1.3rem;font-weight:700;font-size:0.95rem;border-radius:8px;text-decoration:none;">See Career Roadmap (Pro) &rarr;</a>'
+              + '<span style="display:inline-block;margin-left:0.85rem;color:var(--muted-v2);font-size:0.82rem;">$15/mo or $99/yr · cancel any time</span>'
               + '</div>';
 
         // Tailor CTA
