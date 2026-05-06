@@ -886,6 +886,8 @@ function extractTextFromFile(file) {
 function sendPayload(data, btn) {
     data.mode = 'tailor';
     data.amount = data.include_cover_letter ? 150 : 100;
+    var pageRadio = document.querySelector('input[name="page_pref"]:checked');
+    data.page_pref = (pageRadio && pageRadio.value === '2') ? '2' : '1';
     var email = document.getElementById('userEmail').value.trim();
     if (!email || email.indexOf('@') < 1) {
         toast('Please enter a valid email address.', 'error');
