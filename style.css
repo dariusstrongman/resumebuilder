@@ -3415,6 +3415,64 @@ textarea::placeholder {
     margin-top: 2rem;
 }
 
+/* Post-purchase Pro upsell on success.html. Lime-tinted card, conversion-focused. */
+.success-upsell {
+    margin: 2.4rem 0 0;
+    padding: 1.6rem 1.7rem;
+    background: linear-gradient(180deg, rgba(202,255,0,0.06), rgba(132,225,106,0.03));
+    border: 1px solid rgba(202,255,0,0.35);
+    border-radius: 14px;
+    text-align: left;
+}
+.success-upsell__eyebrow {
+    margin: 0 0 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c5ff4a;
+}
+.success-upsell__title {
+    margin: 0 0 0.6rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+.success-upsell__sub {
+    margin: 0 0 1rem;
+    color: #cfd2d6;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+.success-upsell__benefits {
+    margin: 0 0 1.2rem;
+    padding: 0 0 0 1.1rem;
+    color: #cfd2d6;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+.success-upsell__benefits li { margin-bottom: 0.25rem; }
+.success-upsell__benefits li::marker { color: #c5ff4a; }
+.success-upsell__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0 0 0.85rem;
+}
+.success-upsell__small {
+    margin: 0;
+    color: var(--muted-v2, #a5a8af);
+    font-size: 0.8rem;
+}
+.success-upsell__small a { color: inherit; text-decoration: underline; }
+@media (max-width: 540px) {
+    .success-upsell { padding: 1.3rem 1.2rem; }
+    .success-upsell__title { font-size: 1.25rem; }
+}
+
 /* ══════════════════════════ Legacy success.html compatibility ══════════════════════════ */
 /* Generic button classes in case success.html renders via app.js */
 .btn {
@@ -4962,6 +5020,15 @@ textarea::placeholder {
 .plan-picker__sub {
     font-size: 0.7rem;
     color: var(--ink-3);
+}
+.plan-picker__guarantee {
+    grid-column: 1 / -1;
+    margin: 0.4rem 0 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted-v2, #84e16a);
+    text-align: center;
+    letter-spacing: 0.06em;
 }
 
 /* ============================================================

@@ -625,6 +625,17 @@
             window._cdLastResume = text;
             document.getElementById('cdResults').innerHTML = renderReport(data);
             document.getElementById('cdResults').classList.add('visible');
+
+            // Stash for the Roadmap (Pro) handoff so the user doesn't retype.
+            // Read by career-outlook.html on form load, expires after 30 min.
+            try {
+                var topAdj = (data.adjacent && data.adjacent[0]) ? data.adjacent[0] : null;
+                sessionStorage.setItem('atshackDirectionHandoff', JSON.stringify({
+                    resume: text,
+                    role: (data.role && data.role.title) || (topAdj && topAdj.title) || null,
+                    ts: Date.now()
+                }));
+            } catch(eStash) {}
         })
         .catch(function() {
             document.getElementById('cdLoading').classList.remove('visible');

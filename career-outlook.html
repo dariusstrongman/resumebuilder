@@ -158,6 +158,9 @@
             .co-phase summary { flex-wrap: wrap; }
             .co-phase-window { width: 100%; padding-left: calc(0.55rem + 1.7em); }
         }
+        .co-handoff-banner { background: rgba(132,225,106,0.08); border: 1px solid rgba(132,225,106,0.35); color: #cfd2d6; border-radius: 10px; padding: 0.85rem 1.05rem; margin: 1rem 0 0.6rem; font-size: 0.9rem; line-height: 1.5; }
+        .co-handoff-banner strong { color: #84e16a; }
+        .co-handoff-banner a { color: #c5ff4a; text-decoration: underline; }
         .co-q-hint { color: var(--muted-v2, #a5a8af); font-size: 0.84rem; line-height: 1.55; margin: 0.5rem 0 0; }
         .co-q-hint strong { color: #c5ff4a; font-weight: 600; }
         .co-step-divider { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #c5ff4a; margin: 1.6rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 1px solid #1a1d24; }
@@ -392,7 +395,7 @@
             <a href="/#how-it-works">How it works</a>
             <a href="/#pricing">Pricing</a>
             <a href="/career-direction.html">Career Report</a>
-            <a href="/career-outlook.html">Roadmap</a>
+            <a href="/career-outlook.html">Roadmap (Pro)</a>
             <a href="/blog/">Blog</a>
             <a href="/about.html">About</a>
             <a href="/privacy.html">Privacy</a>
@@ -451,6 +454,7 @@
                     renderActive(og);
                 } else {
                     document.getElementById('coForm').style.display = 'block';
+                    applyDirectionHandoff();
                 }
             });
         })
@@ -771,6 +775,8 @@
         status.textContent = '';
         document.getElementById('coForm').style.display = 'none';
         document.getElementById('coLoading').style.display = 'block';
+        // Submission consumes the direction-handoff stash; clear it so refresh doesn't re-prefill.
+        try { sessionStorage.removeItem('atshackDirectionHandoff'); } catch(_) {}
         if (window.gtag) gtag('event', 'career_outlook_submit', {});
 
         fetch(OUTLOOK_WEBHOOK, {
@@ -828,6 +834,43 @@
     function esc(s) {
         return String(s == null ? '' : s)
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // If the user landed here from /career-direction.html and submitted a resume
+    // there in the last 30 min, prefill the textarea here so they don't retype.
+    function applyDirectionHandoff() {
+        try {
+            var raw = sessionStorage.getItem('atshackDirectionHandoff');
+            if (!raw) return;
+            var stash = JSON.parse(raw);
+            if (!stash || !stash.resume) return;
+            var ageMs = Date.now() - (stash.ts || 0);
+            if (ageMs > 30 * 60 * 1000) {
+                sessionStorage.removeItem('atshackDirectionHandoff');
+                return;
+            }
+            var ta = document.getElementById('coResume');
+            if (!ta || ta.value) return;
+            ta.value = stash.resume;
+            // Insert a small banner above the form so the user sees what happened
+            var form = document.getElementById('coForm');
+            if (form && !document.getElementById('coHandoffBanner')) {
+                var b = document.createElement('div');
+                b.id = 'coHandoffBanner';
+                b.className = 'co-handoff-banner';
+                b.innerHTML = 'We pre-filled your resume from the Career Report'
+                    + (stash.role ? ' (detected role: <strong>' + esc(stash.role) + '</strong>)' : '')
+                    + '. <a href="#" id="coHandoffClear">Clear and start fresh &rarr;</a>';
+                form.parentNode.insertBefore(b, form);
+                var clear = document.getElementById('coHandoffClear');
+                if (clear) clear.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    ta.value = '';
+                    b.remove();
+                    try { sessionStorage.removeItem('atshackDirectionHandoff'); } catch(_) {}
+                });
+            }
+        } catch(e) {}
     }
 
     // Renders the detailed phase cards (collapsible). Returns HTML string.
