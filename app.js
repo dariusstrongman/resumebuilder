@@ -219,23 +219,27 @@ function getPromoCode() {
     return el ? (el.value || '').trim() : '';
 }
 (function wirePromo() {
+    // Toggle is optional now that the input is shown by default. If it's
+    // present (legacy markup), keep the open/close behavior.
     var toggle = document.getElementById('promoToggle');
     var wrap = document.getElementById('promoInputWrap');
     var input = document.getElementById('promoCode');
     var status = document.getElementById('promoStatus');
-    if (!toggle || !wrap || !input) return;
+    if (!wrap || !input) return;
 
-    toggle.addEventListener('click', function() {
-        var open = !wrap.hasAttribute('hidden');
-        if (open) {
-            wrap.setAttribute('hidden', '');
-            toggle.setAttribute('aria-expanded', 'false');
-        } else {
-            wrap.removeAttribute('hidden');
-            toggle.setAttribute('aria-expanded', 'true');
-            input.focus();
-        }
-    });
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            var open = !wrap.hasAttribute('hidden');
+            if (open) {
+                wrap.setAttribute('hidden', '');
+                toggle.setAttribute('aria-expanded', 'false');
+            } else {
+                wrap.removeAttribute('hidden');
+                toggle.setAttribute('aria-expanded', 'true');
+                input.focus();
+            }
+        });
+    }
 
     function setUI(state) {
         input.classList.remove('is-valid', 'is-invalid');
