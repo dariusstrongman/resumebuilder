@@ -1031,36 +1031,61 @@ textarea::placeholder {
 .promo-input-wrap {
     margin-top: 0.55rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     align-items: center;
+    flex-wrap: wrap;
 }
 .promo-input-wrap[hidden] { display: none; }
 .promo-input {
-    flex: 1;
-    padding: 0.7rem 0.85rem;
+    flex: 1 1 220px;
+    min-width: 0;
+    padding: 0.75rem 0.9rem;
     border: 1px solid var(--line);
     background: var(--bg-2);
     color: var(--ink-0);
     border-radius: 8px;
     font-family: var(--f-mono);
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    transition: border-color 0.15s var(--ease);
+    letter-spacing: 0.05em;
+    transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
 }
 .promo-input:focus {
     outline: none;
     border-color: var(--accent);
 }
-.promo-input.is-valid { border-color: #16a34a; }
-.promo-input.is-invalid { border-color: #dc2626; }
-.promo-status {
-    font-size: 0.78rem;
-    font-weight: 600;
-    min-width: 4rem;
+.promo-input.is-valid {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+    background: rgba(22, 163, 74, 0.08);
 }
-.promo-status.is-valid { color: #16a34a; }
-.promo-status.is-invalid { color: #dc2626; }
+.promo-input.is-invalid { border-color: #dc2626; }
+/* Status is now a high-visibility pill so 'Applied' is unmissable. */
+.promo-status {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    line-height: 1;
+    white-space: nowrap;
+}
+.promo-status:empty { display: none; }
+.promo-status.is-valid {
+    color: #ffffff;
+    background: #16a34a;
+    border-color: #15803d;
+}
+.promo-status.is-valid::before {
+    content: "\2713\00a0\00a0";
+    font-weight: 800;
+}
+.promo-status.is-invalid {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.08);
+    border-color: rgba(220, 38, 38, 0.4);
+}
 
 /* Submit button */
 .submit-btn {
