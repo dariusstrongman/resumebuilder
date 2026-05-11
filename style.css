@@ -41,11 +41,12 @@
     --success:      #7bdf8a;
     --danger:       #ff6a5a;
 
-    /* Type — Manus v2 + legacy preserved */
-    --f-ui:         'Space Grotesk', 'Host Grotesk', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-    --f-body:       'DM Sans', 'Host Grotesk', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-    --f-display:    'Instrument Serif', 'Times New Roman', serif;       /* legacy elegant italic */
-    --f-bebas:      'Bebas Neue', 'Impact', sans-serif;                  /* v2 kinetic display */
+    /* Type — trimmed to 3 families for LCP. Body + display share Space Grotesk;
+       italic decorative usage shifts to italic Space Grotesk instead of Instrument Serif. */
+    --f-ui:         'Space Grotesk', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --f-body:       'Space Grotesk', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --f-display:    'Space Grotesk', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --f-bebas:      'Bebas Neue', 'Impact', sans-serif;
     --f-mono:       'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
     /* Motion */
@@ -2037,8 +2038,38 @@ textarea::placeholder {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem 3rem;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+}
+.footer-cols {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    flex-basis: 100%;
+    margin-top: 1rem;
+}
+.footer-col { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.footer-col h4 {
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 0.35rem;
+    font-weight: 600;
+}
+.footer-col a {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.15s var(--ease);
+}
+.footer-col a:hover { color: var(--accent); }
+@media (max-width: 900px) {
+    .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+    .footer-cols { grid-template-columns: 1fr; }
 }
 .footer-brand {
     display: inline-flex;
@@ -7183,3 +7214,33 @@ body.has-maintenance-banner { padding-top: 3rem; }
     background: rgba(255,107,107,0.06);
 }
 
+
+
+/* ══════════════════════════ ON-PAGE CITATIONS ══════════════════════════ */
+.sources {
+    max-width: 760px;
+    margin: 4rem auto 2rem;
+    padding: 1.5rem clamp(1rem, 4vw, 2rem);
+    border-top: 1px solid var(--line);
+    color: var(--ink-2);
+    font-size: 0.88rem;
+    line-height: 1.55;
+}
+.sources h2 {
+    font-family: var(--f-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 0.9rem;
+    font-weight: 600;
+}
+.sources-list {
+    list-style: disc;
+    padding-left: 1.1rem;
+    margin: 0;
+}
+.sources-list li { margin-bottom: 0.6rem; }
+.sources-list cite { font-style: normal; color: var(--ink-1); font-weight: 500; }
+.sources-list a { color: var(--accent); text-decoration: none; }
+.sources-list a:hover { text-decoration: underline; }

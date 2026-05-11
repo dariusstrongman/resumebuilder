@@ -56,6 +56,8 @@ Disallow: /reset-password.html
 Disallow: /star.html
 Disallow: /followup.html
 Disallow: /applicationtrackingsystem.html
+Disallow: /outlook-status.html
+Disallow: /unsubscribe.html
 
 Sitemap: https://www.atshack.com/sitemap_index.xml
 Sitemap: https://www.atshack.com/sitemap.xml
