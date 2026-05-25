@@ -5,6 +5,8 @@ workflow-backups/
 # Internal docs - keep local, do NOT publish
 CLAUDE.md
 SETUP.md
+GROWTH-ASSETS.md
+SESSION_NOTES.md
 
 # OS / editor
 .DS_Store
