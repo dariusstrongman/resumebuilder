@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Resume Bullet Point Analyzer (No Sign Up) | ATSHack</title>
+    <meta name="description" content="Paste your resume bullet points and get an instant strength score for each one: action verbs, measurable results, length, and filler words. Free, client-side, no account.">
+    <meta property="og:title" content="Free Resume Bullet Point Analyzer">
+    <meta property="og:description" content="Instant strength score for every resume bullet: action verbs, metrics, length, filler. Free, no sign up.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.atshack.com/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.atshack.com/og.png">
+    <meta property="og:site_name" content="ATSHack">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#07080a">
+    <link rel="canonical" href="https://www.atshack.com/resume-bullet-analyzer.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Resume Bullet Point Analyzer",
+        "url": "https://www.atshack.com/resume-bullet-analyzer.html",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "description": "Free client-side tool that scores resume bullet points on action verbs, measurable results, length, and filler words. No account required."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": "What makes a strong resume bullet point?", "acceptedAnswer": {"@type": "Answer", "text": "A strong bullet starts with a past-tense action verb, includes a measurable result (a number, percentage, or dollar amount), stays to one or two lines, and avoids filler phrases like 'responsible for' or 'worked on'. The formula is: action verb + what you did + quantified result."}},
+            {"@type": "Question", "name": "Is this resume bullet analyzer free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs entirely in your browser, there is no account or email required, and nothing you paste leaves your device."}},
+            {"@type": "Question", "name": "Why do numbers matter in resume bullets?", "acceptedAnswer": {"@type": "Answer", "text": "Quantified results give recruiters a concrete sense of your impact and make claims credible. 'Cut onboarding time 40%' lands harder than 'improved onboarding'. Bullets with metrics consistently outperform vague ones."}},
+            {"@type": "Question", "name": "How long should a resume bullet be?", "acceptedAnswer": {"@type": "Answer", "text": "One to two lines, roughly 8 to 32 words. Shorter bullets often lack substance; longer ones get skimmed past. Lead with the strongest information."}}
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.atshack.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Resume Bullet Analyzer", "item": "https://www.atshack.com/resume-bullet-analyzer.html"}
+        ]
+    }
+    </script>
+    <style>
+        .rba-wrap { margin: 1.5rem 0 2rem; }
+        .rba-ta { width: 100%; min-height: 150px; background: rgba(255,255,255,0.03); color: #f5f6f8; border: 1px solid #2a2a3e; border-radius: 12px; padding: 1rem 1.1rem; font-family: var(--f-mono, 'JetBrains Mono', monospace); font-size: 0.92rem; line-height: 1.6; resize: vertical; }
+        .rba-ta:focus { outline: none; border-color: #c5ff4a; }
+        .rba-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.9rem; }
+        .rba-hint { font-size: 0.8rem; color: #8a909c; }
+        .rba-overall { display: none; align-items: center; gap: 1rem; margin: 1.5rem 0; padding: 1.2rem 1.4rem; border: 1px solid #2a2a3e; border-radius: 14px; background: rgba(197,255,74,0.04); }
+        .rba-overall__num { font-family: var(--f-mono, monospace); font-size: 2.4rem; font-weight: 700; line-height: 1; color: #c5ff4a; }
+        .rba-overall__lbl { font-size: 0.85rem; color: #cbd5e1; }
+        .rba-card { border: 1px solid #1e1e2e; border-radius: 12px; padding: 1rem 1.2rem; margin: 0.7rem 0; background: rgba(255,255,255,0.02); }
+        .rba-card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+        .rba-card__txt { font-size: 0.95rem; color: #e2e8f0; line-height: 1.5; }
+        .rba-badge { flex-shrink: 0; font-family: var(--f-mono, monospace); font-weight: 700; font-size: 0.95rem; padding: 0.25rem 0.6rem; border-radius: 8px; }
+        .rba-badge.good { background: rgba(16,185,129,0.15); color: #34d399; }
+        .rba-badge.mid { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .rba-badge.low { background: rgba(248,113,113,0.15); color: #f87171; }
+        .rba-tips { margin: 0.6rem 0 0; padding-left: 1.1rem; }
+        .rba-tips li { font-size: 0.85rem; color: #9aa3b2; margin: 0.2rem 0; }
+        .rba-tips li.ok { color: #34d399; }
+    </style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/career-direction.html">Career Report <span class="nav-chip">Free</span></a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/#how-it-works">How it works</a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main class="resource-main">
+    <div class="resource-shell">
+        <p class="resource-eyebrow">Free Tool</p>
+        <h1 class="resource-title">Resume bullet point analyzer.</h1>
+        <p class="resource-lede">Paste your resume bullet points below, one per line, and get an instant strength score for each. The analyzer checks the four things recruiters and ATS systems reward most: a strong action verb, a measurable result, the right length, and no filler. Runs in your browser, no account, nothing leaves your device.</p>
+
+        <div class="rba-wrap">
+            <textarea id="rbaInput" class="rba-ta" placeholder="Paste one bullet per line, e.g.&#10;Led a team of 5 engineers to ship a payments feature that cut checkout time 30%&#10;Responsible for various marketing tasks and helped with social media"></textarea>
+            <div class="rba-row">
+                <button id="rbaBtn" class="btn-lime">Analyze bullets &rarr;</button>
+                <span class="rba-hint">One bullet per line. Remove the leading dot or dash if you have one.</span>
+            </div>
+        </div>
+
+        <div id="rbaOverall" class="rba-overall">
+            <div class="rba-overall__num" id="rbaScore">&mdash;</div>
+            <div class="rba-overall__lbl" id="rbaLbl"></div>
+        </div>
+        <div id="rbaResults"></div>
+
+        <article class="legal-doc">
+            <h2>What the analyzer checks</h2>
+            <ul>
+                <li><strong>Action verb start (30 pts):</strong> strong bullets open with a past-tense action verb (Led, Built, Cut, Grew), not a weak phrase like "Responsible for" or "Worked on".</li>
+                <li><strong>Measurable result (30 pts):</strong> a number, percentage, or dollar amount makes the impact concrete and credible.</li>
+                <li><strong>Length (20 pts):</strong> roughly 8&ndash;32 words. Too short lacks substance; too long gets skimmed.</li>
+                <li><strong>No filler (20 pts):</strong> words like "various", "several", "things", "etc", and first-person "I/my" weaken a bullet.</li>
+            </ul>
+
+            <h2>The strong-bullet formula</h2>
+            <p><strong>Action verb + what you did + quantified result.</strong> Compare "Responsible for improving onboarding" with "Cut new-hire onboarding time 40% by automating the setup checklist". Same work, very different signal. The second one names the verb, the action, and the number. Need a verb? See <a href="/blog/action-verbs-for-resume.html">50 action verbs that make your resume stand out</a>.</p>
+
+            <h2>Then tailor it to the job</h2>
+            <p>Strong bullets are step one. Step two is making sure they use the keywords from the specific posting you are applying to &mdash; that is what gets you past the ATS. Run your resume through the <a href="/#grader">free ATS grader</a> to see your match score, or <a href="/tailor-resume-to-job-description.html">tailor it to the job description</a> for $1.</p>
+
+            <h2>FAQ</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">What makes a strong resume bullet point?<span aria-hidden="true">+</span></button>
+                    <div class="faq-a">A strong bullet starts with a past-tense action verb, includes a measurable result (a number, percentage, or dollar amount), stays to one or two lines, and avoids filler phrases like "responsible for" or "worked on". The formula is: action verb + what you did + quantified result.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">Is this resume bullet analyzer free?<span aria-hidden="true">+</span></button>
+                    <div class="faq-a">Yes. It runs entirely in your browser, there is no account or email required, and nothing you paste leaves your device.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">Why do numbers matter in resume bullets?<span aria-hidden="true">+</span></button>
+                    <div class="faq-a">Quantified results give recruiters a concrete sense of your impact and make claims credible. "Cut onboarding time 40%" lands harder than "improved onboarding". Bullets with metrics consistently outperform vague ones.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">How long should a resume bullet be?<span aria-hidden="true">+</span></button>
+                    <div class="faq-a">One to two lines, roughly 8 to 32 words. Shorter bullets often lack substance; longer ones get skimmed past. Lead with the strongest information.</div>
+                </div>
+            </div>
+        </article>
+
+        <div class="resource-cta">
+            <h3>Strong bullets, tailored to the job.</h3>
+            <p>Once your bullets are sharp, tailor the whole resume to the posting in 60 seconds. $1, no account.</p>
+            <a href="/#generate" class="submit-btn submit-btn--inline"><span class="submit-btn__label">Tailor my resume</span></a>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <div class="footer-links">
+            <a href="/#how-it-works">How it works</a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/glossary.html">Glossary</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+        </div>    </div>
+</footer>
+
+<script>
+function toggleFaq(btn){ btn.parentElement.classList.toggle('open'); }
+
+(function(){
+    var STRONG = ("led built launched created designed developed managed increased reduced improved delivered drove grew generated negotiated automated implemented spearheaded optimized achieved exceeded secured cut saved boosted accelerated established founded scaled shipped owned directed coordinated executed analyzed engineered architected resolved transformed overhauled mentored trained won closed raised redesigned rebuilt consolidated launched migrated deployed authored produced oversaw championed initiated").split(" ");
+    var WEAK_START = ["responsible for","worked on","worked with","helped to","helped with","helped","assisted with","assisted","duties included","tasked with","in charge of","involved in","participated in","responsible"];
+    var FILLER = ["various","several","many","a lot","etc","things","stuff","some","numerous","multiple things"];
+    var btn = document.getElementById('rbaBtn');
+    var input = document.getElementById('rbaInput');
+    var results = document.getElementById('rbaResults');
+    var overall = document.getElementById('rbaOverall');
+    var scoreEl = document.getElementById('rbaScore');
+    var lblEl = document.getElementById('rbaLbl');
+
+    function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+    function analyze(line){
+        var raw = line.replace(/^[\s•\-\*·●]+/, '').trim();
+        var lower = raw.toLowerCase();
+        var words = raw.split(/\s+/).filter(Boolean);
+        var wc = words.length;
+        var tips = [];
+        var score = 0;
+
+        // Action verb start
+        var first = (words[0]||'').toLowerCase().replace(/[^a-z]/g,'');
+        var weakHit = WEAK_START.filter(function(w){ return lower.indexOf(w)===0; })[0];
+        if (weakHit){ tips.push(['low','Starts with "'+weakHit+'" — lead with a strong action verb instead (Led, Built, Cut).']); }
+        else if (STRONG.indexOf(first) !== -1){ score += 30; tips.push(['ok','Opens with a strong action verb ("'+words[0]+'").']); }
+        else { score += 12; tips.push(['mid','Consider opening with a stronger past-tense action verb.']); }
+
+        // Metric
+        if (/\d/.test(raw) || /\$|%/.test(raw)){ score += 30; tips.push(['ok','Includes a measurable result.']); }
+        else { tips.push(['low','No number, % or $ — add a measurable result to show impact.']); }
+
+        // Length
+        if (wc >= 8 && wc <= 32){ score += 20; tips.push(['ok','Good length ('+wc+' words).']); }
+        else if (wc < 8){ score += 6; tips.push(['mid','A bit short ('+wc+' words) — add the result or context.']); }
+        else { score += 8; tips.push(['mid','A bit long ('+wc+' words) — tighten to one or two lines.']); }
+
+        // Filler / first person
+        var fillers = FILLER.filter(function(f){ return new RegExp('\\b'+f.replace(/ /g,'\\s')+'\\b').test(lower); });
+        var firstPerson = /\b(i|my|me)\b/.test(lower);
+        if (fillers.length === 0 && !firstPerson){ score += 20; tips.push(['ok','No filler or first-person.']); }
+        else {
+            score += 6;
+            if (fillers.length) tips.push(['mid','Vague words: '+fillers.join(', ')+'. Be specific.']);
+            if (firstPerson) tips.push(['mid','Drop "I/my/me" — resume bullets are implied first person.']);
+        }
+
+        if (score > 100) score = 100;
+        return { raw: raw, score: Math.round(score), tips: tips };
+    }
+
+    function band(s){ return s >= 75 ? 'good' : (s >= 50 ? 'mid' : 'low'); }
+
+    btn.addEventListener('click', function(){
+        var lines = input.value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+        if (!lines.length){ results.innerHTML = '<p class="rba-hint">Paste at least one bullet point above.</p>'; overall.style.display='none'; return; }
+        var html = '', total = 0;
+        lines.forEach(function(line){
+            var r = analyze(line);
+            total += r.score;
+            var tipsHtml = r.tips.map(function(t){ return '<li class="'+(t[0]==='ok'?'ok':'')+'">'+esc(t[1])+'</li>'; }).join('');
+            html += '<div class="rba-card"><div class="rba-card__top"><div class="rba-card__txt">'+esc(r.raw)+'</div><span class="rba-badge '+band(r.score)+'">'+r.score+'</span></div><ul class="rba-tips">'+tipsHtml+'</ul></div>';
+        });
+        var avg = Math.round(total / lines.length);
+        scoreEl.textContent = avg;
+        scoreEl.style.color = band(avg)==='good' ? '#34d399' : (band(avg)==='mid' ? '#fbbf24' : '#f87171');
+        lblEl.textContent = lines.length + ' bullet' + (lines.length>1?'s':'') + ' analyzed · average strength ' + avg + '/100';
+        overall.style.display = 'flex';
+        results.innerHTML = html;
+        results.scrollIntoView({behavior:'smooth', block:'nearest'});
+        if (window.gtag) gtag('event','bullet_analyze',{count:lines.length, avg:avg});
+    });
+
+    var mt = document.getElementById('mobileToggle');
+    if (mt) mt.addEventListener('click', function(){ document.getElementById('navLinks').classList.toggle('open'); });
+})();
+</script>
+
+</body>
+</html>
