@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RW4Z3ETF5P"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RW4Z3ETF5P');gtag('config', 'AW-18121492223');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost Job Detector: Is This Job Real? Free Check | ATSHack</title>
+<meta name="description" content="Paste a job description. We score how likely it is to be a ghost listing using post age, language patterns, and salary disclosure red flags. Free, no account.">
+<meta property="og:title" content="Ghost Job Detector: Is This Job Real? | ATSHack">
+<meta property="og:description" content="Paste a job description. We score how likely it is to be a ghost listing. Free, no account.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ATSHack">
+<meta property="og:image" content="https://www.atshack.com/blog-thumbs/ghost-job-detector.png">
+<meta name="twitter:image" content="https://www.atshack.com/blog-thumbs/ghost-job-detector.png">
+<meta name="theme-color" content="#07080a">
+<link rel="canonical" href="https://www.atshack.com/ghost-job-detector.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Ghost Job Detector",
+  "url": "https://www.atshack.com/ghost-job-detector.html",
+  "description": "Free heuristic detector that scores how likely a job posting is to be a ghost listing.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "isAccessibleForFree": true,
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "publisher": {"@type": "Organization", "name": "ATSHack", "url": "https://www.atshack.com"}
+}
+</script>
+<style>
+    .ghost-shell { max-width: 880px; margin: 0 auto; padding: 2.4rem 1.4rem 4rem; }
+    .ghost-head { text-align: center; margin-bottom: 1.6rem; }
+    .ghost-eyebrow { display: inline-block; padding: 0.32rem 0.85rem; border: 1px solid rgba(202,255,0,0.45); border-radius: 999px; color: #CAFF00; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1rem; }
+    .ghost-title { font-size: clamp(2rem, 4.8vw, 3.2rem); margin: 0 0 0.6rem; letter-spacing: -0.015em; line-height: 1.08; }
+    .ghost-title em { color: #CAFF00; font-style: normal; }
+    .ghost-dek { color: #9097a3; max-width: 600px; margin: 0 auto 0; font-size: 1rem; line-height: 1.55; }
+
+    .ghost-form { background: rgba(20,22,32,0.55); border: 1px solid rgba(255,255,255,0.10); border-radius: 18px; padding: 1.6rem; margin-top: 1.8rem; }
+    .ghost-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.9rem; }
+    @media (max-width: 600px) { .ghost-row { grid-template-columns: 1fr; } }
+    .ghost-field label { display: block; font-size: 0.82rem; font-weight: 600; color: #d1d5dc; margin-bottom: 0.35rem; }
+    .ghost-field label .hint { font-weight: 400; color: #61697a; font-size: 0.74rem; margin-left: 0.3rem; }
+    .ghost-field input, .ghost-field textarea, .ghost-field select { width: 100%; padding: 0.65rem 0.85rem; background: #0a0a0f; border: 1px solid rgba(255,255,255,0.10); border-radius: 9px; color: #f5f6f8; font: 14px/1.45 'Inter', 'Space Grotesk', system-ui, sans-serif; box-sizing: border-box; }
+    .ghost-field input:focus, .ghost-field textarea:focus, .ghost-field select:focus { outline: none; border-color: #CAFF00; box-shadow: 0 0 0 3px rgba(202,255,0,0.12); }
+    .ghost-field textarea { min-height: 220px; resize: vertical; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .ghost-actions { display: flex; gap: 0.7rem; align-items: center; margin-top: 0.6rem; flex-wrap: wrap; }
+    .ghost-actions button { padding: 0.78rem 1.2rem; background: #CAFF00; color: #0a0a0f; border: none; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+    .ghost-actions button:hover { filter: brightness(1.05); }
+    .ghost-actions .secondary { background: transparent; color: #d1d5dc; border: 1px solid rgba(255,255,255,0.15); font-weight: 500; }
+    .ghost-actions .secondary:hover { border-color: #CAFF00; color: #CAFF00; }
+
+    .ghost-result { background: rgba(20,22,32,0.6); border: 1px solid rgba(255,255,255,0.10); border-radius: 18px; padding: 1.8rem; margin-top: 1.6rem; }
+    .ghost-result[hidden] { display: none; }
+    .ghost-result-head { display: flex; align-items: center; gap: 1.4rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+    .ghost-ring { position: relative; width: 110px; height: 110px; flex: 0 0 110px; }
+    .ghost-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ghost-ring .ring-bg { stroke: rgba(255,255,255,0.08); fill: none; }
+    .ghost-ring .ring-fg { fill: none; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease, stroke 0.2s; }
+    .ghost-ring__label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ghost-ring__num { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; letter-spacing: 0.02em; }
+    .ghost-ring__cap { font-size: 0.68rem; color: #9097a3; text-transform: uppercase; letter-spacing: 0.14em; margin-top: 0.2rem; }
+    .ghost-verdict { flex: 1; min-width: 240px; }
+    .ghost-verdict h2 { margin: 0 0 0.4rem; font-size: 1.5rem; }
+    .ghost-verdict p { margin: 0; color: #9097a3; line-height: 1.5; }
+
+    .ghost-flags { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; }
+    .ghost-flag { padding: 0.85rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 11px; display: grid; grid-template-columns: auto 1fr auto; gap: 0.7rem; align-items: center; }
+    .ghost-flag__dot { width: 8px; height: 8px; border-radius: 50%; }
+    .ghost-flag__main strong { display: block; font-size: 0.95rem; color: #f2f4f7; margin-bottom: 0.15rem; }
+    .ghost-flag__main span { font-size: 0.85rem; color: #9097a3; line-height: 1.4; }
+    .ghost-flag__pts { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #ef4444; font-weight: 600; }
+
+    .ghost-rec { margin-top: 1.4rem; padding: 1.05rem 1.2rem; background: rgba(202,255,0,0.06); border: 1px solid rgba(202,255,0,0.30); border-radius: 12px; }
+    .ghost-rec h3 { margin: 0 0 0.35rem; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.14em; color: #CAFF00; font-family: 'JetBrains Mono', monospace; }
+    .ghost-rec p { margin: 0; color: #e7eaee; line-height: 1.55; }
+
+    .ghost-cta { margin-top: 1.6rem; padding: 1.2rem; background: linear-gradient(180deg, #0a0a0f, #141621); border: 1px solid rgba(202,255,0,0.30); border-radius: 14px; text-align: center; }
+    .ghost-cta p { margin: 0 0 0.7rem; color: #d1d5dc; }
+    .ghost-cta a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.3rem; background: #CAFF00; color: #0a0a0f; text-decoration: none; border-radius: 10px; font-weight: 700; }
+
+    .ghost-method { margin-top: 2.2rem; padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.08); color: #9097a3; font-size: 0.88rem; line-height: 1.55; }
+    .ghost-method h3 { color: #d1d5dc; font-size: 0.95rem; margin: 0 0 0.5rem; }
+    .ghost-method ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+
+    .ghost-error { color: #fca5a5; font-size: 0.88rem; margin-top: 0.5rem; }
+</style>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links" id="navLinks">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/ghost-job-detector.html">Ghost Check <span class="nav-chip">Free</span></a>
+            <a href="/career-direction.html">Career Report <span class="nav-chip">Free</span></a>
+            <a href="/ats.html">What is ATS?</a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/login.html" id="navAuthLink" class="nav-cta">Sign in</a><script>(function(){try{var r=localStorage.getItem("sb-jjiizicwjldusuteffnb-auth-token");if(r){var p=JSON.parse(r);if(p&&(p.access_token||(p.currentSession&&p.currentSession.access_token))){var l=document.getElementById("navAuthLink");if(l){l.textContent="Account";l.href="/account.html";l.setAttribute("data-auth","in");}}}}catch(e){}})();</script>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<main>
+<div class="ghost-shell">
+    <header class="ghost-head">
+        <span class="ghost-eyebrow">Free Tool</span>
+        <h1 class="ghost-title">Is this job <em>actually real?</em></h1>
+        <p class="ghost-dek">Paste a job description and we score how likely it is to be a ghost listing. We look at posting age, applicant volume, language patterns, and salary disclosure. Free, no account, no email needed.</p>
+    </header>
+
+    <form class="ghost-form" id="ghostForm" autocomplete="off">
+        <div class="ghost-field">
+            <label for="ghostJD">Job description text <span class="hint">copy/paste from the posting</span></label>
+            <textarea id="ghostJD" placeholder="Paste the full job description here..." required></textarea>
+        </div>
+
+        <div class="ghost-row">
+            <div class="ghost-field">
+                <label for="ghostPostedAge">Posted how long ago? <span class="hint">on the job site</span></label>
+                <select id="ghostPostedAge">
+                    <option value="0">Today / 1 day</option>
+                    <option value="3">2-7 days</option>
+                    <option value="14">8-21 days</option>
+                    <option value="30" selected>22-45 days</option>
+                    <option value="60">46-90 days</option>
+                    <option value="120">3-6 months</option>
+                    <option value="200">6+ months</option>
+                </select>
+            </div>
+            <div class="ghost-field">
+                <label for="ghostApplicants">Number of applicants <span class="hint">if visible</span></label>
+                <select id="ghostApplicants">
+                    <option value="-1" selected>Not shown / unknown</option>
+                    <option value="10">Under 25</option>
+                    <option value="50">25-99</option>
+                    <option value="150">100-200</option>
+                    <option value="300">200+ ("100+" on LinkedIn)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="ghost-row">
+            <div class="ghost-field">
+                <label for="ghostState">Job location state <span class="hint">for salary law check</span></label>
+                <select id="ghostState">
+                    <option value="" selected>Not in US / not sure</option>
+                    <option value="CA">California (pay law)</option>
+                    <option value="NY">New York (pay law)</option>
+                    <option value="WA">Washington (pay law)</option>
+                    <option value="CO">Colorado (pay law)</option>
+                    <option value="IL">Illinois (pay law)</option>
+                    <option value="other">Other US state</option>
+                </select>
+            </div>
+            <div class="ghost-field">
+                <label for="ghostSalary">Salary disclosed in the posting?</label>
+                <select id="ghostSalary">
+                    <option value="yes" selected>Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="ghost-actions">
+            <button type="submit" id="ghostSubmit">Check the posting</button>
+            <button type="button" class="secondary" id="ghostExample">Try with a sample posting</button>
+        </div>
+        <p class="ghost-error" id="ghostError" hidden></p>
+    </form>
+
+    <section class="ghost-result" id="ghostResult" hidden aria-live="polite">
+        <div class="ghost-result-head">
+            <div class="ghost-ring">
+                <svg viewBox="0 0 110 110">
+                    <circle class="ring-bg" cx="55" cy="55" r="46" stroke-width="9"></circle>
+                    <circle class="ring-fg" id="ghostRingFg" cx="55" cy="55" r="46" stroke-width="9"
+                            stroke-dasharray="289" stroke-dashoffset="289" stroke="#CAFF00"></circle>
+                </svg>
+                <div class="ghost-ring__label">
+                    <span class="ghost-ring__num" id="ghostRingNum">0</span>
+                    <span class="ghost-ring__cap">ghost score</span>
+                </div>
+            </div>
+            <div class="ghost-verdict">
+                <h2 id="ghostVerdict">Looks legit</h2>
+                <p id="ghostVerdictBody">No major red flags. Probably worth a real application.</p>
+            </div>
+        </div>
+
+        <h3 style="font-size:0.82rem;text-transform:uppercase;letter-spacing:0.14em;color:#d1d5dc;margin:0 0 0.7rem;font-family:'JetBrains Mono',monospace;">Red flags found</h3>
+        <ul class="ghost-flags" id="ghostFlags"></ul>
+
+        <div class="ghost-rec">
+            <h3>What to do</h3>
+            <p id="ghostRec">Apply normally. Tailor a resume and send it.</p>
+        </div>
+
+        <div class="ghost-cta">
+            <p>However real or ghosted, your resume still has to land. Tailored in 60 seconds, $1.</p>
+            <a href="/#generate">Tailor my resume <span style="color:rgba(10,10,15,0.65);">$1</span></a>
+        </div>
+    </section>
+
+    <section class="ghost-method">
+        <h3>How the score works</h3>
+        <p>This is a heuristic detector, not a verdict. We add ghost-points based on patterns that recent studies (Harvard Business School "Hidden Workers" report, LinkedIn 2024-2026 ghost-job data, recruiter surveys) consistently associate with non-hiring postings. The score is your guide, not your judge.</p>
+        <ul>
+            <li><strong>Posting age.</strong> Real jobs typically close within 30 days. Postings open 60-90+ days are suspicious. Open 6+ months is a near-certain ghost or evergreen.</li>
+            <li><strong>Applicant count + age combined.</strong> 200+ applicants and still open after a month means the company isn't moving on candidates.</li>
+            <li><strong>Language patterns.</strong> Phrases like "rolling basis," "talent pipeline," "always looking for great people" appear disproportionately in ghost listings.</li>
+            <li><strong>Salary disclosure.</strong> Missing salary on a posting in CA, NY, WA, CO, or IL is illegal as of 2025. If a posting violates this, the employer is either careless or not actually hiring.</li>
+            <li><strong>Vagueness.</strong> Real jobs name a team, a manager, a specific product, or specific responsibilities. Generic JDs with no specifics are ghost-leaning.</li>
+        </ul>
+        <p>Want the AI-powered "vibe check" on top of this? Coming in the next release.</p>
+    </section>
+</div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-tile">ATS</span>
+            <span>ATSHack</span>
+        </div>
+        <nav class="footer-cols" aria-label="Footer">
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="/">Tailor a resume</a>
+                <a href="/#grader">Free resume grader</a>
+                <a href="/ghost-job-detector.html">Ghost job detector</a>
+                <a href="/pricing.html">Pricing</a>
+                <a href="/help.html">Help</a>
+            </div>
+            <div class="footer-col">
+                <h4>Free tools</h4>
+                <a href="/keyword-extractor.html">Keyword extractor</a>
+                <a href="/career-direction.html">Career direction</a>
+                <a href="/behavioral-questions.html">Behavioral questions</a>
+                <a href="/follow-up-emails.html">Follow-up emails</a>
+                <a href="/salary-playbook.html">Salary playbook</a>
+            </div>
+            <div class="footer-col">
+                <h4>ATS guides</h4>
+                <a href="/ats.html">What is ATS?</a>
+                <a href="/workday-ats.html">Workday</a>
+                <a href="/greenhouse-ats.html">Greenhouse</a>
+                <a href="/lever-ats.html">Lever</a>
+            </div>
+            <div class="footer-col">
+                <h4>Compare</h4>
+                <a href="/vs-jobscan.html">vs Jobscan</a>
+                <a href="/vs-teal.html">vs Teal</a>
+                <a href="/blog/">Blog</a>
+            </div>
+        </nav>
+        <div class="footer-meta">
+            <a href="/privacy.html">Privacy</a>
+            &nbsp;&middot;&nbsp;
+            <a href="/terms.html">Terms</a>
+            &nbsp;&middot;&nbsp;
+            <a href="mailto:contact@atshack.com">contact@atshack.com</a>
+            &nbsp;&middot;&nbsp;
+            <span>&copy; 2026 ATSHack</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    // Ghost-flag phrases (lowercase). Score weight applied per match (max one per phrase).
+    var RED_PHRASES = [
+        { phrase: 'rolling basis', pts: 15, why: 'The phrase "rolling basis" appears disproportionately in postings that never close.' },
+        { phrase: 'talent pipeline', pts: 15, why: '"Talent pipeline" usually means the company is collecting resumes for future hires, not filling a current role.' },
+        { phrase: 'pipeline of candidates', pts: 15, why: 'Same as "talent pipeline" — they\'re sourcing, not hiring.' },
+        { phrase: 'always looking', pts: 12, why: '"Always looking for great people" is the canonical ghost phrase.' },
+        { phrase: 'always hiring', pts: 12, why: '"Always hiring" almost never means actively filling this specific role.' },
+        { phrase: 'build our bench', pts: 12, why: '"Build our bench" is recruiter-speak for backup-list collection.' },
+        { phrase: 'evergreen', pts: 18, why: '"Evergreen role" is the explicit name for a never-actually-hiring posting.' },
+        { phrase: 'multiple openings', pts: 6, why: '"Multiple openings" with no count and no team named is often vague-by-design.' },
+        { phrase: 'multiple positions', pts: 6, why: 'Same. If they were real, they\'d say how many.' },
+        { phrase: 'fast-paced', pts: 2, why: 'Mild signal. Generic corporate language tends to cluster in low-effort postings.' },
+        { phrase: 'wear many hats', pts: 2, why: 'Mild signal of vagueness.' },
+        { phrase: 'no specific job description', pts: 8, why: 'They literally said it.' },
+        { phrase: 'we\'re always open', pts: 12, why: '"We\'re always open to talent" is a near-perfect ghost tell.' },
+        { phrase: 'submit your resume anyway', pts: 14, why: '"Even if you don\'t see your role, submit your resume" = resume harvesting.' }
+    ];
+
+    var PAY_LAW_STATES = ['CA', 'NY', 'WA', 'CO', 'IL'];
+
+    var form = document.getElementById('ghostForm');
+    var jdEl = document.getElementById('ghostJD');
+    var ageEl = document.getElementById('ghostPostedAge');
+    var appsEl = document.getElementById('ghostApplicants');
+    var stateEl = document.getElementById('ghostState');
+    var salaryEl = document.getElementById('ghostSalary');
+    var submitBtn = document.getElementById('ghostSubmit');
+    var exampleBtn = document.getElementById('ghostExample');
+    var errEl = document.getElementById('ghostError');
+    var resultEl = document.getElementById('ghostResult');
+
+    function score() {
+        var jd = (jdEl.value || '').trim();
+        if (jd.length < 80) {
+            showErr('Paste at least a few sentences of the job description.');
+            return;
+        }
+        hideErr();
+
+        var jdLower = jd.toLowerCase();
+        var flags = [];
+        var total = 0;
+
+        // 1. Posted age
+        var age = parseInt(ageEl.value, 10) || 0;
+        if (age >= 200) {
+            flags.push({ label: 'Posting open 6+ months', pts: 50, why: 'Real roles rarely stay posted this long. This is almost certainly evergreen or already filled.' });
+            total += 50;
+        } else if (age >= 120) {
+            flags.push({ label: 'Posting open 3-6 months', pts: 35, why: 'Strong ghost signal. Median real job stays open 23 days.' });
+            total += 35;
+        } else if (age >= 60) {
+            flags.push({ label: 'Posting open 60-90 days', pts: 22, why: 'Suspicious. Most real postings close in under 45 days.' });
+            total += 22;
+        } else if (age >= 30) {
+            flags.push({ label: 'Posting open 30+ days', pts: 10, why: 'Mildly suspicious. Could be slow process or low priority hire.' });
+            total += 10;
+        }
+
+        // 2. Applicants vs age
+        var apps = parseInt(appsEl.value, 10);
+        if (apps >= 150 && age >= 30) {
+            flags.push({ label: '200+ applicants, still open after a month', pts: 18, why: 'They have plenty of candidates. Either they\'re not interviewing or they have no intent to fill.' });
+            total += 18;
+        } else if (apps >= 50 && age >= 60) {
+            flags.push({ label: '50+ applicants and 2+ months old', pts: 12, why: 'No urgency to fill suggests low priority or ghost.' });
+            total += 12;
+        }
+
+        // 3. Red phrases
+        var phraseMatches = [];
+        for (var i = 0; i < RED_PHRASES.length; i++) {
+            var p = RED_PHRASES[i];
+            if (jdLower.indexOf(p.phrase) !== -1) {
+                phraseMatches.push(p);
+            }
+        }
+        // Cap phrase contribution at 45 to avoid pure-phrase pile-on.
+        var phraseTotal = 0;
+        for (var j = 0; j < phraseMatches.length; j++) {
+            var pm = phraseMatches[j];
+            flags.push({ label: 'Red phrase: "' + pm.phrase + '"', pts: pm.pts, why: pm.why });
+            phraseTotal += pm.pts;
+        }
+        if (phraseTotal > 45) phraseTotal = 45;
+        total += phraseTotal;
+
+        // 4. Salary disclosure law
+        var st = stateEl.value;
+        var salaryShown = salaryEl.value === 'yes';
+        if (PAY_LAW_STATES.indexOf(st) !== -1 && !salaryShown) {
+            flags.push({ label: 'No salary in a pay-transparency state', pts: 14, why: 'Posting in ' + st + ' without a salary range violates state law. Careless employer OR not real.' });
+            total += 14;
+        } else if (st === 'other' && !salaryShown) {
+            flags.push({ label: 'No salary disclosed', pts: 4, why: 'Not required in this state, but real hiring teams disclose more often than ghosts.' });
+            total += 4;
+        }
+
+        // 5. Vagueness checks
+        var hasMetrics = /\b(\d+%|\$\d|increased|reduced|deliver|ship|build|maintain|implement|develop)\b/i.test(jd);
+        var hasTeamName = /\b(team|engineering|product|marketing|sales|growth|design|finance|operations|legal|hr|people|customer success)\b/i.test(jd);
+        var wordCount = jd.split(/\s+/).length;
+
+        if (wordCount < 120) {
+            flags.push({ label: 'Very short job description (' + wordCount + ' words)', pts: 10, why: 'Real postings average 350-600 words. Skeleton JDs are a ghost flag.' });
+            total += 10;
+        }
+        if (!hasMetrics && wordCount > 150) {
+            flags.push({ label: 'No specific responsibilities or metrics', pts: 8, why: 'Real jobs name what you would actually do. Vague descriptions cluster in ghost postings.' });
+            total += 8;
+        }
+        if (!hasTeamName) {
+            flags.push({ label: 'No team or department named', pts: 6, why: 'Real postings name the team you would join. Missing team is a vagueness signal.' });
+            total += 6;
+        }
+
+        // Cap at 100
+        if (total > 100) total = 100;
+
+        renderResult(total, flags);
+    }
+
+    function renderResult(total, flags) {
+        // Color + verdict
+        var color, verdictTitle, verdictBody, rec;
+        if (total >= 70) {
+            color = '#ef4444';
+            verdictTitle = 'Likely ghost listing.';
+            verdictBody = 'Strong red flags across multiple categories. Apply only if it costs you 2 minutes or less.';
+            rec = 'Cap your effort. Tailor a resume in 60 seconds, send it, and move on. Do not spend an hour on this one.';
+        } else if (total >= 35) {
+            color = '#facc15';
+            verdictTitle = 'Suspicious. Apply with caution.';
+            verdictBody = 'Several flags worth knowing. Could still be real but with a slow hiring team.';
+            rec = 'Apply, but tailor your resume properly. Set a 14-day expectation and follow up once. Then move on.';
+        } else {
+            color = '#86efac';
+            verdictTitle = 'Looks legit.';
+            verdictBody = 'No major ghost signals. Worth a real application.';
+            rec = 'Apply normally. Tailor the resume to the posting, write a real cover letter if asked, and follow up after 7-10 days.';
+        }
+
+        // Ring fill
+        var ringFg = document.getElementById('ghostRingFg');
+        ringFg.setAttribute('stroke', color);
+        var circumference = 289; // 2*pi*46 rounded
+        var offset = circumference - (total / 100) * circumference;
+        // animate via re-layout
+        ringFg.setAttribute('stroke-dashoffset', circumference);
+        requestAnimationFrame(function () {
+            ringFg.setAttribute('stroke-dashoffset', offset);
+        });
+
+        document.getElementById('ghostRingNum').textContent = total;
+        document.getElementById('ghostVerdict').textContent = verdictTitle;
+        document.getElementById('ghostVerdictBody').textContent = verdictBody;
+        document.getElementById('ghostRec').textContent = rec;
+
+        var flagsEl = document.getElementById('ghostFlags');
+        if (!flags.length) {
+            flagsEl.innerHTML = '<li class="ghost-flag" style="grid-template-columns:auto 1fr;"><span class="ghost-flag__dot" style="background:#86efac;"></span><span style="color:#9097a3;font-size:0.92rem;">No red flags detected. The posting looks legit on the heuristics we check.</span></li>';
+        } else {
+            flagsEl.innerHTML = flags.map(function (f) {
+                var dotColor = f.pts >= 20 ? '#ef4444' : f.pts >= 10 ? '#facc15' : '#9ca3af';
+                return '<li class="ghost-flag">' +
+                    '<span class="ghost-flag__dot" style="background:' + dotColor + ';"></span>' +
+                    '<div class="ghost-flag__main"><strong>' + esc(f.label) + '</strong><span>' + esc(f.why) + '</span></div>' +
+                    '<span class="ghost-flag__pts">+' + f.pts + '</span>' +
+                '</li>';
+            }).join('');
+        }
+
+        resultEl.hidden = false;
+        if (window.gtag) {
+            gtag('event', 'ghost_check', { value: total, num_flags: flags.length });
+        }
+        setTimeout(function () { resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+    }
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function showErr(msg) { errEl.textContent = msg; errEl.hidden = false; }
+    function hideErr() { errEl.hidden = true; }
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        score();
+    });
+
+    exampleBtn.addEventListener('click', function () {
+        jdEl.value = "We are always looking for great people to join our growing team. This is an evergreen role with multiple openings across our talent pipeline. We are a fast-paced startup where you'll wear many hats and have an opportunity to make a real impact. Submit your resume anyway, even if you don't see your role posted. We hire on a rolling basis.";
+        ageEl.value = '120';
+        appsEl.value = '300';
+        stateEl.value = 'CA';
+        salaryEl.value = 'no';
+        score();
+    });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth-nav.js"></script>
+
+</body>
+</html>
