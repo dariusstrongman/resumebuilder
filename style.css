@@ -2848,7 +2848,10 @@ textarea::placeholder {
 }
 .blog-featured-inner { max-width: 1180px; margin: 0 auto; }
 .blog-featured {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(1.2rem, 3vw, 2rem);
+    align-items: center;
     position: relative;
     padding: clamp(1.5rem, 3vw, 2.5rem);
     background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
@@ -2858,6 +2861,24 @@ textarea::placeholder {
     color: inherit;
     overflow: hidden;
     transition: transform 0.25s var(--ease), border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.blog-featured__thumb {
+    grid-column: 2;
+    grid-row: 1 / span 99;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    display: block;
+}
+.blog-featured .bf-marker,
+.blog-featured .bf-body { grid-column: 1; position: relative; z-index: 2; }
+@media (max-width: 720px) {
+    .blog-featured { grid-template-columns: 1fr; }
+    .blog-featured__thumb { grid-column: 1; grid-row: 1; }
+    .blog-featured .bf-marker, .blog-featured .bf-body { grid-column: 1; }
 }
 .blog-featured::before {
     content: '';
@@ -2941,7 +2962,7 @@ textarea::placeholder {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    padding: 1.6rem;
+    padding: 0 0 1.6rem;
     background: var(--bg-1);
     border: 1px solid var(--line);
     border-radius: 14px;
@@ -2951,6 +2972,27 @@ textarea::placeholder {
     position: relative;
     overflow: hidden;
 }
+.blog-card__thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    transition: transform 0.4s var(--ease);
+}
+.blog-card:hover .blog-card__thumb {
+    transform: scale(1.02);
+}
+.blog-card > .blog-tag,
+.blog-card > h3,
+.blog-card > p,
+.blog-card > .blog-meta {
+    margin-left: 1.6rem;
+    margin-right: 1.6rem;
+}
+.blog-card > .blog-tag { margin-top: 1.2rem; }
 .blog-card::after {
     content: '';
     position: absolute;
