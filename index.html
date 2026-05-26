@@ -11,9 +11,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATSHack | ATS-optimized resumes from $1. Pro from $15/mo.</title>
-    <meta name="description" content="Upload your resume. Paste the job posting. Download a tailored, ATS-optimized PDF in 60 seconds. Pay $1 per resume with no account, or go Pro for $15/mo (50 tailorings, ATS gap reports, STAR coach).">
+    <meta name="description" content="Upload your resume. Paste the job posting. Get a tailored ATS-optimized PDF in 60 seconds for $1, no account. Pro tracks which resume versions actually win interviews. $15/mo.">
     <meta property="og:title" content="ATSHack | Tailored resumes from $1.">
-    <meta property="og:description" content="Stop sending the same resume. We rewrite yours to match any job posting in 60 seconds. Passes Workday, Greenhouse, Lever, and every major ATS. $1 one-off or $15/mo Pro.">
+    <meta property="og:description" content="Stop sending the same resume. We rewrite yours to match any posting in 60 seconds. $1 one-off, or Pro tracks which of your resume versions actually win interviews. $15/mo.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://www.atshack.com/og.png">
     <meta property="og:image:width" content="1200">
@@ -160,7 +160,15 @@
                 "name": "Why is ATSHack so cheap?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Pay-as-you-go is $1 per resume. No account, no subscription. If you tailor a lot, Pro is $15 per month for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, an AI follow-up email generator, and an application tracker with follow-up reminders. Most competitors charge $25-100 per month for just a tailorer."
+                    "text": "Pay-as-you-go is $1 per resume. No account, no subscription. If you tailor a lot, Pro is $15 per month for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, an AI follow-up email generator, and a tracker that links applications to the resume you used so you see which versions actually win interviews. Most competitors charge $25-100 per month for just a tailorer."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I know which of my resume versions is working?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ATSHack Pro links every tracked application to the specific resume version you used. The dashboard shows per-resume interview, offer, and rejection counts so you see at a glance which versions actually win interviews and which get ghosted. We are the only resume tool that closes this feedback loop because we are also the application tracker."
                 }
             },
             {
@@ -1044,7 +1052,11 @@
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">Why is it so cheap?<span aria-hidden="true">+</span></button>
-            <div class="faq-a">Pay-as-you-go is $1 per resume. No account, no commitment. Pro is $15/mo for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, AI follow-up email generator, and application tracker with follow-up reminders. Most competitors charge $25&ndash;100 per month for just a tailorer.</div>
+            <div class="faq-a">Pay-as-you-go is $1 per resume. No account, no commitment. Pro is $15/mo for the full job-search workspace: 50 tailorings with cover letters and ATS gap reports, the STAR interview coach, AI follow-up email generator, and a tracker that links applications to the resume you used so you see which versions actually win interviews. Most competitors charge $25&ndash;100/mo for just a tailorer.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">How do I know which of my resume versions is working?<span aria-hidden="true">+</span></button>
+            <div class="faq-a">This is the part no other resume tool answers. ATSHack Pro links every tracked application to the specific resume version you used. The dashboard then shows you per-resume interview, offer, and rejection counts. If your "startup-v3" resume gets 3 interviews in 8 applications and your "v2" gets zero in 5, you stop sending the loser. We are the only resume tool that closes this feedback loop because we are also the application tracker.</div>
         </div>
         <div class="faq-item">
             <button class="faq-q" onclick="toggleFaq(this)">What is the STAR interview coach?<span aria-hidden="true">+</span></button>
@@ -1059,7 +1071,7 @@
         <header class="pro-anchor__head">
             <span class="lime-badge">For active job seekers</span>
             <h2 class="pro-anchor__title">If you're job-hunting for more <em>than a week.</em></h2>
-            <p class="pro-anchor__dek">One subscription, four tools that work together. Tailor a resume, prep the interview, send the follow-up, track the offer. All in one dashboard.</p>
+            <p class="pro-anchor__dek">Stop guessing which version is working. Pro links every application to the resume you used, then shows you which ones actually win interviews. Plus the four tools to tailor, prep, follow up, and track. All in one dashboard.</p>
         </header>
 
         <div class="pro-anchor__grid">
@@ -1088,12 +1100,14 @@
                 <div class="pro-anchor__icon" aria-hidden="true">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                 </div>
-                <h3>Application Tracker</h3>
-                <p>Every application in one view with follow-up reminders, so nothing slips while you're applying to fifty roles.</p>
+                <h3>Tracker with outcome stats</h3>
+                <p>Link every application to the resume you used. See which versions get the most interviews and which get ghosted. No other resume tool shows you this.</p>
             </div>
         </div>
 
         <div class="pro-anchor__benefits">
+            <span class="pro-anchor__benefit">See which resume wins interviews</span>
+            <span class="pro-anchor__dot" aria-hidden="true">&middot;</span>
             <span class="pro-anchor__benefit">50 tailorings a month</span>
             <span class="pro-anchor__dot" aria-hidden="true">&middot;</span>
             <span class="pro-anchor__benefit">ATS gap reports on every one</span>
@@ -1157,7 +1171,7 @@
                 <span class="pricing-per" id="pricingPer">per month</span>
             </div>
             <div class="pricing-copy">
-                <p><strong>Pro.</strong> A real job-search workspace, not just bulk tailorings. Career Roadmap (4-path diagnostic + 90-day plan), STAR interview coach, AI follow-up email generator, application tracker with reminders. Plus 50 tailored resumes a month with cover letters and ATS gap reports on every one.</p>
+                <p><strong>Pro.</strong> A real job-search workspace, not just bulk tailorings. The only tracker that links applications to the resume version you used, so you can see which resumes actually win interviews. Plus Career Roadmap (4-path diagnostic + 90-day plan), STAR interview coach, AI follow-up email generator, and 50 tailored resumes a month with cover letters and ATS gap reports on every one.</p>
                 <p class="pricing-addon" id="pricingAddon">Saved resume history in one dashboard. 10-day money-back guarantee. Cancel anytime.</p>
                 <button type="button" class="submit-btn submit-btn--inline" id="goProBtn" data-plan="pro_monthly">
                     <span class="submit-btn__label">Go Pro</span>
