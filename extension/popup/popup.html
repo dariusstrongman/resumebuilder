@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ATSHack</title>
+<style>
+    :root {
+        --bg: #0a0a0f;
+        --bg2: #12151b;
+        --accent: #CAFF00;
+        --ink: #f5f6f8;
+        --ink2: #9097a3;
+        --line: rgba(255,255,255,0.10);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 'Inter', system-ui, -apple-system, sans-serif; }
+    body { width: 320px; padding: 18px 18px 16px; }
+    .brand { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .brand__tile { background: var(--accent); color: var(--bg); font-weight: 800; font-size: 11px; padding: 4px 8px; border-radius: 6px; letter-spacing: 0.04em; }
+    .brand__name { font-weight: 700; font-size: 15px; }
+    h1 { font-size: 16px; margin: 0 0 6px; }
+    .lede { font-size: 13px; color: var(--ink2); margin: 0 0 14px; line-height: 1.5; }
+    .cta { display: block; padding: 11px 14px; background: var(--accent); color: var(--bg); text-decoration: none; text-align: center; border-radius: 8px; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+    .cta:hover { filter: brightness(1.05); }
+    .cta--ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 600; }
+    .cta--ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .supported { font-size: 11px; color: var(--ink2); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); line-height: 1.5; }
+    .supported strong { color: var(--ink); font-weight: 600; }
+    .footer { margin-top: 10px; font-size: 11px; color: var(--ink2); text-align: center; }
+    .footer a { color: var(--accent); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+    <div class="brand">
+        <span class="brand__tile">ATS</span>
+        <span class="brand__name">ATSHack</span>
+    </div>
+    <h1>Tailor any job in 60 seconds.</h1>
+    <p class="lede">Open a job posting on LinkedIn, Indeed, Greenhouse, Lever, or Workday. The "Tailor with ATSHack" button appears next to the Apply button.</p>
+    <a class="cta" href="https://www.atshack.com/?utm_source=extension&utm_medium=popup" target="_blank">Open ATSHack</a>
+    <a class="cta cta--ghost" href="https://www.atshack.com/#grader?utm_source=extension&utm_medium=popup_grader" target="_blank">Grade my resume free</a>
+    <div class="supported">
+        <strong>Works on:</strong> LinkedIn jobs, Indeed, Greenhouse boards, Lever boards, Workday job sites.
+    </div>
+    <div class="footer">
+        <a href="https://www.atshack.com/extension-privacy.html" target="_blank">Privacy</a>
+        &middot;
+        <a href="https://www.atshack.com/help.html" target="_blank">Help</a>
+        &middot;
+        v1.0.0
+    </div>
+</body>
+</html>

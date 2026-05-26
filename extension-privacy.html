@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index,follow">
+<title>Browser Extension Privacy Policy | ATSHack</title>
+<meta name="description" content="Privacy policy for the ATSHack browser extension. What it accesses, what gets stored, what gets sent.">
+<link rel="canonical" href="https://www.atshack.com/extension-privacy.html">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="bg-noise" aria-hidden="true"></div>
+
+<header class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <span class="brand-tile">ATS</span>
+            <span class="brand-name">ATSHack</span>
+        </a>
+        <nav class="nav-links">
+            <a href="/#grader">Grader <span class="nav-chip">Free</span></a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="/blog/">Blog</a>
+            <a href="/#generate" class="nav-cta">Tailor for $1</a>
+        </nav>
+    </div>
+</header>
+
+<main style="max-width:780px;margin:0 auto;padding:3rem 1.5rem 5rem;">
+    <p style="color:#9097a3;font-family:'JetBrains Mono',monospace;font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;margin:0 0 0.6rem;">Browser Extension</p>
+    <h1 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin:0 0 0.4rem;letter-spacing:-0.01em;">Privacy Policy</h1>
+    <p style="color:#9097a3;margin:0 0 2.2rem;font-size:0.92rem;">Last updated: May 26, 2026</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">The short version</h2>
+    <p>The ATSHack browser extension reads the job description text from the job posting you are currently viewing, stores it temporarily in your browser, and pre-fills it into the ATSHack tailor form when you click "Tailor with ATSHack." That is it. No accounts. No tracking pixels. No selling data.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">What the extension accesses</h2>
+    <p>The extension is granted permission to run only on these specific sites:</p>
+    <ul>
+        <li><strong>linkedin.com/jobs</strong>, <strong>indeed.com</strong>, <strong>boards.greenhouse.io</strong>, <strong>jobs.lever.co</strong>, <strong>*.myworkdayjobs.com</strong>. To detect a job posting page and read the job description text and the job title.</li>
+        <li><strong>atshack.com</strong>. To deliver the saved job description text into the tailor form on our own site.</li>
+    </ul>
+    <p>It does not access any other site, your browser history, your bookmarks, your downloads, or your cookies.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">What the extension stores</h2>
+    <p>When you click "Tailor with ATSHack" on a job posting, the extension saves the job description text and job title into your browser's local extension storage (chrome.storage.local). This storage is on your device only. It is never transmitted to ATSHack servers or anyone else's servers by the extension itself.</p>
+    <p>The saved job description is automatically discarded as soon as it is pre-filled into the ATSHack tailor form, or after 10 minutes if you never opened ATSHack, whichever comes first.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">What the extension sends</h2>
+    <p>Nothing, automatically. The extension does not phone home, does not log analytics, and does not connect to any backend on its own.</p>
+    <p>When you click the "Tailor with ATSHack" button on a job posting, the extension opens a new tab to <strong>atshack.com</strong>. Your browser sends a normal HTTP request to load that page. ATSHack's web app then receives the pre-filled job description text the same way it would if you had pasted it manually. From that point forward, the website's own privacy practices apply (see <a href="/privacy.html">site privacy policy</a>).</p>
+    <p>If you do not click the button, no data leaves your browser. Period.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">What the extension does NOT do</h2>
+    <ul>
+        <li>Does not collect or sell personal information.</li>
+        <li>Does not track you across the web.</li>
+        <li>Does not show ads.</li>
+        <li>Does not read your messages, emails, or any non-job-posting content.</li>
+        <li>Does not require an account to use.</li>
+        <li>Does not modify the job posting pages beyond adding the "Tailor with ATSHack" button.</li>
+        <li>Does not run on any site other than the ones listed above.</li>
+    </ul>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">Permissions, justified</h2>
+    <p>Chrome Web Store requires us to declare permissions. Here is exactly why each one exists.</p>
+    <ul>
+        <li><strong>host_permissions for job boards.</strong> Required so the extension can detect job posting pages and inject the button. Read-only access to the page content.</li>
+        <li><strong>host_permissions for atshack.com.</strong> Required to deliver the saved job description to the tailor form on our site.</li>
+        <li><strong>storage.</strong> Required to temporarily hold the job description between the job board page and the ATSHack tab. Stored locally, never synced or transmitted.</li>
+        <li><strong>activeTab.</strong> Required so the extension can read the content of the tab you are actively viewing when you click the button.</li>
+    </ul>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">Children</h2>
+    <p>The extension is not directed at children under 13 and we do not knowingly collect data from anyone, including children.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">Changes to this policy</h2>
+    <p>If we make a substantive change, the "Last updated" date at the top of this page will change. Material changes will also be noted in the extension's release notes on the Chrome Web Store.</p>
+
+    <h2 style="font-size:1.25rem;margin:2rem 0 0.6rem;">Contact</h2>
+    <p>Questions about the extension or this policy: <a href="mailto:contact@atshack.com">contact@atshack.com</a>.</p>
+
+    <p style="margin:3rem 0 0;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,0.08);color:#9097a3;font-size:0.88rem;">See also: <a href="/privacy.html">site privacy policy</a> &middot; <a href="/terms.html">terms</a></p>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand"><span class="brand-tile">ATS</span><span>ATSHack</span></div>
+        <div class="footer-meta">
+            <a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="mailto:contact@atshack.com">contact@atshack.com</a> &middot; <span>&copy; 2026 ATSHack</span>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

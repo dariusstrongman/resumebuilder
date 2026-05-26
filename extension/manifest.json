@@ -1,0 +1,98 @@
+{
+  "manifest_version": 3,
+  "name": "ATSHack: Tailor Resume in One Click",
+  "short_name": "ATSHack",
+  "version": "1.0.0",
+  "description": "Tailor your resume to any job posting from LinkedIn, Indeed, Greenhouse, Lever, or Workday in 60 seconds. $1, no account needed.",
+  "author": "ATSHack",
+  "homepage_url": "https://www.atshack.com",
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "action": {
+    "default_title": "Tailor with ATSHack",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "host_permissions": [
+    "https://www.linkedin.com/jobs/*",
+    "https://*.indeed.com/*",
+    "https://boards.greenhouse.io/*",
+    "https://job-boards.greenhouse.io/*",
+    "https://jobs.lever.co/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://www.atshack.com/*",
+    "https://atshack.com/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/jobs/*"
+      ],
+      "js": ["content/linkedin.js", "content/inject.js"],
+      "css": ["content/inject.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://*.indeed.com/viewjob*",
+        "https://*.indeed.com/jobs*",
+        "https://*.indeed.com/cmp/*/jobs/*"
+      ],
+      "js": ["content/indeed.js", "content/inject.js"],
+      "css": ["content/inject.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://boards.greenhouse.io/*",
+        "https://job-boards.greenhouse.io/*"
+      ],
+      "js": ["content/greenhouse.js", "content/inject.js"],
+      "css": ["content/inject.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://jobs.lever.co/*"],
+      "js": ["content/lever.js", "content/inject.js"],
+      "css": ["content/inject.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://*.myworkdayjobs.com/*"],
+      "js": ["content/workday.js", "content/inject.js"],
+      "css": ["content/inject.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.atshack.com/*",
+        "https://atshack.com/*"
+      ],
+      "js": ["content/atshack-receiver.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  }
+}
