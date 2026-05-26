@@ -232,7 +232,7 @@
             <li><strong>Salary disclosure.</strong> Missing salary on a posting in CA, NY, WA, CO, or IL is illegal as of 2025. If a posting violates this, the employer is either careless or not actually hiring.</li>
             <li><strong>Vagueness.</strong> Real jobs name a team, a manager, a specific product, or specific responsibilities. Generic JDs with no specifics are ghost-leaning.</li>
         </ul>
-        <p>Want the AI-powered "vibe check" on top of this? Coming in the next release.</p>
+        <p>The final score combines two passes: a pattern-matching score (the rules above) and an AI vibe check that reads the posting in context and adds its own reasoning. Both contribute 50/50 to the final score, and the AI's reasons appear in the flag list tagged with an "AI" badge. We use gpt-4o for the AI pass.</p>
     </section>
 </div>
 </main>
@@ -321,13 +321,18 @@
     var errEl = document.getElementById('ghostError');
     var resultEl = document.getElementById('ghostResult');
 
-    function score() {
+    var WEBHOOK = 'https://n8n.stromation.com/webhook/resume-tailor';
+
+    async function score() {
         var jd = (jdEl.value || '').trim();
         if (jd.length < 80) {
             showErr('Paste at least a few sentences of the job description.');
             return;
         }
         hideErr();
+        submitBtn.disabled = true;
+        var origLabel = submitBtn.textContent;
+        submitBtn.textContent = 'Checking...';
 
         var jdLower = jd.toLowerCase();
         var flags = [];
@@ -409,10 +414,43 @@
         // Cap at 100
         if (total > 100) total = 100;
 
-        renderResult(total, flags);
+        // Render heuristic-only result first so user sees something immediately.
+        renderResult(total, flags, null);
+
+        // Then call the AI vibe check and merge.
+        try {
+            var aiResp = await fetch(WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mode: 'ghost_job_check',
+                    jd_text: jd,
+                    posted_days_ago: age,
+                    applicant_count: apps,
+                    state: st || '',
+                    salary_shown: salaryShown
+                })
+            });
+            var aiData = await aiResp.json();
+            if (aiData && typeof aiData.vibe_score === 'number') {
+                var vibe = aiData.vibe_score;
+                var combined = Math.round((total * 0.5) + (vibe * 0.5));
+                var aiFlags = (aiData.reasons || []).map(function (r) {
+                    return { label: 'AI: ' + r.label, pts: r.pts, why: r.why, isAi: true };
+                });
+                var allFlags = flags.concat(aiFlags);
+                renderResult(combined, allFlags, { vibe: vibe, confidence: aiData.confidence, heuristic: total });
+            }
+        } catch(eA) {
+            // AI failed — keep the heuristic-only result. Nothing to do.
+            console.warn('[GhostCheck] AI vibe check failed:', eA);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = origLabel;
+        }
     }
 
-    function renderResult(total, flags) {
+    function renderResult(total, flags, aiInfo) {
         // Color + verdict
         var color, verdictTitle, verdictBody, rec;
         if (total >= 70) {
@@ -445,7 +483,11 @@
 
         document.getElementById('ghostRingNum').textContent = total;
         document.getElementById('ghostVerdict').textContent = verdictTitle;
-        document.getElementById('ghostVerdictBody').textContent = verdictBody;
+        var bodyText = verdictBody;
+        if (aiInfo) {
+            bodyText += ' (Heuristic ' + aiInfo.heuristic + ' + AI vibe ' + aiInfo.vibe + '; confidence: ' + aiInfo.confidence + '.)';
+        }
+        document.getElementById('ghostVerdictBody').textContent = bodyText;
         document.getElementById('ghostRec').textContent = rec;
 
         var flagsEl = document.getElementById('ghostFlags');
@@ -454,9 +496,11 @@
         } else {
             flagsEl.innerHTML = flags.map(function (f) {
                 var dotColor = f.pts >= 20 ? '#ef4444' : f.pts >= 10 ? '#facc15' : '#9ca3af';
-                return '<li class="ghost-flag">' +
+                var border = f.isAi ? 'border-color:rgba(202,255,0,0.30);' : '';
+                var aiBadge = f.isAi ? '<span style="display:inline-block;margin-left:0.4rem;padding:1px 6px;border-radius:4px;background:rgba(202,255,0,0.15);color:#CAFF00;font-size:0.62rem;font-family:JetBrains Mono,monospace;letter-spacing:0.08em;vertical-align:middle;">AI</span>' : '';
+                return '<li class="ghost-flag" style="' + border + '">' +
                     '<span class="ghost-flag__dot" style="background:' + dotColor + ';"></span>' +
-                    '<div class="ghost-flag__main"><strong>' + esc(f.label) + '</strong><span>' + esc(f.why) + '</span></div>' +
+                    '<div class="ghost-flag__main"><strong>' + esc(f.label.replace(/^AI: /, '')) + aiBadge + '</strong><span>' + esc(f.why) + '</span></div>' +
                     '<span class="ghost-flag__pts">+' + f.pts + '</span>' +
                 '</li>';
             }).join('');
