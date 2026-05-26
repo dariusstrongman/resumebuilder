@@ -25,3 +25,4 @@ v2_init.sql
 
 # Local build folder for generating OG image / favicon assets
 _build/
+__pycache__/
