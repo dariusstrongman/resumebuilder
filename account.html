@@ -33,6 +33,21 @@
         .today-cell__label{font-weight:600;font-size:.95rem;color:#f2f4f7}
         .today-cell__hint{font-size:.78rem;color:#9ca3af;line-height:1.35}
         .today-empty{margin:.6rem 0 0;color:#9ca3af;font-size:.92rem}
+
+        /* About you (unified profile) */
+        .profile-card{border:1px solid rgba(255,255,255,.10);background:rgba(20,22,32,.55);border-radius:14px;padding:1rem 1.15rem}
+        .profile-empty p{margin:0 0 .75rem;color:#9ca3af;font-size:.92rem;line-height:1.45}
+        .profile-empty[hidden]{display:none}
+        .profile-summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+        .profile-summary[hidden]{display:none}
+        .profile-chips{display:flex;gap:.4rem;flex-wrap:wrap}
+        .profile-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.32rem .7rem;border-radius:999px;background:rgba(250,204,21,.10);border:1px solid rgba(250,204,21,.35);color:#facc15;font-size:.82rem;font-weight:500;letter-spacing:.01em}
+        .profile-edit-btn{background:transparent;border:1px solid rgba(255,255,255,.18);color:#e2e8f0;padding:.4rem .9rem;border-radius:8px;font-size:.85rem;cursor:pointer;font:inherit}
+        .profile-edit-btn:hover{border-color:rgba(250,204,21,.55);color:#facc15}
+        .profile-modal__hint{margin:0 0 1rem;color:#9ca3af;font-size:.88rem;line-height:1.4}
+        .profile-remote-field{margin-top:.4rem}
+        .profile-remote-label{display:inline-flex;align-items:center;gap:.55rem;cursor:pointer;color:#e2e8f0;font-size:.92rem}
+        .profile-remote-label input{width:1.05rem;height:1.05rem;accent-color:#facc15}
     </style>
 </head>
 <body>
@@ -206,15 +221,15 @@
                 <p class="today-empty" id="todayEmpty" hidden>Nothing urgent right now. Add an application or tailor a fresh resume.</p>
             </section>
 
-            <!-- ABOUT YOU (unified profile — WIP, hidden until modal+save logic ships) -->
+            <!-- ABOUT YOU (unified profile) -->
             <section class="account-section profile-section" id="profileSection" hidden>
                 <header class="account-section-head">
                     <h2>About you</h2>
-                    <span class="account-pill account-pill--quiet" id="profilePill">Set once, used everywhere</span>
+                    <span class="account-pill account-pill--quiet" id="profilePill">Saved to your profile</span>
                 </header>
                 <div class="profile-card" id="profileCard">
                     <div class="profile-empty" id="profileEmpty" hidden>
-                        <p>Set your target role, salary, and work auth once. The tailor form, STAR coach, and Career Roadmap will auto-fill from here.</p>
+                        <p>Save your current title, salary target, location, and work auth. Future tools will read from this so you don't enter it again.</p>
                         <button type="button" class="submit-btn submit-btn--inline" id="profileFillBtn">
                             <span class="submit-btn__label">Set up profile (1 min)</span>
                         </button>
@@ -551,6 +566,80 @@
             </div>
         </header>
         <div class="modal__body apps-modal__body" id="appsViewModalBody"></div>
+    </div>
+</div>
+
+<!-- PROFILE EDIT MODAL -->
+<div class="modal apps-modal" id="profileModal" hidden>
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__panel apps-modal__panel" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+        <header class="modal__head">
+            <div class="modal__head-info">
+                <p class="modal__eyebrow">About you</p>
+                <h2 class="modal__title" id="profileModalTitle">Set up your profile</h2>
+            </div>
+            <div class="modal__nav">
+                <button type="button" class="modal__close" data-close="1" aria-label="Close">&times;</button>
+            </div>
+        </header>
+        <div class="modal__body apps-modal__body">
+            <p class="profile-modal__hint">Used by the tailor form, STAR coach, and Career Roadmap. Set once, change anytime.</p>
+            <form id="profileForm" class="apps-form">
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="profCurrentTitle"><span class="field-name">Current title</span></label>
+                        <input type="text" id="profCurrentTitle" class="email-input" maxlength="120" autocomplete="organization-title" placeholder="e.g. Senior Software Engineer">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="profYearsExp"><span class="field-name">Years of experience</span></label>
+                        <input type="number" id="profYearsExp" class="email-input" min="0" max="60" step="1" placeholder="0-60">
+                    </div>
+                </div>
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="profSalaryMin"><span class="field-name">Target salary min <span class="field-hint">USD</span></span></label>
+                        <input type="number" id="profSalaryMin" class="email-input" min="0" step="1000" placeholder="e.g. 120000">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="profSalaryMax"><span class="field-name">Target salary max <span class="field-hint">USD</span></span></label>
+                        <input type="number" id="profSalaryMax" class="email-input" min="0" step="1000" placeholder="e.g. 160000">
+                    </div>
+                </div>
+                <div class="apps-form-row">
+                    <div class="field">
+                        <label class="field-label" for="profLocation"><span class="field-name">Target location</span></label>
+                        <input type="text" id="profLocation" class="email-input" maxlength="120" autocomplete="address-level2" placeholder="e.g. Austin, TX or NYC area">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="profWorkAuth"><span class="field-name">Work authorization</span></label>
+                        <select id="profWorkAuth" class="email-input">
+                            <option value="">(prefer not to say)</option>
+                            <option value="us_citizen">US citizen</option>
+                            <option value="green_card">Green card / permanent resident</option>
+                            <option value="h1b">H-1B</option>
+                            <option value="opt_cpt">OPT / CPT</option>
+                            <option value="needs_sponsorship">Needs sponsorship</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field profile-remote-field">
+                    <label class="profile-remote-label" for="profOpenRemote">
+                        <input type="checkbox" id="profOpenRemote">
+                        <span>Open to remote roles</span>
+                    </label>
+                </div>
+                <div id="profileFormMsg" class="auth-msg" aria-live="polite"></div>
+                <div class="apps-form__actions">
+                    <div class="apps-form__primary">
+                        <button type="button" class="apps-form__cancel" data-close="1">Cancel</button>
+                        <button type="submit" class="submit-btn submit-btn--inline" id="profileSaveBtn">
+                            <span class="submit-btn__label">Save</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -1076,6 +1165,165 @@
             if (typeof renderAvatar === 'function') renderAvatar(profile.avatar);
             closeEdit();
         });
+    })();
+
+    // ── ABOUT YOU (unified profile card + modal) ──────────────────────────
+    (function() {
+        var section = document.getElementById('profileSection');
+        var card = document.getElementById('profileCard');
+        if (!section || !card) return;
+
+        var emptyEl = document.getElementById('profileEmpty');
+        var summaryEl = document.getElementById('profileSummary');
+        var chipsEl = document.getElementById('profileChips');
+        var fillBtn = document.getElementById('profileFillBtn');
+        var editBtn = document.getElementById('profileEditBtn');
+        var modal = document.getElementById('profileModal');
+        var form = document.getElementById('profileForm');
+        var saveBtn = document.getElementById('profileSaveBtn');
+        var msgEl = document.getElementById('profileFormMsg');
+
+        var FIELDS = {
+            current_title:     'profCurrentTitle',
+            years_experience:  'profYearsExp',
+            target_salary_min: 'profSalaryMin',
+            target_salary_max: 'profSalaryMax',
+            target_location:   'profLocation',
+            work_auth:         'profWorkAuth'
+        };
+
+        function fmtMoney(n) {
+            if (typeof n !== 'number' || isNaN(n)) return '';
+            if (n >= 1000) return '$' + Math.round(n / 1000) + 'k';
+            return '$' + n;
+        }
+        function workAuthLabel(v) {
+            return ({
+                us_citizen: 'US citizen',
+                green_card: 'Green card',
+                h1b: 'H-1B',
+                opt_cpt: 'OPT/CPT',
+                needs_sponsorship: 'Needs sponsorship',
+                other: 'Other'
+            })[v] || '';
+        }
+
+        function hasAny() {
+            return !!(profile.current_title || profile.years_experience != null
+                || profile.target_salary_min != null || profile.target_salary_max != null
+                || profile.target_location || profile.work_auth || profile.open_to_remote);
+        }
+
+        function render() {
+            section.hidden = false;
+            if (!hasAny()) {
+                emptyEl.hidden = false;
+                summaryEl.hidden = true;
+                return;
+            }
+            emptyEl.hidden = true;
+            summaryEl.hidden = false;
+            var chips = [];
+            if (profile.current_title) chips.push(profile.current_title);
+            if (profile.years_experience != null) chips.push(profile.years_experience + ' yrs exp');
+            var sMin = profile.target_salary_min, sMax = profile.target_salary_max;
+            if (sMin != null && sMax != null) chips.push(fmtMoney(sMin) + ' - ' + fmtMoney(sMax));
+            else if (sMin != null) chips.push(fmtMoney(sMin) + '+');
+            else if (sMax != null) chips.push('up to ' + fmtMoney(sMax));
+            if (profile.target_location) chips.push(profile.target_location);
+            if (profile.open_to_remote) chips.push('Remote OK');
+            if (profile.work_auth) chips.push(workAuthLabel(profile.work_auth));
+            chipsEl.innerHTML = chips.map(function(c) {
+                return '<span class="profile-chip">' + esc(c) + '</span>';
+            }).join('');
+        }
+
+        function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        function openModal() {
+            // Prefill from current profile state.
+            Object.keys(FIELDS).forEach(function(key) {
+                var el = document.getElementById(FIELDS[key]);
+                if (!el) return;
+                var v = profile[key];
+                el.value = (v == null) ? '' : v;
+            });
+            document.getElementById('profOpenRemote').checked = !!profile.open_to_remote;
+            msgEl.textContent = '';
+            msgEl.className = 'auth-msg';
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            var first = document.getElementById('profCurrentTitle');
+            if (first) setTimeout(function() { first.focus(); }, 30);
+        }
+        function closeModal() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+        }
+
+        function readInt(id) {
+            var el = document.getElementById(id);
+            var v = el && el.value.trim();
+            if (!v) return null;
+            var n = parseInt(v, 10);
+            return isNaN(n) ? null : n;
+        }
+        function readStr(id) {
+            var el = document.getElementById(id);
+            var v = el && el.value.trim();
+            return v ? v : null;
+        }
+
+        async function save(e) {
+            e.preventDefault();
+            var payload = {
+                id: user.id,
+                email: user.email,
+                current_title:     readStr('profCurrentTitle'),
+                years_experience:  readInt('profYearsExp'),
+                target_salary_min: readInt('profSalaryMin'),
+                target_salary_max: readInt('profSalaryMax'),
+                target_location:   readStr('profLocation'),
+                work_auth:         readStr('profWorkAuth'),
+                open_to_remote:    document.getElementById('profOpenRemote').checked
+            };
+            if (payload.years_experience != null && (payload.years_experience < 0 || payload.years_experience > 60)) {
+                msgEl.textContent = 'Years of experience must be between 0 and 60.';
+                msgEl.className = 'auth-msg auth-msg--error';
+                return;
+            }
+            if (payload.target_salary_min != null && payload.target_salary_max != null
+                && payload.target_salary_min > payload.target_salary_max) {
+                msgEl.textContent = 'Salary min cannot exceed salary max.';
+                msgEl.className = 'auth-msg auth-msg--error';
+                return;
+            }
+            saveBtn.disabled = true;
+            var label = saveBtn.querySelector('.submit-btn__label');
+            var orig = label ? label.textContent : '';
+            if (label) label.textContent = 'Saving...';
+            var res = await sb.from('profiles').upsert(payload).select().single();
+            saveBtn.disabled = false;
+            if (label) label.textContent = orig;
+            if (res.error) {
+                msgEl.textContent = res.error.message || 'Could not save. Try again.';
+                msgEl.className = 'auth-msg auth-msg--error';
+                return;
+            }
+            // Sync local state.
+            Object.keys(payload).forEach(function(k) { profile[k] = payload[k]; });
+            render();
+            closeModal();
+        }
+
+        fillBtn.addEventListener('click', openModal);
+        editBtn.addEventListener('click', openModal);
+        form.addEventListener('submit', save);
+        modal.querySelectorAll('[data-close]').forEach(function(el) {
+            el.addEventListener('click', closeModal);
+        });
+
+        render();
     })();
 
     // ── HERO SUB-LINE (adaptive) ───────────────────────────────────────────
