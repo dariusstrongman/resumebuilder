@@ -93,12 +93,12 @@
                     <li>10-day money-back guarantee on annual</li>
                 </ul>
                 <div class="success-upsell__cta">
-                    <a href="/login.html?next=%2Faccount.html&amp;intent=pro_monthly" class="submit-btn submit-btn--inline">
+                    <button type="button" id="upsellGoPro" data-plan="pro_monthly" class="submit-btn submit-btn--inline">
                         <span class="submit-btn__label">Go Pro &middot; $15/mo</span>
-                    </a>
-                    <a href="/pricing.html" class="submit-btn submit-btn--inline submit-btn--light">
-                        <span class="submit-btn__label">See plans &middot; $99/yr</span>
-                    </a>
+                    </button>
+                    <button type="button" id="upsellGoProYearly" data-plan="pro_yearly" class="submit-btn submit-btn--inline submit-btn--light">
+                        <span class="submit-btn__label">Go Pro Yearly &middot; $99/yr</span>
+                    </button>
                 </div>
                 <p class="success-upsell__small">10-day money-back guarantee &middot; cancel anytime &middot; <a href="/help.html">help</a></p>
             </div>
@@ -322,7 +322,9 @@
 
         if (data.email) {
             document.getElementById('deliveryEmail').textContent = data.email;
+            window._userEmail = data.email;
         }
+        wireUpsell();
 
         if (data.pack_code) {
             var banner = document.getElementById('packBanner');
@@ -509,6 +511,69 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('error').style.display = 'flex';
         document.getElementById('errorMsg').textContent = msg;
+    }
+
+    function readAuth() {
+        try {
+            var raw = localStorage.getItem('sb-jjiizicwjldusuteffnb-auth-token');
+            if (!raw) return null;
+            var p = JSON.parse(raw);
+            var sess = p && (p.currentSession || p);
+            var u = sess && sess.user;
+            if (u && u.id) return { id: u.id, email: u.email || '' };
+        } catch(e) {}
+        return null;
+    }
+
+    function wireUpsell() {
+        var btns = [document.getElementById('upsellGoPro'), document.getElementById('upsellGoProYearly')];
+        btns.forEach(function(btn) {
+            if (!btn) return;
+            btn.addEventListener('click', function() {
+                var plan = btn.dataset.plan || 'pro_monthly';
+                var auth = readAuth();
+                var label = btn.querySelector('.submit-btn__label');
+                var origText = label ? label.textContent : '';
+                btn.disabled = true;
+                if (label) label.textContent = 'Redirecting...';
+
+                if (!auth) {
+                    var email = window._userEmail || '';
+                    var url = '/login.html?next=' + encodeURIComponent('/account.html?intent=' + plan)
+                            + '&intent=' + encodeURIComponent(plan);
+                    if (email) url += '&email=' + encodeURIComponent(email);
+                    window.location.href = url;
+                    return;
+                }
+
+                fetch('https://n8n.stromation.com/webhook/resume-tailor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mode: 'create_subscription',
+                        plan: plan,
+                        user_id: auth.id,
+                        user_email: auth.email,
+                        site_url: window.location.origin
+                    })
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    if (d && d.payment_url) {
+                        window.location.href = d.payment_url;
+                        return;
+                    }
+                    alert((d && d.error) || 'Could not start checkout. Please try again.');
+                    btn.disabled = false;
+                    if (label) label.textContent = origText;
+                })
+                .catch(function() {
+                    alert('Could not start checkout. Please try again.');
+                    btn.disabled = false;
+                    if (label) label.textContent = origText;
+                });
+            });
+        });
     }
 })();
 </script>

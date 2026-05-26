@@ -1232,6 +1232,19 @@
         startPlanCheckout(b.dataset.plan, b);
     });
 
+    // Auto-fire checkout when arriving from /success.html or /login.html with ?intent=
+    (function() {
+        if (isPro) return;
+        var intent = new URLSearchParams(window.location.search).get('intent');
+        if (intent !== 'pro_monthly' && intent !== 'pro_yearly') return;
+        try {
+            var url = new URL(window.location.href);
+            url.searchParams.delete('intent');
+            window.history.replaceState({}, '', url.toString());
+        } catch(e) {}
+        startPlanCheckout(intent, planCta);
+    })();
+
     toolkitStar.addEventListener('click', function(e) {
         if (toolkitStar.dataset.locked) {
             e.preventDefault();

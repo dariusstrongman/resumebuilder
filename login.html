@@ -171,9 +171,27 @@
 (function() {
     var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_PUBLISHABLE_KEY);
 
+    var qs = new URLSearchParams(window.location.search);
+    var nextParam = qs.get('next');
+    var emailParam = qs.get('email');
+    // Only allow same-site relative redirects.
+    function safeNext() {
+        if (!nextParam) return '/account.html';
+        if (nextParam.charAt(0) !== '/' || nextParam.charAt(1) === '/') return '/account.html';
+        return nextParam;
+    }
+    if (emailParam) {
+        try {
+            var siInput = document.querySelector('#signinForm input[name="email"]');
+            var suInput = document.querySelector('#signupForm input[name="email"]');
+            if (siInput) siInput.value = emailParam;
+            if (suInput) suInput.value = emailParam;
+        } catch(e) {}
+    }
+
     sb.auth.getUser().then(function(res) {
         if (res && res.data && res.data.user) {
-            window.location.href = '/account.html';
+            window.location.href = safeNext();
         }
     });
 
@@ -210,7 +228,7 @@
             setMsg('signinMsg', res.error.message, true);
             btn.disabled = false; label.textContent = 'Sign in';
         } else {
-            window.location.href = '/account.html';
+            window.location.href = safeNext();
         }
     });
 
@@ -226,14 +244,14 @@
             password: fd.get('password') || '',
             options: {
                 data: { display_name: (fd.get('name') || '').trim() },
-                emailRedirectTo: window.location.origin + '/account.html'
+                emailRedirectTo: window.location.origin + safeNext()
             }
         });
         if (res.error) {
             setMsg('signupMsg', res.error.message, true);
             btn.disabled = false; label.textContent = 'Create account';
         } else if (res.data && res.data.session) {
-            window.location.href = '/account.html';
+            window.location.href = safeNext();
         } else {
             setMsg('signupMsg', 'Check your email to confirm your account, then sign in.', false);
             label.textContent = 'Account created';
