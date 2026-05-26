@@ -4826,6 +4826,7 @@ textarea::placeholder {
     border: 1px solid var(--accent);
     border-radius: 14px;
 }
+.toolkit-pro-band[hidden] { display: none; }
 .toolkit-pro-band__copy {
     display: flex;
     flex-direction: column;

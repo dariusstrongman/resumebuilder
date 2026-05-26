@@ -19,6 +19,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Today stripe — Pro habit hook above the fold */
+        .today-section{margin-top:.4rem}
+        .today-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;margin-top:.4rem}
+        .today-cell{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:.25rem;padding:1.05rem 1.15rem;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(20,22,32,.55);color:inherit;cursor:pointer;font:inherit;transition:border-color .15s ease,transform .15s ease,background .15s ease}
+        .today-cell[hidden]{display:none}
+        .today-cell:hover{border-color:rgba(250,204,21,.55);transform:translateY(-1px);background:rgba(20,22,32,.78)}
+        .today-cell--alert{border-color:rgba(239,68,68,.55);background:rgba(58,18,18,.45)}
+        .today-cell--alert:hover{border-color:rgba(239,68,68,.85);background:rgba(58,18,18,.62)}
+        .today-cell__num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;color:#facc15;letter-spacing:.02em}
+        .today-cell--alert .today-cell__num{color:#fca5a5}
+        .today-cell__label{font-weight:600;font-size:.95rem;color:#f2f4f7}
+        .today-cell__hint{font-size:.78rem;color:#9ca3af;line-height:1.35}
+        .today-empty{margin:.6rem 0 0;color:#9ca3af;font-size:.92rem}
+    </style>
 </head>
 <body>
 
@@ -165,6 +180,80 @@
                 </div>
             </section>
 
+            <!-- TODAY (Pro habit hook — populated by renderTodayStripe) -->
+            <section class="account-section today-section" id="todaySection" hidden>
+                <header class="account-section-head">
+                    <h2>Today</h2>
+                    <span class="account-pill account-pill--quiet" id="todayPill" hidden></span>
+                </header>
+                <div class="today-grid" id="todayGrid">
+                    <button type="button" class="today-cell" data-target="applicationsSection" id="todayFollowups" hidden>
+                        <span class="today-cell__num" id="todayFollowupsNum">0</span>
+                        <span class="today-cell__label">follow-ups due</span>
+                        <span class="today-cell__hint">Move on these today.</span>
+                    </button>
+                    <button type="button" class="today-cell" data-target="applicationsSection" id="todayWaiting" hidden>
+                        <span class="today-cell__num" id="todayWaitingNum">0</span>
+                        <span class="today-cell__label">apps waiting &gt;14 days</span>
+                        <span class="today-cell__hint">Time for a follow-up or move on.</span>
+                    </button>
+                    <button type="button" class="today-cell" data-target="resumeList" id="todayStaleResumes" hidden>
+                        <span class="today-cell__num" id="todayStaleResumesNum">0</span>
+                        <span class="today-cell__label">resumes &gt;30 days old</span>
+                        <span class="today-cell__hint">Regrade against a fresh job.</span>
+                    </button>
+                </div>
+                <p class="today-empty" id="todayEmpty" hidden>Nothing urgent right now. Add an application or tailor a fresh resume.</p>
+            </section>
+
+            <!-- ABOUT YOU (unified profile — WIP, hidden until modal+save logic ships) -->
+            <section class="account-section profile-section" id="profileSection" hidden>
+                <header class="account-section-head">
+                    <h2>About you</h2>
+                    <span class="account-pill account-pill--quiet" id="profilePill">Set once, used everywhere</span>
+                </header>
+                <div class="profile-card" id="profileCard">
+                    <div class="profile-empty" id="profileEmpty" hidden>
+                        <p>Set your target role, salary, and work auth once. The tailor form, STAR coach, and Career Roadmap will auto-fill from here.</p>
+                        <button type="button" class="submit-btn submit-btn--inline" id="profileFillBtn">
+                            <span class="submit-btn__label">Set up profile (1 min)</span>
+                        </button>
+                    </div>
+                    <div class="profile-summary" id="profileSummary" hidden>
+                        <div class="profile-chips" id="profileChips"></div>
+                        <button type="button" class="profile-edit-btn" id="profileEditBtn">Edit</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- APPLICATIONS (Pro tracker) -->
+            <section class="account-section" id="applicationsSection">
+                <header class="account-section-head">
+                    <h2>Applications</h2>
+                    <span class="account-pill" id="appsFollowUpPill" hidden></span>
+                </header>
+                <div class="apps-paywall" id="appsPaywall" hidden>
+                    <div class="account-card apps-paywall__card">
+                        <p class="account-card__label">Pro feature</p>
+                        <h3 class="apps-paywall__title">Track every application.</h3>
+                        <p class="account-card__detail">Status, applied date, follow-up reminders. Never lose track of an open application.</p>
+                        <button type="button" class="submit-btn submit-btn--inline apps-paywall__btn" id="appsPaywallUpgrade">
+                            <span class="submit-btn__label">Upgrade to Pro</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="apps-active" id="appsActive" hidden>
+                    <div class="apps-toolbar">
+                        <button type="button" class="apps-add-btn" id="appsAddBtn">+ Add application</button>
+                    </div>
+                    <div class="apps-empty" id="appsEmpty" hidden>
+                        <p>No applications tracked yet. Add one above to start tracking status and follow-ups.</p>
+                    </div>
+                    <div class="apps-list" id="appsList"></div>
+                </div>
+                <div class="apps-error" id="appsError" hidden></div>
+            </section>
+
             <!-- TOOLKIT -->
             <section class="account-section">
                 <header class="account-section-head">
@@ -254,34 +343,6 @@
                         </a>
                     </div>
                 </div>
-            </section>
-
-            <!-- APPLICATIONS (Pro tracker) -->
-            <section class="account-section" id="applicationsSection">
-                <header class="account-section-head">
-                    <h2>Applications</h2>
-                    <span class="account-pill" id="appsFollowUpPill" hidden></span>
-                </header>
-                <div class="apps-paywall" id="appsPaywall" hidden>
-                    <div class="account-card apps-paywall__card">
-                        <p class="account-card__label">Pro feature</p>
-                        <h3 class="apps-paywall__title">Track every application.</h3>
-                        <p class="account-card__detail">Status, applied date, follow-up reminders. Never lose track of an open application.</p>
-                        <button type="button" class="submit-btn submit-btn--inline apps-paywall__btn" id="appsPaywallUpgrade">
-                            <span class="submit-btn__label">Upgrade to Pro</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="apps-active" id="appsActive" hidden>
-                    <div class="apps-toolbar">
-                        <button type="button" class="apps-add-btn" id="appsAddBtn">+ Add application</button>
-                    </div>
-                    <div class="apps-empty" id="appsEmpty" hidden>
-                        <p>No applications tracked yet. Add one above to start tracking status and follow-ups.</p>
-                    </div>
-                    <div class="apps-list" id="appsList"></div>
-                </div>
-                <div class="apps-error" id="appsError" hidden></div>
             </section>
 
             <!-- LATEST FROM PLAYBOOK -->
@@ -692,7 +753,7 @@
     // dashboard reads no longer route through n8n. n8n is reserved for things
     // that genuinely need the service role (Stripe, GPT, RLS-blocked writes).
     var monthStartIso = calMonthStart.toISOString();
-    var profilePromise = sb.from('profiles').select('display_name, email, target_role').eq('id', user.id).maybeSingle();
+    var profilePromise = sb.from('profiles').select('display_name, email, target_role, current_title, years_experience, target_salary_min, target_salary_max, target_location, open_to_remote, work_auth').eq('id', user.id).maybeSingle();
     var subPromise = sb.from('subscriptions').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
     var resumesPromise = sb.from('resumes').select('id, title, target_role, target_company, created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
     var totalSessionsPromise = sb.from('resumego_sessions').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'complete');
@@ -1061,6 +1122,77 @@
     var toolkitOutlook = document.getElementById('toolkitOutlook');
     var toolkitOutlookPill = document.getElementById('toolkitOutlookPill');
     var isPro = !!(sub && (sub.plan === 'pro_monthly' || sub.plan === 'pro_yearly') && sub.status === 'active');
+
+    // ── TODAY STRIPE (Pro habit hook) ──────────────────────────────────────
+    // Reads `resumes` from outer scope and `window.__todayApps` (set by the
+    // applications block after each fetch / mutation). Shown to Pro users only.
+    window.__todayApps = window.__todayApps || [];
+    function renderTodayStripe() {
+        var section = document.getElementById('todaySection');
+        if (!section) return;
+        if (!isPro) { section.hidden = true; return; }
+
+        var now = Date.now();
+        var today = new Date(); today.setHours(23, 59, 59, 999);
+
+        var followupsDue = (window.__todayApps || []).filter(function(a) {
+            if (!a || !a.follow_up_at) return false;
+            var d = new Date(a.follow_up_at); d.setHours(23, 59, 59, 999);
+            return d.getTime() <= now;
+        }).length;
+
+        var waiting14 = (window.__todayApps || []).filter(function(a) {
+            if (!a || a.status !== 'applied' || !a.applied_at) return false;
+            var d = new Date(a.applied_at);
+            var days = Math.floor((now - d.getTime()) / 86400000);
+            return days >= 14;
+        }).length;
+
+        var staleResumes = (resumes || []).filter(function(r) {
+            if (!r || !r.created_at) return false;
+            var d = new Date(r.created_at);
+            var days = Math.floor((now - d.getTime()) / 86400000);
+            return days >= 30;
+        }).length;
+
+        var cells = [
+            { id: 'todayFollowups', numId: 'todayFollowupsNum', n: followupsDue, alert: true },
+            { id: 'todayWaiting', numId: 'todayWaitingNum', n: waiting14, alert: false },
+            { id: 'todayStaleResumes', numId: 'todayStaleResumesNum', n: staleResumes, alert: false }
+        ];
+        var anyShown = false;
+        cells.forEach(function(c) {
+            var el = document.getElementById(c.id);
+            var numEl = document.getElementById(c.numId);
+            if (!el || !numEl) return;
+            if (c.n > 0) {
+                numEl.textContent = c.n;
+                el.hidden = false;
+                if (c.alert) el.classList.add('today-cell--alert');
+                else el.classList.remove('today-cell--alert');
+                anyShown = true;
+            } else {
+                el.hidden = true;
+            }
+        });
+
+        section.hidden = false;
+        var emptyEl = document.getElementById('todayEmpty');
+        if (emptyEl) emptyEl.hidden = anyShown;
+    }
+    // Wire click-to-scroll once.
+    (function() {
+        var grid = document.getElementById('todayGrid');
+        if (!grid) return;
+        grid.addEventListener('click', function(e) {
+            var btn = e.target.closest('[data-target]');
+            if (!btn) return;
+            var target = document.getElementById(btn.dataset.target);
+            if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    })();
+    // Initial paint: stale-resume count is known immediately; apps will refresh later.
+    renderTodayStripe();
     if (isPro) {
         var label = sub.plan === 'pro_yearly' ? 'Pro (yearly)' : 'Pro';
         planValue.textContent = label;
@@ -2100,6 +2232,8 @@
                 appsFollowUpPill.hidden = true;
                 appsFollowUpPill.classList.remove('account-pill--alert');
             }
+            window.__todayApps = apps;
+            if (typeof renderTodayStripe === 'function') renderTodayStripe();
         }
         function populateResumeOptions() {
             var sel = document.getElementById('appResume');
