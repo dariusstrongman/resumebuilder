@@ -1176,6 +1176,18 @@ textarea::placeholder {
     padding-top: 0.9rem;
     border-top: 1px solid var(--line);
 }
+/* Risk reversal directly under the pay button */
+.form-fine--guarantee {
+    color: var(--ink-1);
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0.85rem;
+}
+.form-fine--guarantee + .form-fine {
+    margin-top: 0.5rem;
+    border-top: 0;
+    padding-top: 0;
+}
 
 /* Spinner */
 .spinner {
@@ -2575,6 +2587,52 @@ textarea::placeholder {
 .grader-upsell .submit-btn {
     width: 100%;
     position: relative;
+}
+
+/* Issues found by the grader — the diagnosis that sells the fix */
+.grader-issues {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.4rem;
+    background: rgba(255, 106, 90, 0.06);
+    border: 1px solid rgba(255, 106, 90, 0.35);
+    border-radius: 14px;
+}
+.grader-issues h4 {
+    margin: 0 0 0.7rem;
+    font-family: var(--f-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--ink-0);
+    letter-spacing: -0.01em;
+}
+.grader-issues ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.grader-issues li {
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--ink-1);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+.grader-issues li::before {
+    content: '\2715';
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    color: var(--danger);
+    font-size: 0.8em;
+    font-weight: 700;
+}
+.grader-issues-more {
+    margin: 0.7rem 0 0;
+    font-size: 0.82rem;
+    color: var(--ink-3);
 }
 .grader-reset-wrap {
     text-align: center;

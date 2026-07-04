@@ -344,7 +344,9 @@
             var auth = readAuth();
             if (!auth) {
                 var plan = proBtn.dataset.plan || 'pro_monthly';
-                window.location.href = '/login.html?next=%2Faccount.html&intent=' + encodeURIComponent(plan);
+                // intent must ride INSIDE next: login.html only forwards next,
+                // so a sibling param gets dropped and checkout never fires.
+                window.location.href = '/login.html?next=' + encodeURIComponent('/account.html?intent=' + plan);
                 return;
             }
             var plan = proBtn.dataset.plan || 'pro_monthly';

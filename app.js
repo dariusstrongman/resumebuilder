@@ -565,9 +565,47 @@ function renderGraderResult(d) {
         + '</div>';
     }
 
+    // Below 90: show the diagnosis first (you cannot sell a fix for problems
+    // the buyer cannot see), then lead with the $1 fix, banded by pain level.
+    if (score < 90) {
+        if (issues.length) {
+            var shownIssues = issues.slice(0, 3).map(function(it) {
+                return '<li>' + escapeHtml(String(it)) + '</li>';
+            }).join('');
+            html += '<div class="grader-issues">'
+              + '<h4>' + issues.length + (issues.length === 1 ? ' issue is' : ' issues are') + ' dragging your score down</h4>'
+              + '<ul>' + shownIssues + '</ul>'
+              + (issues.length > 3 ? '<p class="grader-issues-more">+ ' + (issues.length - 3) + ' more found. The full list is in your emailed report below.</p>' : '')
+            + '</div>';
+        }
+
+        var fixLine = issues.length ? 'fixes every issue above' : 'fixes the weaknesses for you';
+        var upsellHead, upsellBody;
+        if (score < 40) {
+            upsellHead = 'At ' + score + '/100 this resume is getting filtered out before a human reads it.';
+            upsellBody = 'Most rejected resumes die in the ATS keyword filter, and yours is currently in that pile. The tailor rebuilds it around a real job posting and ' + fixLine + '. ATS-clean PDF and DOCX in 60 seconds.';
+        } else if (score < 60) {
+            upsellHead = score + '/100 loses to tailored resumes almost every time.';
+            upsellBody = 'Recruiters read the top matches first. The tailor ' + fixLine + ' and rewrites your resume around a specific posting. 60 seconds, no account, no subscription.';
+        } else {
+            upsellHead = score + '/100 is close. One tailored rewrite puts you in interview range.';
+            upsellBody = 'The before and after examples on this page went from 23 to 87 and 31 to 92. Yours is a shorter jump. The tailor ' + fixLine + ' and rewrites your resume around the job you actually want.';
+        }
+        html += '<div class="grader-upsell">'
+          + '<h3>' + upsellHead + '</h3>'
+          + '<p>' + upsellBody + '</p>'
+          + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Fix my resume</span><span class="submit-btn__price">$1.00</span></button>'
+          + '</div>';
+    }
+
+    // Email capture: the exit ramp for people not fixing it today,
+    // not the headline next step.
     html += '<div class="grader-email-capture" id="graderEmailCapture">'
-      + '<h4>See the full breakdown — free</h4>'
-      + '<p>Drop your email and we will send the in-depth report: ATS compatibility score, every strength worth keeping, and every gap with how to fix it.</p>'
+      + (score < 90
+          ? '<h4>Not fixing it today? At least keep the report.</h4>'
+            + '<p>We will email the full breakdown: every issue, every strength worth keeping, and how to fix each one yourself.</p>'
+          : '<h4>Want the full breakdown? It is free.</h4>'
+            + '<p>Drop your email and we will send the in-depth report: ATS compatibility score, every strength worth keeping, and every gap with how to fix it.</p>')
       + '<form class="grader-email-form" onsubmit="sendGraderReport(event); return false;">'
         + '<input type="email" id="graderEmailInput" placeholder="you@email.com" required autocomplete="email">'
         + '<button type="submit" class="submit-btn submit-btn--inline" id="graderEmailBtn">'
@@ -576,16 +614,6 @@ function renderGraderResult(d) {
       + '</form>'
       + '<p class="grader-email-note">One email. No spam. Unsubscribe with a click.</p>'
     + '</div>';
-
-    // For 90+ scorers the high-score callout already carries the $1 CTA,
-    // so we skip the duplicate upsell card here.
-    if (score < 90) {
-        html += '<div class="grader-upsell">'
-          + '<h3>Or fix all of it <em>automatically</em> for $1</h3>'
-          + '<p>The tailor rewrites your resume to match a specific job posting and fixes the weaknesses for you. ATS-optimized PDF in 60 seconds.</p>'
-          + '<button class="submit-btn" onclick="upsellFromGrader()"><span class="submit-btn__label">Tailor my resume</span><span class="submit-btn__price">$1.00</span></button>'
-          + '</div>';
-    }
 
     html += '</div></div>'
       + '<div class="grader-reset-wrap"><button class="grader-reset" onclick="resetGrader()">Grade another resume</button></div>';
@@ -596,6 +624,7 @@ function renderGraderResult(d) {
 
     // Stash for the email-report handler.
     window._graderLastResult = d;
+    track('grader_result', { score: score, issues: issues.length });
 
     // Animate the gauge fill in after mount
     setTimeout(function() {
@@ -692,7 +721,9 @@ function upsellFromGrader() {
         switchResumeTab('paste');
     }
 
-    track('grader_upsell_click');
+    var lastScore = (window._graderLastResult && typeof window._graderLastResult.score === 'number') ? window._graderLastResult.score : null;
+    window._checkoutSource = 'grader';
+    track('grader_upsell_click', lastScore !== null ? { score: lastScore } : {});
     document.getElementById('generate').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     setTimeout(function() {
@@ -743,7 +774,7 @@ if (form) {
             }
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
-            track('begin_checkout', { with_cover_letter: wantCover, input_method: 'paste' });
+            track('begin_checkout', { with_cover_letter: wantCover, input_method: 'paste', source: window._checkoutSource || 'direct' });
             sendPayload({ resume: resumeTextVal, job_posting: job, include_cover_letter: wantCover }, btn);
         } else {
             if (!uploadedFile) {
@@ -763,7 +794,7 @@ if (form) {
                     text = text.substring(0, MAX_RESUME_CHARS);
                 }
                 btn.innerHTML = '<span class="spinner"></span>Tailoring your resume...';
-                track('begin_checkout', { with_cover_letter: wantCover, input_method: 'upload' });
+                track('begin_checkout', { with_cover_letter: wantCover, input_method: 'upload', source: window._checkoutSource || 'direct' });
                 sendPayload({ resume: text, job_posting: job, include_cover_letter: wantCover }, btn);
             }).catch(function(err) {
                 console.error('File extraction error:', err);
@@ -1059,11 +1090,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (proBtn) {
         proBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            var plan = (proBtn.dataset.plan === 'pro_yearly') ? 'pro_yearly' : 'pro_monthly';
             if (!window.RESUMEGO_USER_ID) {
-                window.location.href = '/login.html?next=/account.html';
+                // Carry the chosen plan through login inside `next` so
+                // account.html can auto-fire checkout on arrival.
+                window.location.href = '/login.html?next=' + encodeURIComponent('/account.html?intent=' + plan);
                 return;
             }
-            var plan = (proBtn.dataset.plan === 'pro_yearly') ? 'pro_yearly' : 'pro_monthly';
             startCheckout(proBtn, {
                 mode: 'create_subscription',
                 plan: plan,

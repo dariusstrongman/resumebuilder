@@ -425,7 +425,7 @@
         <div class="generate-wrap__head">
             <span class="lime-badge">Tailor Your Resume</span>
             <h2 class="generate-wrap__title">START NOW. <em>ONE DOLLAR.</em></h2>
-            <p class="generate-wrap__dek">3 steps &middot; 60 seconds. Pay $1 per resume, or 50 a month with Pro at $15/mo.</p>
+            <p class="generate-wrap__dek">3 steps &middot; 60 seconds. Pay $1 per resume, or 50 a month with Pro at $15/mo.<br>Unlike ChatGPT: real matched keywords, a formatted PDF and DOCX, and it can't invent jobs you didn't have.</p>
         </div>
 
         <aside class="form-card">
@@ -512,19 +512,14 @@
                         <span class="field-name">Email</span>
                     </label>
                     <input type="email" id="userEmail" placeholder="you@example.com" class="email-input" required>
-                    <p class="field-hint" style="font-size:.78rem;color:#d97706;margin-top:.4rem;">Double-check the spelling. You'll still see the tailored resume on screen, but a typo means the email copy won't reach your inbox.</p>
+                    <p class="field-hint" style="font-size:.78rem;color:var(--ink-2);margin-top:.4rem;">We email the files here. Double-check the spelling.</p>
                 </div>
 
-                <!-- PROMO / PACK CODE -->
-                <div class="promo-wrap promo-wrap--visible">
-                    <label class="promo-label" for="promoCode">
-                        <span class="promo-label__icon" aria-hidden="true">🎟️</span>
-                        <span class="promo-label__text">
-                            <span class="promo-label__title">Pack or promo code</span>
-                            <span class="promo-label__sub">Have a 10-pack code? Drop it here to skip checkout.</span>
-                        </span>
-                    </label>
-                    <div class="promo-input-wrap" id="promoInputWrap">
+                <!-- PROMO / PACK CODE (collapsed: only pack holders need it,
+                     an open field tells first-time buyers a discount exists) -->
+                <div class="promo-wrap">
+                    <button type="button" class="promo-toggle" id="promoToggle" aria-expanded="false">Have a 10-pack or promo code?</button>
+                    <div class="promo-input-wrap" id="promoInputWrap" hidden>
                         <input type="text" id="promoCode" placeholder="PACK-XXXX-XXXX" class="promo-input" autocomplete="off" autocapitalize="characters" spellcheck="false">
                         <span class="promo-status" id="promoStatus" aria-live="polite"></span>
                     </div>
@@ -588,6 +583,9 @@
                 })();
                 </script>
 
+                <p class="form-fine form-fine--guarantee">
+                    Broken or unusable output? We regenerate it or refund your dollar. No questions: contact@atshack.com
+                </p>
                 <p class="form-fine">
                     Paid once via Stripe. Delivered to your inbox. On the $1 path your resume is processed in memory and discarded after delivery. (Pro accounts save to your dashboard.)
                 </p>
