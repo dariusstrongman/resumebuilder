@@ -249,21 +249,30 @@ function toggleFaq(btn){ btn.parentElement.classList.toggle('open'); }
     btn.addEventListener('click', function(){
         var lines = input.value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
         if (!lines.length){ results.innerHTML = '<p class="rba-hint">Paste at least one bullet point above.</p>'; overall.style.display='none'; return; }
-        var html = '', total = 0;
+        var html = '', total = 0, weak = 0;
         lines.forEach(function(line){
             var r = analyze(line);
             total += r.score;
+            if (r.score < 75) weak++;
             var tipsHtml = r.tips.map(function(t){ return '<li class="'+(t[0]==='ok'?'ok':'')+'">'+esc(t[1])+'</li>'; }).join('');
             html += '<div class="rba-card"><div class="rba-card__top"><div class="rba-card__txt">'+esc(r.raw)+'</div><span class="rba-badge '+band(r.score)+'">'+r.score+'</span></div><ul class="rba-tips">'+tipsHtml+'</ul></div>';
         });
         var avg = Math.round(total / lines.length);
+        // The offer at the pain moment: weak bullets are exactly what the $1 tailor rewrites.
+        if (weak > 0) {
+            html += '<div class="resource-cta" style="margin-top:1.5rem;">'
+              + '<h3>' + weak + ' of your ' + lines.length + ' bullet' + (lines.length>1?'s':'') + ' scored under 75.</h3>'
+              + '<p>Weak bullets are fixable, but rewriting them one at a time is the slow way. The $1 tailor rewrites every bullet against a real job posting: strong verb, metric, right length, matched keywords. 60 seconds, no account.</p>'
+              + '<a href="/#generate" class="submit-btn submit-btn--inline"><span class="submit-btn__label">Rewrite my bullets</span><span class="submit-btn__price">$1.00</span></a>'
+              + '</div>';
+        }
         scoreEl.textContent = avg;
         scoreEl.style.color = band(avg)==='good' ? '#34d399' : (band(avg)==='mid' ? '#fbbf24' : '#f87171');
         lblEl.textContent = lines.length + ' bullet' + (lines.length>1?'s':'') + ' analyzed · average strength ' + avg + '/100';
         overall.style.display = 'flex';
         results.innerHTML = html;
         results.scrollIntoView({behavior:'smooth', block:'nearest'});
-        if (window.gtag) gtag('event','bullet_analyze',{count:lines.length, avg:avg});
+        if (window.gtag) gtag('event','bullet_analyze',{count:lines.length, avg:avg, weak:weak});
     });
 
     var mt = document.getElementById('mobileToggle');

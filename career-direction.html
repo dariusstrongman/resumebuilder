@@ -617,6 +617,22 @@
               + '</form>'
               + '</div>';
 
+        // Tailor CTA first: the natural next step after a fit score is a $1
+        // no-account impulse buy, not a $15/mo subscription.
+        var topAdj = (d.adjacent && d.adjacent[0]) ? d.adjacent[0] : null;
+        var ctaTitle = topAdj && topAdj.fit_pct >= 50
+            ? 'Tailor your resume for a ' + topAdj.title + ' role'
+            : 'Tailor your resume to a specific posting';
+        var ctaSub = topAdj && topAdj.fit_pct >= 50
+            ? 'You meet most requirements. Run it through the tailor and apply this week. $1, no account.'
+            : 'Match your resume to the actual job posting. Most candidates lift their score 20+ points after tailoring. $1, no account.';
+
+        html += '<div class="cd-cta">'
+              + '<p style="color:var(--ink-0);font-weight:600;font-size:1.05rem;">' + esc(ctaTitle) + '</p>'
+              + '<p style="color:var(--muted-v2);font-size:0.92rem;line-height:1.55;">' + esc(ctaSub) + '</p>'
+              + '<a href="/#generate" class="btn-lime">Tailor My Resume &middot; $1 &rarr;</a>'
+              + '</div>';
+
         // Pro upsell (Career Roadmap + 90-Day Plan)
         html += '<div style="margin:1.8rem 0 0;padding:1.6rem 1.7rem;border-radius:14px;border:1.5px solid rgba(202,255,0,0.45);background:linear-gradient(180deg, rgba(202,255,0,0.08), rgba(202,255,0,0.03));box-shadow:0 0 0 3px rgba(202,255,0,0.04);">'
               + '<p style="margin:0 0 0.5rem;font-family:JetBrains Mono,monospace;font-size:0.72rem;letter-spacing:0.16em;color:#c5ff4a;text-transform:uppercase;font-weight:600;">Pro upgrade · Career Roadmap</p>'
@@ -629,21 +645,6 @@
               + '</ul>'
               + '<a href="/career-outlook.html" class="btn-lime" style="display:inline-block;padding:0.7rem 1.3rem;font-weight:700;font-size:0.95rem;border-radius:8px;text-decoration:none;">See Career Roadmap (Pro) &rarr;</a>'
               + '<span style="display:inline-block;margin-left:0.85rem;color:var(--muted-v2);font-size:0.82rem;">$15/mo or $99/yr · cancel any time</span>'
-              + '</div>';
-
-        // Tailor CTA
-        var topAdj = (d.adjacent && d.adjacent[0]) ? d.adjacent[0] : null;
-        var ctaTitle = topAdj && topAdj.fit_pct >= 50
-            ? 'Tailor your resume for a ' + topAdj.title + ' role'
-            : 'Tailor your resume to a specific posting';
-        var ctaSub = topAdj && topAdj.fit_pct >= 50
-            ? 'You meet most requirements. Run it through the tailor and apply this week. $1, no account.'
-            : 'Match your resume to the actual job posting. Most candidates lift their score 20+ points after tailoring. $1, no account.';
-
-        html += '<div class="cd-cta">'
-              + '<p style="color:var(--ink-0);font-weight:600;font-size:1.05rem;">' + esc(ctaTitle) + '</p>'
-              + '<p style="color:var(--muted-v2);font-size:0.92rem;line-height:1.55;">' + esc(ctaSub) + '</p>'
-              + '<a href="/#generate" class="btn-lime">Tailor My Resume &mdash; $1 &rarr;</a>'
               + '</div>';
 
         return html;

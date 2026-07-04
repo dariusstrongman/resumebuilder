@@ -217,8 +217,8 @@
         </div>
 
         <div class="ghost-cta">
-            <p>However real or ghosted, your resume still has to land. Tailored in 60 seconds, $1.</p>
-            <a href="/#generate">Tailor my resume <span style="color:rgba(10,10,15,0.65);">$1</span></a>
+            <p id="ghostCtaText">However real or ghosted, your resume still has to land. Tailored in 60 seconds, $1.</p>
+            <a href="/#generate" id="ghostCtaBtn">Tailor my resume <span style="color:rgba(10,10,15,0.65);">$1</span></a>
         </div>
     </section>
 
@@ -451,24 +451,35 @@
     }
 
     function renderResult(total, flags, aiInfo) {
-        // Color + verdict
-        var color, verdictTitle, verdictBody, rec;
+        // Color + verdict + a CTA that matches the moment: "legit" means the
+        // user has a real posting in hand right now, which is peak buying time.
+        var color, verdictTitle, verdictBody, rec, ctaText, ctaLabel;
         if (total >= 70) {
             color = '#ef4444';
             verdictTitle = 'Likely ghost listing.';
             verdictBody = 'Strong red flags across multiple categories. Apply only if it costs you 2 minutes or less.';
             rec = 'Cap your effort. Tailor a resume in 60 seconds, send it, and move on. Do not spend an hour on this one.';
+            ctaText = 'Probably a ghost. If you apply anyway, cap your effort at a dollar and a minute.';
+            ctaLabel = 'Send the minimum viable resume';
         } else if (total >= 35) {
             color = '#facc15';
             verdictTitle = 'Suspicious. Apply with caution.';
             verdictBody = 'Several flags worth knowing. Could still be real but with a slow hiring team.';
             rec = 'Apply, but tailor your resume properly. Set a 14-day expectation and follow up once. Then move on.';
+            ctaText = 'Maybe real, maybe slow. Spend a dollar and a minute on it, not an evening.';
+            ctaLabel = 'Tailor and move on';
         } else {
             color = '#86efac';
             verdictTitle = 'Looks legit.';
             verdictBody = 'No major ghost signals. Worth a real application.';
             rec = 'Apply normally. Tailor the resume to the posting, write a real cover letter if asked, and follow up after 7-10 days.';
+            ctaText = 'This one is real, and you already have the posting in hand. Paste it into the tailor and send a resume built for exactly this job.';
+            ctaLabel = 'Tailor for this job';
         }
+        var ctaTextEl = document.getElementById('ghostCtaText');
+        var ctaBtnEl = document.getElementById('ghostCtaBtn');
+        if (ctaTextEl) ctaTextEl.textContent = ctaText;
+        if (ctaBtnEl) ctaBtnEl.innerHTML = ctaLabel + ' <span style="color:rgba(10,10,15,0.65);">$1</span>';
 
         // Ring fill
         var ringFg = document.getElementById('ghostRingFg');

@@ -151,11 +151,12 @@
             </div>
             <h1 class="success-h">Something went wrong.</h1>
             <p id="errorMsg" class="success-sub"></p>
+            <p class="success-sub" style="font-size:0.88rem;">If you already paid: you were charged once, your order is safe on our side, and retrying will not charge you again.</p>
             <div class="success-buttons">
-                <a href="/" class="submit-btn submit-btn--inline">
-                    <span class="submit-btn__label">Try again</span>
-                </a>
-                <a href="mailto:contact@atshack.com" class="submit-btn submit-btn--inline submit-btn--light">
+                <button type="button" onclick="location.reload()" class="submit-btn submit-btn--inline">
+                    <span class="submit-btn__label">Retry</span>
+                </button>
+                <a href="mailto:contact@atshack.com" id="errorSupportLink" class="submit-btn submit-btn--inline submit-btn--light">
                     <span class="submit-btn__label">Email support</span>
                 </a>
             </div>
@@ -512,6 +513,15 @@
         document.getElementById('loading').style.display = 'none';
         document.getElementById('error').style.display = 'flex';
         document.getElementById('errorMsg').textContent = msg;
+        // Self-identifying support email: include the Stripe session id so
+        // support can find the charge without back-and-forth.
+        try {
+            var sid = new URLSearchParams(window.location.search).get('session_id');
+            var link = document.getElementById('errorSupportLink');
+            if (sid && link) {
+                link.href = 'mailto:contact@atshack.com?subject=' + encodeURIComponent('Order issue, session ' + sid);
+            }
+        } catch(e) {}
     }
 
     function readAuth() {

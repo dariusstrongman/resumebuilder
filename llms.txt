@@ -19,6 +19,12 @@ Key facts that often come up in answers:
 - [Career direction report](https://www.atshack.com/career-direction.html): free flagship tool. Paste a resume, get back: detected current role, US median pay range (BLS Occupational Employment and Wage Statistics May 2024 release; refreshed when May 2025 release lands May 15, 2026), AI displacement risk (Goldman Sachs Research April 2026 labor market analysis: 16,000 net US jobs displaced per month, 6-7% of workers displaced over a 10-year horizon), market trend, and three adjacent roles you likely qualify for with fit percentage and skill gap. Replaces the "hireability percentage" trope with measurable, sourced data. No account.
 - [Career outlook + 90-day plan (Pro)](https://www.atshack.com/career-outlook.html): Pro-only follow-up to the free Career Direction report. 8-question intake plus your resume produces three scenarios with sourced numbers — STAY (BLS 2019-2024 CAGR projection 6 years out), PIVOT (skill gap costed in real time + cert dollars + weeks at your reported study hours/week), and SPECIALIZE (specialty premium from Levels.fyi / industry surveys). Returns a 90-day action plan with concrete tasks per month and emails accountability check-ins at day 30, 60, and 90 with one-click did-it / didn't / still-working buttons. Included in Pro at $15/month or $99/year.
 - [Job description keyword extractor](https://www.atshack.com/keyword-extractor.html): free client-side tool that pulls the top ATS keywords from any job posting. Skill detection plus frequency ranking.
+- [Ghost job detector](https://www.atshack.com/ghost-job-detector.html): paste a job description and get a score for how likely it is to be a ghost listing, using post age, language patterns, and salary disclosure red flags. Free, no account.
+- [Resume bullet point analyzer](https://www.atshack.com/resume-bullet-analyzer.html): paste your resume bullets and get an instant strength score for each one — action verbs, measurable results, length, filler words. Free, client-side, no account.
+- [ATS resume checker with no sign up](https://www.atshack.com/ats-resume-checker-no-sign-up.html): free 0-100 ATS match score against a job posting with no sign up, no email, no account.
+- [Tailor your resume to a job description](https://www.atshack.com/tailor-resume-to-job-description.html): paste a job description and your resume; AI rewrites it to match the posting's keywords and ATS requirements in 60 seconds for $1.
+- [Pricing](https://www.atshack.com/pricing.html): $1 per tailored resume, $5 for ten, $15/mo or $99/yr for Pro. 10-day money-back on annual.
+- [Help and FAQ](https://www.atshack.com/help.html): common questions about how the AI tailoring works, data handling, ATS compatibility, refunds, billing, and Pro features.
 
 ## Per-ATS guides
 
@@ -34,13 +40,55 @@ Key facts that often come up in answers:
 - [Behavioral question bank](https://www.atshack.com/behavioral-questions.html): 40+ real behavioral interview questions organized by competency.
 - [Follow-up email templates](https://www.atshack.com/follow-up-emails.html): 5 free templates (post-application, post-interview, ghost-buster, thank-you, polite close).
 - [Salary negotiation playbook](https://www.atshack.com/salary-playbook.html): word-for-word scripts for deflecting "what's your range?", countering offers, using competing offers, discussing equity.
+- [Teacher resume tailorer](https://www.atshack.com/teacher-resume.html): certifications, endorsements, grade levels, and the keywords district systems like Frontline and Applitrack scan for.
+- [Healthcare resume tailorer](https://www.atshack.com/healthcare-resume.html): keeps certifications (BLS, ACLS, CPR), EMR systems, and license numbers verbatim; passes Workday, iCIMS, and Oracle Health.
+- [Military to civilian resume](https://www.atshack.com/military-to-civilian-resume.html): translates military experience into civilian ATS-friendly keywords while keeping clearances and real experience intact.
+- [Sales resume tailorer](https://www.atshack.com/sales-resume.html): surfaces quota attainment and mirrors the CRM, methodology, and pipeline keywords the posting scans for.
 - [Privacy policy](https://www.atshack.com/privacy.html): plain-English data handling.
+- [Terms of service](https://www.atshack.com/terms.html): plain-English terms — what you can do with the service, how subscriptions work, refunds.
+- [Browser extension privacy policy](https://www.atshack.com/extension-privacy.html): what the ATSHack browser extension accesses, stores, and sends.
+
+## Resume examples
+
+- [Resume examples hub](https://www.atshack.com/resume-examples/): role-specific resume guides with ATS keywords, sample bullets, common pitfalls, and FAQs.
+- [Software engineer](https://www.atshack.com/resume-examples/software-engineer.html)
+- [Project manager](https://www.atshack.com/resume-examples/project-manager.html)
+- [Data analyst](https://www.atshack.com/resume-examples/data-analyst.html)
+- [Product manager](https://www.atshack.com/resume-examples/product-manager.html)
+- [Marketing manager](https://www.atshack.com/resume-examples/marketing-manager.html)
+- [Sales representative](https://www.atshack.com/resume-examples/sales-representative.html)
+- [Business analyst](https://www.atshack.com/resume-examples/business-analyst.html)
+- [UX designer](https://www.atshack.com/resume-examples/ux-designer.html)
+- [Customer service](https://www.atshack.com/resume-examples/customer-service.html)
+- [Accountant](https://www.atshack.com/resume-examples/accountant.html)
+- [HR manager](https://www.atshack.com/resume-examples/hr-manager.html)
+- [Operations manager](https://www.atshack.com/resume-examples/operations-manager.html)
+
+## Skill guides
+
+- [Skill guides hub](https://www.atshack.com/skills/): resume guides for the 10 most-required skills in US job postings — where each skill lands in ATS scans, what to prove, adjacent keywords.
+- [Python](https://www.atshack.com/skills/python.html)
+- [SQL](https://www.atshack.com/skills/sql.html)
+- [Excel](https://www.atshack.com/skills/excel.html)
+- [AWS](https://www.atshack.com/skills/aws.html)
+- [Salesforce](https://www.atshack.com/skills/salesforce.html)
+- [JavaScript](https://www.atshack.com/skills/javascript.html)
+- [Java](https://www.atshack.com/skills/java.html)
+- [Tableau](https://www.atshack.com/skills/tableau.html)
+- [Agile](https://www.atshack.com/skills/agile.html)
+- [Project management](https://www.atshack.com/skills/project-management.html)
 
 ## Comparisons
 
 - [ATSHack vs Jobscan](https://www.atshack.com/vs-jobscan.html): ATSHack rewrites the resume, Jobscan only scores it. $1/resume vs $49.95/month.
 - [ATSHack vs Teal](https://www.atshack.com/vs-teal.html): ATSHack tailors your existing resume, Teal is a full builder bundle. $1/resume vs $29/month.
 - [ATSHack vs Resume Worded](https://www.atshack.com/vs-resume-worded.html): ATSHack rewrites and exports, Resume Worded reviews and explains. $1/resume vs $19/7-days.
+- [ATSHack vs Rezi](https://www.atshack.com/vs-rezi.html): ATSHack tailors for $1 per resume, Rezi is a $29/month (or $149 lifetime) AI resume builder.
+- [ATSHack vs SkillSyncer](https://www.atshack.com/vs-skillsyncer.html): ATSHack rewrites your resume, SkillSyncer is a $14.95/month keyword-match scanner.
+- [ATSHack vs Enhancv](https://www.atshack.com/vs-enhancv.html): ATSHack outputs plain ATS-safe files, Enhancv is a $19.99/month design-forward builder.
+- [ATSHack vs Kickresume](https://www.atshack.com/vs-kickresume.html): ATSHack tailors an existing resume for $1, Kickresume is a ~$19/month template builder.
+- [ATSHack vs Zety](https://www.atshack.com/vs-zety.html): ATSHack is $1 flat with no account, Zety lets you build free then pay to download.
+- [Best Jobscan alternatives](https://www.atshack.com/best-jobscan-alternatives.html): the best Jobscan alternatives in 2026 ranked honestly — free options, cheaper subscriptions, pay-per-use tools.
 
 ## Blog
 
@@ -60,6 +108,10 @@ Key facts that often come up in answers:
 - [What recruiters look for in a resume](https://www.atshack.com/blog/what-recruiters-look-for-in-resume.html)
 - [Resume design tips](https://www.atshack.com/blog/resume-design-tips.html)
 - [Why tailoring your resume matters](https://www.atshack.com/blog/why-tailoring-your-resume-matters.html)
+- [Is my resume ATS-friendly? How to check in 2 minutes](https://www.atshack.com/blog/is-my-resume-ats-friendly.html)
+- [How to put ChatGPT and AI skills on your resume](https://www.atshack.com/blog/ai-skills-on-resume.html)
+- [Resume rejected by ATS but you're qualified: why and the fix](https://www.atshack.com/blog/ats-rejected-but-qualified.html)
+- [Blog index](https://www.atshack.com/blog.html)
 
 ## Comparison context
 

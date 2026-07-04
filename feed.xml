@@ -5,8 +5,29 @@
     <link>https://www.atshack.com/blog.html</link>
     <description>Practical resume advice backed by how hiring actually works. Learn what ATS systems scan for, which keywords matter, and how to stand out in 7 seconds.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.atshack.com/feed.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>How to Put ChatGPT and AI Skills on Your Resume (2026)</title>
+      <link>https://www.atshack.com/blog/ai-skills-on-resume.html</link>
+      <description>The honest guide to putting AI skills on your resume in 2026. Which keywords actually score, what makes recruiters skip your resume, and 10 ready-to-paste bullet examples.</description>
+      <guid isPermaLink="true">https://www.atshack.com/blog/ai-skills-on-resume.html</guid>
+    </item>
+
+    <item>
+      <title>Resume Rejected by ATS but You're Qualified: Why and the Fix</title>
+      <link>https://www.atshack.com/blog/ats-rejected-but-qualified.html</link>
+      <description>The auto-reject was not random. Seven specific causes, the exact 5-minute fix for each, and how to tell whether it was the ATS or a human who rejected you.</description>
+      <guid isPermaLink="true">https://www.atshack.com/blog/ats-rejected-but-qualified.html</guid>
+    </item>
+
+    <item>
+      <title>Is My Resume ATS-Friendly? How to Check in 2 Minutes</title>
+      <link>https://www.atshack.com/blog/is-my-resume-ats-friendly.html</link>
+      <description>Seven fast checks to tell if your resume is ATS-friendly, plus the quickest way to test your match against a real job posting. No account needed.</description>
+      <guid isPermaLink="true">https://www.atshack.com/blog/is-my-resume-ats-friendly.html</guid>
+    </item>
 
     <item>
       <title>Effective Resume Design Tips for Job Seekers</title>
@@ -18,7 +39,7 @@
     <item>
       <title>Why Sending the Same Resume to Every Job is Costing You Interviews</title>
       <link>https://www.atshack.com/blog/why-tailoring-your-resume-matters.html</link>
-      <description>75% of resumes get filtered by ATS before a human sees them. Learn why sending generic resumes costs you interviews and how to fix it.</description>
+      <description>88% of employers say their ATS filters out qualified candidates. Learn why sending generic resumes costs you interviews and how to fix it.</description>
       <guid isPermaLink="true">https://www.atshack.com/blog/why-tailoring-your-resume-matters.html</guid>
     </item>
 
