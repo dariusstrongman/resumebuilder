@@ -1,10 +1,16 @@
 {
-  "version": "round-2",
+  "version": "round-3",
   "generated": "2026-09-05",
+  "status": "concepts-awaiting-rendered-visual-review",
   "files": [
-    {"path":"README.md","note":"Round 2 source-of-truth notes"},
-    {"path":"concepts/01-system-scan/index.html","note":"Scroll-driven parser transformation"},
-    {"path":"concepts/02-editorial-precision/index.html","note":"Scroll-driven visible document edit"},
-    {"path":"concepts/03-outcome-engine/index.html","note":"Application object moves through the system"}
-  ]
+    {"path":"README.md","note":"Round 3 source-of-truth notes and advancement gate"},
+    {"path":"industry-excellence.md","note":"ATSHack resume/domain excellence contract"},
+    {"path":"canonical-transformation.json","note":"Shared source-bound illustrative candidate and target-role fixture"},
+    {"path":"concepts/01-system-scan/index.html","note":"Evidence map: requirement to source to supported rewrite or explicit gap"},
+    {"path":"concepts/02-editorial-precision/index.html","note":"Editorial source-bound rewrite with visible annotation"},
+    {"path":"concepts/03-outcome-engine/index.html","note":"Application and resume-version lineage through the job search"}
+  ],
+  "production_untouched": true,
+  "winner_selected": false,
+  "browser_visual_review_complete": false
 }
