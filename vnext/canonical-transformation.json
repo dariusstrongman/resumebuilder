@@ -1,0 +1,52 @@
+{
+  "candidate": {
+    "name": "Jordan Lee",
+    "current_title": "Operations Coordinator",
+    "company": "Northstar Logistics",
+    "location": "Dallas, TX"
+  },
+  "target_role": "Operations Specialist",
+  "target_requirements": [
+    {"term": "inventory reconciliation", "status": "supported"},
+    {"term": "Excel", "status": "supported"},
+    {"term": "KPI reporting", "status": "supported"},
+    {"term": "cross-functional coordination", "status": "supported"},
+    {"term": "process improvement", "status": "supported"},
+    {"term": "SOP ownership", "status": "unsupported"}
+  ],
+  "source_facts": [
+    "Performs daily inventory counts across receiving, storage, and outbound operations.",
+    "Investigates inventory discrepancies in Excel and maintains the cycle-count log.",
+    "Builds the weekly KPI report for warehouse managers covering inventory accuracy, order exceptions, and on-time departures.",
+    "Coordinates warehouse and transportation teams when inventory or dispatch exceptions block customer orders.",
+    "Updated the cycle-count checklist after recurring discrepancies by adding a second verification step.",
+    "No evidence supplied for owning formal SOP documentation."
+  ],
+  "before": {
+    "summary": "Hardworking operations professional looking for a new opportunity.",
+    "bullets": [
+      "Helped with inventory.",
+      "Made reports for managers.",
+      "Worked with different departments.",
+      "Helped improve the inventory process."
+    ],
+    "skills": ["Excel", "Inventory", "Reporting", "Teamwork"]
+  },
+  "after": {
+    "summary": "Operations Coordinator experienced in inventory reconciliation, Excel-based KPI reporting, and cross-functional issue resolution across receiving, storage, and outbound workflows.",
+    "bullets": [
+      "Reconciled daily inventory counts across receiving, storage, and outbound operations, investigating discrepancies in Excel and maintaining cycle-count records.",
+      "Built weekly KPI reports on inventory accuracy, order exceptions, and on-time departures for warehouse managers.",
+      "Coordinated warehouse and transportation teams to resolve inventory and dispatch exceptions blocking customer orders.",
+      "Updated the cycle-count checklist after recurring discrepancies, adding a second verification step to the counting workflow."
+    ],
+    "skills": [
+      "Inventory reconciliation",
+      "Excel",
+      "KPI reporting",
+      "Cross-functional coordination",
+      "Process improvement"
+    ]
+  },
+  "explicit_gap": "SOP ownership is requested by the target posting but is unsupported by the source packet and must not be added."
+}
