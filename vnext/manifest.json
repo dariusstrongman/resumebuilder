@@ -1,0 +1,10 @@
+{
+  "version": "round-2",
+  "generated": "2026-09-05",
+  "files": [
+    {"path":"README.md","note":"Round 2 source-of-truth notes"},
+    {"path":"concepts/01-system-scan/index.html","note":"Scroll-driven parser transformation"},
+    {"path":"concepts/02-editorial-precision/index.html","note":"Scroll-driven visible document edit"},
+    {"path":"concepts/03-outcome-engine/index.html","note":"Application object moves through the system"}
+  ]
+}

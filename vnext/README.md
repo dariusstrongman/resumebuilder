@@ -1,18 +1,17 @@
-# ATSHack vNext — Design Exploration
+# ATSHack vNext — Round 2 concepts
 
-This directory is the source of truth for the ATSHack vNext concept phase.
+Round 1 was rejected because the studies were too static, too SaaS-generic, and below the 9/10 visual floor.
 
-Rules:
-- Current live atshack.com is untouched.
-- Hosted previews are disposable mirrors, never the only copy.
-- Every concept keeps its HTML/CSS/JS locally.
-- No production webhooks, Stripe, Supabase writes, email, or paid fulfillment are connected in these concept files.
-- All proof shown in concepts is explicitly illustrative unless it is a real product capability.
-- No invented testimonials, customer counts, review counts, awards, or outcome guarantees.
+Round 2 rules:
+- Current live atshack.com remains untouched.
+- Hosted previews are mirrors; source files are canonical.
+- Every concept includes a signature scroll-driven mechanic.
+- Product storytelling must be ATSHack-specific, not generic feature-card composition.
+- Illustrative examples are explicitly labeled; no fake outcome percentages or guaranteed ATS passage.
+- Mobile behavior is intentionally responsive rather than a simple desktop shrink.
+- Concepts are still explorations, not production pages and contain no live Stripe/Supabase/n8n wiring.
 
-Concepts:
-1. `01-system-scan` — dark/high-contrast, product-first ATS scanner aesthetic.
-2. `02-editorial-precision` — light editorial, restrained, premium and trust-heavy.
-3. `03-outcome-engine` — deep navy job-search operating system, workflow-oriented.
-
-After owner direction approval, expand only the selected direction into the full multi-page build.
+Directions:
+1. `01-system-scan` — scanner / parser transformation as the hero story.
+2. `02-editorial-precision` — document editing and visible rewrite as a premium editorial narrative.
+3. `03-outcome-engine` — one application object moves through tailor → tracker → interview → follow-up.
