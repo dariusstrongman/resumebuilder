@@ -432,12 +432,18 @@
                 })
             });
             var aiData = await aiResp.json();
-            if (aiData && typeof aiData.vibe_score === 'number') {
+            if (aiData && typeof aiData.vibe_score === 'number' && isFinite(aiData.vibe_score)) {
                 var vibe = aiData.vibe_score;
                 var combined = Math.round((total * 0.5) + (vibe * 0.5));
-                var aiFlags = (aiData.reasons || []).map(function (r) {
-                    return { label: 'AI: ' + r.label, pts: r.pts, why: r.why, isAi: true };
-                });
+                var aiFlags = (Array.isArray(aiData.reasons) ? aiData.reasons : []).map(function (r) {
+                    if (typeof r === 'string') r = { label: r };
+                    if (!r || typeof r !== 'object') return null;
+                    var lbl = r.label || r.title || r.name || r.issue || '';
+                    var why = r.why || r.description || r.message || r.reason || '';
+                    if (!lbl && !why) return null;
+                    var pts = Number(r.pts);
+                    return { label: 'AI: ' + (lbl || why), pts: isFinite(pts) ? pts : 0, why: lbl ? why : '', isAi: true };
+                }).filter(Boolean);
                 var allFlags = flags.concat(aiFlags);
                 renderResult(combined, allFlags, { vibe: vibe, confidence: aiData.confidence, heuristic: total });
             }
@@ -496,7 +502,7 @@
         document.getElementById('ghostVerdict').textContent = verdictTitle;
         var bodyText = verdictBody;
         if (aiInfo) {
-            bodyText += ' (Heuristic ' + aiInfo.heuristic + ' + AI vibe ' + aiInfo.vibe + '; confidence: ' + aiInfo.confidence + '.)';
+            bodyText += ' (Heuristic ' + aiInfo.heuristic + ' + AI vibe ' + aiInfo.vibe + (aiInfo.confidence != null && aiInfo.confidence !== '' && typeof aiInfo.confidence !== 'object' ? '; confidence: ' + aiInfo.confidence : '') + '.)';
         }
         document.getElementById('ghostVerdictBody').textContent = bodyText;
         document.getElementById('ghostRec').textContent = rec;
@@ -512,7 +518,7 @@
                 return '<li class="ghost-flag" style="' + border + '">' +
                     '<span class="ghost-flag__dot" style="background:' + dotColor + ';"></span>' +
                     '<div class="ghost-flag__main"><strong>' + esc(f.label.replace(/^AI: /, '')) + aiBadge + '</strong><span>' + esc(f.why) + '</span></div>' +
-                    '<span class="ghost-flag__pts">+' + f.pts + '</span>' +
+                    (f.pts > 0 ? '<span class="ghost-flag__pts">+' + f.pts + '</span>' : '') +
                 '</li>';
             }).join('');
         }
@@ -524,7 +530,8 @@
         setTimeout(function () { resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
     }
 
-    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function escTxt(s) { if (s && typeof s === 'object') { var a = s.title || s.text || s.name || s.label || s.skill || s.issue || s.message || s.headline || ''; var b = s.description || s.detail || s.why || ''; s = (a && b) ? a + ': ' + b : (a || b || ''); } return s == null ? '' : s; }
+    function esc(s) { var d = document.createElement('div'); d.textContent = escTxt(s); return d.innerHTML; }
     function showErr(msg) { errEl.textContent = msg; errEl.hidden = false; }
     function hideErr() { errEl.hidden = true; }
 

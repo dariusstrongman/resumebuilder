@@ -466,7 +466,7 @@ function gradeResume() {
         .then(function(data) {
             document.getElementById('graderLoading').style.display = 'none';
             if (data && data.error) {
-                toast(data.error, 'error');
+                toast(errorText(data.error, 'We could not grade that resume. Please try again.'), 'error');
                 document.getElementById('graderInput').style.display = 'block';
                 resetGraderBtn();
                 return;
@@ -505,12 +505,21 @@ function resetGraderBtn() {
 
 function renderGraderResult(d) {
     var resultEl = document.getElementById('graderResult');
-    var score = typeof d.score === 'number' ? d.score : 0;
-    var ats = d.ats_compatibility || { score: 0, notes: '' };
-    var strengths = Array.isArray(d.strengths) ? d.strengths : [];
-    var issues = Array.isArray(d.issues) ? d.issues : [];
-    var gradeLetter = d.grade || '';
-    var summary = d.summary || '';
+    d = d || {};
+    var score = Number(d.score);
+    if (d.score === null || d.score === '' || !isFinite(score)) {
+        // No real score came back. Say so plainly instead of showing a fake 0.
+        toast('We could not grade that resume. Please try again.', 'error');
+        document.getElementById('graderInput').style.display = 'block';
+        resetGraderBtn();
+        return;
+    }
+    score = Math.round(Math.min(100, Math.max(0, score)));
+    // Issues arrive as {title, severity, description} objects (older
+    // responses used plain strings). Keep only items with real text.
+    var issues = (Array.isArray(d.issues) ? d.issues : []).filter(function(it) { return displayText(it) !== ''; });
+    var gradeLetter = displayText(d.grade);
+    var summary = displayText(d.summary);
 
     var gradeClass = 'F';
     if (score >= 90) gradeClass = 'A';
@@ -522,7 +531,7 @@ function renderGraderResult(d) {
     var finalOffset = CIRC * (1 - Math.min(100, Math.max(0, score)) / 100);
 
     var liftHtml = '';
-    if (typeof window._regradePrev === 'number' && score > 0) {
+    if (typeof window._regradePrev === 'number' && isFinite(window._regradePrev) && score > 0) {
         var delta = score - window._regradePrev;
         var deltaSign = delta > 0 ? '+' : '';
         var deltaColor = delta > 0 ? '#059669' : (delta < 0 ? '#dc2626' : '#6b7280');
@@ -570,7 +579,7 @@ function renderGraderResult(d) {
     if (score < 90) {
         if (issues.length) {
             var shownIssues = issues.slice(0, 3).map(function(it) {
-                return '<li>' + escapeHtml(String(it)) + '</li>';
+                return '<li>' + displayItemHtml(it) + '</li>';
             }).join('');
             html += '<div class="grader-issues">'
               + '<h4>' + issues.length + (issues.length === 1 ? ' issue is' : ' issues are') + ' dragging your score down</h4>'
@@ -675,7 +684,7 @@ function sendGraderReport(e) {
         if (data && data.error) {
             btn.disabled = false;
             if (label && prevLabel) label.textContent = prevLabel;
-            toast(data.error, 'error');
+            toast(errorText(data.error, 'Could not send. Please try again.'), 'error');
             return;
         }
         capture.innerHTML = '<div class="grader-email-success">'
@@ -966,7 +975,7 @@ function sendPayload(data, btn) {
         } else if (resp.resume_text) {
             showResult(resp);
         } else if (resp.error) {
-            toast(resp.error, 'error');
+            toast(errorText(resp.error), 'error');
             resetBtn(btn);
         }
     })
@@ -1149,7 +1158,7 @@ function showResult(data) {
 }
 
 function formatResumePreview(text) {
-    var lines = text.split('\n');
+    var lines = (typeof text === 'string' ? text : displayText(text)).split('\n');
     var html = '';
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i].trim();
@@ -1243,6 +1252,41 @@ function escapeHtml(str) {
     var div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+}
+
+// Turn an API value (string, number, or an {title, description}-style object
+// from the AI endpoints) into plain display text. Never returns
+// "[object Object]", "undefined", "null" or "NaN"; returns '' when there is
+// nothing real to show, so callers can skip the item.
+function displayText(v) {
+    if (v === null || v === undefined) return '';
+    if (typeof v === 'string') return v.trim();
+    if (typeof v === 'number') return isFinite(v) ? String(v) : '';
+    if (typeof v === 'boolean') return '';
+    if (Array.isArray(v)) return v.map(displayText).filter(Boolean).join(', ');
+    if (typeof v === 'object') {
+        var head = displayText(v.title || v.name || v.label || v.issue || v.strength || '');
+        var body = displayText(v.description || v.detail || v.details || v.text || v.message || v.fix || v.notes || '');
+        if (head && body && head !== body) return head + ': ' + body;
+        return head || body;
+    }
+    return '';
+}
+
+// Same, but as HTML with a bold lead-in when the item has a title.
+function displayItemHtml(v) {
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+        var head = displayText(v.title || v.name || v.label || v.issue || v.strength || '');
+        var body = displayText(v.description || v.detail || v.details || v.text || v.message || v.fix || v.notes || '');
+        if (head && body && head !== body) return '<strong>' + escapeHtml(head) + '.</strong> ' + escapeHtml(body);
+        return escapeHtml(head || body);
+    }
+    return escapeHtml(displayText(v));
+}
+
+// Error text from an API response, with a plain fallback.
+function errorText(e, fallback) {
+    return displayText(e) || fallback || 'Something went wrong. Please try again.';
 }
 
 // FAQ toggle

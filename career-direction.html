@@ -535,11 +535,12 @@
         return extractFromFile(pickedFile);
     };
 
-    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];}); }
+    function escTxt(s) { if (s && typeof s === 'object') { var a = s.title || s.text || s.name || s.label || s.skill || s.issue || s.message || s.headline || ''; var b = s.description || s.detail || s.why || ''; s = (a && b) ? a + ': ' + b : (a || b || ''); } return s == null ? '' : s; }
+    function esc(s) { return String(escTxt(s)).replace(/[&<>"']/g, function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];}); }
 
     function formatPay(low, high) {
         function k(n) { return '$' + Math.round(n / 1000) + 'k'; }
-        if (!low || !high) return '--';
+        if (!isFinite(Number(low)) || !isFinite(Number(high)) || !low || !high) return 'not available for this role';
         return k(low) + ' - ' + k(high);
     }
 
@@ -563,17 +564,17 @@
                 + '</div>';
         }
 
-        var c = d.current;
+        var c = d.current || {};
         var html = '';
 
         // Teaser only: detected role + pay band, three adjacent role titles + fit %.
         // The depth (AI risk note, market note, recommendation, skill gaps, certs,
         // cover-letter angle, pay deltas) is reserved for the emailed report.
         html += '<div class="cd-current">';
-        html += '<p class="role-meta">Your detected role &middot; ' + esc(c.level || 'mid') + ' &middot; ' + (c.years || '?') + ' years</p>';
+        html += '<p class="role-meta">Your detected role &middot; ' + esc(c.level || 'mid') + (c.years ? ' &middot; ' + c.years + ' years' : '') + '</p>';
         html += '<h2>' + esc(c.title) + '</h2>';
         html += '<p style="color:var(--muted-v2);margin:0.4rem 0 0;font-size:0.95rem;">Pay band for your level: <strong style="color:var(--ink-0);">' + formatPay(c.pay_low, c.pay_high) + '</strong>'
-              + (c.pay_median ? ' <span style="color:var(--muted-v2);font-size:0.85rem;">(role median $' + Math.round(c.pay_median/1000) + 'k)</span>' : '')
+              + (Number(c.pay_median) > 0 ? ' <span style="color:var(--muted-v2);font-size:0.85rem;">(role median $' + Math.round(c.pay_median/1000) + 'k)</span>' : '')
               + '</p>';
         html += '</div>';
 
@@ -599,7 +600,7 @@
                 html += '<div class="cd-adj">';
                 html += '<div class="cd-adj-head">'
                       + '<div><h4 class="cd-adj-title">' + esc(a.title) + '</h4></div>'
-                      + '<div style="text-align:right;"><div class="cd-adj-fit ' + fitClass(a.fit_pct) + '">' + a.fit_pct + '%</div><div class="cd-adj-fit-cap">fit</div></div>'
+                      + (isFinite(Number(a.fit_pct)) && a.fit_pct != null && a.fit_pct !== '' ? '<div style="text-align:right;"><div class="cd-adj-fit ' + fitClass(Number(a.fit_pct)) + '">' + Math.round(Number(a.fit_pct)) + '%</div><div class="cd-adj-fit-cap">fit</div></div>' : '')
                       + '</div>';
                 html += '<p class="cd-adj-why" style="color:var(--muted-v2);font-size:0.88rem;margin:0.5rem 0 0;font-style:italic;">Pay range, skill gap, certs to chase, and a tailored cover-letter angle in the email below.</p>';
                 html += '</div>';
@@ -620,7 +621,7 @@
         // Tailor CTA first: the natural next step after a fit score is a $1
         // no-account impulse buy, not a $15/mo subscription.
         var topAdj = (d.adjacent && d.adjacent[0]) ? d.adjacent[0] : null;
-        var ctaTitle = topAdj && topAdj.fit_pct >= 50
+        var ctaTitle = topAdj && topAdj.title && topAdj.fit_pct >= 50
             ? 'Tailor your resume for a ' + topAdj.title + ' role'
             : 'Tailor your resume to a specific posting';
         var ctaSub = topAdj && topAdj.fit_pct >= 50

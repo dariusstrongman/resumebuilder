@@ -88,7 +88,7 @@
         if (data.error) {
             badge.className = 'os-badge os-skipped'; badge.textContent = 'Error';
             head.textContent = 'Could not record';
-            body.textContent = data.error;
+            body.textContent = (typeof data.error === 'string' ? data.error : (data.error && (data.error.message || data.error.description)) || 'Something went wrong. Please try again.');
             return;
         }
         if (status === 'cancel') {

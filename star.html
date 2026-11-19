@@ -320,7 +320,9 @@
     function renderQuestion() {
         document.getElementById('qIdx').textContent = idx + 1;
         document.getElementById('qFill').style.width = ((idx + 1) / questions.length * 100) + '%';
-        document.getElementById('qText').textContent = questions[idx];
+        var q = questions[idx];
+        if (q && typeof q === 'object') q = q.question || q.text || q.title || '';
+        document.getElementById('qText').textContent = q == null ? '' : String(q);
         document.getElementById('qAnswer').value = '';
         document.getElementById('qFeedback').hidden = true;
         document.getElementById('qSubmit').disabled = false;
@@ -343,10 +345,15 @@
                 body: JSON.stringify({ mode: 'star_submit_answer', user_id: user.id, session_id: sessionId, order_index: idx, answer: answer })
             });
             var d = await r.json();
-            if (d.error) { alert(d.error); btn.disabled = false; label.textContent = 'Submit answer'; document.getElementById('qAnswer').disabled = false; return; }
-            scores.push(d.score || 3);
-            document.getElementById('qScore').textContent = d.score;
-            document.getElementById('qFeedbackText').textContent = d.feedback || '';
+            if (d.error) { alert((typeof d.error === 'string' ? d.error : (d.error && (d.error.message || d.error.description)) || 'Something went wrong. Please try again.')); btn.disabled = false; label.textContent = 'Submit answer'; document.getElementById('qAnswer').disabled = false; return; }
+            var scoreNum = Number(d.score);
+            var scoreReal = d.score != null && d.score !== '' && isFinite(scoreNum) && scoreNum > 0;
+            scores.push(scoreReal ? scoreNum : 3);
+            var qScoreEl = document.getElementById('qScore');
+            // Show only a real score; never a made-up one.
+            qScoreEl.textContent = scoreReal ? scoreNum : '';
+            qScoreEl.style.display = scoreReal ? '' : 'none';
+            document.getElementById('qFeedbackText').textContent = (typeof d.feedback === 'string' ? d.feedback : (d.feedback && (d.feedback.text || d.feedback.description || d.feedback.summary)) || '');
             var struct = d.structure || {};
             var parts = ['situation','task','action','result'].map(function(k) {
                 var ok = !!struct[k];
