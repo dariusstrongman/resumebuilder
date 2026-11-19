@@ -1816,7 +1816,8 @@
         alert(res.error ? res.error.message : 'Password updated.');
     });
 
-    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+    function escTxt(s) { if (s && typeof s === 'object') { var a = s.title || s.text || s.name || s.label || s.skill || s.issue || s.message || s.headline || ''; var b = s.description || s.detail || s.why || ''; s = (a && b) ? a + ': ' + b : (a || b || ''); } return s == null ? '' : s; }
+    function esc(s) { var d = document.createElement('div'); d.textContent = escTxt(s); return d.innerHTML; }
 
     // Compact ATS gap report card, used on the modal and (mirrored) on the
     // success page. Returns an HTML string ready to inject. Pass null to

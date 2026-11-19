@@ -309,8 +309,8 @@
             });
             var d = await r.json();
             if (d.error) {
-                alert(d.error);
-            } else if (d.subject && d.body) {
+                alert((typeof d.error === 'string' ? d.error : (d.error && (d.error.message || d.error.description)) || 'Something went wrong. Please try again.'));
+            } else if (typeof d.subject === 'string' && typeof d.body === 'string' && d.subject && d.body) {
                 document.getElementById('fuOutSubject').value = d.subject;
                 document.getElementById('fuOutBody').value = d.body;
                 lastInput = input;
